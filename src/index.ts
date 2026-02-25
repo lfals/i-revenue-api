@@ -13,8 +13,11 @@ app.use(prettyJSON()) // With options: prettyJSON({ space: 4 })
 
 export const db = drizzle({
   connection: {
-    url: process.env.TURSO_DATABASE_URL!,
-    authToken: process.env.TURSO_AUTH_TOKEN!
+    url: process.env.LOCAL_DB!,
+    authToken: process.env.TURSO_AUTH_TOKEN!,
+    syncUrl: process.env.TURSO_DATABASE_URL!,
+    syncInterval: 15, // - https://docs.turso.tech/sdk/ts/reference#periodic-sync,
+    encryptionKey: process.env.SECRET
   }
 });
 
