@@ -1,7 +1,7 @@
 import { zValidator as baseZValidator } from '@hono/zod-validator'
 import type { ValidationTargets } from 'hono'
 import type { ZodSchema } from 'zod'
-import { buildErrorResponse } from './error-response.util'
+import { buildErrorResponse } from './error-response'
 
 export const zValidator = <T extends ZodSchema, Target extends keyof ValidationTargets>(
   target: Target,

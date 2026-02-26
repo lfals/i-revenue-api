@@ -1,11 +1,12 @@
 import type { Context, Next } from 'hono'
-import { buildSuccessResponse } from '../utils/success-response.util'
+import type { ContentfulStatusCode } from 'hono/utils/http-status'
+import { buildSuccessResponse } from '../http/success-response'
 
 export async function responseEnvelope(c: Context, next: Next) {
   const originalJson = c.json.bind(c)
 
   c.json = ((data: unknown, status?: number, headers?: HeadersInit) => {
-    const httpStatus = status ?? 200
+    const httpStatus = (status ?? 200) as ContentfulStatusCode
     const hasEnvelope =
       !!data &&
       typeof data === 'object' &&
@@ -13,14 +14,13 @@ export async function responseEnvelope(c: Context, next: Next) {
       'status' in (data as Record<string, unknown>)
 
     if (httpStatus >= 400 || hasEnvelope) {
-      return originalJson(data as never, httpStatus, headers)
+      return originalJson(data as never, { status: httpStatus, headers })
     }
 
-    return originalJson(
-      buildSuccessResponse(httpStatus, 'Sucesso', data),
-      httpStatus,
+    return originalJson(buildSuccessResponse(httpStatus, 'Sucesso', data), {
+      status: httpStatus,
       headers,
-    )
+    })
   }) as typeof c.json
 
   await next()

@@ -5,6 +5,7 @@
     "jsxImportSource": "hono/jsx",
     "moduleResolution": "nodenext",
     "module": "nodenext",
-    "target": "esnext"
+    "target": "esnext",
+    "skipLibCheck": true
   }
 }

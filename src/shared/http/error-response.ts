@@ -14,4 +14,3 @@ export const buildErrorResponse = (
   message,
   errors,
 })
-

@@ -1,12 +1,13 @@
 import { createClient } from '@libsql/client/node'
 import { drizzle } from 'drizzle-orm/libsql'
+import { env } from '../../config/env'
 
 const client = createClient({
-  url: process.env.LOCAL_DB!,
-  authToken: process.env.TURSO_AUTH_TOKEN!,
-  syncUrl: process.env.TURSO_DATABASE_URL!,
+  url: env.LOCAL_DB,
+  authToken: env.TURSO_AUTH_TOKEN,
+  syncUrl: env.TURSO_DATABASE_URL,
   syncInterval: 15,
-  encryptionKey: process.env.SECRET,
+  encryptionKey: env.SECRET,
 })
 
 export const db = drizzle(client)

@@ -1,10 +1,10 @@
 import { context, trace } from '@opentelemetry/api'
 import { sql } from 'drizzle-orm'
-import { db } from '../db/client'
-import { logsTable } from '../db/schema'
+import { env } from '../../config/env'
+import { db } from '../../infra/db/client'
+import { logsTable } from '../../infra/db/schema'
 
 type LogLevel = 'debug' | 'info' | 'warn' | 'error'
-
 type LogAttributes = Record<string, unknown>
 
 const severityMap: Record<LogLevel, { text: string; number: number }> = {
@@ -14,8 +14,7 @@ const severityMap: Record<LogLevel, { text: string; number: number }> = {
   error: { text: 'ERROR', number: 17 },
 }
 
-const serviceName = process.env.OTEL_SERVICE_NAME || 'i-revenue-api'
-const shouldPersistLogs = process.env.NODE_ENV === 'production'
+const shouldPersistLogs = env.NODE_ENV === 'production'
 
 function getTraceContext(): { trace_id?: string; span_id?: string } {
   const span = trace.getSpan(context.active())
@@ -99,7 +98,7 @@ function write(level: LogLevel, body: string, attributes: LogAttributes = {}) {
     severity_number: severity.number,
     body,
     attributes: {
-      'service.name': serviceName,
+      'service.name': env.OTEL_SERVICE_NAME,
       ...attributes,
     },
     ...getTraceContext(),
