@@ -1,6 +1,6 @@
 import { Hono } from 'hono'
 import { createUserSchema, loginSchema } from '../model/user.model'
-import { db } from '..'
+import { db } from '../db/client'
 import { usersTable } from '../db/schema'
 import { eq } from 'drizzle-orm'
 import { HTTPException } from 'hono/http-exception'
