@@ -6,6 +6,7 @@ import { eq } from 'drizzle-orm'
 import { HTTPException } from 'hono/http-exception'
 import { generateJWT } from '../utils/jwt.util'
 import { zValidator } from '../utils/zod-validator.util'
+import { logger } from '../utils/logger.util'
 
 const auth = new Hono()
 
@@ -42,7 +43,9 @@ auth.post(
                 throw error
             }
 
-            console.error('[auth/register] unexpected error', error)
+            logger.error('auth.register.unexpected_error', {
+                error: error instanceof Error ? error.message : 'unknown_error',
+            })
             throw new HTTPException(500, { message: 'Erro interno ao criar usuário' })
         }
     })
@@ -87,7 +90,9 @@ auth.post('/login',
                 throw error
             }
 
-            console.error('[auth/login] unexpected error', error)
+            logger.error('auth.login.unexpected_error', {
+                error: error instanceof Error ? error.message : 'unknown_error',
+            })
             throw new HTTPException(500, { message: 'Erro interno ao autenticar usuário' })
         }
     })
