@@ -23156,6 +23156,7 @@ var severityMap = {
   error: { text: "ERROR", number: 17 }
 };
 var serviceName = process.env.OTEL_SERVICE_NAME || "i-revenue-api";
+var shouldPersistLogs = false;
 function getTraceContext() {
   const span = import_api7.trace.getSpan(import_api7.context.active());
   const spanContext = span?.spanContext();
@@ -23225,7 +23226,9 @@ function write(level, body, attributes = {}) {
     ...getTraceContext()
   };
   const serialized = JSON.stringify(logRecord);
-  persistLogRecord(logRecord);
+  if (shouldPersistLogs) {
+    persistLogRecord(logRecord);
+  }
   if (level === "error" || level === "warn") {
     console.error(serialized);
     return;
