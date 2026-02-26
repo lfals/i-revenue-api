@@ -5,6 +5,7 @@
     "build": " bun build ./src/index.ts --outdir ./build --target=node --platform=node"
   },
   "dependencies": {
+    "@opentelemetry/api": "^1.9.0",
     "@hono/zod-openapi": "^1.2.2",
     "@hono/zod-validator": "^0.7.6",
     "@libsql/client": "^0.17.0",
