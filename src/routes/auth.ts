@@ -1,17 +1,13 @@
 import { Hono } from 'hono'
-import { zValidator } from '@hono/zod-validator'
 import { createUserSchema, loginSchema } from '../model/user.model'
 import { db } from '..'
 import { usersTable } from '../db/schema'
-import { sign } from 'hono/jwt'
 import { eq } from 'drizzle-orm'
 import { HTTPException } from 'hono/http-exception'
-import { password } from 'bun'
 import { generateJWT } from '../utils/jwt.util'
+import { zValidator } from '../utils/zod-validator.util'
 
 const auth = new Hono()
-
-
 
 auth.post(
     '/register',
@@ -37,10 +33,17 @@ auth.post(
                 id: userSaved[0].id,
             })
 
-            return c.json({ message: "Usuário criado com sucesso", user: { ...userSaved[0], token } }, 201)
+            return c.json({
+                message: 'Usuário criado com sucesso',
+                user: { ...userSaved[0], token },
+            }, 201)
         } catch (error) {
+            if (error instanceof HTTPException) {
+                throw error
+            }
+
             console.error('[auth/register] unexpected error', error)
-            return c.json({ message: 'Erro interno ao criar usuário' }, 500)
+            throw new HTTPException(500, { message: 'Erro interno ao criar usuário' })
         }
     })
 
@@ -49,22 +52,18 @@ auth.post('/login',
     async (c) => {
         const validated = c.req.valid('json')
         try {
+
             const userFound = await db.selectDistinct({
                 id: usersTable.id,
                 name: usersTable.name,
                 password: usersTable.password
             }).from(usersTable).where(eq(usersTable.email, validated.email))
 
-            if (!userFound) {
+            if (userFound.length === 0) {
                 throw new HTTPException(401, { message: 'Email e ou senha incorretos' })
             }
 
             const passwordIsValid = await Bun.password.verify(validated.password, userFound[0].password)
-
-
-            console.log(passwordIsValid)
-            console.log(userFound)
-            console.log(validated)
 
             if (!passwordIsValid) {
                 throw new HTTPException(401, { message: 'Email e ou senha incorretos' })
@@ -75,9 +74,21 @@ auth.post('/login',
                 id: userFound[0].id,
             })
 
-            return c.json({ id: userFound[0].id, name: userFound[0].name, token }, 200)
+
+
+            return c.json({
+                message: 'Login realizado com sucesso',
+                id: userFound[0].id,
+                name: userFound[0].name,
+                token,
+            }, 200)
         } catch (error) {
-            return c.json({ message: "erro", error }, 400)
+            if (error instanceof HTTPException) {
+                throw error
+            }
+
+            console.error('[auth/login] unexpected error', error)
+            throw new HTTPException(500, { message: 'Erro interno ao autenticar usuário' })
         }
     })
 

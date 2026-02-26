@@ -1,7 +1,7 @@
 {
   "name": "i-revenua-api",
   "scripts": {
-    "dev": "bun run --hot src/index.ts",
+    "dev": "bun --watch run src/index.ts",
     "build": " bun build ./src/index.ts --outdir ./build --target=node --platform=node"
   },
   "dependencies": {

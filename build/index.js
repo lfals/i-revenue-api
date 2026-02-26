@@ -408,7 +408,7 @@ var require_sqlite_error = __commonJS((exports, module) => {
 
 // node_modules/libsql/index.js
 var require_libsql = __commonJS((exports, module) => {
-  var __dirname = "/Users/felps/Personal/i-revenue-api-old/node_modules/libsql";
+  var __dirname = "/Users/felps/Personal/i-revenue-api/node_modules/libsql";
   var { load, currentTarget } = require_dist();
   var { familySync, GLIBC, MUSL } = require_detect_libc();
   function requireNative() {
@@ -8245,169 +8245,6 @@ var bearerAuth = (options) => {
   };
 };
 
-// node_modules/hono/dist/utils/cookie.js
-var validCookieNameRegEx = /^[\w!#$%&'*.^`|~+-]+$/;
-var validCookieValueRegEx = /^[ !#-:<-[\]-~]*$/;
-var parse = (cookie, name) => {
-  if (name && cookie.indexOf(name) === -1) {
-    return {};
-  }
-  const pairs = cookie.trim().split(";");
-  const parsedCookie = {};
-  for (let pairStr of pairs) {
-    pairStr = pairStr.trim();
-    const valueStartPos = pairStr.indexOf("=");
-    if (valueStartPos === -1) {
-      continue;
-    }
-    const cookieName = pairStr.substring(0, valueStartPos).trim();
-    if (name && name !== cookieName || !validCookieNameRegEx.test(cookieName)) {
-      continue;
-    }
-    let cookieValue = pairStr.substring(valueStartPos + 1).trim();
-    if (cookieValue.startsWith('"') && cookieValue.endsWith('"')) {
-      cookieValue = cookieValue.slice(1, -1);
-    }
-    if (validCookieValueRegEx.test(cookieValue)) {
-      parsedCookie[cookieName] = cookieValue.indexOf("%") !== -1 ? tryDecode(cookieValue, decodeURIComponent_) : cookieValue;
-      if (name) {
-        break;
-      }
-    }
-  }
-  return parsedCookie;
-};
-
-// node_modules/hono/dist/helper/cookie/index.js
-var getCookie = (c, key, prefix) => {
-  const cookie = c.req.raw.headers.get("Cookie");
-  if (typeof key === "string") {
-    if (!cookie) {
-      return;
-    }
-    let finalKey = key;
-    if (prefix === "secure") {
-      finalKey = "__Secure-" + key;
-    } else if (prefix === "host") {
-      finalKey = "__Host-" + key;
-    }
-    const obj2 = parse(cookie, finalKey);
-    return obj2[finalKey];
-  }
-  if (!cookie) {
-    return {};
-  }
-  const obj = parse(cookie);
-  return obj;
-};
-
-// node_modules/hono/dist/validator/validator.js
-var jsonRegex = /^application\/([a-z-\.]+\+)?json(;\s*[a-zA-Z0-9\-]+\=([^;]+))*$/;
-var multipartRegex = /^multipart\/form-data(;\s?boundary=[a-zA-Z0-9'"()+_,\-./:=?]+)?$/;
-var urlencodedRegex = /^application\/x-www-form-urlencoded(;\s*[a-zA-Z0-9\-]+\=([^;]+))*$/;
-var validator = (target, validationFunc) => {
-  return async (c, next) => {
-    let value = {};
-    const contentType = c.req.header("Content-Type");
-    switch (target) {
-      case "json":
-        if (!contentType || !jsonRegex.test(contentType)) {
-          break;
-        }
-        try {
-          value = await c.req.json();
-        } catch {
-          const message = "Malformed JSON in request body";
-          throw new HTTPException(400, { message });
-        }
-        break;
-      case "form": {
-        if (!contentType || !(multipartRegex.test(contentType) || urlencodedRegex.test(contentType))) {
-          break;
-        }
-        let formData;
-        if (c.req.bodyCache.formData) {
-          formData = await c.req.bodyCache.formData;
-        } else {
-          try {
-            const arrayBuffer = await c.req.arrayBuffer();
-            formData = await bufferToFormData(arrayBuffer, contentType);
-            c.req.bodyCache.formData = formData;
-          } catch (e) {
-            let message = "Malformed FormData request.";
-            message += e instanceof Error ? ` ${e.message}` : ` ${String(e)}`;
-            throw new HTTPException(400, { message });
-          }
-        }
-        const form = {};
-        formData.forEach((value2, key) => {
-          if (key.endsWith("[]")) {
-            (form[key] ??= []).push(value2);
-          } else if (Array.isArray(form[key])) {
-            form[key].push(value2);
-          } else if (key in form) {
-            form[key] = [form[key], value2];
-          } else {
-            form[key] = value2;
-          }
-        });
-        value = form;
-        break;
-      }
-      case "query":
-        value = Object.fromEntries(Object.entries(c.req.queries()).map(([k, v]) => {
-          return v.length === 1 ? [k, v[0]] : [k, v];
-        }));
-        break;
-      case "param":
-        value = c.req.param();
-        break;
-      case "header":
-        value = c.req.header();
-        break;
-      case "cookie":
-        value = getCookie(c);
-        break;
-    }
-    const res = await validationFunc(value, c);
-    if (res instanceof Response) {
-      return res;
-    }
-    c.req.addValidatedData(target, res);
-    return await next();
-  };
-};
-
-// node_modules/@hono/zod-validator/dist/index.js
-function zValidatorFunction(target, schema, hook, options) {
-  return validator(target, async (value, c) => {
-    let validatorValue = value;
-    if (target === "header" && "_def" in schema || target === "header" && "_zod" in schema) {
-      const schemaKeys = Object.keys("in" in schema ? schema.in.shape : schema.shape);
-      const caseInsensitiveKeymap = Object.fromEntries(schemaKeys.map((key) => [key.toLowerCase(), key]));
-      validatorValue = Object.fromEntries(Object.entries(value).map(([key, value$1]) => [caseInsensitiveKeymap[key] || key, value$1]));
-    }
-    const result = options && options.validationFunction ? await options.validationFunction(schema, validatorValue) : await schema.safeParseAsync(validatorValue);
-    if (hook) {
-      const hookResult = await hook({
-        data: validatorValue,
-        ...result,
-        target
-      }, c);
-      if (hookResult) {
-        if (hookResult instanceof Response)
-          return hookResult;
-        if ("response" in hookResult)
-          return hookResult.response;
-      }
-    }
-    if (!result.success)
-      return c.json(result, 400);
-    return result.data;
-  });
-}
-var zValidator = zValidatorFunction;
-
 // node_modules/zod/v4/core/core.js
 var NEVER = Object.freeze({
   status: "aborted"
@@ -11805,7 +11642,7 @@ var ZodRealError = $constructor("ZodError", initializer2, {
 });
 
 // node_modules/zod/v4/classic/parse.js
-var parse4 = /* @__PURE__ */ _parse(ZodRealError);
+var parse3 = /* @__PURE__ */ _parse(ZodRealError);
 var parseAsync2 = /* @__PURE__ */ _parseAsync(ZodRealError);
 var safeParse2 = /* @__PURE__ */ _safeParse(ZodRealError);
 var safeParseAsync2 = /* @__PURE__ */ _safeParseAsync(ZodRealError);
@@ -11848,7 +11685,7 @@ var ZodType = /* @__PURE__ */ $constructor("ZodType", (inst, def) => {
     reg.add(inst, meta2);
     return inst;
   };
-  inst.parse = (data, params) => parse4(inst, data, params, { callee: inst.parse });
+  inst.parse = (data, params) => parse3(inst, data, params, { callee: inst.parse });
   inst.safeParse = (data, params) => safeParse2(inst, data, params);
   inst.parseAsync = async (data, params) => parseAsync2(inst, data, params, { callee: inst.parseAsync });
   inst.safeParseAsync = async (data, params) => safeParseAsync2(inst, data, params);
@@ -16118,6 +15955,62 @@ var usersTable = sqliteTable("users_table", {
   createdAt: text().default(sql`(CURRENT_TIMESTAMP)`)
 });
 
+// node_modules/hono/dist/utils/cookie.js
+var validCookieNameRegEx = /^[\w!#$%&'*.^`|~+-]+$/;
+var validCookieValueRegEx = /^[ !#-:<-[\]-~]*$/;
+var parse4 = (cookie, name) => {
+  if (name && cookie.indexOf(name) === -1) {
+    return {};
+  }
+  const pairs = cookie.trim().split(";");
+  const parsedCookie = {};
+  for (let pairStr of pairs) {
+    pairStr = pairStr.trim();
+    const valueStartPos = pairStr.indexOf("=");
+    if (valueStartPos === -1) {
+      continue;
+    }
+    const cookieName = pairStr.substring(0, valueStartPos).trim();
+    if (name && name !== cookieName || !validCookieNameRegEx.test(cookieName)) {
+      continue;
+    }
+    let cookieValue = pairStr.substring(valueStartPos + 1).trim();
+    if (cookieValue.startsWith('"') && cookieValue.endsWith('"')) {
+      cookieValue = cookieValue.slice(1, -1);
+    }
+    if (validCookieValueRegEx.test(cookieValue)) {
+      parsedCookie[cookieName] = cookieValue.indexOf("%") !== -1 ? tryDecode(cookieValue, decodeURIComponent_) : cookieValue;
+      if (name) {
+        break;
+      }
+    }
+  }
+  return parsedCookie;
+};
+
+// node_modules/hono/dist/helper/cookie/index.js
+var getCookie = (c, key, prefix) => {
+  const cookie = c.req.raw.headers.get("Cookie");
+  if (typeof key === "string") {
+    if (!cookie) {
+      return;
+    }
+    let finalKey = key;
+    if (prefix === "secure") {
+      finalKey = "__Secure-" + key;
+    } else if (prefix === "host") {
+      finalKey = "__Host-" + key;
+    }
+    const obj2 = parse4(cookie, finalKey);
+    return obj2[finalKey];
+  }
+  if (!cookie) {
+    return {};
+  }
+  const obj = parse4(cookie);
+  return obj;
+};
+
 // node_modules/hono/dist/utils/encode.js
 var decodeBase64Url = (str) => {
   return decodeBase64(str.replace(/_|-/g, (m) => ({ _: "/", "-": "+" })[m] ?? m));
@@ -16653,24 +16546,160 @@ var decode3 = Jwt.decode;
 var sign2 = Jwt.sign;
 
 // src/utils/jwt.util.ts
+var secretKey = process.env.JWT_SECRET;
+var alg = "HS256";
 async function generateJWT(payload) {
   const data = {
     ...payload,
     sub: payload.id,
     exp: Math.floor(Date.now() / 1000) + 60 * 60
   };
-  const secret = process.env.JWT_SECRET;
   try {
-    const token = await sign2(data, secret);
+    const token = await sign2(data, secretKey, alg);
     return token;
   } catch (error) {
     return error;
   }
 }
+async function validateJWT(tokenToVerify) {
+  try {
+    const decodedPayload = await verify2(tokenToVerify, secretKey, alg);
+    console.log(decodedPayload);
+    return true;
+  } catch (error) {
+    throw new HTTPException(401, { message: "Usuário não autenticado" });
+  }
+}
+
+// node_modules/hono/dist/validator/validator.js
+var jsonRegex = /^application\/([a-z-\.]+\+)?json(;\s*[a-zA-Z0-9\-]+\=([^;]+))*$/;
+var multipartRegex = /^multipart\/form-data(;\s?boundary=[a-zA-Z0-9'"()+_,\-./:=?]+)?$/;
+var urlencodedRegex = /^application\/x-www-form-urlencoded(;\s*[a-zA-Z0-9\-]+\=([^;]+))*$/;
+var validator = (target, validationFunc) => {
+  return async (c, next) => {
+    let value = {};
+    const contentType = c.req.header("Content-Type");
+    switch (target) {
+      case "json":
+        if (!contentType || !jsonRegex.test(contentType)) {
+          break;
+        }
+        try {
+          value = await c.req.json();
+        } catch {
+          const message = "Malformed JSON in request body";
+          throw new HTTPException(400, { message });
+        }
+        break;
+      case "form": {
+        if (!contentType || !(multipartRegex.test(contentType) || urlencodedRegex.test(contentType))) {
+          break;
+        }
+        let formData;
+        if (c.req.bodyCache.formData) {
+          formData = await c.req.bodyCache.formData;
+        } else {
+          try {
+            const arrayBuffer = await c.req.arrayBuffer();
+            formData = await bufferToFormData(arrayBuffer, contentType);
+            c.req.bodyCache.formData = formData;
+          } catch (e) {
+            let message = "Malformed FormData request.";
+            message += e instanceof Error ? ` ${e.message}` : ` ${String(e)}`;
+            throw new HTTPException(400, { message });
+          }
+        }
+        const form = {};
+        formData.forEach((value2, key) => {
+          if (key.endsWith("[]")) {
+            (form[key] ??= []).push(value2);
+          } else if (Array.isArray(form[key])) {
+            form[key].push(value2);
+          } else if (key in form) {
+            form[key] = [form[key], value2];
+          } else {
+            form[key] = value2;
+          }
+        });
+        value = form;
+        break;
+      }
+      case "query":
+        value = Object.fromEntries(Object.entries(c.req.queries()).map(([k, v]) => {
+          return v.length === 1 ? [k, v[0]] : [k, v];
+        }));
+        break;
+      case "param":
+        value = c.req.param();
+        break;
+      case "header":
+        value = c.req.header();
+        break;
+      case "cookie":
+        value = getCookie(c);
+        break;
+    }
+    const res = await validationFunc(value, c);
+    if (res instanceof Response) {
+      return res;
+    }
+    c.req.addValidatedData(target, res);
+    return await next();
+  };
+};
+
+// node_modules/@hono/zod-validator/dist/index.js
+function zValidatorFunction(target, schema, hook, options) {
+  return validator(target, async (value, c) => {
+    let validatorValue = value;
+    if (target === "header" && "_def" in schema || target === "header" && "_zod" in schema) {
+      const schemaKeys = Object.keys("in" in schema ? schema.in.shape : schema.shape);
+      const caseInsensitiveKeymap = Object.fromEntries(schemaKeys.map((key) => [key.toLowerCase(), key]));
+      validatorValue = Object.fromEntries(Object.entries(value).map(([key, value$1]) => [caseInsensitiveKeymap[key] || key, value$1]));
+    }
+    const result = options && options.validationFunction ? await options.validationFunction(schema, validatorValue) : await schema.safeParseAsync(validatorValue);
+    if (hook) {
+      const hookResult = await hook({
+        data: validatorValue,
+        ...result,
+        target
+      }, c);
+      if (hookResult) {
+        if (hookResult instanceof Response)
+          return hookResult;
+        if ("response" in hookResult)
+          return hookResult.response;
+      }
+    }
+    if (!result.success)
+      return c.json(result, 400);
+    return result.data;
+  });
+}
+var zValidator = zValidatorFunction;
+
+// src/utils/error-response.util.ts
+var buildErrorResponse = (status, message, errors2 = []) => ({
+  success: false,
+  status,
+  message,
+  errors: errors2
+});
+
+// src/utils/zod-validator.util.ts
+var zValidator2 = (target, schema) => zValidator(target, schema, (result, c) => {
+  if (!result.success) {
+    return c.json(buildErrorResponse(400, "Dados inválidos", result.error.issues.map((issue2) => ({
+      path: issue2.path.join("."),
+      message: issue2.message,
+      code: issue2.code
+    }))), 400);
+  }
+});
 
 // src/routes/auth.ts
 var auth = new Hono2;
-auth.post("/register", zValidator("json", createUserSchema), async (c) => {
+auth.post("/register", zValidator2("json", createUserSchema), async (c) => {
   try {
     const validated = c.req.valid("json");
     const hash = await Bun.password.hash(validated.password);
@@ -16686,13 +16715,19 @@ auth.post("/register", zValidator("json", createUserSchema), async (c) => {
       name: userSaved[0].name,
       id: userSaved[0].id
     });
-    return c.json({ message: "Usuário criado com sucesso", user: { ...userSaved[0], token } }, 201);
+    return c.json({
+      message: "Usuário criado com sucesso",
+      user: { ...userSaved[0], token }
+    }, 201);
   } catch (error) {
+    if (error instanceof HTTPException) {
+      throw error;
+    }
     console.error("[auth/register] unexpected error", error);
-    return c.json({ message: "Erro interno ao criar usuário" }, 500);
+    throw new HTTPException(500, { message: "Erro interno ao criar usuário" });
   }
 });
-auth.post("/login", zValidator("json", loginSchema), async (c) => {
+auth.post("/login", zValidator2("json", loginSchema), async (c) => {
   const validated = c.req.valid("json");
   try {
     const userFound = await db.selectDistinct({
@@ -16700,13 +16735,10 @@ auth.post("/login", zValidator("json", loginSchema), async (c) => {
       name: usersTable.name,
       password: usersTable.password
     }).from(usersTable).where(eq(usersTable.email, validated.email));
-    if (!userFound) {
+    if (userFound.length === 0) {
       throw new HTTPException(401, { message: "Email e ou senha incorretos" });
     }
     const passwordIsValid = await Bun.password.verify(validated.password, userFound[0].password);
-    console.log(passwordIsValid);
-    console.log(userFound);
-    console.log(validated);
     if (!passwordIsValid) {
       throw new HTTPException(401, { message: "Email e ou senha incorretos" });
     }
@@ -16714,9 +16746,18 @@ auth.post("/login", zValidator("json", loginSchema), async (c) => {
       name: userFound[0].name,
       id: userFound[0].id
     });
-    return c.json({ id: userFound[0].id, name: userFound[0].name, token }, 200);
+    return c.json({
+      message: "Login realizado com sucesso",
+      id: userFound[0].id,
+      name: userFound[0].name,
+      token
+    }, 200);
   } catch (error) {
-    return c.json({ message: "erro", error }, 400);
+    if (error instanceof HTTPException) {
+      throw error;
+    }
+    console.error("[auth/login] unexpected error", error);
+    throw new HTTPException(500, { message: "Erro interno ao autenticar usuário" });
   }
 });
 var auth_default = auth;
@@ -21914,10 +21955,33 @@ var prettyJSON = (options) => {
   };
 };
 
+// src/utils/success-response.util.ts
+var buildSuccessResponse = (status, message, data) => ({
+  success: true,
+  status,
+  message,
+  data: data ?? null
+});
+
+// src/middlewares/response-envelope.ts
+async function responseEnvelope(c, next) {
+  const originalJson = c.json.bind(c);
+  c.json = (data, status, headers) => {
+    const httpStatus = status ?? 200;
+    const hasEnvelope = !!data && typeof data === "object" && "success" in data && "status" in data;
+    if (httpStatus >= 400 || hasEnvelope) {
+      return originalJson(data, httpStatus, headers);
+    }
+    return originalJson(buildSuccessResponse(httpStatus, "Sucesso", data), httpStatus, headers);
+  };
+  await next();
+}
+
 // src/index.ts
 var app = new Hono2;
 var startedAt = Date.now();
 app.use(prettyJSON());
+app.use("*", responseEnvelope);
 var client = createClient({
   url: process.env.LOCAL_DB,
   authToken: process.env.TURSO_AUTH_TOKEN,
@@ -21927,19 +21991,35 @@ var client = createClient({
 });
 var db = drizzle(client);
 app.route("/auth", auth_default);
+app.notFound((c) => {
+  const message = "Rota não encontrada";
+  return c.json(buildErrorResponse(404, message, [{ code: "not_found", message }]), 404);
+});
+app.onError((error, c) => {
+  if (error instanceof HTTPException) {
+    const status = error.status;
+    const defaultMessage = "Erro na requisição";
+    const exceptionMessage = error.message || defaultMessage;
+    const isVerifyTokenError = status === 401 && exceptionMessage === "Usuário não autenticado";
+    const message2 = isVerifyTokenError ? "Usuário não autenticado" : exceptionMessage;
+    const errorDetail = isVerifyTokenError ? "Usuário não autenticado" : exceptionMessage;
+    return c.json(buildErrorResponse(status, message2, [{ code: "http_exception", message: errorDetail }]), status);
+  }
+  console.error("[app] unhandled error", error);
+  const message = "Erro interno do servidor";
+  return c.json(buildErrorResponse(500, message, [{ code: "internal_error", message }]), 500);
+});
 app.get("/health", (c) => {
   return c.json({
+    message: "Serviço disponível",
     uptime: `${Math.floor((Date.now() - startedAt) / 1000)}s`
-  });
+  }, 200);
 });
 app.use("/api/*", bearerAuth({
-  verifyToken: async (token, c) => {
-    console.log(token, c);
-    return true;
-  }
+  verifyToken: validateJWT
 }));
 app.get("/api/page", (c) => {
-  return c.json({ message: "You are authorized" });
+  return c.json({ message: "You are authorized" }, 200);
 });
 var src_default = app;
 export {
