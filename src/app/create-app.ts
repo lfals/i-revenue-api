@@ -1,17 +1,18 @@
 import { Hono } from 'hono'
-import { bearerAuth } from 'hono/bearer-auth'
 import { prettyJSON } from 'hono/pretty-json'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import authRoutes from '../modules/auth/auth.routes'
-import { validateJWT } from '../infra/security/jwt.service'
+import type { JwtPayload } from '../infra/security/jwt.service'
+import { getUserFromJWT } from '../infra/security/jwt.service'
 import { AppError } from '../shared/errors/app-error'
+import { ERROR_CODES } from '../shared/errors/error-codes'
 import { buildErrorResponse } from '../shared/http/error-response'
 import { logger } from '../shared/logger/logger'
 import { requestLogger } from '../shared/middlewares/request-logger'
 import { responseEnvelope } from '../shared/middlewares/response-envelope'
 
 export function createApp() {
-  const app = new Hono()
+  const app = new Hono<{ Variables: { authUser: JwtPayload } }>()
   const startedAt = Date.now()
 
   app.use(prettyJSON())
@@ -30,21 +31,43 @@ export function createApp() {
     )
   })
 
-  app.use(
-    '/api/*',
-    bearerAuth({
-      verifyToken: validateJWT,
-      noAuthenticationHeader: {
-        message: 'Bearer é obrigatório',
-      },
-    }),
-  )
+  app.use('/api/*', async (c, next) => {
+    const authorization = c.req.header('authorization')
+    if (!authorization || !authorization.startsWith('Bearer ')) {
+      throw new AppError(
+        401,
+        'Bearer é obrigatório',
+        ERROR_CODES.MISSING_TOKEN,
+        [{ code: ERROR_CODES.MISSING_TOKEN, message: 'Bearer é obrigatório' }],
+        { 'WWW-Authenticate': 'Bearer realm="api"' },
+      )
+    }
 
-  app.get('/api/page', (c) => c.json({ message: 'You are authorized' }, 200))
+    const token = authorization.slice('Bearer '.length).trim()
+    if (!token) {
+      throw new AppError(
+        401,
+        'Bearer é obrigatório',
+        ERROR_CODES.MISSING_TOKEN,
+        [{ code: ERROR_CODES.MISSING_TOKEN, message: 'Bearer é obrigatório' }],
+        { 'WWW-Authenticate': 'Bearer realm="api"' },
+      )
+    }
+
+    const authUser = await getUserFromJWT(token)
+    c.set('authUser', authUser)
+
+    await next()
+  })
+
+  app.get('/api/page', (c) => {
+    const authUser = c.get('authUser')
+    return c.json({ message: 'You are authorized', authUser }, 200)
+  })
 
   app.notFound((c) => {
     const message = 'Rota não encontrada'
-    return c.json(buildErrorResponse(404, message, [{ code: 'not_found', message }]), 404)
+    return c.json(buildErrorResponse(404, message, [{ code: ERROR_CODES.NOT_FOUND, message }]), 404)
   })
 
   app.onError((error, c) => {
@@ -85,7 +108,7 @@ export function createApp() {
     })
 
     const message = 'Erro interno do servidor'
-    return c.json(buildErrorResponse(500, message, [{ code: 'internal_error', message }]), 500)
+    return c.json(buildErrorResponse(500, message, [{ code: ERROR_CODES.INTERNAL_ERROR, message }]), 500)
   })
 
   return app

@@ -1,19 +1,22 @@
+import type { ErrorCode } from './error-codes'
+import { ERROR_CODES } from './error-codes'
+
 export type AppErrorDetail = {
-  code: string
+  code: ErrorCode
   message: string
   path?: string
 }
 
 export class AppError extends Error {
   status: number
-  code: string
+  code: ErrorCode
   details: AppErrorDetail[]
   headers?: Record<string, string>
 
   constructor(
     status: number,
     message: string,
-    code = 'app_error',
+    code: ErrorCode = ERROR_CODES.APP_ERROR,
     details: AppErrorDetail[] = [],
     headers?: Record<string, string>,
   ) {

@@ -1,4 +1,5 @@
 import { beforeAll, describe, expect, it, mock } from 'bun:test'
+import { ERROR_CODES } from '../../shared/errors/error-codes.js'
 
 type AuthServiceCtor = new (authRepository: {
   createUser: (input: { name: string; email: string; password: string }) => Promise<{ id: string; name: string } | null>
@@ -93,7 +94,7 @@ describe('AuthService.register', () => {
     } catch (error) {
       expect(error).toBeInstanceOf(AppError)
       expect((error as InstanceType<AppErrorCtor>).status).toBe(409)
-      expect((error as InstanceType<AppErrorCtor>).code).toBe('user_already_exists')
+      expect((error as InstanceType<AppErrorCtor>).code).toBe(ERROR_CODES.USER_ALREADY_EXISTS)
     }
   })
 
@@ -119,7 +120,7 @@ describe('AuthService.register', () => {
     } catch (error) {
       expect(error).toBeInstanceOf(AppError)
       expect((error as InstanceType<AppErrorCtor>).status).toBe(409)
-      expect((error as InstanceType<AppErrorCtor>).code).toBe('email_already_exists')
+      expect((error as InstanceType<AppErrorCtor>).code).toBe(ERROR_CODES.EMAIL_ALREADY_EXISTS)
     }
   })
 })
@@ -173,7 +174,7 @@ describe('AuthService.login', () => {
     } catch (error) {
       expect(error).toBeInstanceOf(AppError)
       expect((error as InstanceType<AppErrorCtor>).status).toBe(401)
-      expect((error as InstanceType<AppErrorCtor>).code).toBe('invalid_credentials')
+      expect((error as InstanceType<AppErrorCtor>).code).toBe(ERROR_CODES.INVALID_CREDENTIALS)
     }
   })
 
@@ -197,7 +198,7 @@ describe('AuthService.login', () => {
     } catch (error) {
       expect(error).toBeInstanceOf(AppError)
       expect((error as InstanceType<AppErrorCtor>).status).toBe(401)
-      expect((error as InstanceType<AppErrorCtor>).code).toBe('invalid_credentials')
+      expect((error as InstanceType<AppErrorCtor>).code).toBe(ERROR_CODES.INVALID_CREDENTIALS)
     }
   })
 
@@ -219,7 +220,7 @@ describe('AuthService.login', () => {
     } catch (error) {
       expect(error).toBeInstanceOf(AppError)
       expect((error as InstanceType<AppErrorCtor>).status).toBe(500)
-      expect((error as InstanceType<AppErrorCtor>).code).toBe('login_failed')
+      expect((error as InstanceType<AppErrorCtor>).code).toBe(ERROR_CODES.LOGIN_FAILED)
     }
   })
 })
