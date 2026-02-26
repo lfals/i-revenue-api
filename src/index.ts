@@ -2,14 +2,11 @@ import { Hono } from 'hono'
 import { bearerAuth } from 'hono/bearer-auth'
 import { HTTPException } from 'hono/http-exception'
 import auth from './routes/auth'
-import { drizzle } from 'drizzle-orm/libsql';
 import { prettyJSON } from 'hono/pretty-json'
 import { buildErrorResponse } from './utils/error-response.util'
 import { responseEnvelope } from './middlewares/response-envelope'
 import { requestLogger } from './middlewares/request-logger'
 import { logger } from './utils/logger.util'
-
-import { createClient } from "@libsql/client/node";
 import { validateJWT } from './utils/jwt.util';
 
 const app = new Hono()
@@ -18,16 +15,6 @@ const startedAt = Date.now()
 app.use(prettyJSON()) // With options: prettyJSON({ space: 4 })
 app.use('*', requestLogger)
 app.use('*', responseEnvelope)
-
-const client = createClient({
-  url: process.env.LOCAL_DB!,
-  authToken: process.env.TURSO_AUTH_TOKEN!,
-  syncUrl: process.env.TURSO_DATABASE_URL!,
-  syncInterval: 15, // - https://docs.turso.tech/sdk/ts/reference#periodic-sync,
-  encryptionKey: process.env.SECRET
-});
-
-export const db = drizzle(client);
 
 app.route('/auth', auth)
 
