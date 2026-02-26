@@ -6,6 +6,8 @@ import { drizzle } from 'drizzle-orm/libsql';
 import { prettyJSON } from 'hono/pretty-json'
 import { buildErrorResponse } from './utils/error-response.util'
 import { responseEnvelope } from './middlewares/response-envelope'
+import { requestLogger } from './middlewares/request-logger'
+import { logger } from './utils/logger.util'
 
 import { createClient } from "@libsql/client/node";
 import { validateJWT } from './utils/jwt.util';
@@ -14,6 +16,7 @@ const app = new Hono()
 const startedAt = Date.now()
 
 app.use(prettyJSON()) // With options: prettyJSON({ space: 4 })
+app.use('*', requestLogger)
 app.use('*', responseEnvelope)
 
 const client = createClient({
@@ -56,13 +59,25 @@ app.onError(async (error, c) => {
     const message = isVerifyTokenError ? 'Usuário não autenticado' : exceptionMessage
     const errorDetail = isVerifyTokenError ? 'Usuário não autenticado' : exceptionMessage
 
+    logger.warn('request.http_exception', {
+      'http.request.method': c.req.method,
+      'url.path': c.req.path,
+      'http.response.status_code': status,
+      message: exceptionMessage,
+    })
+
     return c.json(
       buildErrorResponse(status, message, [{ code: 'http_exception', message: errorDetail }]),
       status,
     )
   }
 
-  console.error('[app] unhandled error', error)
+  logger.error('request.unhandled_error', {
+    'http.request.method': c.req.method,
+    'url.path': c.req.path,
+    'http.response.status_code': 500,
+    error: error instanceof Error ? error.message : 'unknown_error',
+  })
 
   const message = 'Erro interno do servidor'
   return c.json(
