@@ -15,6 +15,7 @@ const severityMap: Record<LogLevel, { text: string; number: number }> = {
 }
 
 const serviceName = process.env.OTEL_SERVICE_NAME || 'i-revenue-api'
+const shouldPersistLogs = process.env.NODE_ENV === 'production'
 
 function getTraceContext(): { trace_id?: string; span_id?: string } {
   const span = trace.getSpan(context.active())
@@ -105,7 +106,9 @@ function write(level: LogLevel, body: string, attributes: LogAttributes = {}) {
   }
 
   const serialized = JSON.stringify(logRecord)
-  void persistLogRecord(logRecord)
+  if (shouldPersistLogs) {
+    void persistLogRecord(logRecord)
+  }
 
   if (level === 'error' || level === 'warn') {
     console.error(serialized)
