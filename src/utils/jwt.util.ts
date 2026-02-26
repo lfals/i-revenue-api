@@ -1,6 +1,7 @@
 import { sign, verify } from 'hono/jwt'
 import { HTTPException } from 'hono/http-exception'
 import { usersTable } from '../db/schema'
+import { logger } from './logger.util'
 
 type JWTPayload = {
     id: typeof usersTable.$inferInsert['id']
@@ -29,11 +30,12 @@ export async function validateJWT(tokenToVerify: string): Promise<boolean> {
 
 
     try {
-        const decodedPayload = await verify(tokenToVerify, secretKey, alg)
-
-        console.log(decodedPayload)
+        await verify(tokenToVerify, secretKey, alg)
         return true
     } catch (error) {
+        logger.warn('auth.jwt.invalid_token', {
+            error: error instanceof Error ? error.message : 'invalid_token',
+        })
         throw new HTTPException(401, {
             message: 'Usuário não autenticado',
             res: new Response('Usuário não autenticado', {
