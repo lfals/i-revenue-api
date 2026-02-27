@@ -226,18 +226,12 @@ export function createApp() {
 
   app.doc('/openapi.json', {
     openapi: '3.0.0',
-    servers: [{
-      url: "https://i-revenue-api-production.up.railway.app/",
-      description: "Prod"
-    },
-    {
-      url: "https://i-revenue-api-development.up.railway.app",
-      description: "Dev"
-    },
-    {
-      url: "http://localhost:3000",
-      description: "Local"
-    }],
+    servers: [
+      {
+        url: '/',
+        description: 'Current server',
+      },
+    ],
     info: {
       title: 'i-revenue API',
       version: apiVersion,
