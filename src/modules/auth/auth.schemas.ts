@@ -29,37 +29,29 @@ export const authUserSchema = z.object({
   name: z.string(),
 }).openapi('AuthUser')
 
+export const authTokenUserSchema = authUserSchema.extend({
+  accessToken: z.string(),
+}).openapi('AuthTokenUser')
+
 export const registerResponseSchema = z.object({
   success: z.boolean(),
   status: z.number(),
   message: z.string(),
-  data: z.object({
-    user: authUserSchema.extend({
-      accessToken: z.string(),
-    }),
-  }),
+  data: authTokenUserSchema,
 }).openapi('RegisterResponse')
 
 export const loginResponseSchema = z.object({
   success: z.boolean(),
   status: z.number(),
   message: z.string(),
-  data: z.object({
-    id: z.string(),
-    name: z.string(),
-    accessToken: z.string(),
-  }),
+  data: authTokenUserSchema,
 }).openapi('LoginResponse')
 
 export const renewResponseSchema = z.object({
   success: z.boolean(),
   status: z.number(),
   message: z.string(),
-  data: z.object({
-    id: z.string(),
-    name: z.string(),
-    accessToken: z.string(),
-  }),
+  data: authTokenUserSchema,
 }).openapi('RenewTokenResponse')
 
 export const errorItemSchema = z.object({
