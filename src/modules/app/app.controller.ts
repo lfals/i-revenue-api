@@ -2,7 +2,7 @@ import type { Context } from 'hono'
 import { AppService } from './app.service'
 
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly appService: AppService) { }
 
   getDashboard(c: Context) {
     return c.json(
