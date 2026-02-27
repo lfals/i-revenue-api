@@ -43,7 +43,7 @@ const registerRoute = createRoute({
             data: {
               message: 'Usuário criado com sucesso',
               user: {
-                id: 'usr_01JY2MKRF8K3P7D2A9Q4X1NB5T',
+                id: "f01d0190-7b66-4480-8fa3-3bbebaddb3cd",
                 name: 'Felipe Santos',
                 token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
               },
@@ -120,7 +120,7 @@ const loginRoute = createRoute({
             message: 'Usuário autenticado com sucesso',
             data: {
               message: 'Login realizado com sucesso',
-              id: 'usr_01JY2MKRF8K3P7D2A9Q4X1NB5T',
+              id: "f01d0190-7b66-4480-8fa3-3bbebaddb3cd",
               name: 'Felipe Santos',
               token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
             },
