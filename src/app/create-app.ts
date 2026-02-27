@@ -1,6 +1,7 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { prettyJSON } from 'hono/pretty-json'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
+import appRoutes from '../modules/app/app.routes'
 import authRoutes from '../modules/auth/auth.routes'
 import type { JwtPayload } from '../infra/security/jwt.service'
 import { getUserFromJWT } from '../infra/security/jwt.service'
@@ -32,6 +33,7 @@ export function createApp() {
   app.use('*', responseEnvelope)
 
   app.route('/auth', authRoutes)
+  app.route('/api', appRoutes)
 
   const healthRoute = createRoute({
     method: 'get',

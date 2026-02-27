@@ -99,4 +99,138 @@ describe('Secure routes auth context', () => {
     expect(body.data.authUser.id).toBe('user-1')
     expect(body.data.authUser.name).toBe('Felps')
   })
+
+  it('retorna dashboard vazio quando autenticado', async () => {
+    const app = createApp()
+    const token = await generateJWT({
+      id: 'user-2',
+      name: 'Felps',
+    })
+
+    const response = await app.request('http://localhost/api/dashboard', {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    })
+    const body = (await response.json()) as {
+      success: boolean
+      status: number
+      message: string
+      data: unknown[]
+    }
+
+    expect(response.status).toBe(200)
+    expect(body.success).toBeTrue()
+    expect(body.status).toBe(200)
+    expect(body.message).toBe('Sucesso')
+    expect(body.data).toEqual([])
+  })
+
+  it('retorna dashboard vazio no POST quando autenticado', async () => {
+    const app = createApp()
+    const token = await generateJWT({
+      id: 'user-3',
+      name: 'Felps',
+    })
+
+    const response = await app.request('http://localhost/api/dashboard', {
+      method: 'POST',
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    })
+    const body = (await response.json()) as {
+      success: boolean
+      status: number
+      message: string
+      data: unknown[]
+    }
+
+    expect(response.status).toBe(200)
+    expect(body.success).toBeTrue()
+    expect(body.status).toBe(200)
+    expect(body.message).toBe('Sucesso')
+    expect(body.data).toEqual([])
+  })
+
+  it('retorna dashboard vazio no PUT quando autenticado', async () => {
+    const app = createApp()
+    const token = await generateJWT({
+      id: 'user-4',
+      name: 'Felps',
+    })
+
+    const response = await app.request('http://localhost/api/dashboard', {
+      method: 'PUT',
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    })
+    const body = (await response.json()) as {
+      success: boolean
+      status: number
+      message: string
+      data: unknown[]
+    }
+
+    expect(response.status).toBe(200)
+    expect(body.success).toBeTrue()
+    expect(body.status).toBe(200)
+    expect(body.message).toBe('Sucesso')
+    expect(body.data).toEqual([])
+  })
+
+  it('retorna dashboard vazio no PATCH quando autenticado', async () => {
+    const app = createApp()
+    const token = await generateJWT({
+      id: 'user-5',
+      name: 'Felps',
+    })
+
+    const response = await app.request('http://localhost/api/dashboard', {
+      method: 'PATCH',
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    })
+    const body = (await response.json()) as {
+      success: boolean
+      status: number
+      message: string
+      data: unknown[]
+    }
+
+    expect(response.status).toBe(200)
+    expect(body.success).toBeTrue()
+    expect(body.status).toBe(200)
+    expect(body.message).toBe('Sucesso')
+    expect(body.data).toEqual([])
+  })
+
+  it('retorna dashboard vazio no DELETE quando autenticado', async () => {
+    const app = createApp()
+    const token = await generateJWT({
+      id: 'user-6',
+      name: 'Felps',
+    })
+
+    const response = await app.request('http://localhost/api/dashboard', {
+      method: 'DELETE',
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    })
+    const body = (await response.json()) as {
+      success: boolean
+      status: number
+      message: string
+      data: unknown[]
+    }
+
+    expect(response.status).toBe(200)
+    expect(body.success).toBeTrue()
+    expect(body.status).toBe(200)
+    expect(body.message).toBe('Sucesso')
+    expect(body.data).toEqual([])
+  })
 })
