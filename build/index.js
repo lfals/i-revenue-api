@@ -334,33 +334,33 @@ var require_detect_libc = __commonJS((exports, module) => {
     }
     return null;
   };
-  var version3 = async () => {
-    let version4 = null;
+  var version4 = async () => {
+    let version5 = null;
     if (isLinux()) {
-      version4 = await versionFromFilesystem();
-      if (!version4) {
-        version4 = versionFromReport();
+      version5 = await versionFromFilesystem();
+      if (!version5) {
+        version5 = versionFromReport();
       }
-      if (!version4) {
+      if (!version5) {
         const out = await safeCommand();
-        version4 = versionFromCommand(out);
+        version5 = versionFromCommand(out);
       }
     }
-    return version4;
+    return version5;
   };
   var versionSync = () => {
-    let version4 = null;
+    let version5 = null;
     if (isLinux()) {
-      version4 = versionFromFilesystemSync();
-      if (!version4) {
-        version4 = versionFromReport();
+      version5 = versionFromFilesystemSync();
+      if (!version5) {
+        version5 = versionFromReport();
       }
-      if (!version4) {
+      if (!version5) {
         const out = safeCommandSync();
-        version4 = versionFromCommand(out);
+        version5 = versionFromCommand(out);
       }
     }
-    return version4;
+    return version5;
   };
   module.exports = {
     GLIBC,
@@ -369,7 +369,7 @@ var require_detect_libc = __commonJS((exports, module) => {
     familySync,
     isNonGlibcLinux,
     isNonGlibcLinuxSync,
-    version: version3,
+    version: version4,
     versionSync
   };
 });
@@ -1422,14 +1422,14 @@ var require_receiver = __commonJS((exports, module) => {
       }
       const buf = this.consume(2);
       if ((buf[0] & 48) !== 0) {
-        const error = this.createError(RangeError, "RSV2 and RSV3 must be clear", true, 1002, "WS_ERR_UNEXPECTED_RSV_2_3");
-        cb(error);
+        const error48 = this.createError(RangeError, "RSV2 and RSV3 must be clear", true, 1002, "WS_ERR_UNEXPECTED_RSV_2_3");
+        cb(error48);
         return;
       }
       const compressed = (buf[0] & 64) === 64;
       if (compressed && !this._extensions[PerMessageDeflate.extensionName]) {
-        const error = this.createError(RangeError, "RSV1 must be clear", true, 1002, "WS_ERR_UNEXPECTED_RSV_1");
-        cb(error);
+        const error48 = this.createError(RangeError, "RSV1 must be clear", true, 1002, "WS_ERR_UNEXPECTED_RSV_1");
+        cb(error48);
         return;
       }
       this._fin = (buf[0] & 128) === 128;
@@ -1437,42 +1437,42 @@ var require_receiver = __commonJS((exports, module) => {
       this._payloadLength = buf[1] & 127;
       if (this._opcode === 0) {
         if (compressed) {
-          const error = this.createError(RangeError, "RSV1 must be clear", true, 1002, "WS_ERR_UNEXPECTED_RSV_1");
-          cb(error);
+          const error48 = this.createError(RangeError, "RSV1 must be clear", true, 1002, "WS_ERR_UNEXPECTED_RSV_1");
+          cb(error48);
           return;
         }
         if (!this._fragmented) {
-          const error = this.createError(RangeError, "invalid opcode 0", true, 1002, "WS_ERR_INVALID_OPCODE");
-          cb(error);
+          const error48 = this.createError(RangeError, "invalid opcode 0", true, 1002, "WS_ERR_INVALID_OPCODE");
+          cb(error48);
           return;
         }
         this._opcode = this._fragmented;
       } else if (this._opcode === 1 || this._opcode === 2) {
         if (this._fragmented) {
-          const error = this.createError(RangeError, `invalid opcode ${this._opcode}`, true, 1002, "WS_ERR_INVALID_OPCODE");
-          cb(error);
+          const error48 = this.createError(RangeError, `invalid opcode ${this._opcode}`, true, 1002, "WS_ERR_INVALID_OPCODE");
+          cb(error48);
           return;
         }
         this._compressed = compressed;
       } else if (this._opcode > 7 && this._opcode < 11) {
         if (!this._fin) {
-          const error = this.createError(RangeError, "FIN must be set", true, 1002, "WS_ERR_EXPECTED_FIN");
-          cb(error);
+          const error48 = this.createError(RangeError, "FIN must be set", true, 1002, "WS_ERR_EXPECTED_FIN");
+          cb(error48);
           return;
         }
         if (compressed) {
-          const error = this.createError(RangeError, "RSV1 must be clear", true, 1002, "WS_ERR_UNEXPECTED_RSV_1");
-          cb(error);
+          const error48 = this.createError(RangeError, "RSV1 must be clear", true, 1002, "WS_ERR_UNEXPECTED_RSV_1");
+          cb(error48);
           return;
         }
         if (this._payloadLength > 125 || this._opcode === 8 && this._payloadLength === 1) {
-          const error = this.createError(RangeError, `invalid payload length ${this._payloadLength}`, true, 1002, "WS_ERR_INVALID_CONTROL_PAYLOAD_LENGTH");
-          cb(error);
+          const error48 = this.createError(RangeError, `invalid payload length ${this._payloadLength}`, true, 1002, "WS_ERR_INVALID_CONTROL_PAYLOAD_LENGTH");
+          cb(error48);
           return;
         }
       } else {
-        const error = this.createError(RangeError, `invalid opcode ${this._opcode}`, true, 1002, "WS_ERR_INVALID_OPCODE");
-        cb(error);
+        const error48 = this.createError(RangeError, `invalid opcode ${this._opcode}`, true, 1002, "WS_ERR_INVALID_OPCODE");
+        cb(error48);
         return;
       }
       if (!this._fin && !this._fragmented)
@@ -1480,13 +1480,13 @@ var require_receiver = __commonJS((exports, module) => {
       this._masked = (buf[1] & 128) === 128;
       if (this._isServer) {
         if (!this._masked) {
-          const error = this.createError(RangeError, "MASK must be set", true, 1002, "WS_ERR_EXPECTED_MASK");
-          cb(error);
+          const error48 = this.createError(RangeError, "MASK must be set", true, 1002, "WS_ERR_EXPECTED_MASK");
+          cb(error48);
           return;
         }
       } else if (this._masked) {
-        const error = this.createError(RangeError, "MASK must be clear", true, 1002, "WS_ERR_UNEXPECTED_MASK");
-        cb(error);
+        const error48 = this.createError(RangeError, "MASK must be clear", true, 1002, "WS_ERR_UNEXPECTED_MASK");
+        cb(error48);
         return;
       }
       if (this._payloadLength === 126)
@@ -1512,8 +1512,8 @@ var require_receiver = __commonJS((exports, module) => {
       const buf = this.consume(8);
       const num = buf.readUInt32BE(0);
       if (num > Math.pow(2, 53 - 32) - 1) {
-        const error = this.createError(RangeError, "Unsupported WebSocket frame: payload length > 2^53 - 1", false, 1009, "WS_ERR_UNSUPPORTED_DATA_PAYLOAD_LENGTH");
-        cb(error);
+        const error48 = this.createError(RangeError, "Unsupported WebSocket frame: payload length > 2^53 - 1", false, 1009, "WS_ERR_UNSUPPORTED_DATA_PAYLOAD_LENGTH");
+        cb(error48);
         return;
       }
       this._payloadLength = num * Math.pow(2, 32) + buf.readUInt32BE(4);
@@ -1523,8 +1523,8 @@ var require_receiver = __commonJS((exports, module) => {
       if (this._payloadLength && this._opcode < 8) {
         this._totalPayloadLength += this._payloadLength;
         if (this._totalPayloadLength > this._maxPayload && this._maxPayload > 0) {
-          const error = this.createError(RangeError, "Max payload size exceeded", false, 1009, "WS_ERR_UNSUPPORTED_MESSAGE_LENGTH");
-          cb(error);
+          const error48 = this.createError(RangeError, "Max payload size exceeded", false, 1009, "WS_ERR_UNSUPPORTED_MESSAGE_LENGTH");
+          cb(error48);
           return;
         }
       }
@@ -1576,8 +1576,8 @@ var require_receiver = __commonJS((exports, module) => {
         if (buf.length) {
           this._messageLength += buf.length;
           if (this._messageLength > this._maxPayload && this._maxPayload > 0) {
-            const error = this.createError(RangeError, "Max payload size exceeded", false, 1009, "WS_ERR_UNSUPPORTED_MESSAGE_LENGTH");
-            cb(error);
+            const error48 = this.createError(RangeError, "Max payload size exceeded", false, 1009, "WS_ERR_UNSUPPORTED_MESSAGE_LENGTH");
+            cb(error48);
             return;
           }
           this._fragments.push(buf);
@@ -1623,8 +1623,8 @@ var require_receiver = __commonJS((exports, module) => {
       } else {
         const buf = concat(fragments, messageLength);
         if (!this._skipUTF8Validation && !isValidUTF8(buf)) {
-          const error = this.createError(Error, "invalid UTF-8 sequence", true, 1007, "WS_ERR_INVALID_UTF8");
-          cb(error);
+          const error48 = this.createError(Error, "invalid UTF-8 sequence", true, 1007, "WS_ERR_INVALID_UTF8");
+          cb(error48);
           return;
         }
         if (this._state === INFLATING || this._allowSynchronousEvents) {
@@ -1649,14 +1649,14 @@ var require_receiver = __commonJS((exports, module) => {
         } else {
           const code = data.readUInt16BE(0);
           if (!isValidStatusCode(code)) {
-            const error = this.createError(RangeError, `invalid status code ${code}`, true, 1002, "WS_ERR_INVALID_CLOSE_CODE");
-            cb(error);
+            const error48 = this.createError(RangeError, `invalid status code ${code}`, true, 1002, "WS_ERR_INVALID_CLOSE_CODE");
+            cb(error48);
             return;
           }
           const buf = new FastBuffer(data.buffer, data.byteOffset + 2, data.length - 2);
           if (!this._skipUTF8Validation && !isValidUTF8(buf)) {
-            const error = this.createError(Error, "invalid UTF-8 sequence", true, 1007, "WS_ERR_INVALID_UTF8");
-            cb(error);
+            const error48 = this.createError(Error, "invalid UTF-8 sequence", true, 1007, "WS_ERR_INVALID_UTF8");
+            cb(error48);
             return;
           }
           this._loop = false;
@@ -1726,7 +1726,7 @@ var require_sender = __commonJS((exports, module) => {
     }
     static frame(data, options) {
       let mask;
-      let merge = false;
+      let merge2 = false;
       let offset = 2;
       let skipMasking = false;
       if (options.mask) {
@@ -1759,7 +1759,7 @@ var require_sender = __commonJS((exports, module) => {
         }
       } else {
         dataLength = data.length;
-        merge = options.mask && options.readOnly && !skipMasking;
+        merge2 = options.mask && options.readOnly && !skipMasking;
       }
       let payloadLength = dataLength;
       if (dataLength >= 65536) {
@@ -1769,7 +1769,7 @@ var require_sender = __commonJS((exports, module) => {
         offset += 2;
         payloadLength = 126;
       }
-      const target = Buffer.allocUnsafe(merge ? dataLength + offset : offset);
+      const target = Buffer.allocUnsafe(merge2 ? dataLength + offset : offset);
       target[0] = options.fin ? options.opcode | 128 : options.opcode;
       if (options.rsv1)
         target[0] |= 64;
@@ -1789,7 +1789,7 @@ var require_sender = __commonJS((exports, module) => {
       target[offset - 1] = mask[3];
       if (skipMasking)
         return [target, data];
-      if (merge) {
+      if (merge2) {
         applyMask(data, mask, target, offset, dataLength);
         return [target];
       }
@@ -2146,10 +2146,10 @@ var require_event_target = __commonJS((exports, module) => {
           callListener(handler, this, event);
         };
       } else if (type === "error") {
-        wrapper = function onError(error) {
+        wrapper = function onError(error48) {
           const event = new ErrorEvent("error", {
-            error,
-            message: error.message
+            error: error48,
+            message: error48.message
           });
           event[kTarget] = this;
           callListener(handler, this, event);
@@ -2205,7 +2205,7 @@ var require_extension = __commonJS((exports, module) => {
     else
       dest[name].push(elem);
   }
-  function parse2(header) {
+  function parse6(header) {
     const offers = Object.create(null);
     let params = Object.create(null);
     let mustUnescape = false;
@@ -2358,7 +2358,7 @@ var require_extension = __commonJS((exports, module) => {
       }).join(", ");
     }).join(", ");
   }
-  module.exports = { format, parse: parse2 };
+  module.exports = { format, parse: parse6 };
 });
 
 // node_modules/ws/lib/websocket.js
@@ -2368,7 +2368,7 @@ var require_websocket = __commonJS((exports, module) => {
   var http = __require("http");
   var net = __require("net");
   var tls = __require("tls");
-  var { randomBytes, createHash: createHash2 } = __require("crypto");
+  var { randomBytes, createHash } = __require("crypto");
   var { Duplex, Readable } = __require("stream");
   var { URL: URL2 } = __require("url");
   var PerMessageDeflate = require_permessage_deflate();
@@ -2389,7 +2389,7 @@ var require_websocket = __commonJS((exports, module) => {
   var {
     EventTarget: { addEventListener: addEventListener2, removeEventListener }
   } = require_event_target();
-  var { format, parse: parse2 } = require_extension();
+  var { format, parse: parse6 } = require_extension();
   var { toBuffer } = require_buffer_util();
   var kAborted = Symbol("kAborted");
   var protocolVersions = [8, 13];
@@ -2903,7 +2903,7 @@ var require_websocket = __commonJS((exports, module) => {
         abortHandshake(websocket, socket, "Invalid Upgrade header");
         return;
       }
-      const digest = createHash2("sha1").update(key + GUID).digest("base64");
+      const digest = createHash("sha1").update(key + GUID).digest("base64");
       if (res.headers["sec-websocket-accept"] !== digest) {
         abortHandshake(websocket, socket, "Invalid Sec-WebSocket-Accept header");
         return;
@@ -2934,7 +2934,7 @@ var require_websocket = __commonJS((exports, module) => {
         }
         let extensions;
         try {
-          extensions = parse2(secWebSocketExtensions);
+          extensions = parse6(secWebSocketExtensions);
         } catch (err) {
           const message = "Invalid Sec-WebSocket-Extensions header";
           abortHandshake(websocket, socket, message);
@@ -3156,7 +3156,7 @@ var require_stream = __commonJS((exports, module) => {
       if (!duplex.push(data))
         ws.pause();
     });
-    ws.once("error", function error(err) {
+    ws.once("error", function error48(err) {
       if (duplex.destroyed)
         return;
       terminateOnDestroy = false;
@@ -3174,7 +3174,7 @@ var require_stream = __commonJS((exports, module) => {
         return;
       }
       let called = false;
-      ws.once("error", function error(err2) {
+      ws.once("error", function error48(err2) {
         called = true;
         callback(err2);
       });
@@ -3229,7 +3229,7 @@ var require_stream = __commonJS((exports, module) => {
 // node_modules/ws/lib/subprotocol.js
 var require_subprotocol = __commonJS((exports, module) => {
   var { tokenChars } = require_validation();
-  function parse2(header) {
+  function parse6(header) {
     const protocols = new Set;
     let start = -1;
     let end = -1;
@@ -3268,7 +3268,7 @@ var require_subprotocol = __commonJS((exports, module) => {
     protocols.add(protocol);
     return protocols;
   }
-  module.exports = { parse: parse2 };
+  module.exports = { parse: parse6 };
 });
 
 // node_modules/ws/lib/websocket-server.js
@@ -3276,7 +3276,7 @@ var require_websocket_server = __commonJS((exports, module) => {
   var EventEmitter = __require("events");
   var http = __require("http");
   var { Duplex } = __require("stream");
-  var { createHash: createHash2 } = __require("crypto");
+  var { createHash } = __require("crypto");
   var extension = require_extension();
   var PerMessageDeflate = require_permessage_deflate();
   var subprotocol = require_subprotocol();
@@ -3403,7 +3403,7 @@ var require_websocket_server = __commonJS((exports, module) => {
       socket.on("error", socketOnError);
       const key = req.headers["sec-websocket-key"];
       const upgrade = req.headers.upgrade;
-      const version3 = +req.headers["sec-websocket-version"];
+      const version4 = +req.headers["sec-websocket-version"];
       if (req.method !== "GET") {
         const message = "Invalid HTTP method";
         abortHandshakeOrEmitwsClientError(this, req, socket, 405, message);
@@ -3419,7 +3419,7 @@ var require_websocket_server = __commonJS((exports, module) => {
         abortHandshakeOrEmitwsClientError(this, req, socket, 400, message);
         return;
       }
-      if (version3 !== 13 && version3 !== 8) {
+      if (version4 !== 13 && version4 !== 8) {
         const message = "Missing or invalid Sec-WebSocket-Version header";
         abortHandshakeOrEmitwsClientError(this, req, socket, 400, message, {
           "Sec-WebSocket-Version": "13, 8"
@@ -3459,7 +3459,7 @@ var require_websocket_server = __commonJS((exports, module) => {
       }
       if (this.options.verifyClient) {
         const info = {
-          origin: req.headers[`${version3 === 8 ? "sec-websocket-origin" : "origin"}`],
+          origin: req.headers[`${version4 === 8 ? "sec-websocket-origin" : "origin"}`],
           secure: !!(req.socket.authorized || req.socket.encrypted),
           req
         };
@@ -3485,7 +3485,7 @@ var require_websocket_server = __commonJS((exports, module) => {
       }
       if (this._state > RUNNING)
         return abortHandshake(socket, 503);
-      const digest = createHash2("sha1").update(key + GUID).digest("base64");
+      const digest = createHash("sha1").update(key + GUID).digest("base64");
       const headers = [
         "HTTP/1.1 101 Switching Protocols",
         "Upgrade: websocket",
@@ -3531,12 +3531,12 @@ var require_websocket_server = __commonJS((exports, module) => {
     }
   }
   module.exports = WebSocketServer;
-  function addListeners(server, map) {
-    for (const event of Object.keys(map))
-      server.on(event, map[event]);
+  function addListeners(server, map2) {
+    for (const event of Object.keys(map2))
+      server.on(event, map2[event]);
     return function removeListeners() {
-      for (const event of Object.keys(map)) {
-        server.removeListener(event, map[event]);
+      for (const event of Object.keys(map2)) {
+        server.removeListener(event, map2[event]);
       }
     };
   }
@@ -3780,8 +3780,8 @@ var require_tr46 = __commonJS((exports, module) => {
     return null;
   }
   var regexAstralSymbols = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
-  function countSymbols(string2) {
-    return string2.replace(regexAstralSymbols, "_").length;
+  function countSymbols(string5) {
+    return string5.replace(regexAstralSymbols, "_").length;
   }
   function mapChars(domain_name, useSTD3, processing_option) {
     var hasError = false;
@@ -3837,21 +3837,21 @@ var require_tr46 = __commonJS((exports, module) => {
       label = punycode.toUnicode(label);
       processing_option = PROCESSING_OPTIONS.NONTRANSITIONAL;
     }
-    var error = false;
+    var error48 = false;
     if (normalize(label) !== label || label[3] === "-" && label[4] === "-" || label[0] === "-" || label[label.length - 1] === "-" || label.indexOf(".") !== -1 || label.search(combiningMarksRegex) === 0) {
-      error = true;
+      error48 = true;
     }
     var len = countSymbols(label);
     for (var i = 0;i < len; ++i) {
       var status = findStatus(label.codePointAt(i));
       if (processing === PROCESSING_OPTIONS.TRANSITIONAL && status[1] !== "valid" || processing === PROCESSING_OPTIONS.NONTRANSITIONAL && status[1] !== "valid" && status[1] !== "deviation") {
-        error = true;
+        error48 = true;
         break;
       }
     }
     return {
       label,
-      error
+      error: error48
     };
   }
   function processing(domain_name, useSTD3, processing_option) {
@@ -3952,33 +3952,33 @@ var require_url_state_machine = __commonJS((exports, module) => {
   function isWindowsDriveLetterCodePoints(cp1, cp2) {
     return isASCIIAlpha(cp1) && (cp2 === 58 || cp2 === 124);
   }
-  function isWindowsDriveLetterString(string2) {
-    return string2.length === 2 && isASCIIAlpha(string2.codePointAt(0)) && (string2[1] === ":" || string2[1] === "|");
+  function isWindowsDriveLetterString(string5) {
+    return string5.length === 2 && isASCIIAlpha(string5.codePointAt(0)) && (string5[1] === ":" || string5[1] === "|");
   }
-  function isNormalizedWindowsDriveLetterString(string2) {
-    return string2.length === 2 && isASCIIAlpha(string2.codePointAt(0)) && string2[1] === ":";
+  function isNormalizedWindowsDriveLetterString(string5) {
+    return string5.length === 2 && isASCIIAlpha(string5.codePointAt(0)) && string5[1] === ":";
   }
-  function containsForbiddenHostCodePoint(string2) {
-    return string2.search(/\u0000|\u0009|\u000A|\u000D|\u0020|#|%|\/|:|\?|@|\[|\\|\]/) !== -1;
+  function containsForbiddenHostCodePoint(string5) {
+    return string5.search(/\u0000|\u0009|\u000A|\u000D|\u0020|#|%|\/|:|\?|@|\[|\\|\]/) !== -1;
   }
-  function containsForbiddenHostCodePointExcludingPercent(string2) {
-    return string2.search(/\u0000|\u0009|\u000A|\u000D|\u0020|#|\/|:|\?|@|\[|\\|\]/) !== -1;
+  function containsForbiddenHostCodePointExcludingPercent(string5) {
+    return string5.search(/\u0000|\u0009|\u000A|\u000D|\u0020|#|\/|:|\?|@|\[|\\|\]/) !== -1;
   }
   function isSpecialScheme(scheme) {
     return specialSchemes[scheme] !== undefined;
   }
-  function isSpecial(url) {
-    return isSpecialScheme(url.scheme);
+  function isSpecial(url2) {
+    return isSpecialScheme(url2.scheme);
   }
   function defaultPort(scheme) {
     return specialSchemes[scheme];
   }
   function percentEncode(c) {
-    let hex = c.toString(16).toUpperCase();
-    if (hex.length === 1) {
-      hex = "0" + hex;
+    let hex3 = c.toString(16).toUpperCase();
+    if (hex3.length === 1) {
+      hex3 = "0" + hex3;
     }
-    return "%" + hex;
+    return "%" + hex3;
   }
   function utf8PercentEncode(c) {
     const buf = new Buffer(c);
@@ -4068,13 +4068,13 @@ var require_url_state_machine = __commonJS((exports, module) => {
     if (numbers[numbers.length - 1] >= Math.pow(256, 5 - numbers.length)) {
       return failure;
     }
-    let ipv4 = numbers.pop();
+    let ipv43 = numbers.pop();
     let counter = 0;
     for (const n of numbers) {
-      ipv4 += n * Math.pow(256, 3 - counter);
+      ipv43 += n * Math.pow(256, 3 - counter);
       ++counter;
     }
-    return ipv4;
+    return ipv43;
   }
   function serializeIPv4(address) {
     let output = "";
@@ -4144,13 +4144,13 @@ var require_url_state_machine = __commonJS((exports, module) => {
             return failure;
           }
           while (isASCIIDigit(input[pointer])) {
-            const number2 = parseInt(at(input, pointer));
+            const number5 = parseInt(at(input, pointer));
             if (ipv4Piece === null) {
-              ipv4Piece = number2;
+              ipv4Piece = number5;
             } else if (ipv4Piece === 0) {
               return failure;
             } else {
-              ipv4Piece = ipv4Piece * 10 + number2;
+              ipv4Piece = ipv4Piece * 10 + number5;
             }
             if (ipv4Piece > 255) {
               return failure;
@@ -4227,8 +4227,8 @@ var require_url_state_machine = __commonJS((exports, module) => {
     if (!isSpecialArg) {
       return parseOpaqueHost(input);
     }
-    const domain = utf8PercentDecode(input);
-    const asciiDomain = tr46.toASCII(domain, false, tr46.PROCESSING_OPTIONS.NONTRANSITIONAL, false);
+    const domain2 = utf8PercentDecode(input);
+    const asciiDomain = tr46.toASCII(domain2, false, tr46.PROCESSING_OPTIONS.NONTRANSITIONAL, false);
     if (asciiDomain === null) {
       return failure;
     }
@@ -4290,38 +4290,38 @@ var require_url_state_machine = __commonJS((exports, module) => {
     }
     return host;
   }
-  function trimControlChars(url) {
-    return url.replace(/^[\u0000-\u001F\u0020]+|[\u0000-\u001F\u0020]+$/g, "");
+  function trimControlChars(url2) {
+    return url2.replace(/^[\u0000-\u001F\u0020]+|[\u0000-\u001F\u0020]+$/g, "");
   }
-  function trimTabAndNewline(url) {
-    return url.replace(/\u0009|\u000A|\u000D/g, "");
+  function trimTabAndNewline(url2) {
+    return url2.replace(/\u0009|\u000A|\u000D/g, "");
   }
-  function shortenPath(url) {
-    const path = url.path;
+  function shortenPath(url2) {
+    const path = url2.path;
     if (path.length === 0) {
       return;
     }
-    if (url.scheme === "file" && path.length === 1 && isNormalizedWindowsDriveLetter(path[0])) {
+    if (url2.scheme === "file" && path.length === 1 && isNormalizedWindowsDriveLetter(path[0])) {
       return;
     }
     path.pop();
   }
-  function includesCredentials(url) {
-    return url.username !== "" || url.password !== "";
+  function includesCredentials(url2) {
+    return url2.username !== "" || url2.password !== "";
   }
-  function cannotHaveAUsernamePasswordPort(url) {
-    return url.host === null || url.host === "" || url.cannotBeABaseURL || url.scheme === "file";
+  function cannotHaveAUsernamePasswordPort(url2) {
+    return url2.host === null || url2.host === "" || url2.cannotBeABaseURL || url2.scheme === "file";
   }
-  function isNormalizedWindowsDriveLetter(string2) {
-    return /^[A-Za-z]:$/.test(string2);
+  function isNormalizedWindowsDriveLetter(string5) {
+    return /^[A-Za-z]:$/.test(string5);
   }
-  function URLStateMachine(input, base, encodingOverride, url, stateOverride) {
+  function URLStateMachine(input, base, encodingOverride, url2, stateOverride) {
     this.pointer = 0;
     this.input = input;
     this.base = base || null;
     this.encodingOverride = encodingOverride || "utf-8";
     this.stateOverride = stateOverride;
-    this.url = url;
+    this.url = url2;
     this.failure = false;
     this.parseError = false;
     if (!this.url) {
@@ -4871,53 +4871,53 @@ var require_url_state_machine = __commonJS((exports, module) => {
     }
     return true;
   };
-  function serializeURL(url, excludeFragment) {
-    let output = url.scheme + ":";
-    if (url.host !== null) {
+  function serializeURL(url2, excludeFragment) {
+    let output = url2.scheme + ":";
+    if (url2.host !== null) {
       output += "//";
-      if (url.username !== "" || url.password !== "") {
-        output += url.username;
-        if (url.password !== "") {
-          output += ":" + url.password;
+      if (url2.username !== "" || url2.password !== "") {
+        output += url2.username;
+        if (url2.password !== "") {
+          output += ":" + url2.password;
         }
         output += "@";
       }
-      output += serializeHost(url.host);
-      if (url.port !== null) {
-        output += ":" + url.port;
+      output += serializeHost(url2.host);
+      if (url2.port !== null) {
+        output += ":" + url2.port;
       }
-    } else if (url.host === null && url.scheme === "file") {
+    } else if (url2.host === null && url2.scheme === "file") {
       output += "//";
     }
-    if (url.cannotBeABaseURL) {
-      output += url.path[0];
+    if (url2.cannotBeABaseURL) {
+      output += url2.path[0];
     } else {
-      for (const string2 of url.path) {
-        output += "/" + string2;
+      for (const string5 of url2.path) {
+        output += "/" + string5;
       }
     }
-    if (url.query !== null) {
-      output += "?" + url.query;
+    if (url2.query !== null) {
+      output += "?" + url2.query;
     }
-    if (!excludeFragment && url.fragment !== null) {
-      output += "#" + url.fragment;
+    if (!excludeFragment && url2.fragment !== null) {
+      output += "#" + url2.fragment;
     }
     return output;
   }
-  function serializeOrigin(tuple) {
-    let result = tuple.scheme + "://";
-    result += serializeHost(tuple.host);
-    if (tuple.port !== null) {
-      result += ":" + tuple.port;
+  function serializeOrigin(tuple2) {
+    let result = tuple2.scheme + "://";
+    result += serializeHost(tuple2.host);
+    if (tuple2.port !== null) {
+      result += ":" + tuple2.port;
     }
     return result;
   }
   exports.serializeURL = serializeURL;
-  exports.serializeURLOrigin = function(url) {
-    switch (url.scheme) {
+  exports.serializeURLOrigin = function(url2) {
+    switch (url2.scheme) {
       case "blob":
         try {
-          return exports.serializeURLOrigin(exports.parseURL(url.path[0]));
+          return exports.serializeURLOrigin(exports.parseURL(url2.path[0]));
         } catch (e) {
           return "null";
         }
@@ -4928,9 +4928,9 @@ var require_url_state_machine = __commonJS((exports, module) => {
       case "ws":
       case "wss":
         return serializeOrigin({
-          scheme: url.scheme,
-          host: url.host,
-          port: url.port
+          scheme: url2.scheme,
+          host: url2.host,
+          port: url2.port
         });
       case "file":
         return "file://";
@@ -4948,24 +4948,24 @@ var require_url_state_machine = __commonJS((exports, module) => {
     }
     return usm.url;
   };
-  exports.setTheUsername = function(url, username) {
-    url.username = "";
+  exports.setTheUsername = function(url2, username) {
+    url2.username = "";
     const decoded = punycode.ucs2.decode(username);
     for (let i = 0;i < decoded.length; ++i) {
-      url.username += percentEncodeChar(decoded[i], isUserinfoPercentEncode);
+      url2.username += percentEncodeChar(decoded[i], isUserinfoPercentEncode);
     }
   };
-  exports.setThePassword = function(url, password) {
-    url.password = "";
+  exports.setThePassword = function(url2, password) {
+    url2.password = "";
     const decoded = punycode.ucs2.decode(password);
     for (let i = 0;i < decoded.length; ++i) {
-      url.password += percentEncodeChar(decoded[i], isUserinfoPercentEncode);
+      url2.password += percentEncodeChar(decoded[i], isUserinfoPercentEncode);
     }
   };
   exports.serializeHost = serializeHost;
   exports.cannotHaveAUsernamePasswordPort = cannotHaveAUsernamePasswordPort;
-  exports.serializeInteger = function(integer) {
-    return String(integer);
+  exports.serializeInteger = function(integer2) {
+    return String(integer2);
   };
   exports.parseURL = function(input, options) {
     if (options === undefined) {
@@ -4980,7 +4980,7 @@ var require_URL_impl = __commonJS((exports) => {
   var usm = require_url_state_machine();
   exports.implementation = class URLImpl {
     constructor(constructorArgs) {
-      const url = constructorArgs[0];
+      const url2 = constructorArgs[0];
       const base = constructorArgs[1];
       let parsedBase = null;
       if (base !== undefined) {
@@ -4989,7 +4989,7 @@ var require_URL_impl = __commonJS((exports) => {
           throw new TypeError("Invalid base URL");
         }
       }
-      const parsedURL = usm.basicURLParse(url, { baseURL: parsedBase });
+      const parsedURL = usm.basicURLParse(url2, { baseURL: parsedBase });
       if (parsedURL === "failure") {
         throw new TypeError("Invalid URL");
       }
@@ -5033,14 +5033,14 @@ var require_URL_impl = __commonJS((exports) => {
       usm.setThePassword(this._url, v);
     }
     get host() {
-      const url = this._url;
-      if (url.host === null) {
+      const url2 = this._url;
+      if (url2.host === null) {
         return "";
       }
-      if (url.port === null) {
-        return usm.serializeHost(url.host);
+      if (url2.port === null) {
+        return usm.serializeHost(url2.host);
       }
-      return usm.serializeHost(url.host) + ":" + usm.serializeInteger(url.port);
+      return usm.serializeHost(url2.host) + ":" + usm.serializeInteger(url2.port);
     }
     set host(v) {
       if (this._url.cannotBeABaseURL) {
@@ -5099,14 +5099,14 @@ var require_URL_impl = __commonJS((exports) => {
       return "?" + this._url.query;
     }
     set search(v) {
-      const url = this._url;
+      const url2 = this._url;
       if (v === "") {
-        url.query = null;
+        url2.query = null;
         return;
       }
       const input = v[0] === "?" ? v.substring(1) : v;
-      url.query = "";
-      usm.basicURLParse(input, { url, stateOverride: "query" });
+      url2.query = "";
+      usm.basicURLParse(input, { url: url2, stateOverride: "query" });
     }
     get hash() {
       if (this._url.fragment === null || this._url.fragment === "") {
@@ -5135,7 +5135,7 @@ var require_URL = __commonJS((exports, module) => {
   var utils = require_utils();
   var Impl = require_URL_impl();
   var impl = utils.implSymbol;
-  function URL2(url) {
+  function URL2(url2) {
     if (!this || this[impl] || !(this instanceof URL2)) {
       throw new TypeError("Failed to construct 'URL': Please use the 'new' operator, this DOM object constructor cannot be called as a function.");
     }
@@ -5484,8 +5484,8 @@ var require_lib2 = __commonJS((exports, module) => {
     this.timeout = timeout;
     if (body instanceof Stream2) {
       body.on("error", function(err) {
-        const error = err.name === "AbortError" ? err : new FetchError(`Invalid response body while trying to fetch ${_this.url}: ${err.message}`, "system", err);
-        _this[INTERNALS].error = error;
+        const error48 = err.name === "AbortError" ? err : new FetchError(`Invalid response body while trying to fetch ${_this.url}: ${err.message}`, "system", err);
+        _this[INTERNALS].error = error48;
       });
     }
   }
@@ -5664,7 +5664,7 @@ var require_lib2 = __commonJS((exports, module) => {
   function isBlob(obj) {
     return typeof obj === "object" && typeof obj.arrayBuffer === "function" && typeof obj.type === "string" && typeof obj.stream === "function" && typeof obj.constructor === "function" && typeof obj.constructor.name === "string" && /^(Blob|File)$/.test(obj.constructor.name) && /^(Blob|File)$/.test(obj[Symbol.toStringTag]);
   }
-  function clone(instance) {
+  function clone2(instance) {
     let p1, p2;
     let body = instance.body;
     if (instance.bodyUsed) {
@@ -5748,9 +5748,9 @@ var require_lib2 = __commonJS((exports, module) => {
       throw new TypeError(`${value} is not a legal HTTP header value`);
     }
   }
-  function find(map, name) {
+  function find(map2, name) {
     name = name.toLowerCase();
-    for (const key in map) {
+    for (const key in map2) {
       if (key.toLowerCase() === name) {
         return key;
       }
@@ -6012,7 +6012,7 @@ var require_lib2 = __commonJS((exports, module) => {
       return this[INTERNALS$1].headers;
     }
     clone() {
-      return new Response3(clone(this), {
+      return new Response3(clone2(this), {
         url: this.url,
         status: this.status,
         statusText: this.statusText,
@@ -6076,7 +6076,7 @@ var require_lib2 = __commonJS((exports, module) => {
       if ((init.body != null || isRequest(input) && input.body !== null) && (method === "GET" || method === "HEAD")) {
         throw new TypeError("Request with GET/HEAD method cannot have body");
       }
-      let inputBody = init.body != null ? init.body : isRequest(input) && input.body !== null ? clone(input) : null;
+      let inputBody = init.body != null ? init.body : isRequest(input) && input.body !== null ? clone2(input) : null;
       Body.call(this, inputBody, {
         timeout: init.timeout || input.timeout || 0,
         size: init.size || input.size || 0
@@ -6205,26 +6205,26 @@ var require_lib2 = __commonJS((exports, module) => {
     const dest = new URL$1(destination).protocol;
     return orig === dest;
   };
-  function fetch2(url, opts) {
+  function fetch2(url2, opts) {
     if (!fetch2.Promise) {
       throw new Error("native promise missing, set fetch.Promise to your favorite alternative");
     }
     Body.Promise = fetch2.Promise;
     return new fetch2.Promise(function(resolve, reject) {
-      const request = new Request3(url, opts);
+      const request = new Request3(url2, opts);
       const options = getNodeRequestOptions(request);
       const send = (options.protocol === "https:" ? https : http).request;
       const signal = request.signal;
       let response = null;
       const abort = function abort2() {
-        let error = new AbortError("The user aborted a request.");
-        reject(error);
+        let error48 = new AbortError("The user aborted a request.");
+        reject(error48);
         if (request.body && request.body instanceof Stream2.Readable) {
-          destroyStream(request.body, error);
+          destroyStream(request.body, error48);
         }
         if (!response || !response.body)
           return;
-        response.body.emit("error", error);
+        response.body.emit("error", error48);
       };
       if (signal && signal.aborted) {
         abort();
@@ -6232,14 +6232,14 @@ var require_lib2 = __commonJS((exports, module) => {
       }
       const abortAndFinalize = function abortAndFinalize2() {
         abort();
-        finalize();
+        finalize2();
       };
       const req = send(options);
       let reqTimeout;
       if (signal) {
         signal.addEventListener("abort", abortAndFinalize);
       }
-      function finalize() {
+      function finalize2() {
         req.abort();
         if (signal)
           signal.removeEventListener("abort", abortAndFinalize);
@@ -6249,7 +6249,7 @@ var require_lib2 = __commonJS((exports, module) => {
         req.once("socket", function(socket) {
           reqTimeout = setTimeout(function() {
             reject(new FetchError(`network timeout at: ${request.url}`, "request-timeout"));
-            finalize();
+            finalize2();
           }, request.timeout);
         });
       }
@@ -6258,7 +6258,7 @@ var require_lib2 = __commonJS((exports, module) => {
         if (response && response.body) {
           destroyStream(response.body, err);
         }
-        finalize();
+        finalize2();
       });
       fixResponseChunkedTransferBadEnding(req, function(err) {
         if (signal && signal.aborted) {
@@ -6291,14 +6291,14 @@ var require_lib2 = __commonJS((exports, module) => {
           } catch (err) {
             if (request.redirect !== "manual") {
               reject(new FetchError(`uri requested responds with an invalid redirect URL: ${location}`, "invalid-redirect"));
-              finalize();
+              finalize2();
               return;
             }
           }
           switch (request.redirect) {
             case "error":
               reject(new FetchError(`uri requested responds with a redirect, redirect mode is set to error: ${request.url}`, "no-redirect"));
-              finalize();
+              finalize2();
               return;
             case "manual":
               if (locationURL !== null) {
@@ -6315,7 +6315,7 @@ var require_lib2 = __commonJS((exports, module) => {
               }
               if (request.counter >= request.follow) {
                 reject(new FetchError(`maximum redirect reached at: ${request.url}`, "max-redirect"));
-                finalize();
+                finalize2();
                 return;
               }
               const requestOpts = {
@@ -6337,7 +6337,7 @@ var require_lib2 = __commonJS((exports, module) => {
               }
               if (res.statusCode !== 303 && request.body && getTotalBytes(request) === null) {
                 reject(new FetchError("Cannot follow redirect with body being a readable stream", "unsupported-redirect"));
-                finalize();
+                finalize2();
                 return;
               }
               if (res.statusCode === 303 || (res.statusCode === 301 || res.statusCode === 302) && request.method === "POST") {
@@ -6346,7 +6346,7 @@ var require_lib2 = __commonJS((exports, module) => {
                 requestOpts.headers.delete("content-length");
               }
               resolve(fetch2(new Request3(locationURL, requestOpts)));
-              finalize();
+              finalize2();
               return;
           }
         }
@@ -6456,11 +6456,11 @@ var require_lib2 = __commonJS((exports, module) => {
 var require_node_ponyfill = __commonJS((exports, module) => {
   var nodeFetch = require_lib2();
   var realFetch = nodeFetch.default || nodeFetch;
-  var fetch2 = function(url, options) {
-    if (/^\/\//.test(url)) {
-      url = "https:" + url;
+  var fetch2 = function(url2, options) {
+    if (/^\/\//.test(url2)) {
+      url2 = "https:" + url2;
     }
-    return realFetch.call(this, url, options);
+    return realFetch.call(this, url2, options);
   };
   fetch2.ponyfill = true;
   module.exports = exports = fetch2;
@@ -6501,9 +6501,9 @@ var require_promise_limit = __commonJS((exports, module) => {
         return Promise.resolve(fn()).then(function(result) {
           remove();
           return result;
-        }, function(error) {
+        }, function(error48) {
           remove();
-          throw error;
+          throw error48;
         });
       } catch (err) {
         remove();
@@ -6519,7 +6519,7 @@ var require_promise_limit = __commonJS((exports, module) => {
     };
     return semaphore;
   }
-  function map(items, mapper) {
+  function map2(items, mapper) {
     var failed = false;
     var limit = this;
     return Promise.all(items.map(function() {
@@ -6536,7 +6536,7 @@ var require_promise_limit = __commonJS((exports, module) => {
   }
   function addExtras(fn) {
     fn.queue = 0;
-    fn.map = map;
+    fn.map = map2;
     return fn;
   }
   module.exports = function(count) {
@@ -7951,143 +7951,1501 @@ var require_src = __commonJS((exports) => {
   };
 });
 
-// node_modules/hono/dist/compose.js
-var compose = (middleware, onError, onNotFound) => {
-  return (context, next) => {
-    let index = -1;
-    return dispatch(0);
-    async function dispatch(i) {
-      if (i <= index) {
-        throw new Error("next() called multiple times");
-      }
-      index = i;
-      let res;
-      let isError = false;
-      let handler;
-      if (middleware[i]) {
-        handler = middleware[i][0][0];
-        context.req.routeIndex = i;
-      } else {
-        handler = i === middleware.length && next || undefined;
-      }
-      if (handler) {
-        try {
-          res = await handler(context, () => dispatch(i + 1));
-        } catch (err) {
-          if (err instanceof Error && onError) {
-            context.error = err;
-            res = await onError(err, context);
-            isError = true;
-          } else {
-            throw err;
-          }
-        }
-      } else {
-        if (context.finalized === false && onNotFound) {
-          res = await onNotFound(context);
-        }
-      }
-      if (res && (context.finalized === false || isError)) {
-        context.res = res;
-      }
-      return context;
+// node_modules/@asteasolutions/zod-to-openapi/dist/index.cjs
+function __rest(s, e) {
+  var t = {};
+  for (var p in s)
+    if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+      t[p] = s[p];
+  if (s != null && typeof Object.getOwnPropertySymbols === "function")
+    for (var i = 0, p = Object.getOwnPropertySymbols(s);i < p.length; i++) {
+      if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+        t[p[i]] = s[p[i]];
     }
+  return t;
+}
+var ZodTypeKeys = {
+  ZodAny: "any",
+  ZodArray: "array",
+  ZodBigInt: "bigint",
+  ZodBoolean: "boolean",
+  ZodDefault: "default",
+  ZodPrefault: "prefault",
+  ZodTransform: "transform",
+  ZodEnum: "enum",
+  ZodIntersection: "intersection",
+  ZodLazy: "lazy",
+  ZodLiteral: "literal",
+  ZodNever: "never",
+  ZodNull: "null",
+  ZodNullable: "nullable",
+  ZodNumber: "number",
+  ZodNonOptional: "nonoptional",
+  ZodObject: "object",
+  ZodOptional: "optional",
+  ZodPipe: "pipe",
+  ZodReadonly: "readonly",
+  ZodRecord: "record",
+  ZodString: "string",
+  ZodTuple: "tuple",
+  ZodType: "type",
+  ZodUnion: "union",
+  ZodDiscriminatedUnion: "union",
+  ZodUnknown: "unknown",
+  ZodVoid: "void",
+  ZodDate: "date",
+  ZodTemplateLiteral: "template_literal"
+};
+function isZodType(schema, typeNames) {
+  const typeNamesArray = Array.isArray(typeNames) ? typeNames : [typeNames];
+  return typeNamesArray.some((typeName) => {
+    var _a;
+    const typeNameMatch = ((_a = schema === null || schema === undefined ? undefined : schema.def) === null || _a === undefined ? undefined : _a.type) === ZodTypeKeys[typeName];
+    if (typeName === "ZodDiscriminatedUnion") {
+      return typeNameMatch && "discriminator" in schema.def;
+    }
+    return typeNameMatch;
+  });
+}
+function isAnyZodType(schema) {
+  return schema && "def" in schema;
+}
+function isNullableSchema(schema) {
+  return schema.safeParse(null).success;
+}
+function isOptionalSchema(schema) {
+  return schema.safeParse(undefined).success;
+}
+
+class $ZodRegistry {
+  constructor() {
+    this._map = new Map;
+    this._idmap = new Map;
+  }
+  add(schema, ..._meta) {
+    const meta = _meta[0];
+    this._map.set(schema, meta);
+    if (meta && typeof meta === "object" && "id" in meta) {
+      if (this._idmap.has(meta.id)) {
+        throw new Error(`ID ${meta.id} already exists in the registry`);
+      }
+      this._idmap.set(meta.id, schema);
+    }
+    return this;
+  }
+  clear() {
+    this._map = new Map;
+    this._idmap = new Map;
+    return this;
+  }
+  remove(schema) {
+    const meta = this._map.get(schema);
+    if (meta && typeof meta === "object" && "id" in meta) {
+      this._idmap.delete(meta.id);
+    }
+    this._map.delete(schema);
+    return this;
+  }
+  get(schema) {
+    const p = schema._zod.parent;
+    if (p) {
+      const pm = { ...this.get(p) ?? {} };
+      delete pm.id;
+      return { ...pm, ...this._map.get(schema) };
+    }
+    return this._map.get(schema);
+  }
+  has(schema) {
+    return this._map.has(schema);
+  }
+}
+function registry() {
+  return new $ZodRegistry;
+}
+function isEqual(x, y) {
+  if (x === null || x === undefined || y === null || y === undefined) {
+    return x === y;
+  }
+  if (x === y || x.valueOf() === y.valueOf()) {
+    return true;
+  }
+  if (Array.isArray(x)) {
+    if (!Array.isArray(y)) {
+      return false;
+    }
+    if (x.length !== y.length) {
+      return false;
+    }
+  }
+  if (!(x instanceof Object) || !(y instanceof Object)) {
+    return false;
+  }
+  const keysX = Object.keys(x);
+  return Object.keys(y).every((keyY) => keysX.indexOf(keyY) !== -1) && keysX.every((key) => isEqual(x[key], y[key]));
+}
+
+class ObjectSet {
+  constructor() {
+    this.buckets = new Map;
+  }
+  put(value) {
+    const hashCode = this.hashCodeOf(value);
+    const itemsByCode = this.buckets.get(hashCode);
+    if (!itemsByCode) {
+      this.buckets.set(hashCode, [value]);
+      return;
+    }
+    const alreadyHasItem = itemsByCode.some((_) => isEqual(_, value));
+    if (!alreadyHasItem) {
+      itemsByCode.push(value);
+    }
+  }
+  contains(value) {
+    const hashCode = this.hashCodeOf(value);
+    const itemsByCode = this.buckets.get(hashCode);
+    if (!itemsByCode) {
+      return false;
+    }
+    return itemsByCode.some((_) => isEqual(_, value));
+  }
+  values() {
+    return [...this.buckets.values()].flat();
+  }
+  stats() {
+    let totalBuckets = 0;
+    let totalValues = 0;
+    let collisions = 0;
+    for (const bucket of this.buckets.values()) {
+      totalBuckets += 1;
+      totalValues += bucket.length;
+      if (bucket.length > 1) {
+        collisions += 1;
+      }
+    }
+    const hashEffectiveness = totalBuckets / totalValues;
+    return { totalBuckets, collisions, totalValues, hashEffectiveness };
+  }
+  hashCodeOf(object) {
+    let hashCode = 0;
+    if (Array.isArray(object)) {
+      for (let i = 0;i < object.length; i++) {
+        hashCode ^= this.hashCodeOf(object[i]) * i;
+      }
+      return hashCode;
+    }
+    if (typeof object === "string") {
+      for (let i = 0;i < object.length; i++) {
+        hashCode ^= object.charCodeAt(i) * i;
+      }
+      return hashCode;
+    }
+    if (typeof object === "number") {
+      return object;
+    }
+    if (typeof object === "object") {
+      for (const [key, value] of Object.entries(object)) {
+        hashCode ^= this.hashCodeOf(key) + this.hashCodeOf(value !== null && value !== undefined ? value : "");
+      }
+    }
+    return hashCode;
+  }
+}
+function isUndefined(value) {
+  return value === undefined;
+}
+function mapValues(object, mapper) {
+  const result = {};
+  Object.entries(object).forEach(([key, value]) => {
+    result[key] = mapper(value);
+  });
+  return result;
+}
+function omit(object, keys) {
+  const result = {};
+  Object.entries(object).forEach(([key, value]) => {
+    if (!keys.some((keyToOmit) => keyToOmit === key)) {
+      result[key] = value;
+    }
+  });
+  return result;
+}
+function omitBy(object, predicate) {
+  const result = {};
+  Object.entries(object).forEach(([key, value]) => {
+    if (!predicate(value, key)) {
+      result[key] = value;
+    }
+  });
+  return result;
+}
+function compact(arr) {
+  return arr.filter((elem) => !isUndefined(elem));
+}
+var objectEquals = isEqual;
+function uniq(values) {
+  const set = new ObjectSet;
+  values.forEach((value) => set.put(value));
+  return [...set.values()];
+}
+function isString(val) {
+  return typeof val === "string";
+}
+function sortObjectByKeys(obj) {
+  return Object.fromEntries(Object.entries(obj).sort(([leftKey], [rightKey]) => leftKey.localeCompare(rightKey)));
+}
+var zodToOpenAPIRegistry = registry();
+
+class Metadata {
+  static collectMetadata(schema, metadata) {
+    const currentMetadata = this.getMetadataFromRegistry(schema);
+    const _internal = Object.assign(Object.assign({}, currentMetadata === null || currentMetadata === undefined ? undefined : currentMetadata._internal), metadata === null || metadata === undefined ? undefined : metadata._internal);
+    const param = Object.assign(Object.assign({}, currentMetadata === null || currentMetadata === undefined ? undefined : currentMetadata.param), metadata === null || metadata === undefined ? undefined : metadata.param);
+    const totalMetadata = Object.assign(Object.assign(Object.assign(Object.assign({}, Object.keys(_internal).length > 0 ? { _internal } : {}), currentMetadata), metadata), Object.keys(param).length > 0 ? { param } : {});
+    if (isZodType(schema, [
+      "ZodOptional",
+      "ZodNullable",
+      "ZodDefault",
+      "ZodPrefault",
+      "ZodReadonly",
+      "ZodNonOptional"
+    ]) && isAnyZodType(schema._zod.def.innerType)) {
+      return this.collectMetadata(schema._zod.def.innerType, totalMetadata);
+    }
+    if (isZodType(schema, "ZodPipe")) {
+      const inSchema = schema._zod.def.in;
+      const outSchema = schema._zod.def.out;
+      if (isZodType(inSchema, "ZodTransform") && isAnyZodType(outSchema)) {
+        return this.collectMetadata(outSchema, totalMetadata);
+      }
+      if (isAnyZodType(inSchema)) {
+        return this.collectMetadata(inSchema, totalMetadata);
+      }
+    }
+    return totalMetadata;
+  }
+  static getMetadata(zodSchema) {
+    return this.collectMetadata(zodSchema);
+  }
+  static getOpenApiMetadata(zodSchema) {
+    const metadata = this.collectMetadata(zodSchema);
+    const _a = metadata !== null && metadata !== undefined ? metadata : {}, rest = __rest(_a, ["_internal"]);
+    return rest;
+  }
+  static getInternalMetadata(zodSchema) {
+    var _a;
+    return (_a = this.collectMetadata(zodSchema)) === null || _a === undefined ? undefined : _a._internal;
+  }
+  static getParamMetadata(zodSchema) {
+    const metadata = this.collectMetadata(zodSchema);
+    return Object.assign(Object.assign({}, metadata), {
+      param: Object.assign(Object.assign({}, (metadata === null || metadata === undefined ? undefined : metadata.description) ? { description: metadata.description } : {}), metadata === null || metadata === undefined ? undefined : metadata.param)
+    });
+  }
+  static buildSchemaMetadata(metadata) {
+    return omitBy(omit(metadata, ["param", "_internal"]), isUndefined);
+  }
+  static buildParameterMetadata(metadata) {
+    return omitBy(metadata, isUndefined);
+  }
+  static applySchemaMetadata(initialData, metadata) {
+    return omitBy(Object.assign(Object.assign({}, initialData), this.buildSchemaMetadata(metadata)), isUndefined);
+  }
+  static getRefId(zodSchema) {
+    var _a;
+    return (_a = this.getInternalMetadata(zodSchema)) === null || _a === undefined ? undefined : _a.refId;
+  }
+  static unwrapChained(schema) {
+    return this.unwrapUntil(schema);
+  }
+  static getDefaultValue(zodSchema) {
+    var _a;
+    const unwrapped = (_a = this.unwrapUntil(zodSchema, "ZodDefault")) !== null && _a !== undefined ? _a : this.unwrapUntil(zodSchema, "ZodPrefault");
+    return unwrapped === null || unwrapped === undefined ? undefined : unwrapped._zod.def.defaultValue;
+  }
+  static unwrapUntil(schema, typeName) {
+    if (typeName && isZodType(schema, typeName)) {
+      return schema;
+    }
+    if (isZodType(schema, [
+      "ZodOptional",
+      "ZodNullable",
+      "ZodDefault",
+      "ZodPrefault",
+      "ZodReadonly",
+      "ZodNonOptional"
+    ]) && isAnyZodType(schema._zod.def.innerType)) {
+      return this.unwrapUntil(schema._zod.def.innerType, typeName);
+    }
+    if (isZodType(schema, "ZodPipe")) {
+      const inSchema = schema._zod.def.in;
+      const outSchema = schema._zod.def.out;
+      if (isZodType(inSchema, "ZodTransform") && isAnyZodType(outSchema)) {
+        return this.unwrapUntil(outSchema, typeName);
+      }
+      if (isAnyZodType(inSchema)) {
+        return this.unwrapUntil(inSchema, typeName);
+      }
+    }
+    return typeName ? undefined : schema;
+  }
+  static getMetadataFromInternalRegistry(zodSchema) {
+    return zodToOpenAPIRegistry.get(zodSchema);
+  }
+  static getMetadataFromRegistry(zodSchema) {
+    const internal = this.getMetadataFromInternalRegistry(zodSchema);
+    const general = zodSchema.meta();
+    if (!internal) {
+      return general;
+    }
+    const { _internal } = internal, rest = __rest(internal, ["_internal"]);
+    const _a = general !== null && general !== undefined ? general : {}, { id, title } = _a, restGeneral = __rest(_a, ["id", "title"]);
+    return Object.assign(Object.assign(Object.assign({ _internal: Object.assign(Object.assign({}, id ? { refId: id } : {}), _internal) }, rest), title ? { description: title } : {}), restGeneral);
+  }
+  static setMetadataInRegistry(zodSchema, metadata) {
+    zodToOpenAPIRegistry.add(zodSchema, metadata);
+  }
+}
+function preserveMetadataFromModifier(zodSchema, modifier) {
+  const zodModifier = zodSchema[modifier];
+  if (typeof zodModifier !== "function") {
+    return;
+  }
+  zodSchema[modifier] = function(...args) {
+    const result = zodModifier.apply(this, args);
+    const meta = Metadata.getMetadataFromRegistry(this);
+    if (meta) {
+      Metadata.setMetadataInRegistry(result, meta);
+    }
+    return result;
   };
-};
-
-// node_modules/hono/dist/http-exception.js
-var HTTPException = class extends Error {
-  res;
-  status;
-  constructor(status = 500, options) {
-    super(options?.message, { cause: options?.cause });
-    this.res = options?.res;
-    this.status = status;
+}
+function extendZodWithOpenApi(zod) {
+  if (typeof zod.ZodType.prototype.openapi !== "undefined") {
+    return;
   }
-  getResponse() {
-    if (this.res) {
-      const newResponse = new Response(this.res.body, {
-        status: this.status,
-        headers: this.res.headers
+  zod.ZodType.prototype.openapi = function(...args) {
+    const { refId, metadata, options } = getOpenApiConfiguration(...args);
+    const _a = metadata !== null && metadata !== undefined ? metadata : {}, { param } = _a, restOfOpenApi = __rest(_a, ["param"]);
+    const allMetadata = Metadata.getMetadataFromRegistry(this);
+    const _b = allMetadata !== null && allMetadata !== undefined ? allMetadata : {}, { _internal: internalMetadata } = _b, currentMetadata = __rest(_b, ["_internal"]);
+    const _internal = Object.assign(Object.assign(Object.assign({}, internalMetadata), options), refId ? { refId } : undefined);
+    const resultMetadata = Object.assign(Object.assign(Object.assign({}, currentMetadata), restOfOpenApi), (currentMetadata === null || currentMetadata === undefined ? undefined : currentMetadata.param) || param ? {
+      param: Object.assign(Object.assign({}, currentMetadata === null || currentMetadata === undefined ? undefined : currentMetadata.param), param)
+    } : undefined);
+    const result = new this.constructor(this._def);
+    function setMetadata(schema) {
+      Metadata.setMetadataInRegistry(schema, Object.assign(Object.assign({}, Object.keys(_internal).length > 0 ? { _internal } : undefined), resultMetadata));
+    }
+    setMetadata(result);
+    if (isZodType(result, "ZodLazy")) {
+      setMetadata(this);
+    }
+    if (isZodType(result, "ZodObject")) {
+      const currentMetadata2 = Metadata.getMetadataFromRegistry(result);
+      const originalExtend = result.extend;
+      result.extend = function(...args2) {
+        const extendedResult = originalExtend.apply(result, args2);
+        const _a2 = currentMetadata2 !== null && currentMetadata2 !== undefined ? currentMetadata2 : {}, { _internal: _internal2 } = _a2, rest = __rest(_a2, ["_internal"]);
+        Metadata.setMetadataInRegistry(extendedResult, {
+          _internal: {
+            extendedFrom: (_internal2 === null || _internal2 === undefined ? undefined : _internal2.refId) ? { refId: _internal2.refId, schema: result } : _internal2 === null || _internal2 === undefined ? undefined : _internal2.extendedFrom
+          }
+        });
+        return extendedResult.openapi(rest);
+      };
+      preserveMetadataFromModifier(result, "catchall");
+    }
+    preserveMetadataFromModifier(result, "optional");
+    preserveMetadataFromModifier(result, "nullable");
+    preserveMetadataFromModifier(result, "default");
+    preserveMetadataFromModifier(result, "transform");
+    preserveMetadataFromModifier(result, "refine");
+    preserveMetadataFromModifier(result, "length");
+    preserveMetadataFromModifier(result, "min");
+    preserveMetadataFromModifier(result, "max");
+    const originalMeta = result.meta;
+    result.meta = function(...args2) {
+      const result2 = originalMeta.apply(this, args2);
+      if (args2[0]) {
+        const meta = Metadata.getMetadataFromInternalRegistry(this);
+        if (meta) {
+          Metadata.setMetadataInRegistry(result2, Object.assign(Object.assign({}, meta), args2[0]));
+        }
+      }
+      return result2;
+    };
+    return result;
+  };
+}
+function getOpenApiConfiguration(refOrOpenapi, metadataOrOptions, options) {
+  if (typeof refOrOpenapi === "string") {
+    return {
+      refId: refOrOpenapi,
+      metadata: metadataOrOptions,
+      options
+    };
+  }
+  return {
+    refId: undefined,
+    metadata: refOrOpenapi,
+    options: metadataOrOptions
+  };
+}
+function getOpenApiMetadata(zodSchema) {
+  var _a;
+  return omitBy((_a = Metadata.getOpenApiMetadata(zodSchema)) !== null && _a !== undefined ? _a : {}, isUndefined);
+}
+class OpenAPIRegistry {
+  constructor(parents) {
+    this.parents = parents;
+    this._definitions = [];
+  }
+  get definitions() {
+    var _a, _b;
+    const parentDefinitions = (_b = (_a = this.parents) === null || _a === undefined ? undefined : _a.flatMap((par) => par._definitions)) !== null && _b !== undefined ? _b : [];
+    return [...parentDefinitions, ...this._definitions];
+  }
+  register(refId, zodSchema) {
+    const schemaWithRefId = this.schemaWithRefId(refId, zodSchema);
+    this._definitions.push({ type: "schema", schema: schemaWithRefId });
+    return schemaWithRefId;
+  }
+  registerParameter(refId, zodSchema) {
+    var _a, _b, _c;
+    const schemaWithRefId = this.schemaWithRefId(refId, zodSchema);
+    const currentMetadata = (_a = Metadata.getOpenApiMetadata(schemaWithRefId)) !== null && _a !== undefined ? _a : {};
+    const schemaWithMetadata = schemaWithRefId.openapi(Object.assign(Object.assign({}, currentMetadata), { param: Object.assign(Object.assign({}, currentMetadata === null || currentMetadata === undefined ? undefined : currentMetadata.param), { name: (_c = (_b = currentMetadata === null || currentMetadata === undefined ? undefined : currentMetadata.param) === null || _b === undefined ? undefined : _b.name) !== null && _c !== undefined ? _c : refId }) }));
+    this._definitions.push({
+      type: "parameter",
+      schema: schemaWithMetadata
+    });
+    return schemaWithMetadata;
+  }
+  registerPath(route) {
+    this._definitions.push({
+      type: "route",
+      route
+    });
+  }
+  registerWebhook(webhook) {
+    this._definitions.push({
+      type: "webhook",
+      webhook
+    });
+  }
+  registerComponent(type, name, component) {
+    this._definitions.push({
+      type: "component",
+      componentType: type,
+      name,
+      component
+    });
+    return {
+      name,
+      ref: { $ref: `#/components/${type}/${name}` }
+    };
+  }
+  schemaWithRefId(refId, zodSchema) {
+    return zodSchema.openapi(refId);
+  }
+}
+
+class ZodToOpenAPIError {
+  constructor(message) {
+    this.message = message;
+  }
+}
+
+class ConflictError extends ZodToOpenAPIError {
+  constructor(message, data) {
+    super(message);
+    this.data = data;
+  }
+}
+
+class MissingParameterDataError extends ZodToOpenAPIError {
+  constructor(data) {
+    super(`Missing parameter data, please specify \`${data.missingField}\` and other OpenAPI parameter props using the \`param\` field of \`schema.openapi\``);
+    this.data = data;
+  }
+}
+function enhanceMissingParametersError(action, paramsToAdd) {
+  try {
+    return action();
+  } catch (error) {
+    if (error instanceof MissingParameterDataError) {
+      throw new MissingParameterDataError(Object.assign(Object.assign({}, error.data), paramsToAdd));
+    }
+    throw error;
+  }
+}
+
+class UnknownZodTypeError extends ZodToOpenAPIError {
+  constructor(data) {
+    super(`Unknown zod object type, please specify \`type\` and other OpenAPI props using \`schema.openapi\`.`);
+    this.data = data;
+  }
+}
+
+class ArrayTransformer {
+  transform(zodSchema, mapNullableType, mapItems) {
+    var _a, _b, _c, _d;
+    const itemType = zodSchema.def.element;
+    const minItems = (_b = (_a = zodSchema.def.checks) === null || _a === undefined ? undefined : _a.find((check) => check._zod.def.check === "min_length")) === null || _b === undefined ? undefined : _b._zod.def.minimum;
+    const maxItems = (_d = (_c = zodSchema.def.checks) === null || _c === undefined ? undefined : _c.find((check) => check._zod.def.check === "max_length")) === null || _d === undefined ? undefined : _d._zod.def.maximum;
+    return Object.assign(Object.assign({}, mapNullableType("array")), {
+      items: isAnyZodType(itemType) ? mapItems(itemType) : {},
+      minItems,
+      maxItems
+    });
+  }
+}
+
+class BigIntTransformer {
+  transform(mapNullableType) {
+    return Object.assign(Object.assign({}, mapNullableType("string")), { pattern: `^d+$` });
+  }
+}
+
+class DiscriminatedUnionTransformer {
+  transform(zodSchema, isNullable, mapNullableOfArray, mapItem, generateSchemaRef) {
+    const options = [...zodSchema.def.options];
+    const optionSchema = options.map(mapItem);
+    if (isNullable) {
+      return {
+        oneOf: mapNullableOfArray(optionSchema, isNullable)
+      };
+    }
+    const discriminator = zodSchema._zod.def.discriminator;
+    if (!discriminator) {
+      console.error("No discriminator found for discriminated union", zodSchema);
+      return {
+        oneOf: optionSchema
+      };
+    }
+    return {
+      oneOf: optionSchema,
+      discriminator: this.mapDiscriminator(options, discriminator, generateSchemaRef)
+    };
+  }
+  mapDiscriminator(zodObjects, discriminator, generateSchemaRef) {
+    if (zodObjects.some((obj) => Metadata.getRefId(obj) === undefined)) {
+      return;
+    }
+    const mapping = {};
+    zodObjects.forEach((obj) => {
+      var _a;
+      const refId = Metadata.getRefId(obj);
+      const value = (_a = obj.def.shape) === null || _a === undefined ? undefined : _a[discriminator];
+      if (isZodType(value, "ZodEnum")) {
+        const keys = Object.values(value._zod.def.entries).filter(isString);
+        keys.forEach((enumValue) => {
+          mapping[enumValue] = generateSchemaRef(refId);
+        });
+        return;
+      }
+      const literalValue = value === null || value === undefined ? undefined : value.def.values[0];
+      if (typeof literalValue !== "string") {
+        throw new Error(`Discriminator ${discriminator} could not be found in one of the values of a discriminated union`);
+      }
+      mapping[literalValue] = generateSchemaRef(refId);
+    });
+    return {
+      propertyName: discriminator,
+      mapping
+    };
+  }
+}
+function enumInfo(enumObject) {
+  const keysExceptReverseMappings = Object.keys(enumObject).filter((key) => typeof enumObject[enumObject[key]] !== "number");
+  const values = keysExceptReverseMappings.map((key) => enumObject[key]);
+  const numericCount = values.filter((_) => typeof _ === "number").length;
+  const type = numericCount === 0 ? "string" : numericCount === values.length ? "numeric" : "mixed";
+  return { values, type };
+}
+
+class EnumTransformer {
+  transform(zodSchema, isNullable, mapNullableType) {
+    const { type, values } = enumInfo(zodSchema._zod.def.entries);
+    if (type === "mixed") {
+      throw new ZodToOpenAPIError("Enum has mixed string and number values, please specify the OpenAPI type manually");
+    }
+    return Object.assign(Object.assign({}, mapNullableType(type === "numeric" ? "integer" : "string")), { enum: isNullable ? [...values, null] : values });
+  }
+}
+
+class IntersectionTransformer {
+  transform(zodSchema, isNullable, mapNullableOfArray, mapItem) {
+    const subtypes = this.flattenIntersectionTypes(zodSchema);
+    const allOfSchema = {
+      allOf: subtypes.map(mapItem)
+    };
+    if (isNullable) {
+      return {
+        anyOf: mapNullableOfArray([allOfSchema], isNullable)
+      };
+    }
+    return allOfSchema;
+  }
+  flattenIntersectionTypes(schema) {
+    if (!isZodType(schema, "ZodIntersection")) {
+      return [schema];
+    }
+    const leftSubTypes = isAnyZodType(schema._zod.def.left) ? this.flattenIntersectionTypes(schema._zod.def.left) : [];
+    const rightSubTypes = isAnyZodType(schema._zod.def.right) ? this.flattenIntersectionTypes(schema._zod.def.right) : [];
+    return [...leftSubTypes, ...rightSubTypes];
+  }
+}
+
+class LiteralTransformer {
+  constructor() {
+    this.bigIntTransformer = new BigIntTransformer;
+  }
+  transform(zodSchema, mapNullableType) {
+    const type = typeof zodSchema.def.values[0];
+    if (type === "boolean" || type === "number" || type === "string" || type === "object") {
+      return Object.assign(Object.assign({}, mapNullableType(type)), { enum: [zodSchema.def.values[0]] });
+    }
+    if (type === "bigint") {
+      return this.bigIntTransformer.transform(mapNullableType);
+    }
+    return mapNullableType("null");
+  }
+}
+
+class NumberTransformer {
+  transform(zodSchema, mapNullableType, getNumberChecks) {
+    var _a;
+    return Object.assign(Object.assign(Object.assign({}, mapNullableType("number")), mapNullableType(zodSchema.format === "safeint" ? "integer" : "number")), getNumberChecks((_a = zodSchema.def.checks) !== null && _a !== undefined ? _a : []));
+  }
+}
+
+class ObjectTransformer {
+  transform(zodSchema, defaultValue, mapNullableType, mapItem) {
+    var _a;
+    const extendedFrom = (_a = Metadata.getInternalMetadata(zodSchema)) === null || _a === undefined ? undefined : _a.extendedFrom;
+    const required = this.requiredKeysOf(zodSchema);
+    const properties = mapValues(zodSchema.def.shape, mapItem);
+    if (!extendedFrom) {
+      return Object.assign(Object.assign(Object.assign(Object.assign({}, mapNullableType("object")), { properties, default: defaultValue }), required.length > 0 ? { required } : {}), this.generateAdditionalProperties(zodSchema, mapItem));
+    }
+    const parent = extendedFrom.schema;
+    mapItem(parent);
+    const keysRequiredByParent = this.requiredKeysOf(parent);
+    const propsOfParent = mapValues(parent === null || parent === undefined ? undefined : parent.def.shape, mapItem);
+    const propertiesToAdd = Object.fromEntries(Object.entries(properties).filter(([key, type]) => {
+      return !objectEquals(propsOfParent[key], type);
+    }));
+    const additionallyRequired = required.filter((prop) => !keysRequiredByParent.includes(prop));
+    const objectData = Object.assign(Object.assign(Object.assign(Object.assign({}, mapNullableType("object")), { default: defaultValue, properties: propertiesToAdd }), additionallyRequired.length > 0 ? { required: additionallyRequired } : {}), this.generateAdditionalProperties(zodSchema, mapItem));
+    return {
+      allOf: [
+        { $ref: `#/components/schemas/${extendedFrom.refId}` },
+        objectData
+      ]
+    };
+  }
+  generateAdditionalProperties(zodSchema, mapItem) {
+    const catchallSchema = zodSchema.def.catchall;
+    if (!catchallSchema) {
+      return {};
+    }
+    if (isZodType(catchallSchema, "ZodNever")) {
+      return { additionalProperties: false };
+    }
+    if (isAnyZodType(catchallSchema)) {
+      return { additionalProperties: mapItem(catchallSchema) };
+    }
+    return {};
+  }
+  requiredKeysOf(objectSchema) {
+    return Object.entries(objectSchema.def.shape).filter(([_key, type]) => !isOptionalSchema(type)).map(([key, _type]) => key);
+  }
+}
+
+class RecordTransformer {
+  transform(zodSchema, mapNullableType, mapItem) {
+    const propertiesType = zodSchema.valueType;
+    const keyType = zodSchema.keyType;
+    const propertiesSchema = isAnyZodType(propertiesType) ? mapItem(propertiesType) : {};
+    if (isZodType(keyType, "ZodEnum")) {
+      const keys = Object.values(keyType._zod.def.entries).filter(isString);
+      const properties = keys.reduce((acc, curr) => Object.assign(Object.assign({}, acc), { [curr]: propertiesSchema }), {});
+      return Object.assign(Object.assign({}, mapNullableType("object")), { properties });
+    }
+    return Object.assign(Object.assign({}, mapNullableType("object")), { additionalProperties: propertiesSchema });
+  }
+}
+function isZodCheckLengthEquals(check) {
+  return check._zod.def.check === "length_equals";
+}
+function isZodCheckRegex(check) {
+  return check._zod.def.check === "string_format" && check._zod.def.format === "regex";
+}
+
+class StringTransformer {
+  transform(zodSchema, mapNullableType) {
+    var _a, _b, _c, _d;
+    const regexCheck = (_a = zodSchema.def.checks) === null || _a === undefined ? undefined : _a.find(isZodCheckRegex);
+    const pattern = regexCheck === null || regexCheck === undefined ? undefined : regexCheck._zod.def.pattern.toString().replace(/^\/|\/$/g, "");
+    const check = (_b = zodSchema.def.checks) === null || _b === undefined ? undefined : _b.find(isZodCheckLengthEquals);
+    const length = check === null || check === undefined ? undefined : check._zod.def.length;
+    const maxLength = Number.isFinite(zodSchema.minLength) ? (_c = zodSchema.minLength) !== null && _c !== undefined ? _c : undefined : undefined;
+    const minLength = Number.isFinite(zodSchema.maxLength) ? (_d = zodSchema.maxLength) !== null && _d !== undefined ? _d : undefined : undefined;
+    return Object.assign(Object.assign({}, mapNullableType("string")), {
+      minLength: length !== null && length !== undefined ? length : maxLength,
+      maxLength: length !== null && length !== undefined ? length : minLength,
+      format: this.mapStringFormat(zodSchema),
+      pattern
+    });
+  }
+  mapStringFormat(zodString) {
+    if (zodString.format === "uuid")
+      return "uuid";
+    if (zodString.format === "email")
+      return "email";
+    if (zodString.format === "url")
+      return "uri";
+    if (zodString.format === "date")
+      return "date";
+    if (zodString.format === "datetime")
+      return "date-time";
+    if (zodString.format === "cuid")
+      return "cuid";
+    if (zodString.format === "cuid2")
+      return "cuid2";
+    if (zodString.format === "ulid")
+      return "ulid";
+    if (zodString.format === "ipv4")
+      return "ip";
+    if (zodString.format === "ipv6")
+      return "ip";
+    if (zodString.format === "emoji")
+      return "emoji";
+    return;
+  }
+}
+
+class TupleTransformer {
+  constructor(versionSpecifics) {
+    this.versionSpecifics = versionSpecifics;
+  }
+  transform(zodSchema, mapNullableType, mapItem) {
+    const items = zodSchema._zod.def.items;
+    const schemas = items.map((item) => isAnyZodType(item) ? mapItem(item) : {});
+    return Object.assign(Object.assign({}, mapNullableType("array")), this.versionSpecifics.mapTupleItems(schemas));
+  }
+}
+
+class UnionTransformer {
+  constructor(options) {
+    this.options = options;
+  }
+  transform(zodSchema, mapNullableOfArray, mapItem) {
+    var _a, _b, _c;
+    const internalMetadata = Metadata.getInternalMetadata(zodSchema);
+    const preferredType = (_c = (_a = internalMetadata === null || internalMetadata === undefined ? undefined : internalMetadata.unionPreferredType) !== null && _a !== undefined ? _a : (_b = this.options) === null || _b === undefined ? undefined : _b.unionPreferredType) !== null && _c !== undefined ? _c : "anyOf";
+    const options = this.flattenUnionTypes(zodSchema);
+    const schemas = options.map((schema) => {
+      const optionToGenerate = this.unwrapNullable(schema);
+      return mapItem(optionToGenerate);
+    });
+    return {
+      [preferredType]: mapNullableOfArray(schemas)
+    };
+  }
+  flattenUnionTypes(schema) {
+    if (!isZodType(schema, "ZodUnion")) {
+      return [schema];
+    }
+    const options = schema.def.options;
+    return options.flatMap((option) => isAnyZodType(option) ? this.flattenUnionTypes(option) : []);
+  }
+  unwrapNullable(schema) {
+    if (isZodType(schema, "ZodNullable")) {
+      const unwrapped = schema.unwrap();
+      if (isAnyZodType(unwrapped)) {
+        return this.unwrapNullable(unwrapped);
+      }
+    }
+    return schema;
+  }
+}
+
+class DateTransformer {
+  transform(mapNullableType) {
+    return Object.assign(Object.assign({}, mapNullableType("string")), { format: "date-time" });
+  }
+}
+
+class LazyTransformer {
+  transform(zodSchema, mapItem, mapNullableType, mapNullableRef) {
+    const result = mapItem(zodSchema._zod.def.getter());
+    return LazyTransformer.mapRecursive(result, mapNullableType, mapNullableRef);
+  }
+  static mapRecursive(schema, mapNullableType, mapNullableRef) {
+    if ("$ref" in schema) {
+      return mapNullableRef(schema);
+    }
+    if (schema.type) {
+      return Object.assign(Object.assign({}, schema), mapNullableType(schema.type));
+    }
+    return schema;
+  }
+}
+
+class TemplateLiteralTransformer {
+  transform(zodSchema, mapNullableType) {
+    const parts = zodSchema.def.parts;
+    const contentPattern = parts.map((part) => this.generatePattern(part)).join("");
+    return Object.assign(Object.assign({}, mapNullableType("string")), { pattern: `^${contentPattern}$` });
+  }
+  generatePattern(part) {
+    if (typeof part === "string" || typeof part === "number" || typeof part === "boolean" || typeof part === "bigint" || part === null || part === undefined) {
+      return this.escapeRegex(String(part));
+    }
+    if (isZodType(part, "ZodLiteral")) {
+      const value = part.def.values[0];
+      return this.escapeRegex(String(value));
+    }
+    if (isZodType(part, "ZodNumber")) {
+      return "[+-]?\\d+(\\.\\d+)?";
+    }
+    if (isZodType(part, "ZodBoolean")) {
+      return "(true|false)";
+    }
+    if (isZodType(part, "ZodEnum")) {
+      const { values } = enumInfo(part.def.entries);
+      return `(${values.map((v) => this.escapeRegex(String(v))).join("|")})`;
+    }
+    return ".*";
+  }
+  escapeRegex(str) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  }
+}
+
+class OpenApiTransformer {
+  constructor(versionSpecifics, options) {
+    this.versionSpecifics = versionSpecifics;
+    this.objectTransformer = new ObjectTransformer;
+    this.stringTransformer = new StringTransformer;
+    this.numberTransformer = new NumberTransformer;
+    this.bigIntTransformer = new BigIntTransformer;
+    this.dateTransformer = new DateTransformer;
+    this.lazyTransformer = new LazyTransformer;
+    this.literalTransformer = new LiteralTransformer;
+    this.templateLiteralTransformer = new TemplateLiteralTransformer;
+    this.enumTransformer = new EnumTransformer;
+    this.arrayTransformer = new ArrayTransformer;
+    this.discriminatedUnionTransformer = new DiscriminatedUnionTransformer;
+    this.intersectionTransformer = new IntersectionTransformer;
+    this.recordTransformer = new RecordTransformer;
+    this.tupleTransformer = new TupleTransformer(versionSpecifics);
+    this.unionTransformer = new UnionTransformer(options);
+  }
+  transform(zodSchema, isNullable, mapItem, generateSchemaRef, defaultValue) {
+    if (isZodType(zodSchema, "ZodNull")) {
+      return this.versionSpecifics.nullType;
+    }
+    if (isZodType(zodSchema, "ZodUnknown") || isZodType(zodSchema, "ZodAny")) {
+      return this.versionSpecifics.mapNullableType(undefined, isNullable);
+    }
+    if (isZodType(zodSchema, "ZodObject")) {
+      return this.objectTransformer.transform(zodSchema, defaultValue, (_) => this.versionSpecifics.mapNullableType(_, isNullable), mapItem);
+    }
+    const schema = this.transformSchemaWithoutDefault(zodSchema, isNullable, mapItem, generateSchemaRef);
+    return Object.assign(Object.assign({}, schema), { default: defaultValue });
+  }
+  transformSchemaWithoutDefault(zodSchema, isNullable, mapItem, generateSchemaRef) {
+    if (isZodType(zodSchema, "ZodUnknown") || isZodType(zodSchema, "ZodAny")) {
+      return this.versionSpecifics.mapNullableType(undefined, isNullable);
+    }
+    if (isZodType(zodSchema, "ZodString")) {
+      return this.stringTransformer.transform(zodSchema, (schema) => this.versionSpecifics.mapNullableType(schema, isNullable));
+    }
+    if (isZodType(zodSchema, "ZodNumber")) {
+      return this.numberTransformer.transform(zodSchema, (schema) => this.versionSpecifics.mapNullableType(schema, isNullable), (_) => this.versionSpecifics.getNumberChecks(_));
+    }
+    if (isZodType(zodSchema, "ZodBigInt")) {
+      return this.bigIntTransformer.transform((schema) => this.versionSpecifics.mapNullableType(schema, isNullable));
+    }
+    if (isZodType(zodSchema, "ZodBoolean")) {
+      return this.versionSpecifics.mapNullableType("boolean", isNullable);
+    }
+    if (isZodType(zodSchema, "ZodLazy")) {
+      return this.lazyTransformer.transform(zodSchema, mapItem, (schema) => this.versionSpecifics.mapNullableType(schema, isNullable), (schema) => this.versionSpecifics.mapNullableOfRef(schema, isNullable));
+    }
+    if (isZodType(zodSchema, "ZodLiteral")) {
+      return this.literalTransformer.transform(zodSchema, (schema) => this.versionSpecifics.mapNullableType(schema, isNullable));
+    }
+    if (isZodType(zodSchema, "ZodTemplateLiteral")) {
+      return this.templateLiteralTransformer.transform(zodSchema, (schema) => this.versionSpecifics.mapNullableType(schema, isNullable));
+    }
+    if (isZodType(zodSchema, "ZodEnum")) {
+      return this.enumTransformer.transform(zodSchema, isNullable, (schema) => this.versionSpecifics.mapNullableType(schema, isNullable));
+    }
+    if (isZodType(zodSchema, "ZodArray")) {
+      return this.arrayTransformer.transform(zodSchema, (_) => this.versionSpecifics.mapNullableType(_, isNullable), mapItem);
+    }
+    if (isZodType(zodSchema, "ZodTuple")) {
+      return this.tupleTransformer.transform(zodSchema, (_) => this.versionSpecifics.mapNullableType(_, isNullable), mapItem);
+    }
+    if (isZodType(zodSchema, "ZodDiscriminatedUnion")) {
+      return this.discriminatedUnionTransformer.transform(zodSchema, isNullable, (_) => this.versionSpecifics.mapNullableOfArray(_, isNullable), mapItem, generateSchemaRef);
+    }
+    if (isZodType(zodSchema, "ZodUnion")) {
+      return this.unionTransformer.transform(zodSchema, (_) => this.versionSpecifics.mapNullableOfArray(_, isNullable), mapItem);
+    }
+    if (isZodType(zodSchema, "ZodIntersection")) {
+      return this.intersectionTransformer.transform(zodSchema, isNullable, (_) => this.versionSpecifics.mapNullableOfArray(_, isNullable), mapItem);
+    }
+    if (isZodType(zodSchema, "ZodRecord")) {
+      return this.recordTransformer.transform(zodSchema, (_) => this.versionSpecifics.mapNullableType(_, isNullable), mapItem);
+    }
+    if (isZodType(zodSchema, "ZodDate")) {
+      return this.dateTransformer.transform((_) => this.versionSpecifics.mapNullableType(_, isNullable));
+    }
+    const refId = Metadata.getRefId(zodSchema);
+    throw new UnknownZodTypeError({
+      currentSchema: zodSchema.def,
+      schemaName: refId
+    });
+  }
+}
+
+class OpenAPIGenerator {
+  constructor(definitions, versionSpecifics, options) {
+    this.definitions = definitions;
+    this.versionSpecifics = versionSpecifics;
+    this.options = options;
+    this.schemaRefs = {};
+    this.paramRefs = {};
+    this.pathRefs = {};
+    this.rawComponents = [];
+    this.openApiTransformer = new OpenApiTransformer(versionSpecifics, options);
+    this.sortDefinitions();
+  }
+  generateDocumentData() {
+    this.definitions.forEach((definition) => this.generateSingle(definition));
+    return {
+      components: this.buildComponents(),
+      paths: this.pathRefs
+    };
+  }
+  generateComponents() {
+    this.definitions.forEach((definition) => this.generateSingle(definition));
+    return {
+      components: this.buildComponents()
+    };
+  }
+  buildComponents() {
+    var _a, _b, _c, _d;
+    const rawComponents = {};
+    this.rawComponents.forEach(({ componentType, name, component }) => {
+      var _a2;
+      (_a2 = rawComponents[componentType]) !== null && _a2 !== undefined || (rawComponents[componentType] = {});
+      rawComponents[componentType][name] = component;
+    });
+    const allSchemas = Object.assign(Object.assign({}, (_a = rawComponents.schemas) !== null && _a !== undefined ? _a : {}), this.filteredSchemaRefs);
+    const schemas = ((_b = this.options) === null || _b === undefined ? undefined : _b.sortComponents) === "alphabetically" ? sortObjectByKeys(allSchemas) : allSchemas;
+    const allParameters = Object.assign(Object.assign({}, (_c = rawComponents.parameters) !== null && _c !== undefined ? _c : {}), this.paramRefs);
+    const parameters = ((_d = this.options) === null || _d === undefined ? undefined : _d.sortComponents) === "alphabetically" ? sortObjectByKeys(allParameters) : allParameters;
+    return Object.assign(Object.assign({}, rawComponents), { schemas, parameters });
+  }
+  isNotPendingRefEntry(entry) {
+    return entry[1] !== "pending";
+  }
+  get filteredSchemaRefs() {
+    const filtered = Object.entries(this.schemaRefs).filter(this.isNotPendingRefEntry);
+    return Object.fromEntries(filtered);
+  }
+  sortDefinitions() {
+    const generationOrder = [
+      "schema",
+      "parameter",
+      "component",
+      "route"
+    ];
+    this.definitions.sort((left, right) => {
+      if (!("type" in left)) {
+        if (!("type" in right)) {
+          return 0;
+        }
+        return -1;
+      }
+      if (!("type" in right)) {
+        return 1;
+      }
+      const leftIndex = generationOrder.findIndex((type) => type === left.type);
+      const rightIndex = generationOrder.findIndex((type) => type === right.type);
+      return leftIndex - rightIndex;
+    });
+  }
+  generateSingle(definition) {
+    if (!("type" in definition)) {
+      this.generateSchemaWithRef(definition);
+      return;
+    }
+    switch (definition.type) {
+      case "parameter":
+        this.generateParameterDefinition(definition.schema);
+        return;
+      case "schema":
+        this.generateSchemaWithRef(definition.schema);
+        return;
+      case "route":
+        this.generateSingleRoute(definition.route);
+        return;
+      case "component":
+        this.rawComponents.push(definition);
+        return;
+    }
+  }
+  generateParameterDefinition(zodSchema) {
+    const refId = Metadata.getRefId(zodSchema);
+    const result = this.generateParameter(zodSchema);
+    if (refId) {
+      this.paramRefs[refId] = result;
+    }
+    return result;
+  }
+  getParameterRef(schema, external) {
+    const metadata = Metadata.getOpenApiMetadata(schema);
+    const internalMetadata = Metadata.getInternalMetadata(schema);
+    const parameterMetadata = metadata === null || metadata === undefined ? undefined : metadata.param;
+    const existingRef = (internalMetadata === null || internalMetadata === undefined ? undefined : internalMetadata.refId) ? this.paramRefs[internalMetadata.refId] : undefined;
+    if (!(internalMetadata === null || internalMetadata === undefined ? undefined : internalMetadata.refId) || !existingRef) {
+      return;
+    }
+    if (parameterMetadata && existingRef.in !== parameterMetadata.in || (external === null || external === undefined ? undefined : external.in) && existingRef.in !== external.in) {
+      throw new ConflictError(`Conflicting location for parameter ${existingRef.name}`, {
+        key: "in",
+        values: compact([
+          existingRef.in,
+          external === null || external === undefined ? undefined : external.in,
+          parameterMetadata === null || parameterMetadata === undefined ? undefined : parameterMetadata.in
+        ])
       });
-      return newResponse;
     }
-    return new Response(this.message, {
-      status: this.status
+    if (parameterMetadata && existingRef.name !== parameterMetadata.name || (external === null || external === undefined ? undefined : external.name) && existingRef.name !== (external === null || external === undefined ? undefined : external.name)) {
+      throw new ConflictError(`Conflicting names for parameter`, {
+        key: "name",
+        values: compact([
+          existingRef.name,
+          external === null || external === undefined ? undefined : external.name,
+          parameterMetadata === null || parameterMetadata === undefined ? undefined : parameterMetadata.name
+        ])
+      });
+    }
+    return {
+      $ref: `#/components/parameters/${internalMetadata.refId}`
+    };
+  }
+  generateInlineParameters(zodSchema, location) {
+    const metadata = Metadata.getOpenApiMetadata(zodSchema);
+    const parameterMetadata = metadata === null || metadata === undefined ? undefined : metadata.param;
+    const referencedSchema = this.getParameterRef(zodSchema, { in: location });
+    if (referencedSchema) {
+      return [referencedSchema];
+    }
+    if (isZodType(zodSchema, "ZodObject")) {
+      const propTypes = zodSchema.def.shape;
+      const parameters = Object.entries(propTypes).map(([key, schema]) => {
+        var _a;
+        const innerMetadata = Metadata.getOpenApiMetadata(schema);
+        const referencedSchema2 = this.getParameterRef(schema, {
+          in: location,
+          name: key
+        });
+        if (referencedSchema2) {
+          return referencedSchema2;
+        }
+        const innerParameterMetadata = innerMetadata === null || innerMetadata === undefined ? undefined : innerMetadata.param;
+        if ((innerParameterMetadata === null || innerParameterMetadata === undefined ? undefined : innerParameterMetadata.name) && innerParameterMetadata.name !== key) {
+          throw new ConflictError(`Conflicting names for parameter`, {
+            key: "name",
+            values: [key, innerParameterMetadata.name]
+          });
+        }
+        if ((innerParameterMetadata === null || innerParameterMetadata === undefined ? undefined : innerParameterMetadata.in) && innerParameterMetadata.in !== location) {
+          throw new ConflictError(`Conflicting location for parameter ${(_a = innerParameterMetadata.name) !== null && _a !== undefined ? _a : key}`, {
+            key: "in",
+            values: [location, innerParameterMetadata.in]
+          });
+        }
+        return this.generateParameter(schema, { name: key, in: location });
+      });
+      return parameters;
+    }
+    if ((parameterMetadata === null || parameterMetadata === undefined ? undefined : parameterMetadata.in) && parameterMetadata.in !== location) {
+      throw new ConflictError(`Conflicting location for parameter ${parameterMetadata.name}`, {
+        key: "in",
+        values: [location, parameterMetadata.in]
+      });
+    }
+    return [this.generateParameter(zodSchema, { in: location })];
+  }
+  generateSimpleParameter(zodSchema, externalParamMetadata) {
+    const metadata = Metadata.getParamMetadata(zodSchema);
+    const paramMetadata = metadata === null || metadata === undefined ? undefined : metadata.param;
+    const mergedParamMetadata = Object.assign(Object.assign({}, paramMetadata), externalParamMetadata);
+    const required = !isOptionalSchema(zodSchema) && !isNullableSchema(zodSchema);
+    const schema = this.generateSchemaWithRef(zodSchema);
+    return Object.assign({
+      schema,
+      required
+    }, Object.keys(mergedParamMetadata).length > 0 ? Metadata.buildParameterMetadata(mergedParamMetadata) : {});
+  }
+  generateParameter(zodSchema, externalParamMetadata) {
+    var _a, _b;
+    const metadata = Metadata.getOpenApiMetadata(zodSchema);
+    const paramMetadata = metadata === null || metadata === undefined ? undefined : metadata.param;
+    const paramName = (_a = externalParamMetadata === null || externalParamMetadata === undefined ? undefined : externalParamMetadata.name) !== null && _a !== undefined ? _a : paramMetadata === null || paramMetadata === undefined ? undefined : paramMetadata.name;
+    const paramLocation = (_b = externalParamMetadata === null || externalParamMetadata === undefined ? undefined : externalParamMetadata.in) !== null && _b !== undefined ? _b : paramMetadata === null || paramMetadata === undefined ? undefined : paramMetadata.in;
+    if (!paramName) {
+      throw new MissingParameterDataError({ missingField: "name" });
+    }
+    if (!paramLocation) {
+      throw new MissingParameterDataError({
+        missingField: "in",
+        paramName
+      });
+    }
+    const baseParameter = this.generateSimpleParameter(zodSchema, externalParamMetadata);
+    return Object.assign(Object.assign({}, baseParameter), { in: paramLocation, name: paramName });
+  }
+  generateSchemaWithMetadata(zodSchema) {
+    const innerSchema = Metadata.unwrapChained(zodSchema);
+    const metadata = Metadata.getOpenApiMetadata(zodSchema);
+    const defaultValue = Metadata.getDefaultValue(zodSchema);
+    const refId = Metadata.getRefId(zodSchema);
+    if (refId && typeof this.schemaRefs[refId] === "object") {
+      return this.schemaRefs[refId];
+    }
+    if (refId && this.schemaRefs[refId] === "pending") {
+      const refSchema = { $ref: this.generateSchemaRef(refId) };
+      return this.versionSpecifics.mapNullableOfRef(refSchema, isNullableSchema(zodSchema));
+    }
+    if (refId && !this.schemaRefs[refId]) {
+      this.schemaRefs[refId] = "pending";
+    }
+    const result = (metadata === null || metadata === undefined ? undefined : metadata.type) ? { type: metadata.type } : this.toOpenAPISchema(innerSchema, isNullableSchema(zodSchema), defaultValue);
+    return metadata ? Metadata.applySchemaMetadata(result, metadata) : omitBy(result, isUndefined);
+  }
+  constructReferencedOpenAPISchema(zodSchema) {
+    const metadata = Metadata.getOpenApiMetadata(zodSchema);
+    const innerSchema = Metadata.unwrapChained(zodSchema);
+    const defaultValue = Metadata.getDefaultValue(zodSchema);
+    const isNullable = isNullableSchema(zodSchema);
+    if (metadata === null || metadata === undefined ? undefined : metadata.type) {
+      return this.versionSpecifics.mapNullableType(metadata.type, isNullable);
+    }
+    const refId = Metadata.getRefId(zodSchema);
+    if (refId && typeof this.schemaRefs[refId] === "object") {
+      return LazyTransformer.mapRecursive(this.schemaRefs[refId], (schema) => this.versionSpecifics.mapNullableType(schema, isNullable), (schema) => this.versionSpecifics.mapNullableOfRef(schema, isNullable));
+    }
+    if (refId && this.schemaRefs[refId] === "pending") {
+      const refSchema = { $ref: this.generateSchemaRef(refId) };
+      return this.versionSpecifics.mapNullableOfRef(refSchema, isNullable);
+    }
+    if (refId && !this.schemaRefs[refId]) {
+      this.schemaRefs[refId] = "pending";
+    }
+    return this.toOpenAPISchema(innerSchema, isNullable, defaultValue);
+  }
+  generateSimpleSchema(zodSchema) {
+    const metadata = Metadata.getOpenApiMetadata(zodSchema);
+    const refId = Metadata.getRefId(zodSchema);
+    if (!refId || !this.schemaRefs[refId]) {
+      return this.generateSchemaWithMetadata(zodSchema);
+    }
+    const schemaRef = this.schemaRefs[refId];
+    const referenceObject = {
+      $ref: this.generateSchemaRef(refId)
+    };
+    if (this.schemaRefs[refId] === "pending") {
+      return this.versionSpecifics.mapNullableOfRef(referenceObject, isNullableSchema(zodSchema));
+    }
+    const newMetadata = omitBy(Metadata.buildSchemaMetadata(metadata !== null && metadata !== undefined ? metadata : {}), (value, key) => value === undefined || objectEquals(value, schemaRef[key]));
+    if (newMetadata.type) {
+      return {
+        allOf: [referenceObject, newMetadata]
+      };
+    }
+    const newSchemaMetadata = omitBy(this.constructReferencedOpenAPISchema(zodSchema), (value, key) => value === undefined || objectEquals(value, schemaRef[key]));
+    const appliedMetadata = Metadata.applySchemaMetadata(newSchemaMetadata, newMetadata);
+    if (Object.keys(appliedMetadata).length > 0) {
+      return {
+        allOf: [referenceObject, appliedMetadata]
+      };
+    }
+    return referenceObject;
+  }
+  generateSchemaWithRef(zodSchema) {
+    const refId = Metadata.getRefId(zodSchema);
+    if (refId && !this.schemaRefs[refId]) {
+      this.schemaRefs[refId] = this.generateSimpleSchema(zodSchema);
+      return { $ref: this.generateSchemaRef(refId) };
+    }
+    return this.generateSimpleSchema(zodSchema);
+  }
+  generateSchemaRef(refId) {
+    return `#/components/schemas/${refId}`;
+  }
+  getRequestBody(requestBody) {
+    if (!requestBody) {
+      return;
+    }
+    const { content } = requestBody, rest = __rest(requestBody, ["content"]);
+    const requestBodyContent = this.getBodyContent(content);
+    return Object.assign(Object.assign({}, rest), { content: requestBodyContent });
+  }
+  getParameters(request) {
+    if (!request) {
+      return [];
+    }
+    const { headers } = request;
+    const query = this.cleanParameter(request.query);
+    const params = this.cleanParameter(request.params);
+    const cookies = this.cleanParameter(request.cookies);
+    const queryParameters = enhanceMissingParametersError(() => query ? this.generateInlineParameters(query, "query") : [], { location: "query" });
+    const pathParameters = enhanceMissingParametersError(() => params ? this.generateInlineParameters(params, "path") : [], { location: "path" });
+    const cookieParameters = enhanceMissingParametersError(() => cookies ? this.generateInlineParameters(cookies, "cookie") : [], { location: "cookie" });
+    const headerParameters = enhanceMissingParametersError(() => {
+      if (Array.isArray(headers)) {
+        return headers.flatMap((header) => this.generateInlineParameters(header, "header"));
+      }
+      const cleanHeaders = this.cleanParameter(headers);
+      return cleanHeaders ? this.generateInlineParameters(cleanHeaders, "header") : [];
+    }, { location: "header" });
+    return [
+      ...pathParameters,
+      ...queryParameters,
+      ...headerParameters,
+      ...cookieParameters
+    ];
+  }
+  cleanParameter(schema) {
+    if (!schema) {
+      return;
+    }
+    if (isZodType(schema, "ZodPipe")) {
+      const inSchema = schema._zod.def.in;
+      const outSchema = schema._zod.def.out;
+      if (isZodType(inSchema, "ZodObject")) {
+        return this.cleanParameter(inSchema);
+      }
+      if (isZodType(outSchema, "ZodObject")) {
+        return this.cleanParameter(outSchema);
+      }
+      return;
+    }
+    return schema;
+  }
+  generatePath(route) {
+    const { method, path, request, responses } = route, pathItemConfig = __rest(route, ["method", "path", "request", "responses"]);
+    const generatedResponses = mapValues(responses, (response) => {
+      return this.getResponse(response);
+    });
+    const parameters = enhanceMissingParametersError(() => this.getParameters(request), { route: `${method} ${path}` });
+    const requestBody = this.getRequestBody(request === null || request === undefined ? undefined : request.body);
+    const routeDoc = {
+      [method]: Object.assign(Object.assign(Object.assign(Object.assign({}, pathItemConfig), parameters.length > 0 ? {
+        parameters: [...pathItemConfig.parameters || [], ...parameters]
+      } : {}), requestBody ? { requestBody } : {}), { responses: generatedResponses })
+    };
+    return routeDoc;
+  }
+  generateSingleRoute(route) {
+    const routeDoc = this.generatePath(route);
+    this.pathRefs[route.path] = Object.assign(Object.assign({}, this.pathRefs[route.path]), routeDoc);
+    return routeDoc;
+  }
+  getResponse(response) {
+    if (this.isReferenceObject(response)) {
+      return response;
+    }
+    const { content, headers } = response, rest = __rest(response, ["content", "headers"]);
+    const responseContent = content ? { content: this.getBodyContent(content) } : {};
+    if (!headers) {
+      return Object.assign(Object.assign({}, rest), responseContent);
+    }
+    const responseHeaders = isZodType(headers, "ZodObject") ? this.getResponseHeaders(headers) : headers;
+    return Object.assign(Object.assign(Object.assign({}, rest), { headers: responseHeaders }), responseContent);
+  }
+  isReferenceObject(schema) {
+    return "$ref" in schema;
+  }
+  getResponseHeaders(headers) {
+    const schemaShape = headers.def.shape;
+    const responseHeaders = mapValues(schemaShape, (_) => this.generateSimpleParameter(_));
+    return responseHeaders;
+  }
+  getBodyContent(content) {
+    return mapValues(content, (config) => {
+      if (!config || !isAnyZodType(config.schema)) {
+        return config;
+      }
+      const { schema: configSchema } = config, rest = __rest(config, ["schema"]);
+      const schema = this.generateSchemaWithRef(configSchema);
+      return Object.assign({ schema }, rest);
     });
   }
-};
-
-// node_modules/hono/dist/request/constants.js
-var GET_MATCH_RESULT = /* @__PURE__ */ Symbol();
-
-// node_modules/hono/dist/utils/body.js
-var parseBody = async (request, options = /* @__PURE__ */ Object.create(null)) => {
-  const { all = false, dot = false } = options;
-  const headers = request instanceof HonoRequest ? request.raw.headers : request.headers;
-  const contentType = headers.get("Content-Type");
-  if (contentType?.startsWith("multipart/form-data") || contentType?.startsWith("application/x-www-form-urlencoded")) {
-    return parseFormData(request, { all, dot });
+  toOpenAPISchema(zodSchema, isNullable, defaultValue) {
+    const result = this.openApiTransformer.transform(zodSchema, isNullable, (_) => this.generateSchemaWithRef(_), (_) => this.generateSchemaRef(_), defaultValue);
+    return result;
   }
-  return {};
-};
-async function parseFormData(request, options) {
-  const formData = await request.formData();
-  if (formData) {
-    return convertFormDataToBodyData(formData, options);
-  }
-  return {};
 }
-function convertFormDataToBodyData(formData, options) {
-  const form = /* @__PURE__ */ Object.create(null);
-  formData.forEach((value, key) => {
-    const shouldParseAllValues = options.all || key.endsWith("[]");
-    if (!shouldParseAllValues) {
-      form[key] = value;
-    } else {
-      handleParsingAllValues(form, key, value);
-    }
-  });
-  if (options.dot) {
-    Object.entries(form).forEach(([key, value]) => {
-      const shouldParseDotValues = key.includes(".");
-      if (shouldParseDotValues) {
-        handleParsingNestedValues(form, key, value);
-        delete form[key];
-      }
-    });
+
+class OpenApiGeneratorV30Specifics {
+  get nullType() {
+    return { nullable: true };
   }
-  return form;
+  mapNullableOfArray(objects, isNullable) {
+    if (isNullable && !objects.some((object) => objectEquals(object, this.nullType))) {
+      return [...objects, this.nullType];
+    }
+    return objects;
+  }
+  mapNullableType(type, isNullable) {
+    return Object.assign(Object.assign({}, type ? { type } : undefined), isNullable ? this.nullType : undefined);
+  }
+  mapNullableOfRef(ref, isNullable) {
+    if (isNullable) {
+      return {
+        allOf: [ref, this.nullType]
+      };
+    }
+    return ref;
+  }
+  mapTupleItems(schemas) {
+    const uniqueSchemas = uniq(schemas);
+    return {
+      items: uniqueSchemas.length === 1 ? uniqueSchemas[0] : { anyOf: uniqueSchemas },
+      minItems: schemas.length,
+      maxItems: schemas.length
+    };
+  }
+  getNumberChecks(checks) {
+    return Object.assign({}, ...checks.map((check) => {
+      switch (check._zod.def.check) {
+        case "greater_than": {
+          const greaterThanCheck = check;
+          return greaterThanCheck._zod.def.inclusive ? { minimum: Number(greaterThanCheck._zod.def.value) } : {
+            minimum: Number(greaterThanCheck._zod.def.value),
+            exclusiveMinimum: true
+          };
+        }
+        case "less_than": {
+          const lessThanCheck = check;
+          return lessThanCheck._zod.def.inclusive ? { maximum: Number(lessThanCheck._zod.def.value) } : {
+            maximum: Number(lessThanCheck._zod.def.value),
+            exclusiveMaximum: !lessThanCheck._zod.def.inclusive
+          };
+        }
+        default:
+          return {};
+      }
+    }));
+  }
 }
-var handleParsingAllValues = (form, key, value) => {
-  if (form[key] !== undefined) {
-    if (Array.isArray(form[key])) {
-      form[key].push(value);
-    } else {
-      form[key] = [form[key], value];
-    }
-  } else {
-    if (!key.endsWith("[]")) {
-      form[key] = value;
-    } else {
-      form[key] = [value];
-    }
+
+class OpenApiGeneratorV3 {
+  constructor(definitions, options) {
+    const specifics = new OpenApiGeneratorV30Specifics;
+    this.generator = new OpenAPIGenerator(definitions, specifics, options);
   }
-};
-var handleParsingNestedValues = (form, key, value) => {
-  let nestedForm = form;
-  const keys = key.split(".");
-  keys.forEach((key2, index) => {
-    if (index === keys.length - 1) {
-      nestedForm[key2] = value;
-    } else {
-      if (!nestedForm[key2] || typeof nestedForm[key2] !== "object" || Array.isArray(nestedForm[key2]) || nestedForm[key2] instanceof File) {
-        nestedForm[key2] = /* @__PURE__ */ Object.create(null);
-      }
-      nestedForm = nestedForm[key2];
+  generateDocument(config) {
+    const baseData = this.generator.generateDocumentData();
+    return Object.assign(Object.assign({}, config), baseData);
+  }
+  generateComponents() {
+    return this.generator.generateComponents();
+  }
+}
+
+class OpenApiGeneratorV31Specifics {
+  get nullType() {
+    return { type: "null" };
+  }
+  mapNullableOfArray(objects, isNullable) {
+    if (isNullable && !objects.some((object) => objectEquals(object, this.nullType))) {
+      return [...objects, this.nullType];
     }
-  });
-};
+    return objects;
+  }
+  mapNullableType(type, isNullable) {
+    if (!type) {
+      return {};
+    }
+    if (isNullable) {
+      const typeArray = Array.isArray(type) ? type : [type];
+      const nullableType = uniq([...typeArray, "null"]);
+      return { type: nullableType };
+    }
+    return { type };
+  }
+  mapNullableOfRef(ref, isNullable) {
+    if (isNullable) {
+      return {
+        oneOf: [ref, this.nullType]
+      };
+    }
+    return ref;
+  }
+  mapTupleItems(schemas) {
+    return {
+      prefixItems: schemas
+    };
+  }
+  getNumberChecks(checks) {
+    return Object.assign({}, ...checks.map((check) => {
+      switch (check._zod.def.check) {
+        case "greater_than": {
+          const greaterThanCheck = check;
+          return greaterThanCheck._zod.def.inclusive ? { minimum: Number(greaterThanCheck._zod.def.value) } : { exclusiveMinimum: Number(greaterThanCheck._zod.def.value) };
+        }
+        case "less_than": {
+          const lessThanCheck = check;
+          return lessThanCheck._zod.def.inclusive ? { maximum: Number(lessThanCheck._zod.def.value) } : { exclusiveMaximum: Number(lessThanCheck._zod.def.value) };
+        }
+        default:
+          return {};
+      }
+    }));
+  }
+}
+function isWebhookDefinition(definition) {
+  return "type" in definition && definition.type === "webhook";
+}
+
+class OpenApiGeneratorV31 {
+  constructor(definitions, options) {
+    this.definitions = definitions;
+    this.webhookRefs = {};
+    const specifics = new OpenApiGeneratorV31Specifics;
+    this.generator = new OpenAPIGenerator(this.definitions, specifics, options);
+  }
+  generateDocument(config) {
+    const baseDocument = this.generator.generateDocumentData();
+    this.definitions.filter(isWebhookDefinition).forEach((definition) => this.generateSingleWebhook(definition.webhook));
+    return Object.assign(Object.assign(Object.assign({}, config), baseDocument), { webhooks: this.webhookRefs });
+  }
+  generateComponents() {
+    return this.generator.generateComponents();
+  }
+  generateSingleWebhook(route) {
+    const routeDoc = this.generator.generatePath(route);
+    this.webhookRefs[route.path] = Object.assign(Object.assign({}, this.webhookRefs[route.path]), routeDoc);
+    return routeDoc;
+  }
+}
+var $OpenAPIRegistry = OpenAPIRegistry;
+var $OpenApiGeneratorV3 = OpenApiGeneratorV3;
+var $OpenApiGeneratorV31 = OpenApiGeneratorV31;
+var $extendZodWithOpenApi = extendZodWithOpenApi;
+var $getOpenApiMetadata = getOpenApiMetadata;
 
 // node_modules/hono/dist/utils/url.js
 var splitPath = (path) => {
@@ -8288,6 +9646,317 @@ var getQueryParams = (url, key) => {
   return _getQueryParam(url, key, true);
 };
 var decodeURIComponent_ = decodeURIComponent;
+
+// node_modules/hono/dist/utils/cookie.js
+var validCookieNameRegEx = /^[\w!#$%&'*.^`|~+-]+$/;
+var validCookieValueRegEx = /^[ !#-:<-[\]-~]*$/;
+var parse = (cookie, name) => {
+  if (name && cookie.indexOf(name) === -1) {
+    return {};
+  }
+  const pairs = cookie.trim().split(";");
+  const parsedCookie = {};
+  for (let pairStr of pairs) {
+    pairStr = pairStr.trim();
+    const valueStartPos = pairStr.indexOf("=");
+    if (valueStartPos === -1) {
+      continue;
+    }
+    const cookieName = pairStr.substring(0, valueStartPos).trim();
+    if (name && name !== cookieName || !validCookieNameRegEx.test(cookieName)) {
+      continue;
+    }
+    let cookieValue = pairStr.substring(valueStartPos + 1).trim();
+    if (cookieValue.startsWith('"') && cookieValue.endsWith('"')) {
+      cookieValue = cookieValue.slice(1, -1);
+    }
+    if (validCookieValueRegEx.test(cookieValue)) {
+      parsedCookie[cookieName] = cookieValue.indexOf("%") !== -1 ? tryDecode(cookieValue, decodeURIComponent_) : cookieValue;
+      if (name) {
+        break;
+      }
+    }
+  }
+  return parsedCookie;
+};
+
+// node_modules/hono/dist/helper/cookie/index.js
+var getCookie = (c, key, prefix) => {
+  const cookie = c.req.raw.headers.get("Cookie");
+  if (typeof key === "string") {
+    if (!cookie) {
+      return;
+    }
+    let finalKey = key;
+    if (prefix === "secure") {
+      finalKey = "__Secure-" + key;
+    } else if (prefix === "host") {
+      finalKey = "__Host-" + key;
+    }
+    const obj2 = parse(cookie, finalKey);
+    return obj2[finalKey];
+  }
+  if (!cookie) {
+    return {};
+  }
+  const obj = parse(cookie);
+  return obj;
+};
+
+// node_modules/hono/dist/http-exception.js
+var HTTPException = class extends Error {
+  res;
+  status;
+  constructor(status = 500, options) {
+    super(options?.message, { cause: options?.cause });
+    this.res = options?.res;
+    this.status = status;
+  }
+  getResponse() {
+    if (this.res) {
+      const newResponse = new Response(this.res.body, {
+        status: this.status,
+        headers: this.res.headers
+      });
+      return newResponse;
+    }
+    return new Response(this.message, {
+      status: this.status
+    });
+  }
+};
+
+// node_modules/hono/dist/utils/buffer.js
+var bufferToFormData = (arrayBuffer, contentType) => {
+  const response = new Response(arrayBuffer, {
+    headers: {
+      "Content-Type": contentType
+    }
+  });
+  return response.formData();
+};
+
+// node_modules/hono/dist/validator/validator.js
+var jsonRegex = /^application\/([a-z-\.]+\+)?json(;\s*[a-zA-Z0-9\-]+\=([^;]+))*$/;
+var multipartRegex = /^multipart\/form-data(;\s?boundary=[a-zA-Z0-9'"()+_,\-./:=?]+)?$/;
+var urlencodedRegex = /^application\/x-www-form-urlencoded(;\s*[a-zA-Z0-9\-]+\=([^;]+))*$/;
+var validator = (target, validationFunc) => {
+  return async (c, next) => {
+    let value = {};
+    const contentType = c.req.header("Content-Type");
+    switch (target) {
+      case "json":
+        if (!contentType || !jsonRegex.test(contentType)) {
+          break;
+        }
+        try {
+          value = await c.req.json();
+        } catch {
+          const message = "Malformed JSON in request body";
+          throw new HTTPException(400, { message });
+        }
+        break;
+      case "form": {
+        if (!contentType || !(multipartRegex.test(contentType) || urlencodedRegex.test(contentType))) {
+          break;
+        }
+        let formData;
+        if (c.req.bodyCache.formData) {
+          formData = await c.req.bodyCache.formData;
+        } else {
+          try {
+            const arrayBuffer = await c.req.arrayBuffer();
+            formData = await bufferToFormData(arrayBuffer, contentType);
+            c.req.bodyCache.formData = formData;
+          } catch (e) {
+            let message = "Malformed FormData request.";
+            message += e instanceof Error ? ` ${e.message}` : ` ${String(e)}`;
+            throw new HTTPException(400, { message });
+          }
+        }
+        const form = {};
+        formData.forEach((value2, key) => {
+          if (key.endsWith("[]")) {
+            (form[key] ??= []).push(value2);
+          } else if (Array.isArray(form[key])) {
+            form[key].push(value2);
+          } else if (key in form) {
+            form[key] = [form[key], value2];
+          } else {
+            form[key] = value2;
+          }
+        });
+        value = form;
+        break;
+      }
+      case "query":
+        value = Object.fromEntries(Object.entries(c.req.queries()).map(([k, v]) => {
+          return v.length === 1 ? [k, v[0]] : [k, v];
+        }));
+        break;
+      case "param":
+        value = c.req.param();
+        break;
+      case "header":
+        value = c.req.header();
+        break;
+      case "cookie":
+        value = getCookie(c);
+        break;
+    }
+    const res = await validationFunc(value, c);
+    if (res instanceof Response) {
+      return res;
+    }
+    c.req.addValidatedData(target, res);
+    return await next();
+  };
+};
+
+// node_modules/@hono/zod-validator/dist/index.js
+function zValidatorFunction(target, schema, hook, options) {
+  return validator(target, async (value, c) => {
+    let validatorValue = value;
+    if (target === "header" && "_def" in schema || target === "header" && "_zod" in schema) {
+      const schemaKeys = Object.keys("in" in schema ? schema.in.shape : schema.shape);
+      const caseInsensitiveKeymap = Object.fromEntries(schemaKeys.map((key) => [key.toLowerCase(), key]));
+      validatorValue = Object.fromEntries(Object.entries(value).map(([key, value$1]) => [caseInsensitiveKeymap[key] || key, value$1]));
+    }
+    const result = options && options.validationFunction ? await options.validationFunction(schema, validatorValue) : await schema.safeParseAsync(validatorValue);
+    if (hook) {
+      const hookResult = await hook({
+        data: validatorValue,
+        ...result,
+        target
+      }, c);
+      if (hookResult) {
+        if (hookResult instanceof Response)
+          return hookResult;
+        if ("response" in hookResult)
+          return hookResult.response;
+      }
+    }
+    if (!result.success)
+      return c.json(result, 400);
+    return result.data;
+  });
+}
+var zValidator = zValidatorFunction;
+
+// node_modules/hono/dist/compose.js
+var compose = (middleware, onError, onNotFound) => {
+  return (context, next) => {
+    let index = -1;
+    return dispatch(0);
+    async function dispatch(i) {
+      if (i <= index) {
+        throw new Error("next() called multiple times");
+      }
+      index = i;
+      let res;
+      let isError = false;
+      let handler;
+      if (middleware[i]) {
+        handler = middleware[i][0][0];
+        context.req.routeIndex = i;
+      } else {
+        handler = i === middleware.length && next || undefined;
+      }
+      if (handler) {
+        try {
+          res = await handler(context, () => dispatch(i + 1));
+        } catch (err) {
+          if (err instanceof Error && onError) {
+            context.error = err;
+            res = await onError(err, context);
+            isError = true;
+          } else {
+            throw err;
+          }
+        }
+      } else {
+        if (context.finalized === false && onNotFound) {
+          res = await onNotFound(context);
+        }
+      }
+      if (res && (context.finalized === false || isError)) {
+        context.res = res;
+      }
+      return context;
+    }
+  };
+};
+
+// node_modules/hono/dist/request/constants.js
+var GET_MATCH_RESULT = /* @__PURE__ */ Symbol();
+
+// node_modules/hono/dist/utils/body.js
+var parseBody = async (request, options = /* @__PURE__ */ Object.create(null)) => {
+  const { all = false, dot = false } = options;
+  const headers = request instanceof HonoRequest ? request.raw.headers : request.headers;
+  const contentType = headers.get("Content-Type");
+  if (contentType?.startsWith("multipart/form-data") || contentType?.startsWith("application/x-www-form-urlencoded")) {
+    return parseFormData(request, { all, dot });
+  }
+  return {};
+};
+async function parseFormData(request, options) {
+  const formData = await request.formData();
+  if (formData) {
+    return convertFormDataToBodyData(formData, options);
+  }
+  return {};
+}
+function convertFormDataToBodyData(formData, options) {
+  const form = /* @__PURE__ */ Object.create(null);
+  formData.forEach((value, key) => {
+    const shouldParseAllValues = options.all || key.endsWith("[]");
+    if (!shouldParseAllValues) {
+      form[key] = value;
+    } else {
+      handleParsingAllValues(form, key, value);
+    }
+  });
+  if (options.dot) {
+    Object.entries(form).forEach(([key, value]) => {
+      const shouldParseDotValues = key.includes(".");
+      if (shouldParseDotValues) {
+        handleParsingNestedValues(form, key, value);
+        delete form[key];
+      }
+    });
+  }
+  return form;
+}
+var handleParsingAllValues = (form, key, value) => {
+  if (form[key] !== undefined) {
+    if (Array.isArray(form[key])) {
+      form[key].push(value);
+    } else {
+      form[key] = [form[key], value];
+    }
+  } else {
+    if (!key.endsWith("[]")) {
+      form[key] = value;
+    } else {
+      form[key] = [value];
+    }
+  }
+};
+var handleParsingNestedValues = (form, key, value) => {
+  let nestedForm = form;
+  const keys = key.split(".");
+  keys.forEach((key2, index) => {
+    if (index === keys.length - 1) {
+      nestedForm[key2] = value;
+    } else {
+      if (!nestedForm[key2] || typeof nestedForm[key2] !== "object" || Array.isArray(nestedForm[key2]) || nestedForm[key2] instanceof File) {
+        nestedForm[key2] = /* @__PURE__ */ Object.create(null);
+      }
+      nestedForm = nestedForm[key2];
+    }
+  });
+};
 
 // node_modules/hono/dist/request.js
 var tryDecodeURIComponent = (str) => tryDecode(str, decodeURIComponent_);
@@ -9509,9287 +11178,6 @@ var Hono2 = class extends Hono {
   }
 };
 
-// node_modules/hono/dist/utils/crypto.js
-var sha256 = async (data) => {
-  const algorithm = { name: "SHA-256", alias: "sha256" };
-  const hash = await createHash(data, algorithm);
-  return hash;
-};
-var createHash = async (data, algorithm) => {
-  let sourceBuffer;
-  if (ArrayBuffer.isView(data) || data instanceof ArrayBuffer) {
-    sourceBuffer = data;
-  } else {
-    if (typeof data === "object") {
-      data = JSON.stringify(data);
-    }
-    sourceBuffer = new TextEncoder().encode(String(data));
-  }
-  if (crypto && crypto.subtle) {
-    const buffer = await crypto.subtle.digest({
-      name: algorithm.name
-    }, sourceBuffer);
-    const hash = Array.prototype.map.call(new Uint8Array(buffer), (x) => ("00" + x.toString(16)).slice(-2)).join("");
-    return hash;
-  }
-  return null;
-};
-
-// node_modules/hono/dist/utils/buffer.js
-var constantTimeEqualString = (a, b) => {
-  const aLen = a.length;
-  const bLen = b.length;
-  const maxLen = Math.max(aLen, bLen);
-  let out = aLen ^ bLen;
-  for (let i = 0;i < maxLen; i++) {
-    const aChar = i < aLen ? a.charCodeAt(i) : 0;
-    const bChar = i < bLen ? b.charCodeAt(i) : 0;
-    out |= aChar ^ bChar;
-  }
-  return out === 0;
-};
-var timingSafeEqualString = async (a, b, hashFunction) => {
-  if (!hashFunction) {
-    hashFunction = sha256;
-  }
-  const [sa, sb] = await Promise.all([hashFunction(a), hashFunction(b)]);
-  if (sa == null || sb == null || typeof sa !== "string" || typeof sb !== "string") {
-    return false;
-  }
-  const hashEqual = constantTimeEqualString(sa, sb);
-  const originalEqual = constantTimeEqualString(a, b);
-  return hashEqual && originalEqual;
-};
-var timingSafeEqual = async (a, b, hashFunction) => {
-  if (typeof a === "string" && typeof b === "string") {
-    return timingSafeEqualString(a, b, hashFunction);
-  }
-  if (!hashFunction) {
-    hashFunction = sha256;
-  }
-  const [sa, sb] = await Promise.all([hashFunction(a), hashFunction(b)]);
-  if (!sa || !sb || typeof sa !== "string" || typeof sb !== "string") {
-    return false;
-  }
-  return timingSafeEqualString(sa, sb);
-};
-var bufferToFormData = (arrayBuffer, contentType) => {
-  const response = new Response(arrayBuffer, {
-    headers: {
-      "Content-Type": contentType
-    }
-  });
-  return response.formData();
-};
-
-// node_modules/hono/dist/middleware/bearer-auth/index.js
-var TOKEN_STRINGS = "[A-Za-z0-9._~+/-]+=*";
-var PREFIX = "Bearer";
-var HEADER = "Authorization";
-var bearerAuth = (options) => {
-  if (!(("token" in options) || ("verifyToken" in options))) {
-    throw new Error('bearer auth middleware requires options for "token"');
-  }
-  if (!options.realm) {
-    options.realm = "";
-  }
-  if (options.prefix === undefined) {
-    options.prefix = PREFIX;
-  }
-  const realm = options.realm?.replace(/"/g, "\\\"");
-  const prefixRegexStr = options.prefix === "" ? "" : `${options.prefix} +`;
-  const regexp = new RegExp(`^${prefixRegexStr}(${TOKEN_STRINGS}) *$`, "i");
-  const wwwAuthenticatePrefix = options.prefix === "" ? "" : `${options.prefix} `;
-  const throwHTTPException = async (c, status, wwwAuthenticateHeader, messageOption) => {
-    const wwwAuthenticateHeaderValue = typeof wwwAuthenticateHeader === "function" ? await wwwAuthenticateHeader(c) : wwwAuthenticateHeader;
-    const headers = {
-      "WWW-Authenticate": typeof wwwAuthenticateHeaderValue === "string" ? wwwAuthenticateHeaderValue : `${wwwAuthenticatePrefix}${Object.entries(wwwAuthenticateHeaderValue).map(([key, value]) => `${key}="${value}"`).join(",")}`
-    };
-    const responseMessage = typeof messageOption === "function" ? await messageOption(c) : messageOption;
-    const res = typeof responseMessage === "string" ? new Response(responseMessage, { status, headers }) : new Response(JSON.stringify(responseMessage), {
-      status,
-      headers: {
-        ...headers,
-        "content-type": "application/json"
-      }
-    });
-    throw new HTTPException(status, { res });
-  };
-  return async function bearerAuth2(c, next) {
-    const headerToken = c.req.header(options.headerName || HEADER);
-    if (!headerToken) {
-      await throwHTTPException(c, 401, options.noAuthenticationHeader?.wwwAuthenticateHeader || `${wwwAuthenticatePrefix}realm="${realm}"`, options.noAuthenticationHeader?.message || options.noAuthenticationHeaderMessage || "Unauthorized");
-    } else {
-      const match2 = regexp.exec(headerToken);
-      if (!match2) {
-        await throwHTTPException(c, 400, options.invalidAuthenticationHeader?.wwwAuthenticateHeader || `${wwwAuthenticatePrefix}error="invalid_request"`, options.invalidAuthenticationHeader?.message || options.invalidAuthenticationHeaderMessage || "Bad Request");
-      } else {
-        let equal = false;
-        if ("verifyToken" in options) {
-          equal = await options.verifyToken(match2[1], c);
-        } else if (typeof options.token === "string") {
-          equal = await timingSafeEqual(options.token, match2[1], options.hashFunction);
-        } else if (Array.isArray(options.token) && options.token.length > 0) {
-          for (const token of options.token) {
-            if (await timingSafeEqual(token, match2[1], options.hashFunction)) {
-              equal = true;
-              break;
-            }
-          }
-        }
-        if (!equal) {
-          await throwHTTPException(c, 401, options.invalidToken?.wwwAuthenticateHeader || `${wwwAuthenticatePrefix}error="invalid_token"`, options.invalidToken?.message || options.invalidTokenMessage || "Unauthorized");
-        }
-      }
-    }
-    await next();
-  };
-};
-
-// node_modules/hono/dist/middleware/pretty-json/index.js
-var prettyJSON = (options) => {
-  const targetQuery = options?.query ?? "pretty";
-  return async function prettyJSON2(c, next) {
-    const pretty = options?.force || c.req.query(targetQuery) || c.req.query(targetQuery) === "";
-    await next();
-    if (pretty && c.res.headers.get("Content-Type")?.startsWith("application/json")) {
-      const obj = await c.res.json();
-      c.res = new Response(JSON.stringify(obj, null, options?.space ?? 2), c.res);
-    }
-  };
-};
-
-// node_modules/hono/dist/utils/cookie.js
-var validCookieNameRegEx = /^[\w!#$%&'*.^`|~+-]+$/;
-var validCookieValueRegEx = /^[ !#-:<-[\]-~]*$/;
-var parse = (cookie, name) => {
-  if (name && cookie.indexOf(name) === -1) {
-    return {};
-  }
-  const pairs = cookie.trim().split(";");
-  const parsedCookie = {};
-  for (let pairStr of pairs) {
-    pairStr = pairStr.trim();
-    const valueStartPos = pairStr.indexOf("=");
-    if (valueStartPos === -1) {
-      continue;
-    }
-    const cookieName = pairStr.substring(0, valueStartPos).trim();
-    if (name && name !== cookieName || !validCookieNameRegEx.test(cookieName)) {
-      continue;
-    }
-    let cookieValue = pairStr.substring(valueStartPos + 1).trim();
-    if (cookieValue.startsWith('"') && cookieValue.endsWith('"')) {
-      cookieValue = cookieValue.slice(1, -1);
-    }
-    if (validCookieValueRegEx.test(cookieValue)) {
-      parsedCookie[cookieName] = cookieValue.indexOf("%") !== -1 ? tryDecode(cookieValue, decodeURIComponent_) : cookieValue;
-      if (name) {
-        break;
-      }
-    }
-  }
-  return parsedCookie;
-};
-
-// node_modules/hono/dist/helper/cookie/index.js
-var getCookie = (c, key, prefix) => {
-  const cookie = c.req.raw.headers.get("Cookie");
-  if (typeof key === "string") {
-    if (!cookie) {
-      return;
-    }
-    let finalKey = key;
-    if (prefix === "secure") {
-      finalKey = "__Secure-" + key;
-    } else if (prefix === "host") {
-      finalKey = "__Host-" + key;
-    }
-    const obj2 = parse(cookie, finalKey);
-    return obj2[finalKey];
-  }
-  if (!cookie) {
-    return {};
-  }
-  const obj = parse(cookie);
-  return obj;
-};
-
-// node_modules/hono/dist/validator/validator.js
-var jsonRegex = /^application\/([a-z-\.]+\+)?json(;\s*[a-zA-Z0-9\-]+\=([^;]+))*$/;
-var multipartRegex = /^multipart\/form-data(;\s?boundary=[a-zA-Z0-9'"()+_,\-./:=?]+)?$/;
-var urlencodedRegex = /^application\/x-www-form-urlencoded(;\s*[a-zA-Z0-9\-]+\=([^;]+))*$/;
-var validator = (target, validationFunc) => {
-  return async (c, next) => {
-    let value = {};
-    const contentType = c.req.header("Content-Type");
-    switch (target) {
-      case "json":
-        if (!contentType || !jsonRegex.test(contentType)) {
-          break;
-        }
-        try {
-          value = await c.req.json();
-        } catch {
-          const message = "Malformed JSON in request body";
-          throw new HTTPException(400, { message });
-        }
-        break;
-      case "form": {
-        if (!contentType || !(multipartRegex.test(contentType) || urlencodedRegex.test(contentType))) {
-          break;
-        }
-        let formData;
-        if (c.req.bodyCache.formData) {
-          formData = await c.req.bodyCache.formData;
-        } else {
-          try {
-            const arrayBuffer = await c.req.arrayBuffer();
-            formData = await bufferToFormData(arrayBuffer, contentType);
-            c.req.bodyCache.formData = formData;
-          } catch (e) {
-            let message = "Malformed FormData request.";
-            message += e instanceof Error ? ` ${e.message}` : ` ${String(e)}`;
-            throw new HTTPException(400, { message });
-          }
-        }
-        const form = {};
-        formData.forEach((value2, key) => {
-          if (key.endsWith("[]")) {
-            (form[key] ??= []).push(value2);
-          } else if (Array.isArray(form[key])) {
-            form[key].push(value2);
-          } else if (key in form) {
-            form[key] = [form[key], value2];
-          } else {
-            form[key] = value2;
-          }
-        });
-        value = form;
-        break;
-      }
-      case "query":
-        value = Object.fromEntries(Object.entries(c.req.queries()).map(([k, v]) => {
-          return v.length === 1 ? [k, v[0]] : [k, v];
-        }));
-        break;
-      case "param":
-        value = c.req.param();
-        break;
-      case "header":
-        value = c.req.header();
-        break;
-      case "cookie":
-        value = getCookie(c);
-        break;
-    }
-    const res = await validationFunc(value, c);
-    if (res instanceof Response) {
-      return res;
-    }
-    c.req.addValidatedData(target, res);
-    return await next();
-  };
-};
-
-// node_modules/@hono/zod-validator/dist/index.js
-function zValidatorFunction(target, schema, hook, options) {
-  return validator(target, async (value, c) => {
-    let validatorValue = value;
-    if (target === "header" && "_def" in schema || target === "header" && "_zod" in schema) {
-      const schemaKeys = Object.keys("in" in schema ? schema.in.shape : schema.shape);
-      const caseInsensitiveKeymap = Object.fromEntries(schemaKeys.map((key) => [key.toLowerCase(), key]));
-      validatorValue = Object.fromEntries(Object.entries(value).map(([key, value$1]) => [caseInsensitiveKeymap[key] || key, value$1]));
-    }
-    const result = options && options.validationFunction ? await options.validationFunction(schema, validatorValue) : await schema.safeParseAsync(validatorValue);
-    if (hook) {
-      const hookResult = await hook({
-        data: validatorValue,
-        ...result,
-        target
-      }, c);
-      if (hookResult) {
-        if (hookResult instanceof Response)
-          return hookResult;
-        if ("response" in hookResult)
-          return hookResult.response;
-      }
-    }
-    if (!result.success)
-      return c.json(result, 400);
-    return result.data;
-  });
-}
-var zValidator = zValidatorFunction;
-
-// src/shared/http/error-response.ts
-var buildErrorResponse = (status, message, errors = []) => ({
-  success: false,
-  status,
-  message,
-  errors
-});
-
-// src/shared/http/zod-validator.ts
-var zValidator2 = (target, schema) => zValidator(target, schema, (result, c) => {
-  if (!result.success) {
-    return c.json(buildErrorResponse(400, "Dados inválidos", result.error.issues.map((issue) => ({
-      path: issue.path.join("."),
-      message: issue.message,
-      code: issue.code
-    }))), 400);
-  }
-});
-
-// src/modules/auth/auth.controller.ts
-class AuthController {
-  authService;
-  constructor(authService) {
-    this.authService = authService;
-  }
-  async register(c) {
-    const payload = c.req.valid("json");
-    const response = await this.authService.register(payload);
-    return c.json(response, 201);
-  }
-  async login(c) {
-    const payload = c.req.valid("json");
-    const response = await this.authService.login(payload);
-    return c.json(response, 200);
-  }
-}
-
-// node_modules/drizzle-orm/entity.js
-var entityKind = Symbol.for("drizzle:entityKind");
-var hasOwnEntityKind = Symbol.for("drizzle:hasOwnEntityKind");
-function is(value, type) {
-  if (!value || typeof value !== "object") {
-    return false;
-  }
-  if (value instanceof type) {
-    return true;
-  }
-  if (!Object.prototype.hasOwnProperty.call(type, entityKind)) {
-    throw new Error(`Class "${type.name ?? "<unknown>"}" doesn't look like a Drizzle entity. If this is incorrect and the class is provided by Drizzle, please report this as a bug.`);
-  }
-  let cls = Object.getPrototypeOf(value).constructor;
-  if (cls) {
-    while (cls) {
-      if (entityKind in cls && cls[entityKind] === type[entityKind]) {
-        return true;
-      }
-      cls = Object.getPrototypeOf(cls);
-    }
-  }
-  return false;
-}
-
-// node_modules/drizzle-orm/column.js
-class Column {
-  constructor(table, config) {
-    this.table = table;
-    this.config = config;
-    this.name = config.name;
-    this.keyAsName = config.keyAsName;
-    this.notNull = config.notNull;
-    this.default = config.default;
-    this.defaultFn = config.defaultFn;
-    this.onUpdateFn = config.onUpdateFn;
-    this.hasDefault = config.hasDefault;
-    this.primary = config.primaryKey;
-    this.isUnique = config.isUnique;
-    this.uniqueName = config.uniqueName;
-    this.uniqueType = config.uniqueType;
-    this.dataType = config.dataType;
-    this.columnType = config.columnType;
-    this.generated = config.generated;
-    this.generatedIdentity = config.generatedIdentity;
-  }
-  static [entityKind] = "Column";
-  name;
-  keyAsName;
-  primary;
-  notNull;
-  default;
-  defaultFn;
-  onUpdateFn;
-  hasDefault;
-  isUnique;
-  uniqueName;
-  uniqueType;
-  dataType;
-  columnType;
-  enumValues = undefined;
-  generated = undefined;
-  generatedIdentity = undefined;
-  config;
-  mapFromDriverValue(value) {
-    return value;
-  }
-  mapToDriverValue(value) {
-    return value;
-  }
-  shouldDisableInsert() {
-    return this.config.generated !== undefined && this.config.generated.type !== "byDefault";
-  }
-}
-
-// node_modules/drizzle-orm/column-builder.js
-class ColumnBuilder {
-  static [entityKind] = "ColumnBuilder";
-  config;
-  constructor(name, dataType, columnType) {
-    this.config = {
-      name,
-      keyAsName: name === "",
-      notNull: false,
-      default: undefined,
-      hasDefault: false,
-      primaryKey: false,
-      isUnique: false,
-      uniqueName: undefined,
-      uniqueType: undefined,
-      dataType,
-      columnType,
-      generated: undefined
-    };
-  }
-  $type() {
-    return this;
-  }
-  notNull() {
-    this.config.notNull = true;
-    return this;
-  }
-  default(value) {
-    this.config.default = value;
-    this.config.hasDefault = true;
-    return this;
-  }
-  $defaultFn(fn) {
-    this.config.defaultFn = fn;
-    this.config.hasDefault = true;
-    return this;
-  }
-  $default = this.$defaultFn;
-  $onUpdateFn(fn) {
-    this.config.onUpdateFn = fn;
-    this.config.hasDefault = true;
-    return this;
-  }
-  $onUpdate = this.$onUpdateFn;
-  primaryKey() {
-    this.config.primaryKey = true;
-    this.config.notNull = true;
-    return this;
-  }
-  setName(name) {
-    if (this.config.name !== "")
-      return;
-    this.config.name = name;
-  }
-}
-
-// node_modules/drizzle-orm/table.utils.js
-var TableName = Symbol.for("drizzle:Name");
-
-// node_modules/drizzle-orm/tracing-utils.js
-function iife(fn, ...args) {
-  return fn(...args);
-}
-
-// node_modules/drizzle-orm/pg-core/unique-constraint.js
-function uniqueKeyName(table, columns) {
-  return `${table[TableName]}_${columns.join("_")}_unique`;
-}
-
-// node_modules/drizzle-orm/pg-core/columns/common.js
-class PgColumn extends Column {
-  constructor(table, config) {
-    if (!config.uniqueName) {
-      config.uniqueName = uniqueKeyName(table, [config.name]);
-    }
-    super(table, config);
-    this.table = table;
-  }
-  static [entityKind] = "PgColumn";
-}
-
-class ExtraConfigColumn extends PgColumn {
-  static [entityKind] = "ExtraConfigColumn";
-  getSQLType() {
-    return this.getSQLType();
-  }
-  indexConfig = {
-    order: this.config.order ?? "asc",
-    nulls: this.config.nulls ?? "last",
-    opClass: this.config.opClass
-  };
-  defaultConfig = {
-    order: "asc",
-    nulls: "last",
-    opClass: undefined
-  };
-  asc() {
-    this.indexConfig.order = "asc";
-    return this;
-  }
-  desc() {
-    this.indexConfig.order = "desc";
-    return this;
-  }
-  nullsFirst() {
-    this.indexConfig.nulls = "first";
-    return this;
-  }
-  nullsLast() {
-    this.indexConfig.nulls = "last";
-    return this;
-  }
-  op(opClass) {
-    this.indexConfig.opClass = opClass;
-    return this;
-  }
-}
-
-// node_modules/drizzle-orm/pg-core/columns/enum.js
-class PgEnumObjectColumn extends PgColumn {
-  static [entityKind] = "PgEnumObjectColumn";
-  enum;
-  enumValues = this.config.enum.enumValues;
-  constructor(table, config) {
-    super(table, config);
-    this.enum = config.enum;
-  }
-  getSQLType() {
-    return this.enum.enumName;
-  }
-}
-var isPgEnumSym = Symbol.for("drizzle:isPgEnum");
-function isPgEnum(obj) {
-  return !!obj && typeof obj === "function" && isPgEnumSym in obj && obj[isPgEnumSym] === true;
-}
-class PgEnumColumn extends PgColumn {
-  static [entityKind] = "PgEnumColumn";
-  enum = this.config.enum;
-  enumValues = this.config.enum.enumValues;
-  constructor(table, config) {
-    super(table, config);
-    this.enum = config.enum;
-  }
-  getSQLType() {
-    return this.enum.enumName;
-  }
-}
-
-// node_modules/drizzle-orm/subquery.js
-class Subquery {
-  static [entityKind] = "Subquery";
-  constructor(sql, fields, alias, isWith = false, usedTables = []) {
-    this._ = {
-      brand: "Subquery",
-      sql,
-      selectedFields: fields,
-      alias,
-      isWith,
-      usedTables
-    };
-  }
-}
-
-class WithSubquery extends Subquery {
-  static [entityKind] = "WithSubquery";
-}
-
-// node_modules/drizzle-orm/version.js
-var version = "0.45.1";
-
-// node_modules/drizzle-orm/tracing.js
-var otel;
-var rawTracer;
-var tracer = {
-  startActiveSpan(name, fn) {
-    if (!otel) {
-      return fn();
-    }
-    if (!rawTracer) {
-      rawTracer = otel.trace.getTracer("drizzle-orm", version);
-    }
-    return iife((otel2, rawTracer2) => rawTracer2.startActiveSpan(name, (span) => {
-      try {
-        return fn(span);
-      } catch (e) {
-        span.setStatus({
-          code: otel2.SpanStatusCode.ERROR,
-          message: e instanceof Error ? e.message : "Unknown error"
-        });
-        throw e;
-      } finally {
-        span.end();
-      }
-    }), otel, rawTracer);
-  }
-};
-
-// node_modules/drizzle-orm/view-common.js
-var ViewBaseConfig = Symbol.for("drizzle:ViewBaseConfig");
-
-// node_modules/drizzle-orm/table.js
-var Schema = Symbol.for("drizzle:Schema");
-var Columns = Symbol.for("drizzle:Columns");
-var ExtraConfigColumns = Symbol.for("drizzle:ExtraConfigColumns");
-var OriginalName = Symbol.for("drizzle:OriginalName");
-var BaseName = Symbol.for("drizzle:BaseName");
-var IsAlias = Symbol.for("drizzle:IsAlias");
-var ExtraConfigBuilder = Symbol.for("drizzle:ExtraConfigBuilder");
-var IsDrizzleTable = Symbol.for("drizzle:IsDrizzleTable");
-
-class Table {
-  static [entityKind] = "Table";
-  static Symbol = {
-    Name: TableName,
-    Schema,
-    OriginalName,
-    Columns,
-    ExtraConfigColumns,
-    BaseName,
-    IsAlias,
-    ExtraConfigBuilder
-  };
-  [TableName];
-  [OriginalName];
-  [Schema];
-  [Columns];
-  [ExtraConfigColumns];
-  [BaseName];
-  [IsAlias] = false;
-  [IsDrizzleTable] = true;
-  [ExtraConfigBuilder] = undefined;
-  constructor(name, schema, baseName) {
-    this[TableName] = this[OriginalName] = name;
-    this[Schema] = schema;
-    this[BaseName] = baseName;
-  }
-}
-function getTableName(table) {
-  return table[TableName];
-}
-function getTableUniqueName(table) {
-  return `${table[Schema] ?? "public"}.${table[TableName]}`;
-}
-
-// node_modules/drizzle-orm/sql/sql.js
-function isSQLWrapper(value) {
-  return value !== null && value !== undefined && typeof value.getSQL === "function";
-}
-function mergeQueries(queries) {
-  const result = { sql: "", params: [] };
-  for (const query of queries) {
-    result.sql += query.sql;
-    result.params.push(...query.params);
-    if (query.typings?.length) {
-      if (!result.typings) {
-        result.typings = [];
-      }
-      result.typings.push(...query.typings);
-    }
-  }
-  return result;
-}
-
-class StringChunk {
-  static [entityKind] = "StringChunk";
-  value;
-  constructor(value) {
-    this.value = Array.isArray(value) ? value : [value];
-  }
-  getSQL() {
-    return new SQL([this]);
-  }
-}
-
-class SQL {
-  constructor(queryChunks) {
-    this.queryChunks = queryChunks;
-    for (const chunk of queryChunks) {
-      if (is(chunk, Table)) {
-        const schemaName = chunk[Table.Symbol.Schema];
-        this.usedTables.push(schemaName === undefined ? chunk[Table.Symbol.Name] : schemaName + "." + chunk[Table.Symbol.Name]);
-      }
-    }
-  }
-  static [entityKind] = "SQL";
-  decoder = noopDecoder;
-  shouldInlineParams = false;
-  usedTables = [];
-  append(query) {
-    this.queryChunks.push(...query.queryChunks);
-    return this;
-  }
-  toQuery(config) {
-    return tracer.startActiveSpan("drizzle.buildSQL", (span) => {
-      const query = this.buildQueryFromSourceParams(this.queryChunks, config);
-      span?.setAttributes({
-        "drizzle.query.text": query.sql,
-        "drizzle.query.params": JSON.stringify(query.params)
-      });
-      return query;
-    });
-  }
-  buildQueryFromSourceParams(chunks, _config) {
-    const config = Object.assign({}, _config, {
-      inlineParams: _config.inlineParams || this.shouldInlineParams,
-      paramStartIndex: _config.paramStartIndex || { value: 0 }
-    });
-    const {
-      casing,
-      escapeName,
-      escapeParam,
-      prepareTyping,
-      inlineParams,
-      paramStartIndex
-    } = config;
-    return mergeQueries(chunks.map((chunk) => {
-      if (is(chunk, StringChunk)) {
-        return { sql: chunk.value.join(""), params: [] };
-      }
-      if (is(chunk, Name)) {
-        return { sql: escapeName(chunk.value), params: [] };
-      }
-      if (chunk === undefined) {
-        return { sql: "", params: [] };
-      }
-      if (Array.isArray(chunk)) {
-        const result = [new StringChunk("(")];
-        for (const [i, p] of chunk.entries()) {
-          result.push(p);
-          if (i < chunk.length - 1) {
-            result.push(new StringChunk(", "));
-          }
-        }
-        result.push(new StringChunk(")"));
-        return this.buildQueryFromSourceParams(result, config);
-      }
-      if (is(chunk, SQL)) {
-        return this.buildQueryFromSourceParams(chunk.queryChunks, {
-          ...config,
-          inlineParams: inlineParams || chunk.shouldInlineParams
-        });
-      }
-      if (is(chunk, Table)) {
-        const schemaName = chunk[Table.Symbol.Schema];
-        const tableName = chunk[Table.Symbol.Name];
-        return {
-          sql: schemaName === undefined || chunk[IsAlias] ? escapeName(tableName) : escapeName(schemaName) + "." + escapeName(tableName),
-          params: []
-        };
-      }
-      if (is(chunk, Column)) {
-        const columnName = casing.getColumnCasing(chunk);
-        if (_config.invokeSource === "indexes") {
-          return { sql: escapeName(columnName), params: [] };
-        }
-        const schemaName = chunk.table[Table.Symbol.Schema];
-        return {
-          sql: chunk.table[IsAlias] || schemaName === undefined ? escapeName(chunk.table[Table.Symbol.Name]) + "." + escapeName(columnName) : escapeName(schemaName) + "." + escapeName(chunk.table[Table.Symbol.Name]) + "." + escapeName(columnName),
-          params: []
-        };
-      }
-      if (is(chunk, View)) {
-        const schemaName = chunk[ViewBaseConfig].schema;
-        const viewName = chunk[ViewBaseConfig].name;
-        return {
-          sql: schemaName === undefined || chunk[ViewBaseConfig].isAlias ? escapeName(viewName) : escapeName(schemaName) + "." + escapeName(viewName),
-          params: []
-        };
-      }
-      if (is(chunk, Param)) {
-        if (is(chunk.value, Placeholder)) {
-          return { sql: escapeParam(paramStartIndex.value++, chunk), params: [chunk], typings: ["none"] };
-        }
-        const mappedValue = chunk.value === null ? null : chunk.encoder.mapToDriverValue(chunk.value);
-        if (is(mappedValue, SQL)) {
-          return this.buildQueryFromSourceParams([mappedValue], config);
-        }
-        if (inlineParams) {
-          return { sql: this.mapInlineParam(mappedValue, config), params: [] };
-        }
-        let typings = ["none"];
-        if (prepareTyping) {
-          typings = [prepareTyping(chunk.encoder)];
-        }
-        return { sql: escapeParam(paramStartIndex.value++, mappedValue), params: [mappedValue], typings };
-      }
-      if (is(chunk, Placeholder)) {
-        return { sql: escapeParam(paramStartIndex.value++, chunk), params: [chunk], typings: ["none"] };
-      }
-      if (is(chunk, SQL.Aliased) && chunk.fieldAlias !== undefined) {
-        return { sql: escapeName(chunk.fieldAlias), params: [] };
-      }
-      if (is(chunk, Subquery)) {
-        if (chunk._.isWith) {
-          return { sql: escapeName(chunk._.alias), params: [] };
-        }
-        return this.buildQueryFromSourceParams([
-          new StringChunk("("),
-          chunk._.sql,
-          new StringChunk(") "),
-          new Name(chunk._.alias)
-        ], config);
-      }
-      if (isPgEnum(chunk)) {
-        if (chunk.schema) {
-          return { sql: escapeName(chunk.schema) + "." + escapeName(chunk.enumName), params: [] };
-        }
-        return { sql: escapeName(chunk.enumName), params: [] };
-      }
-      if (isSQLWrapper(chunk)) {
-        if (chunk.shouldOmitSQLParens?.()) {
-          return this.buildQueryFromSourceParams([chunk.getSQL()], config);
-        }
-        return this.buildQueryFromSourceParams([
-          new StringChunk("("),
-          chunk.getSQL(),
-          new StringChunk(")")
-        ], config);
-      }
-      if (inlineParams) {
-        return { sql: this.mapInlineParam(chunk, config), params: [] };
-      }
-      return { sql: escapeParam(paramStartIndex.value++, chunk), params: [chunk], typings: ["none"] };
-    }));
-  }
-  mapInlineParam(chunk, { escapeString }) {
-    if (chunk === null) {
-      return "null";
-    }
-    if (typeof chunk === "number" || typeof chunk === "boolean") {
-      return chunk.toString();
-    }
-    if (typeof chunk === "string") {
-      return escapeString(chunk);
-    }
-    if (typeof chunk === "object") {
-      const mappedValueAsString = chunk.toString();
-      if (mappedValueAsString === "[object Object]") {
-        return escapeString(JSON.stringify(chunk));
-      }
-      return escapeString(mappedValueAsString);
-    }
-    throw new Error("Unexpected param value: " + chunk);
-  }
-  getSQL() {
-    return this;
-  }
-  as(alias) {
-    if (alias === undefined) {
-      return this;
-    }
-    return new SQL.Aliased(this, alias);
-  }
-  mapWith(decoder) {
-    this.decoder = typeof decoder === "function" ? { mapFromDriverValue: decoder } : decoder;
-    return this;
-  }
-  inlineParams() {
-    this.shouldInlineParams = true;
-    return this;
-  }
-  if(condition) {
-    return condition ? this : undefined;
-  }
-}
-
-class Name {
-  constructor(value) {
-    this.value = value;
-  }
-  static [entityKind] = "Name";
-  brand;
-  getSQL() {
-    return new SQL([this]);
-  }
-}
-function isDriverValueEncoder(value) {
-  return typeof value === "object" && value !== null && "mapToDriverValue" in value && typeof value.mapToDriverValue === "function";
-}
-var noopDecoder = {
-  mapFromDriverValue: (value) => value
-};
-var noopEncoder = {
-  mapToDriverValue: (value) => value
-};
-var noopMapper = {
-  ...noopDecoder,
-  ...noopEncoder
-};
-
-class Param {
-  constructor(value, encoder = noopEncoder) {
-    this.value = value;
-    this.encoder = encoder;
-  }
-  static [entityKind] = "Param";
-  brand;
-  getSQL() {
-    return new SQL([this]);
-  }
-}
-function sql(strings, ...params) {
-  const queryChunks = [];
-  if (params.length > 0 || strings.length > 0 && strings[0] !== "") {
-    queryChunks.push(new StringChunk(strings[0]));
-  }
-  for (const [paramIndex, param2] of params.entries()) {
-    queryChunks.push(param2, new StringChunk(strings[paramIndex + 1]));
-  }
-  return new SQL(queryChunks);
-}
-((sql2) => {
-  function empty() {
-    return new SQL([]);
-  }
-  sql2.empty = empty;
-  function fromList(list) {
-    return new SQL(list);
-  }
-  sql2.fromList = fromList;
-  function raw2(str) {
-    return new SQL([new StringChunk(str)]);
-  }
-  sql2.raw = raw2;
-  function join(chunks, separator) {
-    const result = [];
-    for (const [i, chunk] of chunks.entries()) {
-      if (i > 0 && separator !== undefined) {
-        result.push(separator);
-      }
-      result.push(chunk);
-    }
-    return new SQL(result);
-  }
-  sql2.join = join;
-  function identifier(value) {
-    return new Name(value);
-  }
-  sql2.identifier = identifier;
-  function placeholder2(name2) {
-    return new Placeholder(name2);
-  }
-  sql2.placeholder = placeholder2;
-  function param2(value, encoder) {
-    return new Param(value, encoder);
-  }
-  sql2.param = param2;
-})(sql || (sql = {}));
-((SQL2) => {
-
-  class Aliased {
-    constructor(sql2, fieldAlias) {
-      this.sql = sql2;
-      this.fieldAlias = fieldAlias;
-    }
-    static [entityKind] = "SQL.Aliased";
-    isSelectionField = false;
-    getSQL() {
-      return this.sql;
-    }
-    clone() {
-      return new Aliased(this.sql, this.fieldAlias);
-    }
-  }
-  SQL2.Aliased = Aliased;
-})(SQL || (SQL = {}));
-
-class Placeholder {
-  constructor(name2) {
-    this.name = name2;
-  }
-  static [entityKind] = "Placeholder";
-  getSQL() {
-    return new SQL([this]);
-  }
-}
-function fillPlaceholders(params, values) {
-  return params.map((p) => {
-    if (is(p, Placeholder)) {
-      if (!(p.name in values)) {
-        throw new Error(`No value for placeholder "${p.name}" was provided`);
-      }
-      return values[p.name];
-    }
-    if (is(p, Param) && is(p.value, Placeholder)) {
-      if (!(p.value.name in values)) {
-        throw new Error(`No value for placeholder "${p.value.name}" was provided`);
-      }
-      return p.encoder.mapToDriverValue(values[p.value.name]);
-    }
-    return p;
-  });
-}
-var IsDrizzleView = Symbol.for("drizzle:IsDrizzleView");
-
-class View {
-  static [entityKind] = "View";
-  [ViewBaseConfig];
-  [IsDrizzleView] = true;
-  constructor({ name: name2, schema, selectedFields, query }) {
-    this[ViewBaseConfig] = {
-      name: name2,
-      originalName: name2,
-      schema,
-      selectedFields,
-      query,
-      isExisting: !query,
-      isAlias: false
-    };
-  }
-  getSQL() {
-    return new SQL([this]);
-  }
-}
-Column.prototype.getSQL = function() {
-  return new SQL([this]);
-};
-Table.prototype.getSQL = function() {
-  return new SQL([this]);
-};
-Subquery.prototype.getSQL = function() {
-  return new SQL([this]);
-};
-
-// node_modules/drizzle-orm/alias.js
-class ColumnAliasProxyHandler {
-  constructor(table) {
-    this.table = table;
-  }
-  static [entityKind] = "ColumnAliasProxyHandler";
-  get(columnObj, prop) {
-    if (prop === "table") {
-      return this.table;
-    }
-    return columnObj[prop];
-  }
-}
-
-class TableAliasProxyHandler {
-  constructor(alias, replaceOriginalName) {
-    this.alias = alias;
-    this.replaceOriginalName = replaceOriginalName;
-  }
-  static [entityKind] = "TableAliasProxyHandler";
-  get(target, prop) {
-    if (prop === Table.Symbol.IsAlias) {
-      return true;
-    }
-    if (prop === Table.Symbol.Name) {
-      return this.alias;
-    }
-    if (this.replaceOriginalName && prop === Table.Symbol.OriginalName) {
-      return this.alias;
-    }
-    if (prop === ViewBaseConfig) {
-      return {
-        ...target[ViewBaseConfig],
-        name: this.alias,
-        isAlias: true
-      };
-    }
-    if (prop === Table.Symbol.Columns) {
-      const columns = target[Table.Symbol.Columns];
-      if (!columns) {
-        return columns;
-      }
-      const proxiedColumns = {};
-      Object.keys(columns).map((key) => {
-        proxiedColumns[key] = new Proxy(columns[key], new ColumnAliasProxyHandler(new Proxy(target, this)));
-      });
-      return proxiedColumns;
-    }
-    const value = target[prop];
-    if (is(value, Column)) {
-      return new Proxy(value, new ColumnAliasProxyHandler(new Proxy(target, this)));
-    }
-    return value;
-  }
-}
-function aliasedTable(table, tableAlias) {
-  return new Proxy(table, new TableAliasProxyHandler(tableAlias, false));
-}
-function aliasedTableColumn(column, tableAlias) {
-  return new Proxy(column, new ColumnAliasProxyHandler(new Proxy(column.table, new TableAliasProxyHandler(tableAlias, false))));
-}
-function mapColumnsInAliasedSQLToAlias(query, alias) {
-  return new SQL.Aliased(mapColumnsInSQLToAlias(query.sql, alias), query.fieldAlias);
-}
-function mapColumnsInSQLToAlias(query, alias) {
-  return sql.join(query.queryChunks.map((c) => {
-    if (is(c, Column)) {
-      return aliasedTableColumn(c, alias);
-    }
-    if (is(c, SQL)) {
-      return mapColumnsInSQLToAlias(c, alias);
-    }
-    if (is(c, SQL.Aliased)) {
-      return mapColumnsInAliasedSQLToAlias(c, alias);
-    }
-    return c;
-  }));
-}
-
-// node_modules/drizzle-orm/errors.js
-class DrizzleError extends Error {
-  static [entityKind] = "DrizzleError";
-  constructor({ message, cause }) {
-    super(message);
-    this.name = "DrizzleError";
-    this.cause = cause;
-  }
-}
-
-class DrizzleQueryError extends Error {
-  constructor(query, params, cause) {
-    super(`Failed query: ${query}
-params: ${params}`);
-    this.query = query;
-    this.params = params;
-    this.cause = cause;
-    Error.captureStackTrace(this, DrizzleQueryError);
-    if (cause)
-      this.cause = cause;
-  }
-}
-
-class TransactionRollbackError extends DrizzleError {
-  static [entityKind] = "TransactionRollbackError";
-  constructor() {
-    super({ message: "Rollback" });
-  }
-}
-
-// node_modules/drizzle-orm/logger.js
-class ConsoleLogWriter {
-  static [entityKind] = "ConsoleLogWriter";
-  write(message) {
-    console.log(message);
-  }
-}
-
-class DefaultLogger {
-  static [entityKind] = "DefaultLogger";
-  writer;
-  constructor(config) {
-    this.writer = config?.writer ?? new ConsoleLogWriter;
-  }
-  logQuery(query, params) {
-    const stringifiedParams = params.map((p) => {
-      try {
-        return JSON.stringify(p);
-      } catch {
-        return String(p);
-      }
-    });
-    const paramsStr = stringifiedParams.length ? ` -- params: [${stringifiedParams.join(", ")}]` : "";
-    this.writer.write(`Query: ${query}${paramsStr}`);
-  }
-}
-
-class NoopLogger {
-  static [entityKind] = "NoopLogger";
-  logQuery() {}
-}
-
-// node_modules/drizzle-orm/query-promise.js
-class QueryPromise {
-  static [entityKind] = "QueryPromise";
-  [Symbol.toStringTag] = "QueryPromise";
-  catch(onRejected) {
-    return this.then(undefined, onRejected);
-  }
-  finally(onFinally) {
-    return this.then((value) => {
-      onFinally?.();
-      return value;
-    }, (reason) => {
-      onFinally?.();
-      throw reason;
-    });
-  }
-  then(onFulfilled, onRejected) {
-    return this.execute().then(onFulfilled, onRejected);
-  }
-}
-
-// node_modules/drizzle-orm/utils.js
-function mapResultRow(columns, row, joinsNotNullableMap) {
-  const nullifyMap = {};
-  const result = columns.reduce((result2, { path, field }, columnIndex) => {
-    let decoder;
-    if (is(field, Column)) {
-      decoder = field;
-    } else if (is(field, SQL)) {
-      decoder = field.decoder;
-    } else if (is(field, Subquery)) {
-      decoder = field._.sql.decoder;
-    } else {
-      decoder = field.sql.decoder;
-    }
-    let node = result2;
-    for (const [pathChunkIndex, pathChunk] of path.entries()) {
-      if (pathChunkIndex < path.length - 1) {
-        if (!(pathChunk in node)) {
-          node[pathChunk] = {};
-        }
-        node = node[pathChunk];
-      } else {
-        const rawValue = row[columnIndex];
-        const value = node[pathChunk] = rawValue === null ? null : decoder.mapFromDriverValue(rawValue);
-        if (joinsNotNullableMap && is(field, Column) && path.length === 2) {
-          const objectName = path[0];
-          if (!(objectName in nullifyMap)) {
-            nullifyMap[objectName] = value === null ? getTableName(field.table) : false;
-          } else if (typeof nullifyMap[objectName] === "string" && nullifyMap[objectName] !== getTableName(field.table)) {
-            nullifyMap[objectName] = false;
-          }
-        }
-      }
-    }
-    return result2;
-  }, {});
-  if (joinsNotNullableMap && Object.keys(nullifyMap).length > 0) {
-    for (const [objectName, tableName] of Object.entries(nullifyMap)) {
-      if (typeof tableName === "string" && !joinsNotNullableMap[tableName]) {
-        result[objectName] = null;
-      }
-    }
-  }
-  return result;
-}
-function orderSelectedFields(fields, pathPrefix) {
-  return Object.entries(fields).reduce((result, [name, field]) => {
-    if (typeof name !== "string") {
-      return result;
-    }
-    const newPath = pathPrefix ? [...pathPrefix, name] : [name];
-    if (is(field, Column) || is(field, SQL) || is(field, SQL.Aliased) || is(field, Subquery)) {
-      result.push({ path: newPath, field });
-    } else if (is(field, Table)) {
-      result.push(...orderSelectedFields(field[Table.Symbol.Columns], newPath));
-    } else {
-      result.push(...orderSelectedFields(field, newPath));
-    }
-    return result;
-  }, []);
-}
-function haveSameKeys(left, right) {
-  const leftKeys = Object.keys(left);
-  const rightKeys = Object.keys(right);
-  if (leftKeys.length !== rightKeys.length) {
-    return false;
-  }
-  for (const [index, key] of leftKeys.entries()) {
-    if (key !== rightKeys[index]) {
-      return false;
-    }
-  }
-  return true;
-}
-function mapUpdateSet(table, values) {
-  const entries = Object.entries(values).filter(([, value]) => value !== undefined).map(([key, value]) => {
-    if (is(value, SQL) || is(value, Column)) {
-      return [key, value];
-    } else {
-      return [key, new Param(value, table[Table.Symbol.Columns][key])];
-    }
-  });
-  if (entries.length === 0) {
-    throw new Error("No values to set");
-  }
-  return Object.fromEntries(entries);
-}
-function applyMixins(baseClass, extendedClasses) {
-  for (const extendedClass of extendedClasses) {
-    for (const name of Object.getOwnPropertyNames(extendedClass.prototype)) {
-      if (name === "constructor")
-        continue;
-      Object.defineProperty(baseClass.prototype, name, Object.getOwnPropertyDescriptor(extendedClass.prototype, name) || /* @__PURE__ */ Object.create(null));
-    }
-  }
-}
-function getTableColumns(table) {
-  return table[Table.Symbol.Columns];
-}
-function getTableLikeName(table) {
-  return is(table, Subquery) ? table._.alias : is(table, View) ? table[ViewBaseConfig].name : is(table, SQL) ? undefined : table[Table.Symbol.IsAlias] ? table[Table.Symbol.Name] : table[Table.Symbol.BaseName];
-}
-function getColumnNameAndConfig(a, b) {
-  return {
-    name: typeof a === "string" && a.length > 0 ? a : "",
-    config: typeof a === "object" ? a : b
-  };
-}
-function isConfig(data) {
-  if (typeof data !== "object" || data === null)
-    return false;
-  if (data.constructor.name !== "Object")
-    return false;
-  if ("logger" in data) {
-    const type = typeof data["logger"];
-    if (type !== "boolean" && (type !== "object" || typeof data["logger"]["logQuery"] !== "function") && type !== "undefined")
-      return false;
-    return true;
-  }
-  if ("schema" in data) {
-    const type = typeof data["schema"];
-    if (type !== "object" && type !== "undefined")
-      return false;
-    return true;
-  }
-  if ("casing" in data) {
-    const type = typeof data["casing"];
-    if (type !== "string" && type !== "undefined")
-      return false;
-    return true;
-  }
-  if ("mode" in data) {
-    if (data["mode"] !== "default" || data["mode"] !== "planetscale" || data["mode"] !== undefined)
-      return false;
-    return true;
-  }
-  if ("connection" in data) {
-    const type = typeof data["connection"];
-    if (type !== "string" && type !== "object" && type !== "undefined")
-      return false;
-    return true;
-  }
-  if ("client" in data) {
-    const type = typeof data["client"];
-    if (type !== "object" && type !== "function" && type !== "undefined")
-      return false;
-    return true;
-  }
-  if (Object.keys(data).length === 0)
-    return true;
-  return false;
-}
-var textDecoder = typeof TextDecoder === "undefined" ? null : new TextDecoder;
-
-// node_modules/drizzle-orm/pg-core/table.js
-var InlineForeignKeys = Symbol.for("drizzle:PgInlineForeignKeys");
-var EnableRLS = Symbol.for("drizzle:EnableRLS");
-
-class PgTable extends Table {
-  static [entityKind] = "PgTable";
-  static Symbol = Object.assign({}, Table.Symbol, {
-    InlineForeignKeys,
-    EnableRLS
-  });
-  [InlineForeignKeys] = [];
-  [EnableRLS] = false;
-  [Table.Symbol.ExtraConfigBuilder] = undefined;
-  [Table.Symbol.ExtraConfigColumns] = {};
-}
-
-// node_modules/drizzle-orm/pg-core/primary-keys.js
-class PrimaryKeyBuilder {
-  static [entityKind] = "PgPrimaryKeyBuilder";
-  columns;
-  name;
-  constructor(columns, name) {
-    this.columns = columns;
-    this.name = name;
-  }
-  build(table) {
-    return new PrimaryKey(table, this.columns, this.name);
-  }
-}
-
-class PrimaryKey {
-  constructor(table, columns, name) {
-    this.table = table;
-    this.columns = columns;
-    this.name = name;
-  }
-  static [entityKind] = "PgPrimaryKey";
-  columns;
-  name;
-  getName() {
-    return this.name ?? `${this.table[PgTable.Symbol.Name]}_${this.columns.map((column) => column.name).join("_")}_pk`;
-  }
-}
-
-// node_modules/drizzle-orm/sql/expressions/conditions.js
-function bindIfParam(value, column) {
-  if (isDriverValueEncoder(column) && !isSQLWrapper(value) && !is(value, Param) && !is(value, Placeholder) && !is(value, Column) && !is(value, Table) && !is(value, View)) {
-    return new Param(value, column);
-  }
-  return value;
-}
-var eq = (left, right) => {
-  return sql`${left} = ${bindIfParam(right, left)}`;
-};
-var ne = (left, right) => {
-  return sql`${left} <> ${bindIfParam(right, left)}`;
-};
-function and(...unfilteredConditions) {
-  const conditions = unfilteredConditions.filter((c) => c !== undefined);
-  if (conditions.length === 0) {
-    return;
-  }
-  if (conditions.length === 1) {
-    return new SQL(conditions);
-  }
-  return new SQL([
-    new StringChunk("("),
-    sql.join(conditions, new StringChunk(" and ")),
-    new StringChunk(")")
-  ]);
-}
-function or(...unfilteredConditions) {
-  const conditions = unfilteredConditions.filter((c) => c !== undefined);
-  if (conditions.length === 0) {
-    return;
-  }
-  if (conditions.length === 1) {
-    return new SQL(conditions);
-  }
-  return new SQL([
-    new StringChunk("("),
-    sql.join(conditions, new StringChunk(" or ")),
-    new StringChunk(")")
-  ]);
-}
-function not(condition) {
-  return sql`not ${condition}`;
-}
-var gt = (left, right) => {
-  return sql`${left} > ${bindIfParam(right, left)}`;
-};
-var gte = (left, right) => {
-  return sql`${left} >= ${bindIfParam(right, left)}`;
-};
-var lt = (left, right) => {
-  return sql`${left} < ${bindIfParam(right, left)}`;
-};
-var lte = (left, right) => {
-  return sql`${left} <= ${bindIfParam(right, left)}`;
-};
-function inArray(column, values) {
-  if (Array.isArray(values)) {
-    if (values.length === 0) {
-      return sql`false`;
-    }
-    return sql`${column} in ${values.map((v) => bindIfParam(v, column))}`;
-  }
-  return sql`${column} in ${bindIfParam(values, column)}`;
-}
-function notInArray(column, values) {
-  if (Array.isArray(values)) {
-    if (values.length === 0) {
-      return sql`true`;
-    }
-    return sql`${column} not in ${values.map((v) => bindIfParam(v, column))}`;
-  }
-  return sql`${column} not in ${bindIfParam(values, column)}`;
-}
-function isNull(value) {
-  return sql`${value} is null`;
-}
-function isNotNull(value) {
-  return sql`${value} is not null`;
-}
-function exists(subquery) {
-  return sql`exists ${subquery}`;
-}
-function notExists(subquery) {
-  return sql`not exists ${subquery}`;
-}
-function between(column, min, max) {
-  return sql`${column} between ${bindIfParam(min, column)} and ${bindIfParam(max, column)}`;
-}
-function notBetween(column, min, max) {
-  return sql`${column} not between ${bindIfParam(min, column)} and ${bindIfParam(max, column)}`;
-}
-function like(column, value) {
-  return sql`${column} like ${value}`;
-}
-function notLike(column, value) {
-  return sql`${column} not like ${value}`;
-}
-function ilike(column, value) {
-  return sql`${column} ilike ${value}`;
-}
-function notIlike(column, value) {
-  return sql`${column} not ilike ${value}`;
-}
-
-// node_modules/drizzle-orm/sql/expressions/select.js
-function asc(column) {
-  return sql`${column} asc`;
-}
-function desc(column) {
-  return sql`${column} desc`;
-}
-
-// node_modules/drizzle-orm/relations.js
-class Relation {
-  constructor(sourceTable, referencedTable, relationName) {
-    this.sourceTable = sourceTable;
-    this.referencedTable = referencedTable;
-    this.relationName = relationName;
-    this.referencedTableName = referencedTable[Table.Symbol.Name];
-  }
-  static [entityKind] = "Relation";
-  referencedTableName;
-  fieldName;
-}
-
-class Relations {
-  constructor(table, config) {
-    this.table = table;
-    this.config = config;
-  }
-  static [entityKind] = "Relations";
-}
-
-class One extends Relation {
-  constructor(sourceTable, referencedTable, config, isNullable) {
-    super(sourceTable, referencedTable, config?.relationName);
-    this.config = config;
-    this.isNullable = isNullable;
-  }
-  static [entityKind] = "One";
-  withFieldName(fieldName) {
-    const relation = new One(this.sourceTable, this.referencedTable, this.config, this.isNullable);
-    relation.fieldName = fieldName;
-    return relation;
-  }
-}
-
-class Many extends Relation {
-  constructor(sourceTable, referencedTable, config) {
-    super(sourceTable, referencedTable, config?.relationName);
-    this.config = config;
-  }
-  static [entityKind] = "Many";
-  withFieldName(fieldName) {
-    const relation = new Many(this.sourceTable, this.referencedTable, this.config);
-    relation.fieldName = fieldName;
-    return relation;
-  }
-}
-function getOperators() {
-  return {
-    and,
-    between,
-    eq,
-    exists,
-    gt,
-    gte,
-    ilike,
-    inArray,
-    isNull,
-    isNotNull,
-    like,
-    lt,
-    lte,
-    ne,
-    not,
-    notBetween,
-    notExists,
-    notLike,
-    notIlike,
-    notInArray,
-    or,
-    sql
-  };
-}
-function getOrderByOperators() {
-  return {
-    sql,
-    asc,
-    desc
-  };
-}
-function extractTablesRelationalConfig(schema, configHelpers) {
-  if (Object.keys(schema).length === 1 && "default" in schema && !is(schema["default"], Table)) {
-    schema = schema["default"];
-  }
-  const tableNamesMap = {};
-  const relationsBuffer = {};
-  const tablesConfig = {};
-  for (const [key, value] of Object.entries(schema)) {
-    if (is(value, Table)) {
-      const dbName = getTableUniqueName(value);
-      const bufferedRelations = relationsBuffer[dbName];
-      tableNamesMap[dbName] = key;
-      tablesConfig[key] = {
-        tsName: key,
-        dbName: value[Table.Symbol.Name],
-        schema: value[Table.Symbol.Schema],
-        columns: value[Table.Symbol.Columns],
-        relations: bufferedRelations?.relations ?? {},
-        primaryKey: bufferedRelations?.primaryKey ?? []
-      };
-      for (const column of Object.values(value[Table.Symbol.Columns])) {
-        if (column.primary) {
-          tablesConfig[key].primaryKey.push(column);
-        }
-      }
-      const extraConfig = value[Table.Symbol.ExtraConfigBuilder]?.(value[Table.Symbol.ExtraConfigColumns]);
-      if (extraConfig) {
-        for (const configEntry of Object.values(extraConfig)) {
-          if (is(configEntry, PrimaryKeyBuilder)) {
-            tablesConfig[key].primaryKey.push(...configEntry.columns);
-          }
-        }
-      }
-    } else if (is(value, Relations)) {
-      const dbName = getTableUniqueName(value.table);
-      const tableName = tableNamesMap[dbName];
-      const relations2 = value.config(configHelpers(value.table));
-      let primaryKey;
-      for (const [relationName, relation] of Object.entries(relations2)) {
-        if (tableName) {
-          const tableConfig = tablesConfig[tableName];
-          tableConfig.relations[relationName] = relation;
-          if (primaryKey) {
-            tableConfig.primaryKey.push(...primaryKey);
-          }
-        } else {
-          if (!(dbName in relationsBuffer)) {
-            relationsBuffer[dbName] = {
-              relations: {},
-              primaryKey
-            };
-          }
-          relationsBuffer[dbName].relations[relationName] = relation;
-        }
-      }
-    }
-  }
-  return { tables: tablesConfig, tableNamesMap };
-}
-function createOne(sourceTable) {
-  return function one(table, config) {
-    return new One(sourceTable, table, config, config?.fields.reduce((res, f) => res && f.notNull, true) ?? false);
-  };
-}
-function createMany(sourceTable) {
-  return function many(referencedTable, config) {
-    return new Many(sourceTable, referencedTable, config);
-  };
-}
-function normalizeRelation(schema, tableNamesMap, relation) {
-  if (is(relation, One) && relation.config) {
-    return {
-      fields: relation.config.fields,
-      references: relation.config.references
-    };
-  }
-  const referencedTableTsName = tableNamesMap[getTableUniqueName(relation.referencedTable)];
-  if (!referencedTableTsName) {
-    throw new Error(`Table "${relation.referencedTable[Table.Symbol.Name]}" not found in schema`);
-  }
-  const referencedTableConfig = schema[referencedTableTsName];
-  if (!referencedTableConfig) {
-    throw new Error(`Table "${referencedTableTsName}" not found in schema`);
-  }
-  const sourceTable = relation.sourceTable;
-  const sourceTableTsName = tableNamesMap[getTableUniqueName(sourceTable)];
-  if (!sourceTableTsName) {
-    throw new Error(`Table "${sourceTable[Table.Symbol.Name]}" not found in schema`);
-  }
-  const reverseRelations = [];
-  for (const referencedTableRelation of Object.values(referencedTableConfig.relations)) {
-    if (relation.relationName && relation !== referencedTableRelation && referencedTableRelation.relationName === relation.relationName || !relation.relationName && referencedTableRelation.referencedTable === relation.sourceTable) {
-      reverseRelations.push(referencedTableRelation);
-    }
-  }
-  if (reverseRelations.length > 1) {
-    throw relation.relationName ? new Error(`There are multiple relations with name "${relation.relationName}" in table "${referencedTableTsName}"`) : new Error(`There are multiple relations between "${referencedTableTsName}" and "${relation.sourceTable[Table.Symbol.Name]}". Please specify relation name`);
-  }
-  if (reverseRelations[0] && is(reverseRelations[0], One) && reverseRelations[0].config) {
-    return {
-      fields: reverseRelations[0].config.references,
-      references: reverseRelations[0].config.fields
-    };
-  }
-  throw new Error(`There is not enough information to infer relation "${sourceTableTsName}.${relation.fieldName}"`);
-}
-function createTableRelationsHelpers(sourceTable) {
-  return {
-    one: createOne(sourceTable),
-    many: createMany(sourceTable)
-  };
-}
-function mapRelationalRow(tablesConfig, tableConfig, row, buildQueryResultSelection, mapColumnValue = (value) => value) {
-  const result = {};
-  for (const [
-    selectionItemIndex,
-    selectionItem
-  ] of buildQueryResultSelection.entries()) {
-    if (selectionItem.isJson) {
-      const relation = tableConfig.relations[selectionItem.tsKey];
-      const rawSubRows = row[selectionItemIndex];
-      const subRows = typeof rawSubRows === "string" ? JSON.parse(rawSubRows) : rawSubRows;
-      result[selectionItem.tsKey] = is(relation, One) ? subRows && mapRelationalRow(tablesConfig, tablesConfig[selectionItem.relationTableTsKey], subRows, selectionItem.selection, mapColumnValue) : subRows.map((subRow) => mapRelationalRow(tablesConfig, tablesConfig[selectionItem.relationTableTsKey], subRow, selectionItem.selection, mapColumnValue));
-    } else {
-      const value = mapColumnValue(row[selectionItemIndex]);
-      const field = selectionItem.field;
-      let decoder;
-      if (is(field, Column)) {
-        decoder = field;
-      } else if (is(field, SQL)) {
-        decoder = field.decoder;
-      } else {
-        decoder = field.sql.decoder;
-      }
-      result[selectionItem.tsKey] = value === null ? null : decoder.mapFromDriverValue(value);
-    }
-  }
-  return result;
-}
-
-// node_modules/@libsql/core/lib-esm/api.js
-class LibsqlError extends Error {
-  code;
-  extendedCode;
-  rawCode;
-  constructor(message, code, extendedCode, rawCode, cause) {
-    if (code !== undefined) {
-      message = `${code}: ${message}`;
-    }
-    super(message, { cause });
-    this.code = code;
-    this.extendedCode = extendedCode;
-    this.rawCode = rawCode;
-    this.name = "LibsqlError";
-  }
-}
-
-class LibsqlBatchError extends LibsqlError {
-  statementIndex;
-  constructor(message, statementIndex, code, extendedCode, rawCode, cause) {
-    super(message, code, extendedCode, rawCode, cause);
-    this.statementIndex = statementIndex;
-    this.name = "LibsqlBatchError";
-  }
-}
-
-// node_modules/@libsql/core/lib-esm/uri.js
-function parseUri(text) {
-  const match2 = URI_RE.exec(text);
-  if (match2 === null) {
-    throw new LibsqlError(`The URL '${text}' is not in a valid format`, "URL_INVALID");
-  }
-  const groups = match2.groups;
-  const scheme = groups["scheme"];
-  const authority = groups["authority"] !== undefined ? parseAuthority(groups["authority"]) : undefined;
-  const path = percentDecode(groups["path"]);
-  const query = groups["query"] !== undefined ? parseQuery(groups["query"]) : undefined;
-  const fragment = groups["fragment"] !== undefined ? percentDecode(groups["fragment"]) : undefined;
-  return { scheme, authority, path, query, fragment };
-}
-var URI_RE = (() => {
-  const SCHEME = "(?<scheme>[A-Za-z][A-Za-z.+-]*)";
-  const AUTHORITY = "(?<authority>[^/?#]*)";
-  const PATH = "(?<path>[^?#]*)";
-  const QUERY = "(?<query>[^#]*)";
-  const FRAGMENT = "(?<fragment>.*)";
-  return new RegExp(`^${SCHEME}:(//${AUTHORITY})?${PATH}(\\?${QUERY})?(#${FRAGMENT})?$`, "su");
-})();
-function parseAuthority(text) {
-  const match2 = AUTHORITY_RE.exec(text);
-  if (match2 === null) {
-    throw new LibsqlError("The authority part of the URL is not in a valid format", "URL_INVALID");
-  }
-  const groups = match2.groups;
-  const host = percentDecode(groups["host_br"] ?? groups["host"]);
-  const port = groups["port"] ? parseInt(groups["port"], 10) : undefined;
-  const userinfo = groups["username"] !== undefined ? {
-    username: percentDecode(groups["username"]),
-    password: groups["password"] !== undefined ? percentDecode(groups["password"]) : undefined
-  } : undefined;
-  return { host, port, userinfo };
-}
-var AUTHORITY_RE = (() => {
-  return new RegExp(`^((?<username>[^:]*)(:(?<password>.*))?@)?((?<host>[^:\\[\\]]*)|(\\[(?<host_br>[^\\[\\]]*)\\]))(:(?<port>[0-9]*))?$`, "su");
-})();
-function parseQuery(text) {
-  const sequences = text.split("&");
-  const pairs = [];
-  for (const sequence of sequences) {
-    if (sequence === "") {
-      continue;
-    }
-    let key;
-    let value;
-    const splitIdx = sequence.indexOf("=");
-    if (splitIdx < 0) {
-      key = sequence;
-      value = "";
-    } else {
-      key = sequence.substring(0, splitIdx);
-      value = sequence.substring(splitIdx + 1);
-    }
-    pairs.push({
-      key: percentDecode(key.replaceAll("+", " ")),
-      value: percentDecode(value.replaceAll("+", " "))
-    });
-  }
-  return { pairs };
-}
-function percentDecode(text) {
-  try {
-    return decodeURIComponent(text);
-  } catch (e) {
-    if (e instanceof URIError) {
-      throw new LibsqlError(`URL component has invalid percent encoding: ${e}`, "URL_INVALID", undefined, undefined, e);
-    }
-    throw e;
-  }
-}
-function encodeBaseUrl(scheme, authority, path) {
-  if (authority === undefined) {
-    throw new LibsqlError(`URL with scheme ${JSON.stringify(scheme + ":")} requires authority (the "//" part)`, "URL_INVALID");
-  }
-  const schemeText = `${scheme}:`;
-  const hostText = encodeHost(authority.host);
-  const portText = encodePort(authority.port);
-  const userinfoText = encodeUserinfo(authority.userinfo);
-  const authorityText = `//${userinfoText}${hostText}${portText}`;
-  let pathText = path.split("/").map(encodeURIComponent).join("/");
-  if (pathText !== "" && !pathText.startsWith("/")) {
-    pathText = "/" + pathText;
-  }
-  return new URL(`${schemeText}${authorityText}${pathText}`);
-}
-function encodeHost(host) {
-  return host.includes(":") ? `[${encodeURI(host)}]` : encodeURI(host);
-}
-function encodePort(port) {
-  return port !== undefined ? `:${port}` : "";
-}
-function encodeUserinfo(userinfo) {
-  if (userinfo === undefined) {
-    return "";
-  }
-  const usernameText = encodeURIComponent(userinfo.username);
-  const passwordText = userinfo.password !== undefined ? `:${encodeURIComponent(userinfo.password)}` : "";
-  return `${usernameText}${passwordText}@`;
-}
-
-// node_modules/js-base64/base64.mjs
-var version2 = "3.7.8";
-var VERSION = version2;
-var _hasBuffer = typeof Buffer === "function";
-var _TD = typeof TextDecoder === "function" ? new TextDecoder : undefined;
-var _TE = typeof TextEncoder === "function" ? new TextEncoder : undefined;
-var b64ch = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-var b64chs = Array.prototype.slice.call(b64ch);
-var b64tab = ((a) => {
-  let tab = {};
-  a.forEach((c, i) => tab[c] = i);
-  return tab;
-})(b64chs);
-var b64re = /^(?:[A-Za-z\d+\/]{4})*?(?:[A-Za-z\d+\/]{2}(?:==)?|[A-Za-z\d+\/]{3}=?)?$/;
-var _fromCC = String.fromCharCode.bind(String);
-var _U8Afrom = typeof Uint8Array.from === "function" ? Uint8Array.from.bind(Uint8Array) : (it) => new Uint8Array(Array.prototype.slice.call(it, 0));
-var _mkUriSafe = (src) => src.replace(/=/g, "").replace(/[+\/]/g, (m0) => m0 == "+" ? "-" : "_");
-var _tidyB64 = (s) => s.replace(/[^A-Za-z0-9\+\/]/g, "");
-var btoaPolyfill = (bin) => {
-  let u32, c0, c1, c2, asc2 = "";
-  const pad = bin.length % 3;
-  for (let i = 0;i < bin.length; ) {
-    if ((c0 = bin.charCodeAt(i++)) > 255 || (c1 = bin.charCodeAt(i++)) > 255 || (c2 = bin.charCodeAt(i++)) > 255)
-      throw new TypeError("invalid character found");
-    u32 = c0 << 16 | c1 << 8 | c2;
-    asc2 += b64chs[u32 >> 18 & 63] + b64chs[u32 >> 12 & 63] + b64chs[u32 >> 6 & 63] + b64chs[u32 & 63];
-  }
-  return pad ? asc2.slice(0, pad - 3) + "===".substring(pad) : asc2;
-};
-var _btoa = typeof btoa === "function" ? (bin) => btoa(bin) : _hasBuffer ? (bin) => Buffer.from(bin, "binary").toString("base64") : btoaPolyfill;
-var _fromUint8Array = _hasBuffer ? (u8a) => Buffer.from(u8a).toString("base64") : (u8a) => {
-  const maxargs = 4096;
-  let strs = [];
-  for (let i = 0, l = u8a.length;i < l; i += maxargs) {
-    strs.push(_fromCC.apply(null, u8a.subarray(i, i + maxargs)));
-  }
-  return _btoa(strs.join(""));
-};
-var fromUint8Array = (u8a, urlsafe = false) => urlsafe ? _mkUriSafe(_fromUint8Array(u8a)) : _fromUint8Array(u8a);
-var cb_utob = (c) => {
-  if (c.length < 2) {
-    var cc = c.charCodeAt(0);
-    return cc < 128 ? c : cc < 2048 ? _fromCC(192 | cc >>> 6) + _fromCC(128 | cc & 63) : _fromCC(224 | cc >>> 12 & 15) + _fromCC(128 | cc >>> 6 & 63) + _fromCC(128 | cc & 63);
-  } else {
-    var cc = 65536 + (c.charCodeAt(0) - 55296) * 1024 + (c.charCodeAt(1) - 56320);
-    return _fromCC(240 | cc >>> 18 & 7) + _fromCC(128 | cc >>> 12 & 63) + _fromCC(128 | cc >>> 6 & 63) + _fromCC(128 | cc & 63);
-  }
-};
-var re_utob = /[\uD800-\uDBFF][\uDC00-\uDFFFF]|[^\x00-\x7F]/g;
-var utob = (u) => u.replace(re_utob, cb_utob);
-var _encode = _hasBuffer ? (s) => Buffer.from(s, "utf8").toString("base64") : _TE ? (s) => _fromUint8Array(_TE.encode(s)) : (s) => _btoa(utob(s));
-var encode = (src, urlsafe = false) => urlsafe ? _mkUriSafe(_encode(src)) : _encode(src);
-var encodeURI2 = (src) => encode(src, true);
-var re_btou = /[\xC0-\xDF][\x80-\xBF]|[\xE0-\xEF][\x80-\xBF]{2}|[\xF0-\xF7][\x80-\xBF]{3}/g;
-var cb_btou = (cccc) => {
-  switch (cccc.length) {
-    case 4:
-      var cp = (7 & cccc.charCodeAt(0)) << 18 | (63 & cccc.charCodeAt(1)) << 12 | (63 & cccc.charCodeAt(2)) << 6 | 63 & cccc.charCodeAt(3), offset = cp - 65536;
-      return _fromCC((offset >>> 10) + 55296) + _fromCC((offset & 1023) + 56320);
-    case 3:
-      return _fromCC((15 & cccc.charCodeAt(0)) << 12 | (63 & cccc.charCodeAt(1)) << 6 | 63 & cccc.charCodeAt(2));
-    default:
-      return _fromCC((31 & cccc.charCodeAt(0)) << 6 | 63 & cccc.charCodeAt(1));
-  }
-};
-var btou = (b) => b.replace(re_btou, cb_btou);
-var atobPolyfill = (asc2) => {
-  asc2 = asc2.replace(/\s+/g, "");
-  if (!b64re.test(asc2))
-    throw new TypeError("malformed base64.");
-  asc2 += "==".slice(2 - (asc2.length & 3));
-  let u24, r1, r2;
-  let binArray = [];
-  for (let i = 0;i < asc2.length; ) {
-    u24 = b64tab[asc2.charAt(i++)] << 18 | b64tab[asc2.charAt(i++)] << 12 | (r1 = b64tab[asc2.charAt(i++)]) << 6 | (r2 = b64tab[asc2.charAt(i++)]);
-    if (r1 === 64) {
-      binArray.push(_fromCC(u24 >> 16 & 255));
-    } else if (r2 === 64) {
-      binArray.push(_fromCC(u24 >> 16 & 255, u24 >> 8 & 255));
-    } else {
-      binArray.push(_fromCC(u24 >> 16 & 255, u24 >> 8 & 255, u24 & 255));
-    }
-  }
-  return binArray.join("");
-};
-var _atob = typeof atob === "function" ? (asc2) => atob(_tidyB64(asc2)) : _hasBuffer ? (asc2) => Buffer.from(asc2, "base64").toString("binary") : atobPolyfill;
-var _toUint8Array = _hasBuffer ? (a) => _U8Afrom(Buffer.from(a, "base64")) : (a) => _U8Afrom(_atob(a).split("").map((c) => c.charCodeAt(0)));
-var toUint8Array = (a) => _toUint8Array(_unURI(a));
-var _decode = _hasBuffer ? (a) => Buffer.from(a, "base64").toString("utf8") : _TD ? (a) => _TD.decode(_toUint8Array(a)) : (a) => btou(_atob(a));
-var _unURI = (a) => _tidyB64(a.replace(/[-_]/g, (m0) => m0 == "-" ? "+" : "/"));
-var decode = (src) => _decode(_unURI(src));
-var isValid = (src) => {
-  if (typeof src !== "string")
-    return false;
-  const s = src.replace(/\s+/g, "").replace(/={0,2}$/, "");
-  return !/[^\s0-9a-zA-Z\+/]/.test(s) || !/[^\s0-9a-zA-Z\-_]/.test(s);
-};
-var _noEnum = (v) => {
-  return {
-    value: v,
-    enumerable: false,
-    writable: true,
-    configurable: true
-  };
-};
-var extendString = function() {
-  const _add = (name, body) => Object.defineProperty(String.prototype, name, _noEnum(body));
-  _add("fromBase64", function() {
-    return decode(this);
-  });
-  _add("toBase64", function(urlsafe) {
-    return encode(this, urlsafe);
-  });
-  _add("toBase64URI", function() {
-    return encode(this, true);
-  });
-  _add("toBase64URL", function() {
-    return encode(this, true);
-  });
-  _add("toUint8Array", function() {
-    return toUint8Array(this);
-  });
-};
-var extendUint8Array = function() {
-  const _add = (name, body) => Object.defineProperty(Uint8Array.prototype, name, _noEnum(body));
-  _add("toBase64", function(urlsafe) {
-    return fromUint8Array(this, urlsafe);
-  });
-  _add("toBase64URI", function() {
-    return fromUint8Array(this, true);
-  });
-  _add("toBase64URL", function() {
-    return fromUint8Array(this, true);
-  });
-};
-var extendBuiltins = () => {
-  extendString();
-  extendUint8Array();
-};
-var gBase64 = {
-  version: version2,
-  VERSION,
-  atob: _atob,
-  atobPolyfill,
-  btoa: _btoa,
-  btoaPolyfill,
-  fromBase64: decode,
-  toBase64: encode,
-  encode,
-  encodeURI: encodeURI2,
-  encodeURL: encodeURI2,
-  utob,
-  btou,
-  decode,
-  isValid,
-  fromUint8Array,
-  toUint8Array,
-  extendString,
-  extendUint8Array,
-  extendBuiltins
-};
-
-// node_modules/@libsql/core/lib-esm/util.js
-var supportedUrlLink = "https://github.com/libsql/libsql-client-ts#supported-urls";
-function transactionModeToBegin(mode) {
-  if (mode === "write") {
-    return "BEGIN IMMEDIATE";
-  } else if (mode === "read") {
-    return "BEGIN TRANSACTION READONLY";
-  } else if (mode === "deferred") {
-    return "BEGIN DEFERRED";
-  } else {
-    throw RangeError('Unknown transaction mode, supported values are "write", "read" and "deferred"');
-  }
-}
-
-class ResultSetImpl {
-  columns;
-  columnTypes;
-  rows;
-  rowsAffected;
-  lastInsertRowid;
-  constructor(columns, columnTypes, rows, rowsAffected, lastInsertRowid) {
-    this.columns = columns;
-    this.columnTypes = columnTypes;
-    this.rows = rows;
-    this.rowsAffected = rowsAffected;
-    this.lastInsertRowid = lastInsertRowid;
-  }
-  toJSON() {
-    return {
-      columns: this.columns,
-      columnTypes: this.columnTypes,
-      rows: this.rows.map(rowToJson),
-      rowsAffected: this.rowsAffected,
-      lastInsertRowid: this.lastInsertRowid !== undefined ? "" + this.lastInsertRowid : null
-    };
-  }
-}
-function rowToJson(row) {
-  return Array.prototype.map.call(row, valueToJson);
-}
-function valueToJson(value) {
-  if (typeof value === "bigint") {
-    return "" + value;
-  } else if (value instanceof ArrayBuffer) {
-    return gBase64.fromUint8Array(new Uint8Array(value));
-  } else {
-    return value;
-  }
-}
-
-// node_modules/@libsql/core/lib-esm/config.js
-var inMemoryMode = ":memory:";
-function isInMemoryConfig(config) {
-  return config.scheme === "file" && (config.path === ":memory:" || config.path.startsWith(":memory:?"));
-}
-function expandConfig(config, preferHttp) {
-  if (typeof config !== "object") {
-    throw new TypeError(`Expected client configuration as object, got ${typeof config}`);
-  }
-  let { url, authToken, tls, intMode, concurrency } = config;
-  concurrency = Math.max(0, concurrency || 20);
-  intMode ??= "number";
-  let connectionQueryParams = [];
-  if (url === inMemoryMode) {
-    url = "file::memory:";
-  }
-  const uri = parseUri(url);
-  const originalUriScheme = uri.scheme.toLowerCase();
-  const isInMemoryMode = originalUriScheme === "file" && uri.path === inMemoryMode && uri.authority === undefined;
-  let queryParamsDef;
-  if (isInMemoryMode) {
-    queryParamsDef = {
-      cache: {
-        values: ["shared", "private"],
-        update: (key, value) => connectionQueryParams.push(`${key}=${value}`)
-      }
-    };
-  } else {
-    queryParamsDef = {
-      tls: {
-        values: ["0", "1"],
-        update: (_, value) => tls = value === "1"
-      },
-      authToken: {
-        update: (_, value) => authToken = value
-      }
-    };
-  }
-  for (const { key, value } of uri.query?.pairs ?? []) {
-    if (!Object.hasOwn(queryParamsDef, key)) {
-      throw new LibsqlError(`Unsupported URL query parameter ${JSON.stringify(key)}`, "URL_PARAM_NOT_SUPPORTED");
-    }
-    const queryParamDef = queryParamsDef[key];
-    if (queryParamDef.values !== undefined && !queryParamDef.values.includes(value)) {
-      throw new LibsqlError(`Unknown value for the "${key}" query argument: ${JSON.stringify(value)}. Supported values are: [${queryParamDef.values.map((x) => '"' + x + '"').join(", ")}]`, "URL_INVALID");
-    }
-    if (queryParamDef.update !== undefined) {
-      queryParamDef?.update(key, value);
-    }
-  }
-  const connectionQueryParamsString = connectionQueryParams.length === 0 ? "" : `?${connectionQueryParams.join("&")}`;
-  const path = uri.path + connectionQueryParamsString;
-  let scheme;
-  if (originalUriScheme === "libsql") {
-    if (tls === false) {
-      if (uri.authority?.port === undefined) {
-        throw new LibsqlError('A "libsql:" URL with ?tls=0 must specify an explicit port', "URL_INVALID");
-      }
-      scheme = preferHttp ? "http" : "ws";
-    } else {
-      scheme = preferHttp ? "https" : "wss";
-    }
-  } else {
-    scheme = originalUriScheme;
-  }
-  if (scheme === "http" || scheme === "ws") {
-    tls ??= false;
-  } else {
-    tls ??= true;
-  }
-  if (scheme !== "http" && scheme !== "ws" && scheme !== "https" && scheme !== "wss" && scheme !== "file") {
-    throw new LibsqlError('The client supports only "libsql:", "wss:", "ws:", "https:", "http:" and "file:" URLs, ' + `got ${JSON.stringify(uri.scheme + ":")}. ` + `For more information, please read ${supportedUrlLink}`, "URL_SCHEME_NOT_SUPPORTED");
-  }
-  if (intMode !== "number" && intMode !== "bigint" && intMode !== "string") {
-    throw new TypeError(`Invalid value for intMode, expected "number", "bigint" or "string", got ${JSON.stringify(intMode)}`);
-  }
-  if (uri.fragment !== undefined) {
-    throw new LibsqlError(`URL fragments are not supported: ${JSON.stringify("#" + uri.fragment)}`, "URL_INVALID");
-  }
-  if (isInMemoryMode) {
-    return {
-      scheme: "file",
-      tls: false,
-      path,
-      intMode,
-      concurrency,
-      syncUrl: config.syncUrl,
-      syncInterval: config.syncInterval,
-      readYourWrites: config.readYourWrites,
-      offline: config.offline,
-      fetch: config.fetch,
-      authToken: undefined,
-      encryptionKey: undefined,
-      remoteEncryptionKey: undefined,
-      authority: undefined
-    };
-  }
-  return {
-    scheme,
-    tls,
-    authority: uri.authority,
-    path,
-    authToken,
-    intMode,
-    concurrency,
-    encryptionKey: config.encryptionKey,
-    remoteEncryptionKey: config.remoteEncryptionKey,
-    syncUrl: config.syncUrl,
-    syncInterval: config.syncInterval,
-    readYourWrites: config.readYourWrites,
-    offline: config.offline,
-    fetch: config.fetch
-  };
-}
-
-// node_modules/@libsql/client/lib-esm/sqlite3.js
-var import_libsql = __toESM(require_libsql(), 1);
-import { Buffer as Buffer2 } from "node:buffer";
-function _createClient(config) {
-  if (config.scheme !== "file") {
-    throw new LibsqlError(`URL scheme ${JSON.stringify(config.scheme + ":")} is not supported by the local sqlite3 client. ` + `For more information, please read ${supportedUrlLink}`, "URL_SCHEME_NOT_SUPPORTED");
-  }
-  const authority = config.authority;
-  if (authority !== undefined) {
-    const host = authority.host.toLowerCase();
-    if (host !== "" && host !== "localhost") {
-      throw new LibsqlError(`Invalid host in file URL: ${JSON.stringify(authority.host)}. ` + 'A "file:" URL with an absolute path should start with one slash ("file:/absolute/path.db") ' + 'or with three slashes ("file:///absolute/path.db"). ' + `For more information, please read ${supportedUrlLink}`, "URL_INVALID");
-    }
-    if (authority.port !== undefined) {
-      throw new LibsqlError("File URL cannot have a port", "URL_INVALID");
-    }
-    if (authority.userinfo !== undefined) {
-      throw new LibsqlError("File URL cannot have username and password", "URL_INVALID");
-    }
-  }
-  let isInMemory = isInMemoryConfig(config);
-  if (isInMemory && config.syncUrl) {
-    throw new LibsqlError(`Embedded replica must use file for local db but URI with in-memory mode were provided instead: ${config.path}`, "URL_INVALID");
-  }
-  let path = config.path;
-  if (isInMemory) {
-    path = `${config.scheme}:${config.path}`;
-  }
-  const options = {
-    authToken: config.authToken,
-    encryptionKey: config.encryptionKey,
-    remoteEncryptionKey: config.remoteEncryptionKey,
-    syncUrl: config.syncUrl,
-    syncPeriod: config.syncInterval,
-    readYourWrites: config.readYourWrites,
-    offline: config.offline
-  };
-  const db = new import_libsql.default(path, options);
-  executeStmt(db, "SELECT 1 AS checkThatTheDatabaseCanBeOpened", config.intMode);
-  return new Sqlite3Client(path, options, db, config.intMode);
-}
-
-class Sqlite3Client {
-  #path;
-  #options;
-  #db;
-  #intMode;
-  closed;
-  protocol;
-  constructor(path, options, db, intMode) {
-    this.#path = path;
-    this.#options = options;
-    this.#db = db;
-    this.#intMode = intMode;
-    this.closed = false;
-    this.protocol = "file";
-  }
-  async execute(stmtOrSql, args) {
-    let stmt;
-    if (typeof stmtOrSql === "string") {
-      stmt = {
-        sql: stmtOrSql,
-        args: args || []
-      };
-    } else {
-      stmt = stmtOrSql;
-    }
-    this.#checkNotClosed();
-    return executeStmt(this.#getDb(), stmt, this.#intMode);
-  }
-  async batch(stmts, mode = "deferred") {
-    this.#checkNotClosed();
-    const db = this.#getDb();
-    try {
-      executeStmt(db, transactionModeToBegin(mode), this.#intMode);
-      const resultSets = [];
-      for (let i = 0;i < stmts.length; i++) {
-        try {
-          if (!db.inTransaction) {
-            throw new LibsqlBatchError("The transaction has been rolled back", i, "TRANSACTION_CLOSED");
-          }
-          const stmt = stmts[i];
-          const normalizedStmt = Array.isArray(stmt) ? { sql: stmt[0], args: stmt[1] || [] } : stmt;
-          resultSets.push(executeStmt(db, normalizedStmt, this.#intMode));
-        } catch (e) {
-          if (e instanceof LibsqlBatchError) {
-            throw e;
-          }
-          if (e instanceof LibsqlError) {
-            throw new LibsqlBatchError(e.message, i, e.code, e.extendedCode, e.rawCode, e.cause instanceof Error ? e.cause : undefined);
-          }
-          throw e;
-        }
-      }
-      executeStmt(db, "COMMIT", this.#intMode);
-      return resultSets;
-    } finally {
-      if (db.inTransaction) {
-        executeStmt(db, "ROLLBACK", this.#intMode);
-      }
-    }
-  }
-  async migrate(stmts) {
-    this.#checkNotClosed();
-    const db = this.#getDb();
-    try {
-      executeStmt(db, "PRAGMA foreign_keys=off", this.#intMode);
-      executeStmt(db, transactionModeToBegin("deferred"), this.#intMode);
-      const resultSets = [];
-      for (let i = 0;i < stmts.length; i++) {
-        try {
-          if (!db.inTransaction) {
-            throw new LibsqlBatchError("The transaction has been rolled back", i, "TRANSACTION_CLOSED");
-          }
-          resultSets.push(executeStmt(db, stmts[i], this.#intMode));
-        } catch (e) {
-          if (e instanceof LibsqlBatchError) {
-            throw e;
-          }
-          if (e instanceof LibsqlError) {
-            throw new LibsqlBatchError(e.message, i, e.code, e.extendedCode, e.rawCode, e.cause instanceof Error ? e.cause : undefined);
-          }
-          throw e;
-        }
-      }
-      executeStmt(db, "COMMIT", this.#intMode);
-      return resultSets;
-    } finally {
-      if (db.inTransaction) {
-        executeStmt(db, "ROLLBACK", this.#intMode);
-      }
-      executeStmt(db, "PRAGMA foreign_keys=on", this.#intMode);
-    }
-  }
-  async transaction(mode = "write") {
-    const db = this.#getDb();
-    executeStmt(db, transactionModeToBegin(mode), this.#intMode);
-    this.#db = null;
-    return new Sqlite3Transaction(db, this.#intMode);
-  }
-  async executeMultiple(sql2) {
-    this.#checkNotClosed();
-    const db = this.#getDb();
-    try {
-      return executeMultiple(db, sql2);
-    } finally {
-      if (db.inTransaction) {
-        executeStmt(db, "ROLLBACK", this.#intMode);
-      }
-    }
-  }
-  async sync() {
-    this.#checkNotClosed();
-    const rep = await this.#getDb().sync();
-    return {
-      frames_synced: rep.frames_synced,
-      frame_no: rep.frame_no
-    };
-  }
-  async reconnect() {
-    try {
-      if (!this.closed && this.#db !== null) {
-        this.#db.close();
-      }
-    } finally {
-      this.#db = new import_libsql.default(this.#path, this.#options);
-      this.closed = false;
-    }
-  }
-  close() {
-    this.closed = true;
-    if (this.#db !== null) {
-      this.#db.close();
-      this.#db = null;
-    }
-  }
-  #checkNotClosed() {
-    if (this.closed) {
-      throw new LibsqlError("The client is closed", "CLIENT_CLOSED");
-    }
-  }
-  #getDb() {
-    if (this.#db === null) {
-      this.#db = new import_libsql.default(this.#path, this.#options);
-    }
-    return this.#db;
-  }
-}
-
-class Sqlite3Transaction {
-  #database;
-  #intMode;
-  constructor(database, intMode) {
-    this.#database = database;
-    this.#intMode = intMode;
-  }
-  async execute(stmtOrSql, args) {
-    let stmt;
-    if (typeof stmtOrSql === "string") {
-      stmt = {
-        sql: stmtOrSql,
-        args: args || []
-      };
-    } else {
-      stmt = stmtOrSql;
-    }
-    this.#checkNotClosed();
-    return executeStmt(this.#database, stmt, this.#intMode);
-  }
-  async batch(stmts) {
-    const resultSets = [];
-    for (let i = 0;i < stmts.length; i++) {
-      try {
-        this.#checkNotClosed();
-        const stmt = stmts[i];
-        const normalizedStmt = Array.isArray(stmt) ? { sql: stmt[0], args: stmt[1] || [] } : stmt;
-        resultSets.push(executeStmt(this.#database, normalizedStmt, this.#intMode));
-      } catch (e) {
-        if (e instanceof LibsqlBatchError) {
-          throw e;
-        }
-        if (e instanceof LibsqlError) {
-          throw new LibsqlBatchError(e.message, i, e.code, e.extendedCode, e.rawCode, e.cause instanceof Error ? e.cause : undefined);
-        }
-        throw e;
-      }
-    }
-    return resultSets;
-  }
-  async executeMultiple(sql2) {
-    this.#checkNotClosed();
-    return executeMultiple(this.#database, sql2);
-  }
-  async rollback() {
-    if (!this.#database.open) {
-      return;
-    }
-    this.#checkNotClosed();
-    executeStmt(this.#database, "ROLLBACK", this.#intMode);
-  }
-  async commit() {
-    this.#checkNotClosed();
-    executeStmt(this.#database, "COMMIT", this.#intMode);
-  }
-  close() {
-    if (this.#database.inTransaction) {
-      executeStmt(this.#database, "ROLLBACK", this.#intMode);
-    }
-  }
-  get closed() {
-    return !this.#database.inTransaction;
-  }
-  #checkNotClosed() {
-    if (this.closed) {
-      throw new LibsqlError("The transaction is closed", "TRANSACTION_CLOSED");
-    }
-  }
-}
-function executeStmt(db, stmt, intMode) {
-  let sql2;
-  let args;
-  if (typeof stmt === "string") {
-    sql2 = stmt;
-    args = [];
-  } else {
-    sql2 = stmt.sql;
-    if (Array.isArray(stmt.args)) {
-      args = stmt.args.map((value) => valueToSql(value, intMode));
-    } else {
-      args = {};
-      for (const name in stmt.args) {
-        const argName = name[0] === "@" || name[0] === "$" || name[0] === ":" ? name.substring(1) : name;
-        args[argName] = valueToSql(stmt.args[name], intMode);
-      }
-    }
-  }
-  try {
-    const sqlStmt = db.prepare(sql2);
-    sqlStmt.safeIntegers(true);
-    let returnsData = true;
-    try {
-      sqlStmt.raw(true);
-    } catch {
-      returnsData = false;
-    }
-    if (returnsData) {
-      const columns = Array.from(sqlStmt.columns().map((col) => col.name));
-      const columnTypes = Array.from(sqlStmt.columns().map((col) => col.type ?? ""));
-      const rows = sqlStmt.all(args).map((sqlRow) => {
-        return rowFromSql(sqlRow, columns, intMode);
-      });
-      const rowsAffected = 0;
-      const lastInsertRowid = undefined;
-      return new ResultSetImpl(columns, columnTypes, rows, rowsAffected, lastInsertRowid);
-    } else {
-      const info = sqlStmt.run(args);
-      const rowsAffected = info.changes;
-      const lastInsertRowid = BigInt(info.lastInsertRowid);
-      return new ResultSetImpl([], [], [], rowsAffected, lastInsertRowid);
-    }
-  } catch (e) {
-    throw mapSqliteError(e);
-  }
-}
-function rowFromSql(sqlRow, columns, intMode) {
-  const row = {};
-  Object.defineProperty(row, "length", { value: sqlRow.length });
-  for (let i = 0;i < sqlRow.length; ++i) {
-    const value = valueFromSql(sqlRow[i], intMode);
-    Object.defineProperty(row, i, { value });
-    const column = columns[i];
-    if (!Object.hasOwn(row, column)) {
-      Object.defineProperty(row, column, {
-        value,
-        enumerable: true,
-        configurable: true,
-        writable: true
-      });
-    }
-  }
-  return row;
-}
-function valueFromSql(sqlValue, intMode) {
-  if (typeof sqlValue === "bigint") {
-    if (intMode === "number") {
-      if (sqlValue < minSafeBigint || sqlValue > maxSafeBigint) {
-        throw new RangeError("Received integer which cannot be safely represented as a JavaScript number");
-      }
-      return Number(sqlValue);
-    } else if (intMode === "bigint") {
-      return sqlValue;
-    } else if (intMode === "string") {
-      return "" + sqlValue;
-    } else {
-      throw new Error("Invalid value for IntMode");
-    }
-  } else if (sqlValue instanceof Buffer2) {
-    return sqlValue.buffer;
-  }
-  return sqlValue;
-}
-var minSafeBigint = -9007199254740991n;
-var maxSafeBigint = 9007199254740991n;
-function valueToSql(value, intMode) {
-  if (typeof value === "number") {
-    if (!Number.isFinite(value)) {
-      throw new RangeError("Only finite numbers (not Infinity or NaN) can be passed as arguments");
-    }
-    return value;
-  } else if (typeof value === "bigint") {
-    if (value < minInteger || value > maxInteger) {
-      throw new RangeError("bigint is too large to be represented as a 64-bit integer and passed as argument");
-    }
-    return value;
-  } else if (typeof value === "boolean") {
-    switch (intMode) {
-      case "bigint":
-        return value ? 1n : 0n;
-      case "string":
-        return value ? "1" : "0";
-      default:
-        return value ? 1 : 0;
-    }
-  } else if (value instanceof ArrayBuffer) {
-    return Buffer2.from(value);
-  } else if (value instanceof Date) {
-    return value.valueOf();
-  } else if (value === undefined) {
-    throw new TypeError("undefined cannot be passed as argument to the database");
-  } else {
-    return value;
-  }
-}
-var minInteger = -9223372036854775808n;
-var maxInteger = 9223372036854775807n;
-function executeMultiple(db, sql2) {
-  try {
-    db.exec(sql2);
-  } catch (e) {
-    throw mapSqliteError(e);
-  }
-}
-function mapSqliteError(e) {
-  if (e instanceof import_libsql.default.SqliteError) {
-    const extendedCode = e.code;
-    const code = mapToBaseCode(e.rawCode);
-    return new LibsqlError(e.message, code, extendedCode, e.rawCode, e);
-  }
-  return e;
-}
-function mapToBaseCode(rawCode) {
-  if (rawCode === undefined) {
-    return "SQLITE_UNKNOWN";
-  }
-  const baseCode = rawCode & 255;
-  return sqliteErrorCodes[baseCode] ?? `SQLITE_UNKNOWN_${baseCode.toString()}`;
-}
-var sqliteErrorCodes = {
-  1: "SQLITE_ERROR",
-  2: "SQLITE_INTERNAL",
-  3: "SQLITE_PERM",
-  4: "SQLITE_ABORT",
-  5: "SQLITE_BUSY",
-  6: "SQLITE_LOCKED",
-  7: "SQLITE_NOMEM",
-  8: "SQLITE_READONLY",
-  9: "SQLITE_INTERRUPT",
-  10: "SQLITE_IOERR",
-  11: "SQLITE_CORRUPT",
-  12: "SQLITE_NOTFOUND",
-  13: "SQLITE_FULL",
-  14: "SQLITE_CANTOPEN",
-  15: "SQLITE_PROTOCOL",
-  16: "SQLITE_EMPTY",
-  17: "SQLITE_SCHEMA",
-  18: "SQLITE_TOOBIG",
-  19: "SQLITE_CONSTRAINT",
-  20: "SQLITE_MISMATCH",
-  21: "SQLITE_MISUSE",
-  22: "SQLITE_NOLFS",
-  23: "SQLITE_AUTH",
-  24: "SQLITE_FORMAT",
-  25: "SQLITE_RANGE",
-  26: "SQLITE_NOTADB",
-  27: "SQLITE_NOTICE",
-  28: "SQLITE_WARNING"
-};
-
-// node_modules/ws/wrapper.mjs
-var import_stream = __toESM(require_stream(), 1);
-var import_receiver = __toESM(require_receiver(), 1);
-var import_sender = __toESM(require_sender(), 1);
-var import_websocket = __toESM(require_websocket(), 1);
-var import_websocket_server = __toESM(require_websocket_server(), 1);
-
-// node_modules/@libsql/hrana-client/lib-esm/client.js
-class Client {
-  constructor() {
-    this.intMode = "number";
-  }
-  intMode;
-}
-
-// node_modules/@libsql/hrana-client/lib-esm/errors.js
-class ClientError extends Error {
-  constructor(message) {
-    super(message);
-    this.name = "ClientError";
-  }
-}
-
-class ProtoError extends ClientError {
-  constructor(message) {
-    super(message);
-    this.name = "ProtoError";
-  }
-}
-
-class ResponseError extends ClientError {
-  code;
-  proto;
-  constructor(message, protoError) {
-    super(message);
-    this.name = "ResponseError";
-    this.code = protoError.code;
-    this.proto = protoError;
-    this.stack = undefined;
-  }
-}
-
-class ClosedError extends ClientError {
-  constructor(message, cause) {
-    if (cause !== undefined) {
-      super(`${message}: ${cause}`);
-      this.cause = cause;
-    } else {
-      super(message);
-    }
-    this.name = "ClosedError";
-  }
-}
-
-class WebSocketUnsupportedError extends ClientError {
-  constructor(message) {
-    super(message);
-    this.name = "WebSocketUnsupportedError";
-  }
-}
-
-class WebSocketError extends ClientError {
-  constructor(message) {
-    super(message);
-    this.name = "WebSocketError";
-  }
-}
-
-class HttpServerError extends ClientError {
-  status;
-  constructor(message, status) {
-    super(message);
-    this.status = status;
-    this.name = "HttpServerError";
-  }
-}
-class ProtocolVersionError extends ClientError {
-  constructor(message) {
-    super(message);
-    this.name = "ProtocolVersionError";
-  }
-}
-
-class InternalError extends ClientError {
-  constructor(message) {
-    super(message);
-    this.name = "InternalError";
-  }
-}
-
-class MisuseError extends ClientError {
-  constructor(message) {
-    super(message);
-    this.name = "MisuseError";
-  }
-}
-
-// node_modules/@libsql/hrana-client/lib-esm/encoding/json/decode.js
-function string(value) {
-  if (typeof value === "string") {
-    return value;
-  }
-  throw typeError(value, "string");
-}
-function stringOpt(value) {
-  if (value === null || value === undefined) {
-    return;
-  } else if (typeof value === "string") {
-    return value;
-  }
-  throw typeError(value, "string or null");
-}
-function number(value) {
-  if (typeof value === "number") {
-    return value;
-  }
-  throw typeError(value, "number");
-}
-function boolean(value) {
-  if (typeof value === "boolean") {
-    return value;
-  }
-  throw typeError(value, "boolean");
-}
-function array(value) {
-  if (Array.isArray(value)) {
-    return value;
-  }
-  throw typeError(value, "array");
-}
-function object(value) {
-  if (value !== null && typeof value === "object" && !Array.isArray(value)) {
-    return value;
-  }
-  throw typeError(value, "object");
-}
-function arrayObjectsMap(value, fun) {
-  return array(value).map((elemValue) => fun(object(elemValue)));
-}
-function typeError(value, expected) {
-  if (value === undefined) {
-    return new ProtoError(`Expected ${expected}, but the property was missing`);
-  }
-  let received = typeof value;
-  if (value === null) {
-    received = "null";
-  } else if (Array.isArray(value)) {
-    received = "array";
-  }
-  return new ProtoError(`Expected ${expected}, received ${received}`);
-}
-function readJsonObject(value, fun) {
-  return fun(object(value));
-}
-// node_modules/@libsql/hrana-client/lib-esm/encoding/json/encode.js
-class ObjectWriter {
-  #output;
-  #isFirst;
-  constructor(output) {
-    this.#output = output;
-    this.#isFirst = false;
-  }
-  begin() {
-    this.#output.push("{");
-    this.#isFirst = true;
-  }
-  end() {
-    this.#output.push("}");
-    this.#isFirst = false;
-  }
-  #key(name) {
-    if (this.#isFirst) {
-      this.#output.push('"');
-      this.#isFirst = false;
-    } else {
-      this.#output.push(',"');
-    }
-    this.#output.push(name);
-    this.#output.push('":');
-  }
-  string(name, value) {
-    this.#key(name);
-    this.#output.push(JSON.stringify(value));
-  }
-  stringRaw(name, value) {
-    this.#key(name);
-    this.#output.push('"');
-    this.#output.push(value);
-    this.#output.push('"');
-  }
-  number(name, value) {
-    this.#key(name);
-    this.#output.push("" + value);
-  }
-  boolean(name, value) {
-    this.#key(name);
-    this.#output.push(value ? "true" : "false");
-  }
-  object(name, value, valueFun) {
-    this.#key(name);
-    this.begin();
-    valueFun(this, value);
-    this.end();
-  }
-  arrayObjects(name, values, valueFun) {
-    this.#key(name);
-    this.#output.push("[");
-    for (let i = 0;i < values.length; ++i) {
-      if (i !== 0) {
-        this.#output.push(",");
-      }
-      this.begin();
-      valueFun(this, values[i]);
-      this.end();
-    }
-    this.#output.push("]");
-  }
-}
-function writeJsonObject(value, fun) {
-  const output = [];
-  const writer = new ObjectWriter(output);
-  writer.begin();
-  fun(writer, value);
-  writer.end();
-  return output.join("");
-}
-// node_modules/@libsql/hrana-client/lib-esm/encoding/protobuf/util.js
-var VARINT = 0;
-var FIXED_64 = 1;
-var LENGTH_DELIMITED = 2;
-var FIXED_32 = 5;
-
-// node_modules/@libsql/hrana-client/lib-esm/encoding/protobuf/decode.js
-class MessageReader {
-  #array;
-  #view;
-  #pos;
-  constructor(array2) {
-    this.#array = array2;
-    this.#view = new DataView(array2.buffer, array2.byteOffset, array2.byteLength);
-    this.#pos = 0;
-  }
-  varint() {
-    let value = 0;
-    for (let shift = 0;; shift += 7) {
-      const byte = this.#array[this.#pos++];
-      value |= (byte & 127) << shift;
-      if (!(byte & 128)) {
-        break;
-      }
-    }
-    return value;
-  }
-  varintBig() {
-    let value = 0n;
-    for (let shift = 0n;; shift += 7n) {
-      const byte = this.#array[this.#pos++];
-      value |= BigInt(byte & 127) << shift;
-      if (!(byte & 128)) {
-        break;
-      }
-    }
-    return value;
-  }
-  bytes(length) {
-    const array2 = new Uint8Array(this.#array.buffer, this.#array.byteOffset + this.#pos, length);
-    this.#pos += length;
-    return array2;
-  }
-  double() {
-    const value = this.#view.getFloat64(this.#pos, true);
-    this.#pos += 8;
-    return value;
-  }
-  skipVarint() {
-    for (;; ) {
-      const byte = this.#array[this.#pos++];
-      if (!(byte & 128)) {
-        break;
-      }
-    }
-  }
-  skip(count) {
-    this.#pos += count;
-  }
-  eof() {
-    return this.#pos >= this.#array.byteLength;
-  }
-}
-
-class FieldReader {
-  #reader;
-  #wireType;
-  constructor(reader) {
-    this.#reader = reader;
-    this.#wireType = -1;
-  }
-  setup(wireType) {
-    this.#wireType = wireType;
-  }
-  #expect(expectedWireType) {
-    if (this.#wireType !== expectedWireType) {
-      throw new ProtoError(`Expected wire type ${expectedWireType}, got ${this.#wireType}`);
-    }
-    this.#wireType = -1;
-  }
-  bytes() {
-    this.#expect(LENGTH_DELIMITED);
-    const length = this.#reader.varint();
-    return this.#reader.bytes(length);
-  }
-  string() {
-    return new TextDecoder().decode(this.bytes());
-  }
-  message(def) {
-    return readProtobufMessage(this.bytes(), def);
-  }
-  int32() {
-    this.#expect(VARINT);
-    return this.#reader.varint();
-  }
-  uint32() {
-    return this.int32();
-  }
-  bool() {
-    return this.int32() !== 0;
-  }
-  uint64() {
-    this.#expect(VARINT);
-    return this.#reader.varintBig();
-  }
-  sint64() {
-    const value = this.uint64();
-    return value >> 1n ^ -(value & 1n);
-  }
-  double() {
-    this.#expect(FIXED_64);
-    return this.#reader.double();
-  }
-  maybeSkip() {
-    if (this.#wireType < 0) {
-      return;
-    } else if (this.#wireType === VARINT) {
-      this.#reader.skipVarint();
-    } else if (this.#wireType === FIXED_64) {
-      this.#reader.skip(8);
-    } else if (this.#wireType === LENGTH_DELIMITED) {
-      const length = this.#reader.varint();
-      this.#reader.skip(length);
-    } else if (this.#wireType === FIXED_32) {
-      this.#reader.skip(4);
-    } else {
-      throw new ProtoError(`Unexpected wire type ${this.#wireType}`);
-    }
-    this.#wireType = -1;
-  }
-}
-function readProtobufMessage(data, def) {
-  const msgReader = new MessageReader(data);
-  const fieldReader = new FieldReader(msgReader);
-  let value = def.default();
-  while (!msgReader.eof()) {
-    const key = msgReader.varint();
-    const tag = key >> 3;
-    const wireType = key & 7;
-    fieldReader.setup(wireType);
-    const tagFun = def[tag];
-    if (tagFun !== undefined) {
-      const returnedValue = tagFun(fieldReader, value);
-      if (returnedValue !== undefined) {
-        value = returnedValue;
-      }
-    }
-    fieldReader.maybeSkip();
-  }
-  return value;
-}
-// node_modules/@libsql/hrana-client/lib-esm/encoding/protobuf/encode.js
-class MessageWriter {
-  #buf;
-  #array;
-  #view;
-  #pos;
-  constructor() {
-    this.#buf = new ArrayBuffer(256);
-    this.#array = new Uint8Array(this.#buf);
-    this.#view = new DataView(this.#buf);
-    this.#pos = 0;
-  }
-  #ensure(extra) {
-    if (this.#pos + extra <= this.#buf.byteLength) {
-      return;
-    }
-    let newCap = this.#buf.byteLength;
-    while (newCap < this.#pos + extra) {
-      newCap *= 2;
-    }
-    const newBuf = new ArrayBuffer(newCap);
-    const newArray = new Uint8Array(newBuf);
-    const newView = new DataView(newBuf);
-    newArray.set(new Uint8Array(this.#buf, 0, this.#pos));
-    this.#buf = newBuf;
-    this.#array = newArray;
-    this.#view = newView;
-  }
-  #varint(value) {
-    this.#ensure(5);
-    value = 0 | value;
-    do {
-      let byte = value & 127;
-      value >>>= 7;
-      byte |= value ? 128 : 0;
-      this.#array[this.#pos++] = byte;
-    } while (value);
-  }
-  #varintBig(value) {
-    this.#ensure(10);
-    value = value & 0xffffffffffffffffn;
-    do {
-      let byte = Number(value & 0x7fn);
-      value >>= 7n;
-      byte |= value ? 128 : 0;
-      this.#array[this.#pos++] = byte;
-    } while (value);
-  }
-  #tag(tag, wireType) {
-    this.#varint(tag << 3 | wireType);
-  }
-  bytes(tag, value) {
-    this.#tag(tag, LENGTH_DELIMITED);
-    this.#varint(value.byteLength);
-    this.#ensure(value.byteLength);
-    this.#array.set(value, this.#pos);
-    this.#pos += value.byteLength;
-  }
-  string(tag, value) {
-    this.bytes(tag, new TextEncoder().encode(value));
-  }
-  message(tag, value, fun) {
-    const writer = new MessageWriter;
-    fun(writer, value);
-    this.bytes(tag, writer.data());
-  }
-  int32(tag, value) {
-    this.#tag(tag, VARINT);
-    this.#varint(value);
-  }
-  uint32(tag, value) {
-    this.int32(tag, value);
-  }
-  bool(tag, value) {
-    this.int32(tag, value ? 1 : 0);
-  }
-  sint64(tag, value) {
-    this.#tag(tag, VARINT);
-    this.#varintBig(value << 1n ^ value >> 63n);
-  }
-  double(tag, value) {
-    this.#tag(tag, FIXED_64);
-    this.#ensure(8);
-    this.#view.setFloat64(this.#pos, value, true);
-    this.#pos += 8;
-  }
-  data() {
-    return new Uint8Array(this.#buf, 0, this.#pos);
-  }
-}
-function writeProtobufMessage(value, fun) {
-  const w = new MessageWriter;
-  fun(w, value);
-  return w.data();
-}
-// node_modules/@libsql/hrana-client/lib-esm/id_alloc.js
-class IdAlloc {
-  #usedIds;
-  #freeIds;
-  constructor() {
-    this.#usedIds = new Set;
-    this.#freeIds = new Set;
-  }
-  alloc() {
-    for (const freeId2 of this.#freeIds) {
-      this.#freeIds.delete(freeId2);
-      this.#usedIds.add(freeId2);
-      if (!this.#usedIds.has(this.#usedIds.size - 1)) {
-        this.#freeIds.add(this.#usedIds.size - 1);
-      }
-      return freeId2;
-    }
-    const freeId = this.#usedIds.size;
-    this.#usedIds.add(freeId);
-    return freeId;
-  }
-  free(id) {
-    if (!this.#usedIds.delete(id)) {
-      throw new InternalError("Freeing an id that is not allocated");
-    }
-    this.#freeIds.delete(this.#usedIds.size);
-    if (id < this.#usedIds.size) {
-      this.#freeIds.add(id);
-    }
-  }
-}
-
-// node_modules/@libsql/hrana-client/lib-esm/util.js
-function impossible(value, message) {
-  throw new InternalError(message);
-}
-
-// node_modules/@libsql/hrana-client/lib-esm/value.js
-function valueToProto(value) {
-  if (value === null) {
-    return null;
-  } else if (typeof value === "string") {
-    return value;
-  } else if (typeof value === "number") {
-    if (!Number.isFinite(value)) {
-      throw new RangeError("Only finite numbers (not Infinity or NaN) can be passed as arguments");
-    }
-    return value;
-  } else if (typeof value === "bigint") {
-    if (value < minInteger2 || value > maxInteger2) {
-      throw new RangeError("This bigint value is too large to be represented as a 64-bit integer and passed as argument");
-    }
-    return value;
-  } else if (typeof value === "boolean") {
-    return value ? 1n : 0n;
-  } else if (value instanceof ArrayBuffer) {
-    return new Uint8Array(value);
-  } else if (value instanceof Uint8Array) {
-    return value;
-  } else if (value instanceof Date) {
-    return +value.valueOf();
-  } else if (typeof value === "object") {
-    return "" + value.toString();
-  } else {
-    throw new TypeError("Unsupported type of value");
-  }
-}
-var minInteger2 = -9223372036854775808n;
-var maxInteger2 = 9223372036854775807n;
-function valueFromProto(value, intMode) {
-  if (value === null) {
-    return null;
-  } else if (typeof value === "number") {
-    return value;
-  } else if (typeof value === "string") {
-    return value;
-  } else if (typeof value === "bigint") {
-    if (intMode === "number") {
-      const num = Number(value);
-      if (!Number.isSafeInteger(num)) {
-        throw new RangeError("Received integer which is too large to be safely represented as a JavaScript number");
-      }
-      return num;
-    } else if (intMode === "bigint") {
-      return value;
-    } else if (intMode === "string") {
-      return "" + value;
-    } else {
-      throw new MisuseError("Invalid value for IntMode");
-    }
-  } else if (value instanceof Uint8Array) {
-    return value.slice().buffer;
-  } else if (value === undefined) {
-    throw new ProtoError("Received unrecognized type of Value");
-  } else {
-    throw impossible(value, "Impossible type of Value");
-  }
-}
-
-// node_modules/@libsql/hrana-client/lib-esm/result.js
-function stmtResultFromProto(result) {
-  return {
-    affectedRowCount: result.affectedRowCount,
-    lastInsertRowid: result.lastInsertRowid,
-    columnNames: result.cols.map((col) => col.name),
-    columnDecltypes: result.cols.map((col) => col.decltype)
-  };
-}
-function rowsResultFromProto(result, intMode) {
-  const stmtResult = stmtResultFromProto(result);
-  const rows = result.rows.map((row) => rowFromProto(stmtResult.columnNames, row, intMode));
-  return { ...stmtResult, rows };
-}
-function rowResultFromProto(result, intMode) {
-  const stmtResult = stmtResultFromProto(result);
-  let row;
-  if (result.rows.length > 0) {
-    row = rowFromProto(stmtResult.columnNames, result.rows[0], intMode);
-  }
-  return { ...stmtResult, row };
-}
-function valueResultFromProto(result, intMode) {
-  const stmtResult = stmtResultFromProto(result);
-  let value;
-  if (result.rows.length > 0 && stmtResult.columnNames.length > 0) {
-    value = valueFromProto(result.rows[0][0], intMode);
-  }
-  return { ...stmtResult, value };
-}
-function rowFromProto(colNames, values, intMode) {
-  const row = {};
-  Object.defineProperty(row, "length", { value: values.length });
-  for (let i = 0;i < values.length; ++i) {
-    const value = valueFromProto(values[i], intMode);
-    Object.defineProperty(row, i, { value });
-    const colName = colNames[i];
-    if (colName !== undefined && !Object.hasOwn(row, colName)) {
-      Object.defineProperty(row, colName, { value, enumerable: true, configurable: true, writable: true });
-    }
-  }
-  return row;
-}
-function errorFromProto(error) {
-  return new ResponseError(error.message, error);
-}
-
-// node_modules/@libsql/hrana-client/lib-esm/sql.js
-class Sql {
-  #owner;
-  #sqlId;
-  #closed;
-  constructor(owner, sqlId) {
-    this.#owner = owner;
-    this.#sqlId = sqlId;
-    this.#closed = undefined;
-  }
-  _getSqlId(owner) {
-    if (this.#owner !== owner) {
-      throw new MisuseError("Attempted to use SQL text opened with other object");
-    } else if (this.#closed !== undefined) {
-      throw new ClosedError("SQL text is closed", this.#closed);
-    }
-    return this.#sqlId;
-  }
-  close() {
-    this._setClosed(new ClientError("SQL text was manually closed"));
-  }
-  _setClosed(error) {
-    if (this.#closed === undefined) {
-      this.#closed = error;
-      this.#owner._closeSql(this.#sqlId);
-    }
-  }
-  get closed() {
-    return this.#closed !== undefined;
-  }
-}
-function sqlToProto(owner, sql2) {
-  if (sql2 instanceof Sql) {
-    return { sqlId: sql2._getSqlId(owner) };
-  } else {
-    return { sql: "" + sql2 };
-  }
-}
-
-// node_modules/@libsql/hrana-client/lib-esm/queue.js
-class Queue {
-  #pushStack;
-  #shiftStack;
-  constructor() {
-    this.#pushStack = [];
-    this.#shiftStack = [];
-  }
-  get length() {
-    return this.#pushStack.length + this.#shiftStack.length;
-  }
-  push(elem) {
-    this.#pushStack.push(elem);
-  }
-  shift() {
-    if (this.#shiftStack.length === 0 && this.#pushStack.length > 0) {
-      this.#shiftStack = this.#pushStack.reverse();
-      this.#pushStack = [];
-    }
-    return this.#shiftStack.pop();
-  }
-  first() {
-    return this.#shiftStack.length !== 0 ? this.#shiftStack[this.#shiftStack.length - 1] : this.#pushStack[0];
-  }
-}
-
-// node_modules/@libsql/hrana-client/lib-esm/stmt.js
-class Stmt {
-  sql;
-  _args;
-  _namedArgs;
-  constructor(sql2) {
-    this.sql = sql2;
-    this._args = [];
-    this._namedArgs = new Map;
-  }
-  bindIndexes(values) {
-    this._args.length = 0;
-    for (const value of values) {
-      this._args.push(valueToProto(value));
-    }
-    return this;
-  }
-  bindIndex(index, value) {
-    if (index !== (index | 0) || index <= 0) {
-      throw new RangeError("Index of a positional argument must be positive integer");
-    }
-    while (this._args.length < index) {
-      this._args.push(null);
-    }
-    this._args[index - 1] = valueToProto(value);
-    return this;
-  }
-  bindName(name, value) {
-    this._namedArgs.set(name, valueToProto(value));
-    return this;
-  }
-  unbindAll() {
-    this._args.length = 0;
-    this._namedArgs.clear();
-    return this;
-  }
-}
-function stmtToProto(sqlOwner, stmt, wantRows) {
-  let inSql;
-  let args = [];
-  let namedArgs = [];
-  if (stmt instanceof Stmt) {
-    inSql = stmt.sql;
-    args = stmt._args;
-    for (const [name, value] of stmt._namedArgs.entries()) {
-      namedArgs.push({ name, value });
-    }
-  } else if (Array.isArray(stmt)) {
-    inSql = stmt[0];
-    if (Array.isArray(stmt[1])) {
-      args = stmt[1].map((arg) => valueToProto(arg));
-    } else {
-      namedArgs = Object.entries(stmt[1]).map(([name, value]) => {
-        return { name, value: valueToProto(value) };
-      });
-    }
-  } else {
-    inSql = stmt;
-  }
-  const { sql: sql2, sqlId } = sqlToProto(sqlOwner, inSql);
-  return { sql: sql2, sqlId, args, namedArgs, wantRows };
-}
-
-// node_modules/@libsql/hrana-client/lib-esm/batch.js
-class Batch {
-  _stream;
-  #useCursor;
-  _steps;
-  #executed;
-  constructor(stream, useCursor) {
-    this._stream = stream;
-    this.#useCursor = useCursor;
-    this._steps = [];
-    this.#executed = false;
-  }
-  step() {
-    return new BatchStep(this);
-  }
-  execute() {
-    if (this.#executed) {
-      throw new MisuseError("This batch has already been executed");
-    }
-    this.#executed = true;
-    const batch = {
-      steps: this._steps.map((step) => step.proto)
-    };
-    if (this.#useCursor) {
-      return executeCursor(this._stream, this._steps, batch);
-    } else {
-      return executeRegular(this._stream, this._steps, batch);
-    }
-  }
-}
-function executeRegular(stream, steps, batch) {
-  return stream._batch(batch).then((result) => {
-    for (let step = 0;step < steps.length; ++step) {
-      const stepResult = result.stepResults.get(step);
-      const stepError = result.stepErrors.get(step);
-      steps[step].callback(stepResult, stepError);
-    }
-  });
-}
-async function executeCursor(stream, steps, batch) {
-  const cursor = await stream._openCursor(batch);
-  try {
-    let nextStep = 0;
-    let beginEntry = undefined;
-    let rows = [];
-    for (;; ) {
-      const entry = await cursor.next();
-      if (entry === undefined) {
-        break;
-      }
-      if (entry.type === "step_begin") {
-        if (entry.step < nextStep || entry.step >= steps.length) {
-          throw new ProtoError("Server produced StepBeginEntry for unexpected step");
-        } else if (beginEntry !== undefined) {
-          throw new ProtoError("Server produced StepBeginEntry before terminating previous step");
-        }
-        for (let step = nextStep;step < entry.step; ++step) {
-          steps[step].callback(undefined, undefined);
-        }
-        nextStep = entry.step + 1;
-        beginEntry = entry;
-        rows = [];
-      } else if (entry.type === "step_end") {
-        if (beginEntry === undefined) {
-          throw new ProtoError("Server produced StepEndEntry but no step is active");
-        }
-        const stmtResult = {
-          cols: beginEntry.cols,
-          rows,
-          affectedRowCount: entry.affectedRowCount,
-          lastInsertRowid: entry.lastInsertRowid
-        };
-        steps[beginEntry.step].callback(stmtResult, undefined);
-        beginEntry = undefined;
-        rows = [];
-      } else if (entry.type === "step_error") {
-        if (beginEntry === undefined) {
-          if (entry.step >= steps.length) {
-            throw new ProtoError("Server produced StepErrorEntry for unexpected step");
-          }
-          for (let step = nextStep;step < entry.step; ++step) {
-            steps[step].callback(undefined, undefined);
-          }
-        } else {
-          if (entry.step !== beginEntry.step) {
-            throw new ProtoError("Server produced StepErrorEntry for unexpected step");
-          }
-          beginEntry = undefined;
-          rows = [];
-        }
-        steps[entry.step].callback(undefined, entry.error);
-        nextStep = entry.step + 1;
-      } else if (entry.type === "row") {
-        if (beginEntry === undefined) {
-          throw new ProtoError("Server produced RowEntry but no step is active");
-        }
-        rows.push(entry.row);
-      } else if (entry.type === "error") {
-        throw errorFromProto(entry.error);
-      } else if (entry.type === "none") {
-        throw new ProtoError("Server produced unrecognized CursorEntry");
-      } else {
-        throw impossible(entry, "Impossible CursorEntry");
-      }
-    }
-    if (beginEntry !== undefined) {
-      throw new ProtoError("Server closed Cursor before terminating active step");
-    }
-    for (let step = nextStep;step < steps.length; ++step) {
-      steps[step].callback(undefined, undefined);
-    }
-  } finally {
-    cursor.close();
-  }
-}
-
-class BatchStep {
-  _batch;
-  #conds;
-  _index;
-  constructor(batch) {
-    this._batch = batch;
-    this.#conds = [];
-    this._index = undefined;
-  }
-  condition(cond) {
-    this.#conds.push(cond._proto);
-    return this;
-  }
-  query(stmt) {
-    return this.#add(stmt, true, rowsResultFromProto);
-  }
-  queryRow(stmt) {
-    return this.#add(stmt, true, rowResultFromProto);
-  }
-  queryValue(stmt) {
-    return this.#add(stmt, true, valueResultFromProto);
-  }
-  run(stmt) {
-    return this.#add(stmt, false, stmtResultFromProto);
-  }
-  #add(inStmt, wantRows, fromProto) {
-    if (this._index !== undefined) {
-      throw new MisuseError("This BatchStep has already been added to the batch");
-    }
-    const stmt = stmtToProto(this._batch._stream._sqlOwner(), inStmt, wantRows);
-    let condition;
-    if (this.#conds.length === 0) {
-      condition = undefined;
-    } else if (this.#conds.length === 1) {
-      condition = this.#conds[0];
-    } else {
-      condition = { type: "and", conds: this.#conds.slice() };
-    }
-    const proto = { stmt, condition };
-    return new Promise((outputCallback, errorCallback) => {
-      const callback = (stepResult, stepError) => {
-        if (stepResult !== undefined && stepError !== undefined) {
-          errorCallback(new ProtoError("Server returned both result and error"));
-        } else if (stepError !== undefined) {
-          errorCallback(errorFromProto(stepError));
-        } else if (stepResult !== undefined) {
-          outputCallback(fromProto(stepResult, this._batch._stream.intMode));
-        } else {
-          outputCallback(undefined);
-        }
-      };
-      this._index = this._batch._steps.length;
-      this._batch._steps.push({ proto, callback });
-    });
-  }
-}
-
-class BatchCond {
-  _batch;
-  _proto;
-  constructor(batch, proto) {
-    this._batch = batch;
-    this._proto = proto;
-  }
-  static ok(step) {
-    return new BatchCond(step._batch, { type: "ok", step: stepIndex(step) });
-  }
-  static error(step) {
-    return new BatchCond(step._batch, { type: "error", step: stepIndex(step) });
-  }
-  static not(cond) {
-    return new BatchCond(cond._batch, { type: "not", cond: cond._proto });
-  }
-  static and(batch, conds) {
-    for (const cond of conds) {
-      checkCondBatch(batch, cond);
-    }
-    return new BatchCond(batch, { type: "and", conds: conds.map((e) => e._proto) });
-  }
-  static or(batch, conds) {
-    for (const cond of conds) {
-      checkCondBatch(batch, cond);
-    }
-    return new BatchCond(batch, { type: "or", conds: conds.map((e) => e._proto) });
-  }
-  static isAutocommit(batch) {
-    batch._stream.client()._ensureVersion(3, "BatchCond.isAutocommit()");
-    return new BatchCond(batch, { type: "is_autocommit" });
-  }
-}
-function stepIndex(step) {
-  if (step._index === undefined) {
-    throw new MisuseError("Cannot add a condition referencing a step that has not been added to the batch");
-  }
-  return step._index;
-}
-function checkCondBatch(expectedBatch, cond) {
-  if (cond._batch !== expectedBatch) {
-    throw new MisuseError("Cannot mix BatchCond objects for different Batch objects");
-  }
-}
-
-// node_modules/@libsql/hrana-client/lib-esm/describe.js
-function describeResultFromProto(result) {
-  return {
-    paramNames: result.params.map((p) => p.name),
-    columns: result.cols,
-    isExplain: result.isExplain,
-    isReadonly: result.isReadonly
-  };
-}
-
-// node_modules/@libsql/hrana-client/lib-esm/stream.js
-class Stream {
-  constructor(intMode) {
-    this.intMode = intMode;
-  }
-  query(stmt) {
-    return this.#execute(stmt, true, rowsResultFromProto);
-  }
-  queryRow(stmt) {
-    return this.#execute(stmt, true, rowResultFromProto);
-  }
-  queryValue(stmt) {
-    return this.#execute(stmt, true, valueResultFromProto);
-  }
-  run(stmt) {
-    return this.#execute(stmt, false, stmtResultFromProto);
-  }
-  #execute(inStmt, wantRows, fromProto) {
-    const stmt = stmtToProto(this._sqlOwner(), inStmt, wantRows);
-    return this._execute(stmt).then((r) => fromProto(r, this.intMode));
-  }
-  batch(useCursor = false) {
-    return new Batch(this, useCursor);
-  }
-  describe(inSql) {
-    const protoSql = sqlToProto(this._sqlOwner(), inSql);
-    return this._describe(protoSql).then(describeResultFromProto);
-  }
-  sequence(inSql) {
-    const protoSql = sqlToProto(this._sqlOwner(), inSql);
-    return this._sequence(protoSql);
-  }
-  intMode;
-}
-
-// node_modules/@libsql/hrana-client/lib-esm/cursor.js
-class Cursor {
-}
-
-// node_modules/@libsql/hrana-client/lib-esm/ws/cursor.js
-var fetchChunkSize = 1000;
-var fetchQueueSize = 10;
-
-class WsCursor extends Cursor {
-  #client;
-  #stream;
-  #cursorId;
-  #entryQueue;
-  #fetchQueue;
-  #closed;
-  #done;
-  constructor(client, stream, cursorId) {
-    super();
-    this.#client = client;
-    this.#stream = stream;
-    this.#cursorId = cursorId;
-    this.#entryQueue = new Queue;
-    this.#fetchQueue = new Queue;
-    this.#closed = undefined;
-    this.#done = false;
-  }
-  async next() {
-    for (;; ) {
-      if (this.#closed !== undefined) {
-        throw new ClosedError("Cursor is closed", this.#closed);
-      }
-      while (!this.#done && this.#fetchQueue.length < fetchQueueSize) {
-        this.#fetchQueue.push(this.#fetch());
-      }
-      const entry = this.#entryQueue.shift();
-      if (this.#done || entry !== undefined) {
-        return entry;
-      }
-      await this.#fetchQueue.shift().then((response) => {
-        if (response === undefined) {
-          return;
-        }
-        for (const entry2 of response.entries) {
-          this.#entryQueue.push(entry2);
-        }
-        this.#done ||= response.done;
-      });
-    }
-  }
-  #fetch() {
-    return this.#stream._sendCursorRequest(this, {
-      type: "fetch_cursor",
-      cursorId: this.#cursorId,
-      maxCount: fetchChunkSize
-    }).then((resp) => resp, (error) => {
-      this._setClosed(error);
-      return;
-    });
-  }
-  _setClosed(error) {
-    if (this.#closed !== undefined) {
-      return;
-    }
-    this.#closed = error;
-    this.#stream._sendCursorRequest(this, {
-      type: "close_cursor",
-      cursorId: this.#cursorId
-    }).catch(() => {
-      return;
-    });
-    this.#stream._cursorClosed(this);
-  }
-  close() {
-    this._setClosed(new ClientError("Cursor was manually closed"));
-  }
-  get closed() {
-    return this.#closed !== undefined;
-  }
-}
-
-// node_modules/@libsql/hrana-client/lib-esm/ws/stream.js
-class WsStream extends Stream {
-  #client;
-  #streamId;
-  #queue;
-  #cursor;
-  #closing;
-  #closed;
-  static open(client) {
-    const streamId = client._streamIdAlloc.alloc();
-    const stream = new WsStream(client, streamId);
-    const responseCallback = () => {
-      return;
-    };
-    const errorCallback = (e) => stream.#setClosed(e);
-    const request = { type: "open_stream", streamId };
-    client._sendRequest(request, { responseCallback, errorCallback });
-    return stream;
-  }
-  constructor(client, streamId) {
-    super(client.intMode);
-    this.#client = client;
-    this.#streamId = streamId;
-    this.#queue = new Queue;
-    this.#cursor = undefined;
-    this.#closing = false;
-    this.#closed = undefined;
-  }
-  client() {
-    return this.#client;
-  }
-  _sqlOwner() {
-    return this.#client;
-  }
-  _execute(stmt) {
-    return this.#sendStreamRequest({
-      type: "execute",
-      streamId: this.#streamId,
-      stmt
-    }).then((response) => {
-      return response.result;
-    });
-  }
-  _batch(batch) {
-    return this.#sendStreamRequest({
-      type: "batch",
-      streamId: this.#streamId,
-      batch
-    }).then((response) => {
-      return response.result;
-    });
-  }
-  _describe(protoSql) {
-    this.#client._ensureVersion(2, "describe()");
-    return this.#sendStreamRequest({
-      type: "describe",
-      streamId: this.#streamId,
-      sql: protoSql.sql,
-      sqlId: protoSql.sqlId
-    }).then((response) => {
-      return response.result;
-    });
-  }
-  _sequence(protoSql) {
-    this.#client._ensureVersion(2, "sequence()");
-    return this.#sendStreamRequest({
-      type: "sequence",
-      streamId: this.#streamId,
-      sql: protoSql.sql,
-      sqlId: protoSql.sqlId
-    }).then((_response) => {
-      return;
-    });
-  }
-  getAutocommit() {
-    this.#client._ensureVersion(3, "getAutocommit()");
-    return this.#sendStreamRequest({
-      type: "get_autocommit",
-      streamId: this.#streamId
-    }).then((response) => {
-      return response.isAutocommit;
-    });
-  }
-  #sendStreamRequest(request) {
-    return new Promise((responseCallback, errorCallback) => {
-      this.#pushToQueue({ type: "request", request, responseCallback, errorCallback });
-    });
-  }
-  _openCursor(batch) {
-    this.#client._ensureVersion(3, "cursor");
-    return new Promise((cursorCallback, errorCallback) => {
-      this.#pushToQueue({ type: "cursor", batch, cursorCallback, errorCallback });
-    });
-  }
-  _sendCursorRequest(cursor, request) {
-    if (cursor !== this.#cursor) {
-      throw new InternalError("Cursor not associated with the stream attempted to execute a request");
-    }
-    return new Promise((responseCallback, errorCallback) => {
-      if (this.#closed !== undefined) {
-        errorCallback(new ClosedError("Stream is closed", this.#closed));
-      } else {
-        this.#client._sendRequest(request, { responseCallback, errorCallback });
-      }
-    });
-  }
-  _cursorClosed(cursor) {
-    if (cursor !== this.#cursor) {
-      throw new InternalError("Cursor was closed, but it was not associated with the stream");
-    }
-    this.#cursor = undefined;
-    this.#flushQueue();
-  }
-  #pushToQueue(entry) {
-    if (this.#closed !== undefined) {
-      entry.errorCallback(new ClosedError("Stream is closed", this.#closed));
-    } else if (this.#closing) {
-      entry.errorCallback(new ClosedError("Stream is closing", undefined));
-    } else {
-      this.#queue.push(entry);
-      this.#flushQueue();
-    }
-  }
-  #flushQueue() {
-    for (;; ) {
-      const entry = this.#queue.first();
-      if (entry === undefined && this.#cursor === undefined && this.#closing) {
-        this.#setClosed(new ClientError("Stream was gracefully closed"));
-        break;
-      } else if (entry?.type === "request" && this.#cursor === undefined) {
-        const { request, responseCallback, errorCallback } = entry;
-        this.#queue.shift();
-        this.#client._sendRequest(request, { responseCallback, errorCallback });
-      } else if (entry?.type === "cursor" && this.#cursor === undefined) {
-        const { batch, cursorCallback } = entry;
-        this.#queue.shift();
-        const cursorId = this.#client._cursorIdAlloc.alloc();
-        const cursor = new WsCursor(this.#client, this, cursorId);
-        const request = {
-          type: "open_cursor",
-          streamId: this.#streamId,
-          cursorId,
-          batch
-        };
-        const responseCallback = () => {
-          return;
-        };
-        const errorCallback = (e) => cursor._setClosed(e);
-        this.#client._sendRequest(request, { responseCallback, errorCallback });
-        this.#cursor = cursor;
-        cursorCallback(cursor);
-      } else {
-        break;
-      }
-    }
-  }
-  #setClosed(error) {
-    if (this.#closed !== undefined) {
-      return;
-    }
-    this.#closed = error;
-    if (this.#cursor !== undefined) {
-      this.#cursor._setClosed(error);
-    }
-    for (;; ) {
-      const entry = this.#queue.shift();
-      if (entry !== undefined) {
-        entry.errorCallback(error);
-      } else {
-        break;
-      }
-    }
-    const request = { type: "close_stream", streamId: this.#streamId };
-    const responseCallback = () => this.#client._streamIdAlloc.free(this.#streamId);
-    const errorCallback = () => {
-      return;
-    };
-    this.#client._sendRequest(request, { responseCallback, errorCallback });
-  }
-  close() {
-    this.#setClosed(new ClientError("Stream was manually closed"));
-  }
-  closeGracefully() {
-    this.#closing = true;
-    this.#flushQueue();
-  }
-  get closed() {
-    return this.#closed !== undefined || this.#closing;
-  }
-}
-
-// node_modules/@libsql/hrana-client/lib-esm/shared/json_encode.js
-function Stmt2(w, msg) {
-  if (msg.sql !== undefined) {
-    w.string("sql", msg.sql);
-  }
-  if (msg.sqlId !== undefined) {
-    w.number("sql_id", msg.sqlId);
-  }
-  w.arrayObjects("args", msg.args, Value);
-  w.arrayObjects("named_args", msg.namedArgs, NamedArg);
-  w.boolean("want_rows", msg.wantRows);
-}
-function NamedArg(w, msg) {
-  w.string("name", msg.name);
-  w.object("value", msg.value, Value);
-}
-function Batch2(w, msg) {
-  w.arrayObjects("steps", msg.steps, BatchStep2);
-}
-function BatchStep2(w, msg) {
-  if (msg.condition !== undefined) {
-    w.object("condition", msg.condition, BatchCond2);
-  }
-  w.object("stmt", msg.stmt, Stmt2);
-}
-function BatchCond2(w, msg) {
-  w.stringRaw("type", msg.type);
-  if (msg.type === "ok" || msg.type === "error") {
-    w.number("step", msg.step);
-  } else if (msg.type === "not") {
-    w.object("cond", msg.cond, BatchCond2);
-  } else if (msg.type === "and" || msg.type === "or") {
-    w.arrayObjects("conds", msg.conds, BatchCond2);
-  } else if (msg.type === "is_autocommit") {} else {
-    throw impossible(msg, "Impossible type of BatchCond");
-  }
-}
-function Value(w, msg) {
-  if (msg === null) {
-    w.stringRaw("type", "null");
-  } else if (typeof msg === "bigint") {
-    w.stringRaw("type", "integer");
-    w.stringRaw("value", "" + msg);
-  } else if (typeof msg === "number") {
-    w.stringRaw("type", "float");
-    w.number("value", msg);
-  } else if (typeof msg === "string") {
-    w.stringRaw("type", "text");
-    w.string("value", msg);
-  } else if (msg instanceof Uint8Array) {
-    w.stringRaw("type", "blob");
-    w.stringRaw("base64", gBase64.fromUint8Array(msg));
-  } else if (msg === undefined) {} else {
-    throw impossible(msg, "Impossible type of Value");
-  }
-}
-
-// node_modules/@libsql/hrana-client/lib-esm/ws/json_encode.js
-function ClientMsg(w, msg) {
-  w.stringRaw("type", msg.type);
-  if (msg.type === "hello") {
-    if (msg.jwt !== undefined) {
-      w.string("jwt", msg.jwt);
-    }
-  } else if (msg.type === "request") {
-    w.number("request_id", msg.requestId);
-    w.object("request", msg.request, Request2);
-  } else {
-    throw impossible(msg, "Impossible type of ClientMsg");
-  }
-}
-function Request2(w, msg) {
-  w.stringRaw("type", msg.type);
-  if (msg.type === "open_stream") {
-    w.number("stream_id", msg.streamId);
-  } else if (msg.type === "close_stream") {
-    w.number("stream_id", msg.streamId);
-  } else if (msg.type === "execute") {
-    w.number("stream_id", msg.streamId);
-    w.object("stmt", msg.stmt, Stmt2);
-  } else if (msg.type === "batch") {
-    w.number("stream_id", msg.streamId);
-    w.object("batch", msg.batch, Batch2);
-  } else if (msg.type === "open_cursor") {
-    w.number("stream_id", msg.streamId);
-    w.number("cursor_id", msg.cursorId);
-    w.object("batch", msg.batch, Batch2);
-  } else if (msg.type === "close_cursor") {
-    w.number("cursor_id", msg.cursorId);
-  } else if (msg.type === "fetch_cursor") {
-    w.number("cursor_id", msg.cursorId);
-    w.number("max_count", msg.maxCount);
-  } else if (msg.type === "sequence") {
-    w.number("stream_id", msg.streamId);
-    if (msg.sql !== undefined) {
-      w.string("sql", msg.sql);
-    }
-    if (msg.sqlId !== undefined) {
-      w.number("sql_id", msg.sqlId);
-    }
-  } else if (msg.type === "describe") {
-    w.number("stream_id", msg.streamId);
-    if (msg.sql !== undefined) {
-      w.string("sql", msg.sql);
-    }
-    if (msg.sqlId !== undefined) {
-      w.number("sql_id", msg.sqlId);
-    }
-  } else if (msg.type === "store_sql") {
-    w.number("sql_id", msg.sqlId);
-    w.string("sql", msg.sql);
-  } else if (msg.type === "close_sql") {
-    w.number("sql_id", msg.sqlId);
-  } else if (msg.type === "get_autocommit") {
-    w.number("stream_id", msg.streamId);
-  } else {
-    throw impossible(msg, "Impossible type of Request");
-  }
-}
-
-// node_modules/@libsql/hrana-client/lib-esm/shared/protobuf_encode.js
-function Stmt3(w, msg) {
-  if (msg.sql !== undefined) {
-    w.string(1, msg.sql);
-  }
-  if (msg.sqlId !== undefined) {
-    w.int32(2, msg.sqlId);
-  }
-  for (const arg of msg.args) {
-    w.message(3, arg, Value2);
-  }
-  for (const arg of msg.namedArgs) {
-    w.message(4, arg, NamedArg2);
-  }
-  w.bool(5, msg.wantRows);
-}
-function NamedArg2(w, msg) {
-  w.string(1, msg.name);
-  w.message(2, msg.value, Value2);
-}
-function Batch3(w, msg) {
-  for (const step of msg.steps) {
-    w.message(1, step, BatchStep3);
-  }
-}
-function BatchStep3(w, msg) {
-  if (msg.condition !== undefined) {
-    w.message(1, msg.condition, BatchCond3);
-  }
-  w.message(2, msg.stmt, Stmt3);
-}
-function BatchCond3(w, msg) {
-  if (msg.type === "ok") {
-    w.uint32(1, msg.step);
-  } else if (msg.type === "error") {
-    w.uint32(2, msg.step);
-  } else if (msg.type === "not") {
-    w.message(3, msg.cond, BatchCond3);
-  } else if (msg.type === "and") {
-    w.message(4, msg.conds, BatchCondList);
-  } else if (msg.type === "or") {
-    w.message(5, msg.conds, BatchCondList);
-  } else if (msg.type === "is_autocommit") {
-    w.message(6, undefined, Empty);
-  } else {
-    throw impossible(msg, "Impossible type of BatchCond");
-  }
-}
-function BatchCondList(w, msg) {
-  for (const cond of msg) {
-    w.message(1, cond, BatchCond3);
-  }
-}
-function Value2(w, msg) {
-  if (msg === null) {
-    w.message(1, undefined, Empty);
-  } else if (typeof msg === "bigint") {
-    w.sint64(2, msg);
-  } else if (typeof msg === "number") {
-    w.double(3, msg);
-  } else if (typeof msg === "string") {
-    w.string(4, msg);
-  } else if (msg instanceof Uint8Array) {
-    w.bytes(5, msg);
-  } else if (msg === undefined) {} else {
-    throw impossible(msg, "Impossible type of Value");
-  }
-}
-function Empty(_w, _msg) {}
-
-// node_modules/@libsql/hrana-client/lib-esm/ws/protobuf_encode.js
-function ClientMsg2(w, msg) {
-  if (msg.type === "hello") {
-    w.message(1, msg, HelloMsg);
-  } else if (msg.type === "request") {
-    w.message(2, msg, RequestMsg);
-  } else {
-    throw impossible(msg, "Impossible type of ClientMsg");
-  }
-}
-function HelloMsg(w, msg) {
-  if (msg.jwt !== undefined) {
-    w.string(1, msg.jwt);
-  }
-}
-function RequestMsg(w, msg) {
-  w.int32(1, msg.requestId);
-  const request = msg.request;
-  if (request.type === "open_stream") {
-    w.message(2, request, OpenStreamReq);
-  } else if (request.type === "close_stream") {
-    w.message(3, request, CloseStreamReq);
-  } else if (request.type === "execute") {
-    w.message(4, request, ExecuteReq);
-  } else if (request.type === "batch") {
-    w.message(5, request, BatchReq);
-  } else if (request.type === "open_cursor") {
-    w.message(6, request, OpenCursorReq);
-  } else if (request.type === "close_cursor") {
-    w.message(7, request, CloseCursorReq);
-  } else if (request.type === "fetch_cursor") {
-    w.message(8, request, FetchCursorReq);
-  } else if (request.type === "sequence") {
-    w.message(9, request, SequenceReq);
-  } else if (request.type === "describe") {
-    w.message(10, request, DescribeReq);
-  } else if (request.type === "store_sql") {
-    w.message(11, request, StoreSqlReq);
-  } else if (request.type === "close_sql") {
-    w.message(12, request, CloseSqlReq);
-  } else if (request.type === "get_autocommit") {
-    w.message(13, request, GetAutocommitReq);
-  } else {
-    throw impossible(request, "Impossible type of Request");
-  }
-}
-function OpenStreamReq(w, msg) {
-  w.int32(1, msg.streamId);
-}
-function CloseStreamReq(w, msg) {
-  w.int32(1, msg.streamId);
-}
-function ExecuteReq(w, msg) {
-  w.int32(1, msg.streamId);
-  w.message(2, msg.stmt, Stmt3);
-}
-function BatchReq(w, msg) {
-  w.int32(1, msg.streamId);
-  w.message(2, msg.batch, Batch3);
-}
-function OpenCursorReq(w, msg) {
-  w.int32(1, msg.streamId);
-  w.int32(2, msg.cursorId);
-  w.message(3, msg.batch, Batch3);
-}
-function CloseCursorReq(w, msg) {
-  w.int32(1, msg.cursorId);
-}
-function FetchCursorReq(w, msg) {
-  w.int32(1, msg.cursorId);
-  w.uint32(2, msg.maxCount);
-}
-function SequenceReq(w, msg) {
-  w.int32(1, msg.streamId);
-  if (msg.sql !== undefined) {
-    w.string(2, msg.sql);
-  }
-  if (msg.sqlId !== undefined) {
-    w.int32(3, msg.sqlId);
-  }
-}
-function DescribeReq(w, msg) {
-  w.int32(1, msg.streamId);
-  if (msg.sql !== undefined) {
-    w.string(2, msg.sql);
-  }
-  if (msg.sqlId !== undefined) {
-    w.int32(3, msg.sqlId);
-  }
-}
-function StoreSqlReq(w, msg) {
-  w.int32(1, msg.sqlId);
-  w.string(2, msg.sql);
-}
-function CloseSqlReq(w, msg) {
-  w.int32(1, msg.sqlId);
-}
-function GetAutocommitReq(w, msg) {
-  w.int32(1, msg.streamId);
-}
-
-// node_modules/@libsql/hrana-client/lib-esm/shared/json_decode.js
-function Error2(obj) {
-  const message = string(obj["message"]);
-  const code = stringOpt(obj["code"]);
-  return { message, code };
-}
-function StmtResult(obj) {
-  const cols = arrayObjectsMap(obj["cols"], Col);
-  const rows = array(obj["rows"]).map((rowObj) => arrayObjectsMap(rowObj, Value3));
-  const affectedRowCount = number(obj["affected_row_count"]);
-  const lastInsertRowidStr = stringOpt(obj["last_insert_rowid"]);
-  const lastInsertRowid = lastInsertRowidStr !== undefined ? BigInt(lastInsertRowidStr) : undefined;
-  return { cols, rows, affectedRowCount, lastInsertRowid };
-}
-function Col(obj) {
-  const name = stringOpt(obj["name"]);
-  const decltype = stringOpt(obj["decltype"]);
-  return { name, decltype };
-}
-function BatchResult(obj) {
-  const stepResults = new Map;
-  array(obj["step_results"]).forEach((value, i) => {
-    if (value !== null) {
-      stepResults.set(i, StmtResult(object(value)));
-    }
-  });
-  const stepErrors = new Map;
-  array(obj["step_errors"]).forEach((value, i) => {
-    if (value !== null) {
-      stepErrors.set(i, Error2(object(value)));
-    }
-  });
-  return { stepResults, stepErrors };
-}
-function CursorEntry(obj) {
-  const type = string(obj["type"]);
-  if (type === "step_begin") {
-    const step = number(obj["step"]);
-    const cols = arrayObjectsMap(obj["cols"], Col);
-    return { type: "step_begin", step, cols };
-  } else if (type === "step_end") {
-    const affectedRowCount = number(obj["affected_row_count"]);
-    const lastInsertRowidStr = stringOpt(obj["last_insert_rowid"]);
-    const lastInsertRowid = lastInsertRowidStr !== undefined ? BigInt(lastInsertRowidStr) : undefined;
-    return { type: "step_end", affectedRowCount, lastInsertRowid };
-  } else if (type === "step_error") {
-    const step = number(obj["step"]);
-    const error = Error2(object(obj["error"]));
-    return { type: "step_error", step, error };
-  } else if (type === "row") {
-    const row = arrayObjectsMap(obj["row"], Value3);
-    return { type: "row", row };
-  } else if (type === "error") {
-    const error = Error2(object(obj["error"]));
-    return { type: "error", error };
-  } else {
-    throw new ProtoError("Unexpected type of CursorEntry");
-  }
-}
-function DescribeResult(obj) {
-  const params = arrayObjectsMap(obj["params"], DescribeParam);
-  const cols = arrayObjectsMap(obj["cols"], DescribeCol);
-  const isExplain = boolean(obj["is_explain"]);
-  const isReadonly = boolean(obj["is_readonly"]);
-  return { params, cols, isExplain, isReadonly };
-}
-function DescribeParam(obj) {
-  const name = stringOpt(obj["name"]);
-  return { name };
-}
-function DescribeCol(obj) {
-  const name = string(obj["name"]);
-  const decltype = stringOpt(obj["decltype"]);
-  return { name, decltype };
-}
-function Value3(obj) {
-  const type = string(obj["type"]);
-  if (type === "null") {
-    return null;
-  } else if (type === "integer") {
-    const value = string(obj["value"]);
-    return BigInt(value);
-  } else if (type === "float") {
-    return number(obj["value"]);
-  } else if (type === "text") {
-    return string(obj["value"]);
-  } else if (type === "blob") {
-    return gBase64.toUint8Array(string(obj["base64"]));
-  } else {
-    throw new ProtoError("Unexpected type of Value");
-  }
-}
-
-// node_modules/@libsql/hrana-client/lib-esm/ws/json_decode.js
-function ServerMsg(obj) {
-  const type = string(obj["type"]);
-  if (type === "hello_ok") {
-    return { type: "hello_ok" };
-  } else if (type === "hello_error") {
-    const error = Error2(object(obj["error"]));
-    return { type: "hello_error", error };
-  } else if (type === "response_ok") {
-    const requestId = number(obj["request_id"]);
-    const response = Response2(object(obj["response"]));
-    return { type: "response_ok", requestId, response };
-  } else if (type === "response_error") {
-    const requestId = number(obj["request_id"]);
-    const error = Error2(object(obj["error"]));
-    return { type: "response_error", requestId, error };
-  } else {
-    throw new ProtoError("Unexpected type of ServerMsg");
-  }
-}
-function Response2(obj) {
-  const type = string(obj["type"]);
-  if (type === "open_stream") {
-    return { type: "open_stream" };
-  } else if (type === "close_stream") {
-    return { type: "close_stream" };
-  } else if (type === "execute") {
-    const result = StmtResult(object(obj["result"]));
-    return { type: "execute", result };
-  } else if (type === "batch") {
-    const result = BatchResult(object(obj["result"]));
-    return { type: "batch", result };
-  } else if (type === "open_cursor") {
-    return { type: "open_cursor" };
-  } else if (type === "close_cursor") {
-    return { type: "close_cursor" };
-  } else if (type === "fetch_cursor") {
-    const entries = arrayObjectsMap(obj["entries"], CursorEntry);
-    const done = boolean(obj["done"]);
-    return { type: "fetch_cursor", entries, done };
-  } else if (type === "sequence") {
-    return { type: "sequence" };
-  } else if (type === "describe") {
-    const result = DescribeResult(object(obj["result"]));
-    return { type: "describe", result };
-  } else if (type === "store_sql") {
-    return { type: "store_sql" };
-  } else if (type === "close_sql") {
-    return { type: "close_sql" };
-  } else if (type === "get_autocommit") {
-    const isAutocommit = boolean(obj["is_autocommit"]);
-    return { type: "get_autocommit", isAutocommit };
-  } else {
-    throw new ProtoError("Unexpected type of Response");
-  }
-}
-
-// node_modules/@libsql/hrana-client/lib-esm/shared/protobuf_decode.js
-var Error3 = {
-  default() {
-    return { message: "", code: undefined };
-  },
-  1(r, msg) {
-    msg.message = r.string();
-  },
-  2(r, msg) {
-    msg.code = r.string();
-  }
-};
-var StmtResult2 = {
-  default() {
-    return {
-      cols: [],
-      rows: [],
-      affectedRowCount: 0,
-      lastInsertRowid: undefined
-    };
-  },
-  1(r, msg) {
-    msg.cols.push(r.message(Col2));
-  },
-  2(r, msg) {
-    msg.rows.push(r.message(Row));
-  },
-  3(r, msg) {
-    msg.affectedRowCount = Number(r.uint64());
-  },
-  4(r, msg) {
-    msg.lastInsertRowid = r.sint64();
-  }
-};
-var Col2 = {
-  default() {
-    return { name: undefined, decltype: undefined };
-  },
-  1(r, msg) {
-    msg.name = r.string();
-  },
-  2(r, msg) {
-    msg.decltype = r.string();
-  }
-};
-var Row = {
-  default() {
-    return [];
-  },
-  1(r, msg) {
-    msg.push(r.message(Value4));
-  }
-};
-var BatchResult2 = {
-  default() {
-    return { stepResults: new Map, stepErrors: new Map };
-  },
-  1(r, msg) {
-    const [key, value] = r.message(BatchResultStepResult);
-    msg.stepResults.set(key, value);
-  },
-  2(r, msg) {
-    const [key, value] = r.message(BatchResultStepError);
-    msg.stepErrors.set(key, value);
-  }
-};
-var BatchResultStepResult = {
-  default() {
-    return [0, StmtResult2.default()];
-  },
-  1(r, msg) {
-    msg[0] = r.uint32();
-  },
-  2(r, msg) {
-    msg[1] = r.message(StmtResult2);
-  }
-};
-var BatchResultStepError = {
-  default() {
-    return [0, Error3.default()];
-  },
-  1(r, msg) {
-    msg[0] = r.uint32();
-  },
-  2(r, msg) {
-    msg[1] = r.message(Error3);
-  }
-};
-var CursorEntry2 = {
-  default() {
-    return { type: "none" };
-  },
-  1(r) {
-    return r.message(StepBeginEntry);
-  },
-  2(r) {
-    return r.message(StepEndEntry);
-  },
-  3(r) {
-    return r.message(StepErrorEntry);
-  },
-  4(r) {
-    return { type: "row", row: r.message(Row) };
-  },
-  5(r) {
-    return { type: "error", error: r.message(Error3) };
-  }
-};
-var StepBeginEntry = {
-  default() {
-    return { type: "step_begin", step: 0, cols: [] };
-  },
-  1(r, msg) {
-    msg.step = r.uint32();
-  },
-  2(r, msg) {
-    msg.cols.push(r.message(Col2));
-  }
-};
-var StepEndEntry = {
-  default() {
-    return {
-      type: "step_end",
-      affectedRowCount: 0,
-      lastInsertRowid: undefined
-    };
-  },
-  1(r, msg) {
-    msg.affectedRowCount = r.uint32();
-  },
-  2(r, msg) {
-    msg.lastInsertRowid = r.uint64();
-  }
-};
-var StepErrorEntry = {
-  default() {
-    return {
-      type: "step_error",
-      step: 0,
-      error: Error3.default()
-    };
-  },
-  1(r, msg) {
-    msg.step = r.uint32();
-  },
-  2(r, msg) {
-    msg.error = r.message(Error3);
-  }
-};
-var DescribeResult2 = {
-  default() {
-    return {
-      params: [],
-      cols: [],
-      isExplain: false,
-      isReadonly: false
-    };
-  },
-  1(r, msg) {
-    msg.params.push(r.message(DescribeParam2));
-  },
-  2(r, msg) {
-    msg.cols.push(r.message(DescribeCol2));
-  },
-  3(r, msg) {
-    msg.isExplain = r.bool();
-  },
-  4(r, msg) {
-    msg.isReadonly = r.bool();
-  }
-};
-var DescribeParam2 = {
-  default() {
-    return { name: undefined };
-  },
-  1(r, msg) {
-    msg.name = r.string();
-  }
-};
-var DescribeCol2 = {
-  default() {
-    return { name: "", decltype: undefined };
-  },
-  1(r, msg) {
-    msg.name = r.string();
-  },
-  2(r, msg) {
-    msg.decltype = r.string();
-  }
-};
-var Value4 = {
-  default() {
-    return;
-  },
-  1(r) {
-    return null;
-  },
-  2(r) {
-    return r.sint64();
-  },
-  3(r) {
-    return r.double();
-  },
-  4(r) {
-    return r.string();
-  },
-  5(r) {
-    return r.bytes();
-  }
-};
-
-// node_modules/@libsql/hrana-client/lib-esm/ws/protobuf_decode.js
-var ServerMsg2 = {
-  default() {
-    return { type: "none" };
-  },
-  1(r) {
-    return { type: "hello_ok" };
-  },
-  2(r) {
-    return r.message(HelloErrorMsg);
-  },
-  3(r) {
-    return r.message(ResponseOkMsg);
-  },
-  4(r) {
-    return r.message(ResponseErrorMsg);
-  }
-};
-var HelloErrorMsg = {
-  default() {
-    return { type: "hello_error", error: Error3.default() };
-  },
-  1(r, msg) {
-    msg.error = r.message(Error3);
-  }
-};
-var ResponseErrorMsg = {
-  default() {
-    return { type: "response_error", requestId: 0, error: Error3.default() };
-  },
-  1(r, msg) {
-    msg.requestId = r.int32();
-  },
-  2(r, msg) {
-    msg.error = r.message(Error3);
-  }
-};
-var ResponseOkMsg = {
-  default() {
-    return {
-      type: "response_ok",
-      requestId: 0,
-      response: { type: "none" }
-    };
-  },
-  1(r, msg) {
-    msg.requestId = r.int32();
-  },
-  2(r, msg) {
-    msg.response = { type: "open_stream" };
-  },
-  3(r, msg) {
-    msg.response = { type: "close_stream" };
-  },
-  4(r, msg) {
-    msg.response = r.message(ExecuteResp);
-  },
-  5(r, msg) {
-    msg.response = r.message(BatchResp);
-  },
-  6(r, msg) {
-    msg.response = { type: "open_cursor" };
-  },
-  7(r, msg) {
-    msg.response = { type: "close_cursor" };
-  },
-  8(r, msg) {
-    msg.response = r.message(FetchCursorResp);
-  },
-  9(r, msg) {
-    msg.response = { type: "sequence" };
-  },
-  10(r, msg) {
-    msg.response = r.message(DescribeResp);
-  },
-  11(r, msg) {
-    msg.response = { type: "store_sql" };
-  },
-  12(r, msg) {
-    msg.response = { type: "close_sql" };
-  },
-  13(r, msg) {
-    msg.response = r.message(GetAutocommitResp);
-  }
-};
-var ExecuteResp = {
-  default() {
-    return { type: "execute", result: StmtResult2.default() };
-  },
-  1(r, msg) {
-    msg.result = r.message(StmtResult2);
-  }
-};
-var BatchResp = {
-  default() {
-    return { type: "batch", result: BatchResult2.default() };
-  },
-  1(r, msg) {
-    msg.result = r.message(BatchResult2);
-  }
-};
-var FetchCursorResp = {
-  default() {
-    return { type: "fetch_cursor", entries: [], done: false };
-  },
-  1(r, msg) {
-    msg.entries.push(r.message(CursorEntry2));
-  },
-  2(r, msg) {
-    msg.done = r.bool();
-  }
-};
-var DescribeResp = {
-  default() {
-    return { type: "describe", result: DescribeResult2.default() };
-  },
-  1(r, msg) {
-    msg.result = r.message(DescribeResult2);
-  }
-};
-var GetAutocommitResp = {
-  default() {
-    return { type: "get_autocommit", isAutocommit: false };
-  },
-  1(r, msg) {
-    msg.isAutocommit = r.bool();
-  }
-};
-
-// node_modules/@libsql/hrana-client/lib-esm/ws/client.js
-var subprotocolsV2 = new Map([
-  ["hrana2", { version: 2, encoding: "json" }],
-  ["hrana1", { version: 1, encoding: "json" }]
-]);
-var subprotocolsV3 = new Map([
-  ["hrana3-protobuf", { version: 3, encoding: "protobuf" }],
-  ["hrana3", { version: 3, encoding: "json" }],
-  ["hrana2", { version: 2, encoding: "json" }],
-  ["hrana1", { version: 1, encoding: "json" }]
-]);
-
-class WsClient extends Client {
-  #socket;
-  #openCallbacks;
-  #opened;
-  #closed;
-  #recvdHello;
-  #subprotocol;
-  #getVersionCalled;
-  #responseMap;
-  #requestIdAlloc;
-  _streamIdAlloc;
-  _cursorIdAlloc;
-  #sqlIdAlloc;
-  constructor(socket, jwt) {
-    super();
-    this.#socket = socket;
-    this.#openCallbacks = [];
-    this.#opened = false;
-    this.#closed = undefined;
-    this.#recvdHello = false;
-    this.#subprotocol = undefined;
-    this.#getVersionCalled = false;
-    this.#responseMap = new Map;
-    this.#requestIdAlloc = new IdAlloc;
-    this._streamIdAlloc = new IdAlloc;
-    this._cursorIdAlloc = new IdAlloc;
-    this.#sqlIdAlloc = new IdAlloc;
-    this.#socket.binaryType = "arraybuffer";
-    this.#socket.addEventListener("open", () => this.#onSocketOpen());
-    this.#socket.addEventListener("close", (event) => this.#onSocketClose(event));
-    this.#socket.addEventListener("error", (event) => this.#onSocketError(event));
-    this.#socket.addEventListener("message", (event) => this.#onSocketMessage(event));
-    this.#send({ type: "hello", jwt });
-  }
-  #send(msg) {
-    if (this.#closed !== undefined) {
-      throw new InternalError("Trying to send a message on a closed client");
-    }
-    if (this.#opened) {
-      this.#sendToSocket(msg);
-    } else {
-      const openCallback = () => this.#sendToSocket(msg);
-      const errorCallback = () => {
-        return;
-      };
-      this.#openCallbacks.push({ openCallback, errorCallback });
-    }
-  }
-  #onSocketOpen() {
-    const protocol = this.#socket.protocol;
-    if (protocol === undefined) {
-      this.#setClosed(new ClientError("The `WebSocket.protocol` property is undefined. This most likely means that the WebSocket " + "implementation provided by the environment is broken. If you are using Miniflare 2, " + "please update to Miniflare 3, which fixes this problem."));
-      return;
-    } else if (protocol === "") {
-      this.#subprotocol = { version: 1, encoding: "json" };
-    } else {
-      this.#subprotocol = subprotocolsV3.get(protocol);
-      if (this.#subprotocol === undefined) {
-        this.#setClosed(new ProtoError(`Unrecognized WebSocket subprotocol: ${JSON.stringify(protocol)}`));
-        return;
-      }
-    }
-    for (const callbacks of this.#openCallbacks) {
-      callbacks.openCallback();
-    }
-    this.#openCallbacks.length = 0;
-    this.#opened = true;
-  }
-  #sendToSocket(msg) {
-    const encoding = this.#subprotocol.encoding;
-    if (encoding === "json") {
-      const jsonMsg = writeJsonObject(msg, ClientMsg);
-      this.#socket.send(jsonMsg);
-    } else if (encoding === "protobuf") {
-      const protobufMsg = writeProtobufMessage(msg, ClientMsg2);
-      this.#socket.send(protobufMsg);
-    } else {
-      throw impossible(encoding, "Impossible encoding");
-    }
-  }
-  getVersion() {
-    return new Promise((versionCallback, errorCallback) => {
-      this.#getVersionCalled = true;
-      if (this.#closed !== undefined) {
-        errorCallback(this.#closed);
-      } else if (!this.#opened) {
-        const openCallback = () => versionCallback(this.#subprotocol.version);
-        this.#openCallbacks.push({ openCallback, errorCallback });
-      } else {
-        versionCallback(this.#subprotocol.version);
-      }
-    });
-  }
-  _ensureVersion(minVersion, feature) {
-    if (this.#subprotocol === undefined || !this.#getVersionCalled) {
-      throw new ProtocolVersionError(`${feature} is supported only on protocol version ${minVersion} and higher, ` + "but the version supported by the WebSocket server is not yet known. " + "Use Client.getVersion() to wait until the version is available.");
-    } else if (this.#subprotocol.version < minVersion) {
-      throw new ProtocolVersionError(`${feature} is supported on protocol version ${minVersion} and higher, ` + `but the WebSocket server only supports version ${this.#subprotocol.version}`);
-    }
-  }
-  _sendRequest(request, callbacks) {
-    if (this.#closed !== undefined) {
-      callbacks.errorCallback(new ClosedError("Client is closed", this.#closed));
-      return;
-    }
-    const requestId = this.#requestIdAlloc.alloc();
-    this.#responseMap.set(requestId, { ...callbacks, type: request.type });
-    this.#send({ type: "request", requestId, request });
-  }
-  #onSocketError(event) {
-    const eventMessage = event.message;
-    const message = eventMessage ?? "WebSocket was closed due to an error";
-    this.#setClosed(new WebSocketError(message));
-  }
-  #onSocketClose(event) {
-    let message = `WebSocket was closed with code ${event.code}`;
-    if (event.reason) {
-      message += `: ${event.reason}`;
-    }
-    this.#setClosed(new WebSocketError(message));
-  }
-  #setClosed(error) {
-    if (this.#closed !== undefined) {
-      return;
-    }
-    this.#closed = error;
-    for (const callbacks of this.#openCallbacks) {
-      callbacks.errorCallback(error);
-    }
-    this.#openCallbacks.length = 0;
-    for (const [requestId, responseState] of this.#responseMap.entries()) {
-      responseState.errorCallback(error);
-      this.#requestIdAlloc.free(requestId);
-    }
-    this.#responseMap.clear();
-    this.#socket.close();
-  }
-  #onSocketMessage(event) {
-    if (this.#closed !== undefined) {
-      return;
-    }
-    try {
-      let msg;
-      const encoding = this.#subprotocol.encoding;
-      if (encoding === "json") {
-        if (typeof event.data !== "string") {
-          this.#socket.close(3003, "Only text messages are accepted with JSON encoding");
-          this.#setClosed(new ProtoError("Received non-text message from server with JSON encoding"));
-          return;
-        }
-        msg = readJsonObject(JSON.parse(event.data), ServerMsg);
-      } else if (encoding === "protobuf") {
-        if (!(event.data instanceof ArrayBuffer)) {
-          this.#socket.close(3003, "Only binary messages are accepted with Protobuf encoding");
-          this.#setClosed(new ProtoError("Received non-binary message from server with Protobuf encoding"));
-          return;
-        }
-        msg = readProtobufMessage(new Uint8Array(event.data), ServerMsg2);
-      } else {
-        throw impossible(encoding, "Impossible encoding");
-      }
-      this.#handleMsg(msg);
-    } catch (e) {
-      this.#socket.close(3007, "Could not handle message");
-      this.#setClosed(e);
-    }
-  }
-  #handleMsg(msg) {
-    if (msg.type === "none") {
-      throw new ProtoError("Received an unrecognized ServerMsg");
-    } else if (msg.type === "hello_ok" || msg.type === "hello_error") {
-      if (this.#recvdHello) {
-        throw new ProtoError("Received a duplicated hello response");
-      }
-      this.#recvdHello = true;
-      if (msg.type === "hello_error") {
-        throw errorFromProto(msg.error);
-      }
-      return;
-    } else if (!this.#recvdHello) {
-      throw new ProtoError("Received a non-hello message before a hello response");
-    }
-    if (msg.type === "response_ok") {
-      const requestId = msg.requestId;
-      const responseState = this.#responseMap.get(requestId);
-      this.#responseMap.delete(requestId);
-      if (responseState === undefined) {
-        throw new ProtoError("Received unexpected OK response");
-      }
-      this.#requestIdAlloc.free(requestId);
-      try {
-        if (responseState.type !== msg.response.type) {
-          console.dir({ responseState, msg });
-          throw new ProtoError("Received unexpected type of response");
-        }
-        responseState.responseCallback(msg.response);
-      } catch (e) {
-        responseState.errorCallback(e);
-        throw e;
-      }
-    } else if (msg.type === "response_error") {
-      const requestId = msg.requestId;
-      const responseState = this.#responseMap.get(requestId);
-      this.#responseMap.delete(requestId);
-      if (responseState === undefined) {
-        throw new ProtoError("Received unexpected error response");
-      }
-      this.#requestIdAlloc.free(requestId);
-      responseState.errorCallback(errorFromProto(msg.error));
-    } else {
-      throw impossible(msg, "Impossible ServerMsg type");
-    }
-  }
-  openStream() {
-    return WsStream.open(this);
-  }
-  storeSql(sql2) {
-    this._ensureVersion(2, "storeSql()");
-    const sqlId = this.#sqlIdAlloc.alloc();
-    const sqlObj = new Sql(this, sqlId);
-    const responseCallback = () => {
-      return;
-    };
-    const errorCallback = (e) => sqlObj._setClosed(e);
-    const request = { type: "store_sql", sqlId, sql: sql2 };
-    this._sendRequest(request, { responseCallback, errorCallback });
-    return sqlObj;
-  }
-  _closeSql(sqlId) {
-    if (this.#closed !== undefined) {
-      return;
-    }
-    const responseCallback = () => this.#sqlIdAlloc.free(sqlId);
-    const errorCallback = (e) => this.#setClosed(e);
-    const request = { type: "close_sql", sqlId };
-    this._sendRequest(request, { responseCallback, errorCallback });
-  }
-  close() {
-    this.#setClosed(new ClientError("Client was manually closed"));
-  }
-  get closed() {
-    return this.#closed !== undefined;
-  }
-}
-
-// node_modules/@libsql/hrana-client/lib-esm/http/client.js
-var import_cross_fetch2 = __toESM(require_node_ponyfill(), 1);
-
-// node_modules/@libsql/hrana-client/lib-esm/http/stream.js
-var import_cross_fetch = __toESM(require_node_ponyfill(), 1);
-
-// node_modules/@libsql/hrana-client/lib-esm/queue_microtask.js
-var _queueMicrotask;
-if (typeof queueMicrotask !== "undefined") {
-  _queueMicrotask = queueMicrotask;
-} else {
-  const resolved = Promise.resolve();
-  _queueMicrotask = (callback) => {
-    resolved.then(callback);
-  };
-}
-
-// node_modules/@libsql/hrana-client/lib-esm/byte_queue.js
-class ByteQueue {
-  #array;
-  #shiftPos;
-  #pushPos;
-  constructor(initialCap) {
-    this.#array = new Uint8Array(new ArrayBuffer(initialCap));
-    this.#shiftPos = 0;
-    this.#pushPos = 0;
-  }
-  get length() {
-    return this.#pushPos - this.#shiftPos;
-  }
-  data() {
-    return this.#array.slice(this.#shiftPos, this.#pushPos);
-  }
-  push(chunk) {
-    this.#ensurePush(chunk.byteLength);
-    this.#array.set(chunk, this.#pushPos);
-    this.#pushPos += chunk.byteLength;
-  }
-  #ensurePush(pushLength) {
-    if (this.#pushPos + pushLength <= this.#array.byteLength) {
-      return;
-    }
-    const filledLength = this.#pushPos - this.#shiftPos;
-    if (filledLength + pushLength <= this.#array.byteLength && 2 * this.#pushPos >= this.#array.byteLength) {
-      this.#array.copyWithin(0, this.#shiftPos, this.#pushPos);
-    } else {
-      let newCap = this.#array.byteLength;
-      do {
-        newCap *= 2;
-      } while (filledLength + pushLength > newCap);
-      const newArray = new Uint8Array(new ArrayBuffer(newCap));
-      newArray.set(this.#array.slice(this.#shiftPos, this.#pushPos), 0);
-      this.#array = newArray;
-    }
-    this.#pushPos = filledLength;
-    this.#shiftPos = 0;
-  }
-  shift(length) {
-    this.#shiftPos += length;
-  }
-}
-
-// node_modules/@libsql/hrana-client/lib-esm/http/json_decode.js
-function PipelineRespBody(obj) {
-  const baton = stringOpt(obj["baton"]);
-  const baseUrl = stringOpt(obj["base_url"]);
-  const results = arrayObjectsMap(obj["results"], StreamResult);
-  return { baton, baseUrl, results };
-}
-function StreamResult(obj) {
-  const type = string(obj["type"]);
-  if (type === "ok") {
-    const response = StreamResponse(object(obj["response"]));
-    return { type: "ok", response };
-  } else if (type === "error") {
-    const error = Error2(object(obj["error"]));
-    return { type: "error", error };
-  } else {
-    throw new ProtoError("Unexpected type of StreamResult");
-  }
-}
-function StreamResponse(obj) {
-  const type = string(obj["type"]);
-  if (type === "close") {
-    return { type: "close" };
-  } else if (type === "execute") {
-    const result = StmtResult(object(obj["result"]));
-    return { type: "execute", result };
-  } else if (type === "batch") {
-    const result = BatchResult(object(obj["result"]));
-    return { type: "batch", result };
-  } else if (type === "sequence") {
-    return { type: "sequence" };
-  } else if (type === "describe") {
-    const result = DescribeResult(object(obj["result"]));
-    return { type: "describe", result };
-  } else if (type === "store_sql") {
-    return { type: "store_sql" };
-  } else if (type === "close_sql") {
-    return { type: "close_sql" };
-  } else if (type === "get_autocommit") {
-    const isAutocommit = boolean(obj["is_autocommit"]);
-    return { type: "get_autocommit", isAutocommit };
-  } else {
-    throw new ProtoError("Unexpected type of StreamResponse");
-  }
-}
-function CursorRespBody(obj) {
-  const baton = stringOpt(obj["baton"]);
-  const baseUrl = stringOpt(obj["base_url"]);
-  return { baton, baseUrl };
-}
-
-// node_modules/@libsql/hrana-client/lib-esm/http/protobuf_decode.js
-var PipelineRespBody2 = {
-  default() {
-    return { baton: undefined, baseUrl: undefined, results: [] };
-  },
-  1(r, msg) {
-    msg.baton = r.string();
-  },
-  2(r, msg) {
-    msg.baseUrl = r.string();
-  },
-  3(r, msg) {
-    msg.results.push(r.message(StreamResult2));
-  }
-};
-var StreamResult2 = {
-  default() {
-    return { type: "none" };
-  },
-  1(r) {
-    return { type: "ok", response: r.message(StreamResponse2) };
-  },
-  2(r) {
-    return { type: "error", error: r.message(Error3) };
-  }
-};
-var StreamResponse2 = {
-  default() {
-    return { type: "none" };
-  },
-  1(r) {
-    return { type: "close" };
-  },
-  2(r) {
-    return r.message(ExecuteStreamResp);
-  },
-  3(r) {
-    return r.message(BatchStreamResp);
-  },
-  4(r) {
-    return { type: "sequence" };
-  },
-  5(r) {
-    return r.message(DescribeStreamResp);
-  },
-  6(r) {
-    return { type: "store_sql" };
-  },
-  7(r) {
-    return { type: "close_sql" };
-  },
-  8(r) {
-    return r.message(GetAutocommitStreamResp);
-  }
-};
-var ExecuteStreamResp = {
-  default() {
-    return { type: "execute", result: StmtResult2.default() };
-  },
-  1(r, msg) {
-    msg.result = r.message(StmtResult2);
-  }
-};
-var BatchStreamResp = {
-  default() {
-    return { type: "batch", result: BatchResult2.default() };
-  },
-  1(r, msg) {
-    msg.result = r.message(BatchResult2);
-  }
-};
-var DescribeStreamResp = {
-  default() {
-    return { type: "describe", result: DescribeResult2.default() };
-  },
-  1(r, msg) {
-    msg.result = r.message(DescribeResult2);
-  }
-};
-var GetAutocommitStreamResp = {
-  default() {
-    return { type: "get_autocommit", isAutocommit: false };
-  },
-  1(r, msg) {
-    msg.isAutocommit = r.bool();
-  }
-};
-var CursorRespBody2 = {
-  default() {
-    return { baton: undefined, baseUrl: undefined };
-  },
-  1(r, msg) {
-    msg.baton = r.string();
-  },
-  2(r, msg) {
-    msg.baseUrl = r.string();
-  }
-};
-
-// node_modules/@libsql/hrana-client/lib-esm/http/cursor.js
-class HttpCursor extends Cursor {
-  #stream;
-  #encoding;
-  #reader;
-  #queue;
-  #closed;
-  #done;
-  constructor(stream, encoding) {
-    super();
-    this.#stream = stream;
-    this.#encoding = encoding;
-    this.#reader = undefined;
-    this.#queue = new ByteQueue(16 * 1024);
-    this.#closed = undefined;
-    this.#done = false;
-  }
-  async open(response) {
-    if (response.body === null) {
-      throw new ProtoError("No response body for cursor request");
-    }
-    this.#reader = response.body[Symbol.asyncIterator]();
-    const respBody = await this.#nextItem(CursorRespBody, CursorRespBody2);
-    if (respBody === undefined) {
-      throw new ProtoError("Empty response to cursor request");
-    }
-    return respBody;
-  }
-  next() {
-    return this.#nextItem(CursorEntry, CursorEntry2);
-  }
-  close() {
-    this._setClosed(new ClientError("Cursor was manually closed"));
-  }
-  _setClosed(error) {
-    if (this.#closed !== undefined) {
-      return;
-    }
-    this.#closed = error;
-    this.#stream._cursorClosed(this);
-    if (this.#reader !== undefined) {
-      this.#reader.return();
-    }
-  }
-  get closed() {
-    return this.#closed !== undefined;
-  }
-  async#nextItem(jsonFun, protobufDef) {
-    for (;; ) {
-      if (this.#done) {
-        return;
-      } else if (this.#closed !== undefined) {
-        throw new ClosedError("Cursor is closed", this.#closed);
-      }
-      if (this.#encoding === "json") {
-        const jsonData = this.#parseItemJson();
-        if (jsonData !== undefined) {
-          const jsonText = new TextDecoder().decode(jsonData);
-          const jsonValue = JSON.parse(jsonText);
-          return readJsonObject(jsonValue, jsonFun);
-        }
-      } else if (this.#encoding === "protobuf") {
-        const protobufData = this.#parseItemProtobuf();
-        if (protobufData !== undefined) {
-          return readProtobufMessage(protobufData, protobufDef);
-        }
-      } else {
-        throw impossible(this.#encoding, "Impossible encoding");
-      }
-      if (this.#reader === undefined) {
-        throw new InternalError("Attempted to read from HTTP cursor before it was opened");
-      }
-      const { value, done } = await this.#reader.next();
-      if (done && this.#queue.length === 0) {
-        this.#done = true;
-      } else if (done) {
-        throw new ProtoError("Unexpected end of cursor stream");
-      } else {
-        this.#queue.push(value);
-      }
-    }
-  }
-  #parseItemJson() {
-    const data = this.#queue.data();
-    const newlineByte = 10;
-    const newlinePos = data.indexOf(newlineByte);
-    if (newlinePos < 0) {
-      return;
-    }
-    const jsonData = data.slice(0, newlinePos);
-    this.#queue.shift(newlinePos + 1);
-    return jsonData;
-  }
-  #parseItemProtobuf() {
-    const data = this.#queue.data();
-    let varintValue = 0;
-    let varintLength = 0;
-    for (;; ) {
-      if (varintLength >= data.byteLength) {
-        return;
-      }
-      const byte = data[varintLength];
-      varintValue |= (byte & 127) << 7 * varintLength;
-      varintLength += 1;
-      if (!(byte & 128)) {
-        break;
-      }
-    }
-    if (data.byteLength < varintLength + varintValue) {
-      return;
-    }
-    const protobufData = data.slice(varintLength, varintLength + varintValue);
-    this.#queue.shift(varintLength + varintValue);
-    return protobufData;
-  }
-}
-
-// node_modules/@libsql/hrana-client/lib-esm/http/json_encode.js
-function PipelineReqBody(w, msg) {
-  if (msg.baton !== undefined) {
-    w.string("baton", msg.baton);
-  }
-  w.arrayObjects("requests", msg.requests, StreamRequest);
-}
-function StreamRequest(w, msg) {
-  w.stringRaw("type", msg.type);
-  if (msg.type === "close") {} else if (msg.type === "execute") {
-    w.object("stmt", msg.stmt, Stmt2);
-  } else if (msg.type === "batch") {
-    w.object("batch", msg.batch, Batch2);
-  } else if (msg.type === "sequence") {
-    if (msg.sql !== undefined) {
-      w.string("sql", msg.sql);
-    }
-    if (msg.sqlId !== undefined) {
-      w.number("sql_id", msg.sqlId);
-    }
-  } else if (msg.type === "describe") {
-    if (msg.sql !== undefined) {
-      w.string("sql", msg.sql);
-    }
-    if (msg.sqlId !== undefined) {
-      w.number("sql_id", msg.sqlId);
-    }
-  } else if (msg.type === "store_sql") {
-    w.number("sql_id", msg.sqlId);
-    w.string("sql", msg.sql);
-  } else if (msg.type === "close_sql") {
-    w.number("sql_id", msg.sqlId);
-  } else if (msg.type === "get_autocommit") {} else {
-    throw impossible(msg, "Impossible type of StreamRequest");
-  }
-}
-function CursorReqBody(w, msg) {
-  if (msg.baton !== undefined) {
-    w.string("baton", msg.baton);
-  }
-  w.object("batch", msg.batch, Batch2);
-}
-
-// node_modules/@libsql/hrana-client/lib-esm/http/protobuf_encode.js
-function PipelineReqBody2(w, msg) {
-  if (msg.baton !== undefined) {
-    w.string(1, msg.baton);
-  }
-  for (const req of msg.requests) {
-    w.message(2, req, StreamRequest2);
-  }
-}
-function StreamRequest2(w, msg) {
-  if (msg.type === "close") {
-    w.message(1, msg, CloseStreamReq2);
-  } else if (msg.type === "execute") {
-    w.message(2, msg, ExecuteStreamReq);
-  } else if (msg.type === "batch") {
-    w.message(3, msg, BatchStreamReq);
-  } else if (msg.type === "sequence") {
-    w.message(4, msg, SequenceStreamReq);
-  } else if (msg.type === "describe") {
-    w.message(5, msg, DescribeStreamReq);
-  } else if (msg.type === "store_sql") {
-    w.message(6, msg, StoreSqlStreamReq);
-  } else if (msg.type === "close_sql") {
-    w.message(7, msg, CloseSqlStreamReq);
-  } else if (msg.type === "get_autocommit") {
-    w.message(8, msg, GetAutocommitStreamReq);
-  } else {
-    throw impossible(msg, "Impossible type of StreamRequest");
-  }
-}
-function CloseStreamReq2(_w, _msg) {}
-function ExecuteStreamReq(w, msg) {
-  w.message(1, msg.stmt, Stmt3);
-}
-function BatchStreamReq(w, msg) {
-  w.message(1, msg.batch, Batch3);
-}
-function SequenceStreamReq(w, msg) {
-  if (msg.sql !== undefined) {
-    w.string(1, msg.sql);
-  }
-  if (msg.sqlId !== undefined) {
-    w.int32(2, msg.sqlId);
-  }
-}
-function DescribeStreamReq(w, msg) {
-  if (msg.sql !== undefined) {
-    w.string(1, msg.sql);
-  }
-  if (msg.sqlId !== undefined) {
-    w.int32(2, msg.sqlId);
-  }
-}
-function StoreSqlStreamReq(w, msg) {
-  w.int32(1, msg.sqlId);
-  w.string(2, msg.sql);
-}
-function CloseSqlStreamReq(w, msg) {
-  w.int32(1, msg.sqlId);
-}
-function GetAutocommitStreamReq(_w, _msg) {}
-function CursorReqBody2(w, msg) {
-  if (msg.baton !== undefined) {
-    w.string(1, msg.baton);
-  }
-  w.message(2, msg.batch, Batch3);
-}
-
-// node_modules/@libsql/hrana-client/lib-esm/http/stream.js
-class HttpStream extends Stream {
-  #client;
-  #baseUrl;
-  #jwt;
-  #fetch;
-  #remoteEncryptionKey;
-  #baton;
-  #queue;
-  #flushing;
-  #cursor;
-  #closing;
-  #closeQueued;
-  #closed;
-  #sqlIdAlloc;
-  constructor(client, baseUrl, jwt, customFetch, remoteEncryptionKey) {
-    super(client.intMode);
-    this.#client = client;
-    this.#baseUrl = baseUrl.toString();
-    this.#jwt = jwt;
-    this.#fetch = customFetch;
-    this.#remoteEncryptionKey = remoteEncryptionKey;
-    this.#baton = undefined;
-    this.#queue = new Queue;
-    this.#flushing = false;
-    this.#closing = false;
-    this.#closeQueued = false;
-    this.#closed = undefined;
-    this.#sqlIdAlloc = new IdAlloc;
-  }
-  client() {
-    return this.#client;
-  }
-  _sqlOwner() {
-    return this;
-  }
-  storeSql(sql2) {
-    const sqlId = this.#sqlIdAlloc.alloc();
-    this.#sendStreamRequest({ type: "store_sql", sqlId, sql: sql2 }).then(() => {
-      return;
-    }, (error) => this._setClosed(error));
-    return new Sql(this, sqlId);
-  }
-  _closeSql(sqlId) {
-    if (this.#closed !== undefined) {
-      return;
-    }
-    this.#sendStreamRequest({ type: "close_sql", sqlId }).then(() => this.#sqlIdAlloc.free(sqlId), (error) => this._setClosed(error));
-  }
-  _execute(stmt) {
-    return this.#sendStreamRequest({ type: "execute", stmt }).then((response) => {
-      return response.result;
-    });
-  }
-  _batch(batch) {
-    return this.#sendStreamRequest({ type: "batch", batch }).then((response) => {
-      return response.result;
-    });
-  }
-  _describe(protoSql) {
-    return this.#sendStreamRequest({
-      type: "describe",
-      sql: protoSql.sql,
-      sqlId: protoSql.sqlId
-    }).then((response) => {
-      return response.result;
-    });
-  }
-  _sequence(protoSql) {
-    return this.#sendStreamRequest({
-      type: "sequence",
-      sql: protoSql.sql,
-      sqlId: protoSql.sqlId
-    }).then((_response) => {
-      return;
-    });
-  }
-  getAutocommit() {
-    this.#client._ensureVersion(3, "getAutocommit()");
-    return this.#sendStreamRequest({
-      type: "get_autocommit"
-    }).then((response) => {
-      return response.isAutocommit;
-    });
-  }
-  #sendStreamRequest(request) {
-    return new Promise((responseCallback, errorCallback) => {
-      this.#pushToQueue({ type: "pipeline", request, responseCallback, errorCallback });
-    });
-  }
-  _openCursor(batch) {
-    return new Promise((cursorCallback, errorCallback) => {
-      this.#pushToQueue({ type: "cursor", batch, cursorCallback, errorCallback });
-    });
-  }
-  _cursorClosed(cursor) {
-    if (cursor !== this.#cursor) {
-      throw new InternalError("Cursor was closed, but it was not associated with the stream");
-    }
-    this.#cursor = undefined;
-    _queueMicrotask(() => this.#flushQueue());
-  }
-  close() {
-    this._setClosed(new ClientError("Stream was manually closed"));
-  }
-  closeGracefully() {
-    this.#closing = true;
-    _queueMicrotask(() => this.#flushQueue());
-  }
-  get closed() {
-    return this.#closed !== undefined || this.#closing;
-  }
-  _setClosed(error) {
-    if (this.#closed !== undefined) {
-      return;
-    }
-    this.#closed = error;
-    if (this.#cursor !== undefined) {
-      this.#cursor._setClosed(error);
-    }
-    this.#client._streamClosed(this);
-    for (;; ) {
-      const entry = this.#queue.shift();
-      if (entry !== undefined) {
-        entry.errorCallback(error);
-      } else {
-        break;
-      }
-    }
-    if ((this.#baton !== undefined || this.#flushing) && !this.#closeQueued) {
-      this.#queue.push({
-        type: "pipeline",
-        request: { type: "close" },
-        responseCallback: () => {
-          return;
-        },
-        errorCallback: () => {
-          return;
-        }
-      });
-      this.#closeQueued = true;
-      _queueMicrotask(() => this.#flushQueue());
-    }
-  }
-  #pushToQueue(entry) {
-    if (this.#closed !== undefined) {
-      throw new ClosedError("Stream is closed", this.#closed);
-    } else if (this.#closing) {
-      throw new ClosedError("Stream is closing", undefined);
-    } else {
-      this.#queue.push(entry);
-      _queueMicrotask(() => this.#flushQueue());
-    }
-  }
-  #flushQueue() {
-    if (this.#flushing || this.#cursor !== undefined) {
-      return;
-    }
-    if (this.#closing && this.#queue.length === 0) {
-      this._setClosed(new ClientError("Stream was gracefully closed"));
-      return;
-    }
-    const endpoint = this.#client._endpoint;
-    if (endpoint === undefined) {
-      this.#client._endpointPromise.then(() => this.#flushQueue(), (error) => this._setClosed(error));
-      return;
-    }
-    const firstEntry = this.#queue.shift();
-    if (firstEntry === undefined) {
-      return;
-    } else if (firstEntry.type === "pipeline") {
-      const pipeline = [firstEntry];
-      for (;; ) {
-        const entry = this.#queue.first();
-        if (entry !== undefined && entry.type === "pipeline") {
-          pipeline.push(entry);
-          this.#queue.shift();
-        } else if (entry === undefined && this.#closing && !this.#closeQueued) {
-          pipeline.push({
-            type: "pipeline",
-            request: { type: "close" },
-            responseCallback: () => {
-              return;
-            },
-            errorCallback: () => {
-              return;
-            }
-          });
-          this.#closeQueued = true;
-          break;
-        } else {
-          break;
-        }
-      }
-      this.#flushPipeline(endpoint, pipeline);
-    } else if (firstEntry.type === "cursor") {
-      this.#flushCursor(endpoint, firstEntry);
-    } else {
-      throw impossible(firstEntry, "Impossible type of QueueEntry");
-    }
-  }
-  #flushPipeline(endpoint, pipeline) {
-    this.#flush(() => this.#createPipelineRequest(pipeline, endpoint), (resp) => decodePipelineResponse(resp, endpoint.encoding), (respBody) => respBody.baton, (respBody) => respBody.baseUrl, (respBody) => handlePipelineResponse(pipeline, respBody), (error) => pipeline.forEach((entry) => entry.errorCallback(error)));
-  }
-  #flushCursor(endpoint, entry) {
-    const cursor = new HttpCursor(this, endpoint.encoding);
-    this.#cursor = cursor;
-    this.#flush(() => this.#createCursorRequest(entry, endpoint), (resp) => cursor.open(resp), (respBody) => respBody.baton, (respBody) => respBody.baseUrl, (_respBody) => entry.cursorCallback(cursor), (error) => entry.errorCallback(error));
-  }
-  #flush(createRequest, decodeResponse, getBaton, getBaseUrl, handleResponse, handleError) {
-    let promise;
-    try {
-      const request = createRequest();
-      const fetch2 = this.#fetch;
-      promise = fetch2(request);
-    } catch (error) {
-      promise = Promise.reject(error);
-    }
-    this.#flushing = true;
-    promise.then((resp) => {
-      if (!resp.ok) {
-        return errorFromResponse(resp).then((error) => {
-          throw error;
-        });
-      }
-      return decodeResponse(resp);
-    }).then((r) => {
-      this.#baton = getBaton(r);
-      this.#baseUrl = getBaseUrl(r) ?? this.#baseUrl;
-      handleResponse(r);
-    }).catch((error) => {
-      this._setClosed(error);
-      handleError(error);
-    }).finally(() => {
-      this.#flushing = false;
-      this.#flushQueue();
-    });
-  }
-  #createPipelineRequest(pipeline, endpoint) {
-    return this.#createRequest(new URL(endpoint.pipelinePath, this.#baseUrl), {
-      baton: this.#baton,
-      requests: pipeline.map((entry) => entry.request)
-    }, endpoint.encoding, PipelineReqBody, PipelineReqBody2);
-  }
-  #createCursorRequest(entry, endpoint) {
-    if (endpoint.cursorPath === undefined) {
-      throw new ProtocolVersionError("Cursors are supported only on protocol version 3 and higher, " + `but the HTTP server only supports version ${endpoint.version}.`);
-    }
-    return this.#createRequest(new URL(endpoint.cursorPath, this.#baseUrl), {
-      baton: this.#baton,
-      batch: entry.batch
-    }, endpoint.encoding, CursorReqBody, CursorReqBody2);
-  }
-  #createRequest(url, reqBody, encoding, jsonFun, protobufFun) {
-    let bodyData;
-    let contentType;
-    if (encoding === "json") {
-      bodyData = writeJsonObject(reqBody, jsonFun);
-      contentType = "application/json";
-    } else if (encoding === "protobuf") {
-      bodyData = writeProtobufMessage(reqBody, protobufFun);
-      contentType = "application/x-protobuf";
-    } else {
-      throw impossible(encoding, "Impossible encoding");
-    }
-    const headers = new import_cross_fetch.Headers;
-    headers.set("content-type", contentType);
-    if (this.#jwt !== undefined) {
-      headers.set("authorization", `Bearer ${this.#jwt}`);
-    }
-    if (this.#remoteEncryptionKey !== undefined) {
-      headers.set("x-turso-encryption-key", this.#remoteEncryptionKey);
-    }
-    return new import_cross_fetch.Request(url.toString(), { method: "POST", headers, body: bodyData });
-  }
-}
-function handlePipelineResponse(pipeline, respBody) {
-  if (respBody.results.length !== pipeline.length) {
-    throw new ProtoError("Server returned unexpected number of pipeline results");
-  }
-  for (let i = 0;i < pipeline.length; ++i) {
-    const result = respBody.results[i];
-    const entry = pipeline[i];
-    if (result.type === "ok") {
-      if (result.response.type !== entry.request.type) {
-        throw new ProtoError("Received unexpected type of response");
-      }
-      entry.responseCallback(result.response);
-    } else if (result.type === "error") {
-      entry.errorCallback(errorFromProto(result.error));
-    } else if (result.type === "none") {
-      throw new ProtoError("Received unrecognized type of StreamResult");
-    } else {
-      throw impossible(result, "Received impossible type of StreamResult");
-    }
-  }
-}
-async function decodePipelineResponse(resp, encoding) {
-  if (encoding === "json") {
-    const respJson = await resp.json();
-    return readJsonObject(respJson, PipelineRespBody);
-  }
-  if (encoding === "protobuf") {
-    const respData = await resp.arrayBuffer();
-    return readProtobufMessage(new Uint8Array(respData), PipelineRespBody2);
-  }
-  await resp.body?.cancel();
-  throw impossible(encoding, "Impossible encoding");
-}
-async function errorFromResponse(resp) {
-  const respType = resp.headers.get("content-type") ?? "text/plain";
-  let message = `Server returned HTTP status ${resp.status}`;
-  if (respType === "application/json") {
-    const respBody = await resp.json();
-    if ("message" in respBody) {
-      return errorFromProto(respBody);
-    }
-    return new HttpServerError(message, resp.status);
-  }
-  if (respType === "text/plain") {
-    const respBody = (await resp.text()).trim();
-    if (respBody !== "") {
-      message += `: ${respBody}`;
-    }
-    return new HttpServerError(message, resp.status);
-  }
-  await resp.body?.cancel();
-  return new HttpServerError(message, resp.status);
-}
-
-// node_modules/@libsql/hrana-client/lib-esm/http/client.js
-var checkEndpoints = [
-  {
-    versionPath: "v3-protobuf",
-    pipelinePath: "v3-protobuf/pipeline",
-    cursorPath: "v3-protobuf/cursor",
-    version: 3,
-    encoding: "protobuf"
-  }
-];
-var fallbackEndpoint = {
-  versionPath: "v2",
-  pipelinePath: "v2/pipeline",
-  cursorPath: undefined,
-  version: 2,
-  encoding: "json"
-};
-
-class HttpClient extends Client {
-  #url;
-  #jwt;
-  #fetch;
-  #remoteEncryptionKey;
-  #closed;
-  #streams;
-  _endpointPromise;
-  _endpoint;
-  constructor(url, jwt, customFetch, remoteEncryptionKey, protocolVersion = 2) {
-    super();
-    this.#url = url;
-    this.#jwt = jwt;
-    this.#fetch = customFetch ?? import_cross_fetch2.fetch;
-    this.#remoteEncryptionKey = remoteEncryptionKey;
-    this.#closed = undefined;
-    this.#streams = new Set;
-    if (protocolVersion == 3) {
-      this._endpointPromise = findEndpoint(this.#fetch, this.#url);
-      this._endpointPromise.then((endpoint) => this._endpoint = endpoint, (error) => this.#setClosed(error));
-    } else {
-      this._endpointPromise = Promise.resolve(fallbackEndpoint);
-      this._endpointPromise.then((endpoint) => this._endpoint = endpoint, (error) => this.#setClosed(error));
-    }
-  }
-  async getVersion() {
-    if (this._endpoint !== undefined) {
-      return this._endpoint.version;
-    }
-    return (await this._endpointPromise).version;
-  }
-  _ensureVersion(minVersion, feature) {
-    if (minVersion <= fallbackEndpoint.version) {
-      return;
-    } else if (this._endpoint === undefined) {
-      throw new ProtocolVersionError(`${feature} is supported only on protocol version ${minVersion} and higher, ` + "but the version supported by the HTTP server is not yet known. " + "Use Client.getVersion() to wait until the version is available.");
-    } else if (this._endpoint.version < minVersion) {
-      throw new ProtocolVersionError(`${feature} is supported only on protocol version ${minVersion} and higher, ` + `but the HTTP server only supports version ${this._endpoint.version}.`);
-    }
-  }
-  openStream() {
-    if (this.#closed !== undefined) {
-      throw new ClosedError("Client is closed", this.#closed);
-    }
-    const stream = new HttpStream(this, this.#url, this.#jwt, this.#fetch, this.#remoteEncryptionKey);
-    this.#streams.add(stream);
-    return stream;
-  }
-  _streamClosed(stream) {
-    this.#streams.delete(stream);
-  }
-  close() {
-    this.#setClosed(new ClientError("Client was manually closed"));
-  }
-  get closed() {
-    return this.#closed !== undefined;
-  }
-  #setClosed(error) {
-    if (this.#closed !== undefined) {
-      return;
-    }
-    this.#closed = error;
-    for (const stream of Array.from(this.#streams)) {
-      stream._setClosed(new ClosedError("Client was closed", error));
-    }
-  }
-}
-async function findEndpoint(customFetch, clientUrl) {
-  const fetch3 = customFetch;
-  for (const endpoint of checkEndpoints) {
-    const url = new URL(endpoint.versionPath, clientUrl);
-    const request = new import_cross_fetch2.Request(url.toString(), { method: "GET" });
-    const response = await fetch3(request);
-    await response.arrayBuffer();
-    if (response.ok) {
-      return endpoint;
-    }
-  }
-  return fallbackEndpoint;
-}
-
-// node_modules/@libsql/hrana-client/lib-esm/index.js
-var import_cross_fetch3 = __toESM(require_node_ponyfill(), 1);
-function openWs(url, jwt, protocolVersion = 2) {
-  if (typeof import_websocket.default === "undefined") {
-    throw new WebSocketUnsupportedError("WebSockets are not supported in this environment");
-  }
-  var subprotocols = undefined;
-  if (protocolVersion == 3) {
-    subprotocols = Array.from(subprotocolsV3.keys());
-  } else {
-    subprotocols = Array.from(subprotocolsV2.keys());
-  }
-  const socket = new import_websocket.default(url, subprotocols);
-  return new WsClient(socket, jwt);
-}
-function openHttp(url, jwt, customFetch, remoteEncryptionKey, protocolVersion = 2) {
-  return new HttpClient(url instanceof URL ? url : new URL(url), jwt, customFetch, remoteEncryptionKey, protocolVersion);
-}
-
-// node_modules/@libsql/client/lib-esm/hrana.js
-class HranaTransaction {
-  #mode;
-  #version;
-  #started;
-  constructor(mode, version3) {
-    this.#mode = mode;
-    this.#version = version3;
-    this.#started = undefined;
-  }
-  execute(stmt) {
-    return this.batch([stmt]).then((results) => results[0]);
-  }
-  async batch(stmts) {
-    const stream = this._getStream();
-    if (stream.closed) {
-      throw new LibsqlError("Cannot execute statements because the transaction is closed", "TRANSACTION_CLOSED");
-    }
-    try {
-      const hranaStmts = stmts.map(stmtToHrana);
-      let rowsPromises;
-      if (this.#started === undefined) {
-        this._getSqlCache().apply(hranaStmts);
-        const batch = stream.batch(this.#version >= 3);
-        const beginStep = batch.step();
-        const beginPromise = beginStep.run(transactionModeToBegin(this.#mode));
-        let lastStep = beginStep;
-        rowsPromises = hranaStmts.map((hranaStmt) => {
-          const stmtStep = batch.step().condition(BatchCond.ok(lastStep));
-          if (this.#version >= 3) {
-            stmtStep.condition(BatchCond.not(BatchCond.isAutocommit(batch)));
-          }
-          const rowsPromise = stmtStep.query(hranaStmt);
-          rowsPromise.catch(() => {
-            return;
-          });
-          lastStep = stmtStep;
-          return rowsPromise;
-        });
-        this.#started = batch.execute().then(() => beginPromise).then(() => {
-          return;
-        });
-        try {
-          await this.#started;
-        } catch (e) {
-          this.close();
-          throw e;
-        }
-      } else {
-        if (this.#version < 3) {
-          await this.#started;
-        } else {}
-        this._getSqlCache().apply(hranaStmts);
-        const batch = stream.batch(this.#version >= 3);
-        let lastStep = undefined;
-        rowsPromises = hranaStmts.map((hranaStmt) => {
-          const stmtStep = batch.step();
-          if (lastStep !== undefined) {
-            stmtStep.condition(BatchCond.ok(lastStep));
-          }
-          if (this.#version >= 3) {
-            stmtStep.condition(BatchCond.not(BatchCond.isAutocommit(batch)));
-          }
-          const rowsPromise = stmtStep.query(hranaStmt);
-          rowsPromise.catch(() => {
-            return;
-          });
-          lastStep = stmtStep;
-          return rowsPromise;
-        });
-        await batch.execute();
-      }
-      const resultSets = [];
-      for (let i = 0;i < rowsPromises.length; i++) {
-        try {
-          const rows = await rowsPromises[i];
-          if (rows === undefined) {
-            throw new LibsqlBatchError("Statement in a transaction was not executed, " + "probably because the transaction has been rolled back", i, "TRANSACTION_CLOSED");
-          }
-          resultSets.push(resultSetFromHrana(rows));
-        } catch (e) {
-          if (e instanceof LibsqlBatchError) {
-            throw e;
-          }
-          const mappedError = mapHranaError(e);
-          if (mappedError instanceof LibsqlError) {
-            throw new LibsqlBatchError(mappedError.message, i, mappedError.code, mappedError.extendedCode, mappedError.rawCode, mappedError.cause instanceof Error ? mappedError.cause : undefined);
-          }
-          throw mappedError;
-        }
-      }
-      return resultSets;
-    } catch (e) {
-      throw mapHranaError(e);
-    }
-  }
-  async executeMultiple(sql2) {
-    const stream = this._getStream();
-    if (stream.closed) {
-      throw new LibsqlError("Cannot execute statements because the transaction is closed", "TRANSACTION_CLOSED");
-    }
-    try {
-      if (this.#started === undefined) {
-        this.#started = stream.run(transactionModeToBegin(this.#mode)).then(() => {
-          return;
-        });
-        try {
-          await this.#started;
-        } catch (e) {
-          this.close();
-          throw e;
-        }
-      } else {
-        await this.#started;
-      }
-      await stream.sequence(sql2);
-    } catch (e) {
-      throw mapHranaError(e);
-    }
-  }
-  async rollback() {
-    try {
-      const stream = this._getStream();
-      if (stream.closed) {
-        return;
-      }
-      if (this.#started !== undefined) {} else {
-        return;
-      }
-      const promise = stream.run("ROLLBACK").catch((e) => {
-        throw mapHranaError(e);
-      });
-      stream.closeGracefully();
-      await promise;
-    } catch (e) {
-      throw mapHranaError(e);
-    } finally {
-      this.close();
-    }
-  }
-  async commit() {
-    try {
-      const stream = this._getStream();
-      if (stream.closed) {
-        throw new LibsqlError("Cannot commit the transaction because it is already closed", "TRANSACTION_CLOSED");
-      }
-      if (this.#started !== undefined) {
-        await this.#started;
-      } else {
-        return;
-      }
-      const promise = stream.run("COMMIT").catch((e) => {
-        throw mapHranaError(e);
-      });
-      stream.closeGracefully();
-      await promise;
-    } catch (e) {
-      throw mapHranaError(e);
-    } finally {
-      this.close();
-    }
-  }
-}
-async function executeHranaBatch(mode, version3, batch, hranaStmts, disableForeignKeys = false) {
-  if (disableForeignKeys) {
-    batch.step().run("PRAGMA foreign_keys=off");
-  }
-  const beginStep = batch.step();
-  const beginPromise = beginStep.run(transactionModeToBegin(mode));
-  let lastStep = beginStep;
-  const stmtPromises = hranaStmts.map((hranaStmt) => {
-    const stmtStep = batch.step().condition(BatchCond.ok(lastStep));
-    if (version3 >= 3) {
-      stmtStep.condition(BatchCond.not(BatchCond.isAutocommit(batch)));
-    }
-    const stmtPromise = stmtStep.query(hranaStmt);
-    lastStep = stmtStep;
-    return stmtPromise;
-  });
-  const commitStep = batch.step().condition(BatchCond.ok(lastStep));
-  if (version3 >= 3) {
-    commitStep.condition(BatchCond.not(BatchCond.isAutocommit(batch)));
-  }
-  const commitPromise = commitStep.run("COMMIT");
-  const rollbackStep = batch.step().condition(BatchCond.not(BatchCond.ok(commitStep)));
-  rollbackStep.run("ROLLBACK").catch((_) => {
-    return;
-  });
-  if (disableForeignKeys) {
-    batch.step().run("PRAGMA foreign_keys=on");
-  }
-  await batch.execute();
-  const resultSets = [];
-  await beginPromise;
-  for (let i = 0;i < stmtPromises.length; i++) {
-    try {
-      const hranaRows = await stmtPromises[i];
-      if (hranaRows === undefined) {
-        throw new LibsqlBatchError("Statement in a batch was not executed, probably because the transaction has been rolled back", i, "TRANSACTION_CLOSED");
-      }
-      resultSets.push(resultSetFromHrana(hranaRows));
-    } catch (e) {
-      if (e instanceof LibsqlBatchError) {
-        throw e;
-      }
-      const mappedError = mapHranaError(e);
-      if (mappedError instanceof LibsqlError) {
-        throw new LibsqlBatchError(mappedError.message, i, mappedError.code, mappedError.extendedCode, mappedError.rawCode, mappedError.cause instanceof Error ? mappedError.cause : undefined);
-      }
-      throw mappedError;
-    }
-  }
-  await commitPromise;
-  return resultSets;
-}
-function stmtToHrana(stmt) {
-  let sql2;
-  let args;
-  if (Array.isArray(stmt)) {
-    [sql2, args] = stmt;
-  } else if (typeof stmt === "string") {
-    sql2 = stmt;
-  } else {
-    sql2 = stmt.sql;
-    args = stmt.args;
-  }
-  const hranaStmt = new Stmt(sql2);
-  if (args) {
-    if (Array.isArray(args)) {
-      hranaStmt.bindIndexes(args);
-    } else {
-      for (const [key, value] of Object.entries(args)) {
-        hranaStmt.bindName(key, value);
-      }
-    }
-  }
-  return hranaStmt;
-}
-function resultSetFromHrana(hranaRows) {
-  const columns = hranaRows.columnNames.map((c) => c ?? "");
-  const columnTypes = hranaRows.columnDecltypes.map((c) => c ?? "");
-  const rows = hranaRows.rows;
-  const rowsAffected = hranaRows.affectedRowCount;
-  const lastInsertRowid = hranaRows.lastInsertRowid !== undefined ? hranaRows.lastInsertRowid : undefined;
-  return new ResultSetImpl(columns, columnTypes, rows, rowsAffected, lastInsertRowid);
-}
-function mapHranaError(e) {
-  if (e instanceof ClientError) {
-    const code = mapHranaErrorCode(e);
-    return new LibsqlError(e.message, code, undefined, undefined, e);
-  }
-  return e;
-}
-function mapHranaErrorCode(e) {
-  if (e instanceof ResponseError && e.code !== undefined) {
-    return e.code;
-  } else if (e instanceof ProtoError) {
-    return "HRANA_PROTO_ERROR";
-  } else if (e instanceof ClosedError) {
-    return e.cause instanceof ClientError ? mapHranaErrorCode(e.cause) : "HRANA_CLOSED_ERROR";
-  } else if (e instanceof WebSocketError) {
-    return "HRANA_WEBSOCKET_ERROR";
-  } else if (e instanceof HttpServerError) {
-    return "SERVER_ERROR";
-  } else if (e instanceof ProtocolVersionError) {
-    return "PROTOCOL_VERSION_ERROR";
-  } else if (e instanceof InternalError) {
-    return "INTERNAL_ERROR";
-  } else {
-    return "UNKNOWN";
-  }
-}
-
-// node_modules/@libsql/client/lib-esm/sql_cache.js
-class SqlCache {
-  #owner;
-  #sqls;
-  capacity;
-  constructor(owner, capacity) {
-    this.#owner = owner;
-    this.#sqls = new Lru;
-    this.capacity = capacity;
-  }
-  apply(hranaStmts) {
-    if (this.capacity <= 0) {
-      return;
-    }
-    const usedSqlObjs = new Set;
-    for (const hranaStmt of hranaStmts) {
-      if (typeof hranaStmt.sql !== "string") {
-        continue;
-      }
-      const sqlText = hranaStmt.sql;
-      if (sqlText.length >= 5000) {
-        continue;
-      }
-      let sqlObj = this.#sqls.get(sqlText);
-      if (sqlObj === undefined) {
-        while (this.#sqls.size + 1 > this.capacity) {
-          const [evictSqlText, evictSqlObj] = this.#sqls.peekLru();
-          if (usedSqlObjs.has(evictSqlObj)) {
-            break;
-          }
-          evictSqlObj.close();
-          this.#sqls.delete(evictSqlText);
-        }
-        if (this.#sqls.size + 1 <= this.capacity) {
-          sqlObj = this.#owner.storeSql(sqlText);
-          this.#sqls.set(sqlText, sqlObj);
-        }
-      }
-      if (sqlObj !== undefined) {
-        hranaStmt.sql = sqlObj;
-        usedSqlObjs.add(sqlObj);
-      }
-    }
-  }
-}
-
-class Lru {
-  #cache;
-  constructor() {
-    this.#cache = new Map;
-  }
-  get(key) {
-    const value = this.#cache.get(key);
-    if (value !== undefined) {
-      this.#cache.delete(key);
-      this.#cache.set(key, value);
-    }
-    return value;
-  }
-  set(key, value) {
-    this.#cache.set(key, value);
-  }
-  peekLru() {
-    for (const entry of this.#cache.entries()) {
-      return entry;
-    }
-    return;
-  }
-  delete(key) {
-    this.#cache.delete(key);
-  }
-  get size() {
-    return this.#cache.size;
-  }
-}
-
-// node_modules/@libsql/client/lib-esm/ws.js
-var import_promise_limit = __toESM(require_promise_limit(), 1);
-function _createClient2(config) {
-  if (config.scheme !== "wss" && config.scheme !== "ws") {
-    throw new LibsqlError('The WebSocket client supports only "libsql:", "wss:" and "ws:" URLs, ' + `got ${JSON.stringify(config.scheme + ":")}. For more information, please read ${supportedUrlLink}`, "URL_SCHEME_NOT_SUPPORTED");
-  }
-  if (config.encryptionKey !== undefined) {
-    throw new LibsqlError("Encryption key is not supported by the remote client.", "ENCRYPTION_KEY_NOT_SUPPORTED");
-  }
-  if (config.scheme === "ws" && config.tls) {
-    throw new LibsqlError(`A "ws:" URL cannot opt into TLS by using ?tls=1`, "URL_INVALID");
-  } else if (config.scheme === "wss" && !config.tls) {
-    throw new LibsqlError(`A "wss:" URL cannot opt out of TLS by using ?tls=0`, "URL_INVALID");
-  }
-  const url = encodeBaseUrl(config.scheme, config.authority, config.path);
-  let client;
-  try {
-    client = openWs(url, config.authToken);
-  } catch (e) {
-    if (e instanceof WebSocketUnsupportedError) {
-      const suggestedScheme = config.scheme === "wss" ? "https" : "http";
-      const suggestedUrl = encodeBaseUrl(suggestedScheme, config.authority, config.path);
-      throw new LibsqlError("This environment does not support WebSockets, please switch to the HTTP client by using " + `a "${suggestedScheme}:" URL (${JSON.stringify(suggestedUrl)}). ` + `For more information, please read ${supportedUrlLink}`, "WEBSOCKETS_NOT_SUPPORTED");
-    }
-    throw mapHranaError(e);
-  }
-  return new WsClient2(client, url, config.authToken, config.intMode, config.concurrency);
-}
-var maxConnAgeMillis = 60 * 1000;
-var sqlCacheCapacity = 100;
-
-class WsClient2 {
-  #url;
-  #authToken;
-  #intMode;
-  #connState;
-  #futureConnState;
-  closed;
-  protocol;
-  #isSchemaDatabase;
-  #promiseLimitFunction;
-  constructor(client, url, authToken, intMode, concurrency) {
-    this.#url = url;
-    this.#authToken = authToken;
-    this.#intMode = intMode;
-    this.#connState = this.#openConn(client);
-    this.#futureConnState = undefined;
-    this.closed = false;
-    this.protocol = "ws";
-    this.#promiseLimitFunction = import_promise_limit.default(concurrency);
-  }
-  async limit(fn) {
-    return this.#promiseLimitFunction(fn);
-  }
-  async execute(stmtOrSql, args) {
-    let stmt;
-    if (typeof stmtOrSql === "string") {
-      stmt = {
-        sql: stmtOrSql,
-        args: args || []
-      };
-    } else {
-      stmt = stmtOrSql;
-    }
-    return this.limit(async () => {
-      const streamState = await this.#openStream();
-      try {
-        const hranaStmt = stmtToHrana(stmt);
-        streamState.conn.sqlCache.apply([hranaStmt]);
-        const hranaRowsPromise = streamState.stream.query(hranaStmt);
-        streamState.stream.closeGracefully();
-        const hranaRowsResult = await hranaRowsPromise;
-        return resultSetFromHrana(hranaRowsResult);
-      } catch (e) {
-        throw mapHranaError(e);
-      } finally {
-        this._closeStream(streamState);
-      }
-    });
-  }
-  async batch(stmts, mode = "deferred") {
-    return this.limit(async () => {
-      const streamState = await this.#openStream();
-      try {
-        const normalizedStmts = stmts.map((stmt) => {
-          if (Array.isArray(stmt)) {
-            return {
-              sql: stmt[0],
-              args: stmt[1] || []
-            };
-          }
-          return stmt;
-        });
-        const hranaStmts = normalizedStmts.map(stmtToHrana);
-        const version3 = await streamState.conn.client.getVersion();
-        streamState.conn.sqlCache.apply(hranaStmts);
-        const batch = streamState.stream.batch(version3 >= 3);
-        const resultsPromise = executeHranaBatch(mode, version3, batch, hranaStmts);
-        const results = await resultsPromise;
-        return results;
-      } catch (e) {
-        throw mapHranaError(e);
-      } finally {
-        this._closeStream(streamState);
-      }
-    });
-  }
-  async migrate(stmts) {
-    return this.limit(async () => {
-      const streamState = await this.#openStream();
-      try {
-        const hranaStmts = stmts.map(stmtToHrana);
-        const version3 = await streamState.conn.client.getVersion();
-        const batch = streamState.stream.batch(version3 >= 3);
-        const resultsPromise = executeHranaBatch("deferred", version3, batch, hranaStmts, true);
-        const results = await resultsPromise;
-        return results;
-      } catch (e) {
-        throw mapHranaError(e);
-      } finally {
-        this._closeStream(streamState);
-      }
-    });
-  }
-  async transaction(mode = "write") {
-    return this.limit(async () => {
-      const streamState = await this.#openStream();
-      try {
-        const version3 = await streamState.conn.client.getVersion();
-        return new WsTransaction(this, streamState, mode, version3);
-      } catch (e) {
-        this._closeStream(streamState);
-        throw mapHranaError(e);
-      }
-    });
-  }
-  async executeMultiple(sql2) {
-    return this.limit(async () => {
-      const streamState = await this.#openStream();
-      try {
-        const promise = streamState.stream.sequence(sql2);
-        streamState.stream.closeGracefully();
-        await promise;
-      } catch (e) {
-        throw mapHranaError(e);
-      } finally {
-        this._closeStream(streamState);
-      }
-    });
-  }
-  sync() {
-    throw new LibsqlError("sync not supported in ws mode", "SYNC_NOT_SUPPORTED");
-  }
-  async#openStream() {
-    if (this.closed) {
-      throw new LibsqlError("The client is closed", "CLIENT_CLOSED");
-    }
-    const now = new Date;
-    const ageMillis = now.valueOf() - this.#connState.openTime.valueOf();
-    if (ageMillis > maxConnAgeMillis && this.#futureConnState === undefined) {
-      const futureConnState = this.#openConn();
-      this.#futureConnState = futureConnState;
-      futureConnState.client.getVersion().then((_version) => {
-        if (this.#connState !== futureConnState) {
-          if (this.#connState.streamStates.size === 0) {
-            this.#connState.client.close();
-          } else {}
-        }
-        this.#connState = futureConnState;
-        this.#futureConnState = undefined;
-      }, (_e) => {
-        this.#futureConnState = undefined;
-      });
-    }
-    if (this.#connState.client.closed) {
-      try {
-        if (this.#futureConnState !== undefined) {
-          this.#connState = this.#futureConnState;
-        } else {
-          this.#connState = this.#openConn();
-        }
-      } catch (e) {
-        throw mapHranaError(e);
-      }
-    }
-    const connState = this.#connState;
-    try {
-      if (connState.useSqlCache === undefined) {
-        connState.useSqlCache = await connState.client.getVersion() >= 2;
-        if (connState.useSqlCache) {
-          connState.sqlCache.capacity = sqlCacheCapacity;
-        }
-      }
-      const stream = connState.client.openStream();
-      stream.intMode = this.#intMode;
-      const streamState = { conn: connState, stream };
-      connState.streamStates.add(streamState);
-      return streamState;
-    } catch (e) {
-      throw mapHranaError(e);
-    }
-  }
-  #openConn(client) {
-    try {
-      client ??= openWs(this.#url, this.#authToken);
-      return {
-        client,
-        useSqlCache: undefined,
-        sqlCache: new SqlCache(client, 0),
-        openTime: new Date,
-        streamStates: new Set
-      };
-    } catch (e) {
-      throw mapHranaError(e);
-    }
-  }
-  async reconnect() {
-    try {
-      for (const st of Array.from(this.#connState.streamStates)) {
-        try {
-          st.stream.close();
-        } catch {}
-      }
-      this.#connState.client.close();
-    } catch {}
-    if (this.#futureConnState) {
-      try {
-        this.#futureConnState.client.close();
-      } catch {}
-      this.#futureConnState = undefined;
-    }
-    const next = this.#openConn();
-    const version3 = await next.client.getVersion();
-    next.useSqlCache = version3 >= 2;
-    if (next.useSqlCache) {
-      next.sqlCache.capacity = sqlCacheCapacity;
-    }
-    this.#connState = next;
-    this.closed = false;
-  }
-  _closeStream(streamState) {
-    streamState.stream.close();
-    const connState = streamState.conn;
-    connState.streamStates.delete(streamState);
-    if (connState.streamStates.size === 0 && connState !== this.#connState) {
-      connState.client.close();
-    }
-  }
-  close() {
-    this.#connState.client.close();
-    this.closed = true;
-    if (this.#futureConnState) {
-      try {
-        this.#futureConnState.client.close();
-      } catch {}
-      this.#futureConnState = undefined;
-    }
-    this.closed = true;
-  }
-}
-
-class WsTransaction extends HranaTransaction {
-  #client;
-  #streamState;
-  constructor(client, state, mode, version3) {
-    super(mode, version3);
-    this.#client = client;
-    this.#streamState = state;
-  }
-  _getStream() {
-    return this.#streamState.stream;
-  }
-  _getSqlCache() {
-    return this.#streamState.conn.sqlCache;
-  }
-  close() {
-    this.#client._closeStream(this.#streamState);
-  }
-  get closed() {
-    return this.#streamState.stream.closed;
-  }
-}
-
-// node_modules/@libsql/client/lib-esm/http.js
-var import_promise_limit2 = __toESM(require_promise_limit(), 1);
-function _createClient3(config) {
-  if (config.scheme !== "https" && config.scheme !== "http") {
-    throw new LibsqlError('The HTTP client supports only "libsql:", "https:" and "http:" URLs, ' + `got ${JSON.stringify(config.scheme + ":")}. For more information, please read ${supportedUrlLink}`, "URL_SCHEME_NOT_SUPPORTED");
-  }
-  if (config.encryptionKey !== undefined) {
-    throw new LibsqlError("Encryption key is not supported by the remote client.", "ENCRYPTION_KEY_NOT_SUPPORTED");
-  }
-  if (config.scheme === "http" && config.tls) {
-    throw new LibsqlError(`A "http:" URL cannot opt into TLS by using ?tls=1`, "URL_INVALID");
-  } else if (config.scheme === "https" && !config.tls) {
-    throw new LibsqlError(`A "https:" URL cannot opt out of TLS by using ?tls=0`, "URL_INVALID");
-  }
-  const url = encodeBaseUrl(config.scheme, config.authority, config.path);
-  return new HttpClient2(url, config.authToken, config.intMode, config.fetch, config.concurrency, config.remoteEncryptionKey);
-}
-var sqlCacheCapacity2 = 30;
-
-class HttpClient2 {
-  #client;
-  protocol;
-  #url;
-  #intMode;
-  #customFetch;
-  #concurrency;
-  #authToken;
-  #remoteEncryptionKey;
-  #promiseLimitFunction;
-  constructor(url, authToken, intMode, customFetch, concurrency, remoteEncryptionKey) {
-    this.#url = url;
-    this.#authToken = authToken;
-    this.#intMode = intMode;
-    this.#customFetch = customFetch;
-    this.#concurrency = concurrency;
-    this.#remoteEncryptionKey = remoteEncryptionKey;
-    this.#client = openHttp(this.#url, this.#authToken, this.#customFetch, remoteEncryptionKey);
-    this.#client.intMode = this.#intMode;
-    this.protocol = "http";
-    this.#promiseLimitFunction = import_promise_limit2.default(this.#concurrency);
-  }
-  async limit(fn) {
-    return this.#promiseLimitFunction(fn);
-  }
-  async execute(stmtOrSql, args) {
-    let stmt;
-    if (typeof stmtOrSql === "string") {
-      stmt = {
-        sql: stmtOrSql,
-        args: args || []
-      };
-    } else {
-      stmt = stmtOrSql;
-    }
-    return this.limit(async () => {
-      try {
-        const hranaStmt = stmtToHrana(stmt);
-        let rowsPromise;
-        const stream = this.#client.openStream();
-        try {
-          rowsPromise = stream.query(hranaStmt);
-        } finally {
-          stream.closeGracefully();
-        }
-        const rowsResult = await rowsPromise;
-        return resultSetFromHrana(rowsResult);
-      } catch (e) {
-        throw mapHranaError(e);
-      }
-    });
-  }
-  async batch(stmts, mode = "deferred") {
-    return this.limit(async () => {
-      try {
-        const normalizedStmts = stmts.map((stmt) => {
-          if (Array.isArray(stmt)) {
-            return {
-              sql: stmt[0],
-              args: stmt[1] || []
-            };
-          }
-          return stmt;
-        });
-        const hranaStmts = normalizedStmts.map(stmtToHrana);
-        const version3 = await this.#client.getVersion();
-        let resultsPromise;
-        const stream = this.#client.openStream();
-        try {
-          const sqlCache = new SqlCache(stream, sqlCacheCapacity2);
-          sqlCache.apply(hranaStmts);
-          const batch = stream.batch(false);
-          resultsPromise = executeHranaBatch(mode, version3, batch, hranaStmts);
-        } finally {
-          stream.closeGracefully();
-        }
-        const results = await resultsPromise;
-        return results;
-      } catch (e) {
-        throw mapHranaError(e);
-      }
-    });
-  }
-  async migrate(stmts) {
-    return this.limit(async () => {
-      try {
-        const hranaStmts = stmts.map(stmtToHrana);
-        const version3 = await this.#client.getVersion();
-        let resultsPromise;
-        const stream = this.#client.openStream();
-        try {
-          const batch = stream.batch(false);
-          resultsPromise = executeHranaBatch("deferred", version3, batch, hranaStmts, true);
-        } finally {
-          stream.closeGracefully();
-        }
-        const results = await resultsPromise;
-        return results;
-      } catch (e) {
-        throw mapHranaError(e);
-      }
-    });
-  }
-  async transaction(mode = "write") {
-    return this.limit(async () => {
-      try {
-        const version3 = await this.#client.getVersion();
-        return new HttpTransaction(this.#client.openStream(), mode, version3);
-      } catch (e) {
-        throw mapHranaError(e);
-      }
-    });
-  }
-  async executeMultiple(sql2) {
-    return this.limit(async () => {
-      try {
-        let promise;
-        const stream = this.#client.openStream();
-        try {
-          promise = stream.sequence(sql2);
-        } finally {
-          stream.closeGracefully();
-        }
-        await promise;
-      } catch (e) {
-        throw mapHranaError(e);
-      }
-    });
-  }
-  sync() {
-    throw new LibsqlError("sync not supported in http mode", "SYNC_NOT_SUPPORTED");
-  }
-  close() {
-    this.#client.close();
-  }
-  async reconnect() {
-    try {
-      if (!this.closed) {
-        this.#client.close();
-      }
-    } finally {
-      this.#client = openHttp(this.#url, this.#authToken, this.#customFetch, this.#remoteEncryptionKey);
-      this.#client.intMode = this.#intMode;
-    }
-  }
-  get closed() {
-    return this.#client.closed;
-  }
-}
-
-class HttpTransaction extends HranaTransaction {
-  #stream;
-  #sqlCache;
-  constructor(stream, mode, version3) {
-    super(mode, version3);
-    this.#stream = stream;
-    this.#sqlCache = new SqlCache(stream, sqlCacheCapacity2);
-  }
-  _getStream() {
-    return this.#stream;
-  }
-  _getSqlCache() {
-    return this.#sqlCache;
-  }
-  close() {
-    this.#stream.close();
-  }
-  get closed() {
-    return this.#stream.closed;
-  }
-}
-
-// node_modules/@libsql/client/lib-esm/node.js
-function createClient(config) {
-  return _createClient4(expandConfig(config, true));
-}
-function _createClient4(config) {
-  if (config.scheme === "wss" || config.scheme === "ws") {
-    return _createClient2(config);
-  } else if (config.scheme === "https" || config.scheme === "http") {
-    return _createClient3(config);
-  } else {
-    return _createClient(config);
-  }
-}
-
-// node_modules/drizzle-orm/selection-proxy.js
-class SelectionProxyHandler {
-  static [entityKind] = "SelectionProxyHandler";
-  config;
-  constructor(config) {
-    this.config = { ...config };
-  }
-  get(subquery, prop) {
-    if (prop === "_") {
-      return {
-        ...subquery["_"],
-        selectedFields: new Proxy(subquery._.selectedFields, this)
-      };
-    }
-    if (prop === ViewBaseConfig) {
-      return {
-        ...subquery[ViewBaseConfig],
-        selectedFields: new Proxy(subquery[ViewBaseConfig].selectedFields, this)
-      };
-    }
-    if (typeof prop === "symbol") {
-      return subquery[prop];
-    }
-    const columns = is(subquery, Subquery) ? subquery._.selectedFields : is(subquery, View) ? subquery[ViewBaseConfig].selectedFields : subquery;
-    const value = columns[prop];
-    if (is(value, SQL.Aliased)) {
-      if (this.config.sqlAliasedBehavior === "sql" && !value.isSelectionField) {
-        return value.sql;
-      }
-      const newValue = value.clone();
-      newValue.isSelectionField = true;
-      return newValue;
-    }
-    if (is(value, SQL)) {
-      if (this.config.sqlBehavior === "sql") {
-        return value;
-      }
-      throw new Error(`You tried to reference "${prop}" field from a subquery, which is a raw SQL field, but it doesn't have an alias declared. Please add an alias to the field using ".as('alias')" method.`);
-    }
-    if (is(value, Column)) {
-      if (this.config.alias) {
-        return new Proxy(value, new ColumnAliasProxyHandler(new Proxy(value.table, new TableAliasProxyHandler(this.config.alias, this.config.replaceOriginalName ?? false))));
-      }
-      return value;
-    }
-    if (typeof value !== "object" || value === null) {
-      return value;
-    }
-    return new Proxy(value, new SelectionProxyHandler(this.config));
-  }
-}
-
-// node_modules/drizzle-orm/sqlite-core/foreign-keys.js
-class ForeignKeyBuilder {
-  static [entityKind] = "SQLiteForeignKeyBuilder";
-  reference;
-  _onUpdate;
-  _onDelete;
-  constructor(config, actions) {
-    this.reference = () => {
-      const { name, columns, foreignColumns } = config();
-      return { name, columns, foreignTable: foreignColumns[0].table, foreignColumns };
-    };
-    if (actions) {
-      this._onUpdate = actions.onUpdate;
-      this._onDelete = actions.onDelete;
-    }
-  }
-  onUpdate(action) {
-    this._onUpdate = action;
-    return this;
-  }
-  onDelete(action) {
-    this._onDelete = action;
-    return this;
-  }
-  build(table) {
-    return new ForeignKey(table, this);
-  }
-}
-
-class ForeignKey {
-  constructor(table, builder) {
-    this.table = table;
-    this.reference = builder.reference;
-    this.onUpdate = builder._onUpdate;
-    this.onDelete = builder._onDelete;
-  }
-  static [entityKind] = "SQLiteForeignKey";
-  reference;
-  onUpdate;
-  onDelete;
-  getName() {
-    const { name, columns, foreignColumns } = this.reference();
-    const columnNames = columns.map((column) => column.name);
-    const foreignColumnNames = foreignColumns.map((column) => column.name);
-    const chunks = [
-      this.table[TableName],
-      ...columnNames,
-      foreignColumns[0].table[TableName],
-      ...foreignColumnNames
-    ];
-    return name ?? `${chunks.join("_")}_fk`;
-  }
-}
-
-// node_modules/drizzle-orm/sqlite-core/unique-constraint.js
-function uniqueKeyName2(table, columns) {
-  return `${table[TableName]}_${columns.join("_")}_unique`;
-}
-
-// node_modules/drizzle-orm/sqlite-core/columns/common.js
-class SQLiteColumnBuilder extends ColumnBuilder {
-  static [entityKind] = "SQLiteColumnBuilder";
-  foreignKeyConfigs = [];
-  references(ref, actions = {}) {
-    this.foreignKeyConfigs.push({ ref, actions });
-    return this;
-  }
-  unique(name) {
-    this.config.isUnique = true;
-    this.config.uniqueName = name;
-    return this;
-  }
-  generatedAlwaysAs(as, config) {
-    this.config.generated = {
-      as,
-      type: "always",
-      mode: config?.mode ?? "virtual"
-    };
-    return this;
-  }
-  buildForeignKeys(column, table) {
-    return this.foreignKeyConfigs.map(({ ref, actions }) => {
-      return ((ref2, actions2) => {
-        const builder = new ForeignKeyBuilder(() => {
-          const foreignColumn = ref2();
-          return { columns: [column], foreignColumns: [foreignColumn] };
-        });
-        if (actions2.onUpdate) {
-          builder.onUpdate(actions2.onUpdate);
-        }
-        if (actions2.onDelete) {
-          builder.onDelete(actions2.onDelete);
-        }
-        return builder.build(table);
-      })(ref, actions);
-    });
-  }
-}
-
-class SQLiteColumn extends Column {
-  constructor(table, config) {
-    if (!config.uniqueName) {
-      config.uniqueName = uniqueKeyName2(table, [config.name]);
-    }
-    super(table, config);
-    this.table = table;
-  }
-  static [entityKind] = "SQLiteColumn";
-}
-
-// node_modules/drizzle-orm/sqlite-core/columns/blob.js
-class SQLiteBigIntBuilder extends SQLiteColumnBuilder {
-  static [entityKind] = "SQLiteBigIntBuilder";
-  constructor(name) {
-    super(name, "bigint", "SQLiteBigInt");
-  }
-  build(table) {
-    return new SQLiteBigInt(table, this.config);
-  }
-}
-
-class SQLiteBigInt extends SQLiteColumn {
-  static [entityKind] = "SQLiteBigInt";
-  getSQLType() {
-    return "blob";
-  }
-  mapFromDriverValue(value) {
-    if (typeof Buffer !== "undefined" && Buffer.from) {
-      const buf = Buffer.isBuffer(value) ? value : value instanceof ArrayBuffer ? Buffer.from(value) : value.buffer ? Buffer.from(value.buffer, value.byteOffset, value.byteLength) : Buffer.from(value);
-      return BigInt(buf.toString("utf8"));
-    }
-    return BigInt(textDecoder.decode(value));
-  }
-  mapToDriverValue(value) {
-    return Buffer.from(value.toString());
-  }
-}
-
-class SQLiteBlobJsonBuilder extends SQLiteColumnBuilder {
-  static [entityKind] = "SQLiteBlobJsonBuilder";
-  constructor(name) {
-    super(name, "json", "SQLiteBlobJson");
-  }
-  build(table) {
-    return new SQLiteBlobJson(table, this.config);
-  }
-}
-
-class SQLiteBlobJson extends SQLiteColumn {
-  static [entityKind] = "SQLiteBlobJson";
-  getSQLType() {
-    return "blob";
-  }
-  mapFromDriverValue(value) {
-    if (typeof Buffer !== "undefined" && Buffer.from) {
-      const buf = Buffer.isBuffer(value) ? value : value instanceof ArrayBuffer ? Buffer.from(value) : value.buffer ? Buffer.from(value.buffer, value.byteOffset, value.byteLength) : Buffer.from(value);
-      return JSON.parse(buf.toString("utf8"));
-    }
-    return JSON.parse(textDecoder.decode(value));
-  }
-  mapToDriverValue(value) {
-    return Buffer.from(JSON.stringify(value));
-  }
-}
-
-class SQLiteBlobBufferBuilder extends SQLiteColumnBuilder {
-  static [entityKind] = "SQLiteBlobBufferBuilder";
-  constructor(name) {
-    super(name, "buffer", "SQLiteBlobBuffer");
-  }
-  build(table) {
-    return new SQLiteBlobBuffer(table, this.config);
-  }
-}
-
-class SQLiteBlobBuffer extends SQLiteColumn {
-  static [entityKind] = "SQLiteBlobBuffer";
-  mapFromDriverValue(value) {
-    if (Buffer.isBuffer(value)) {
-      return value;
-    }
-    return Buffer.from(value);
-  }
-  getSQLType() {
-    return "blob";
-  }
-}
-function blob(a, b) {
-  const { name, config } = getColumnNameAndConfig(a, b);
-  if (config?.mode === "json") {
-    return new SQLiteBlobJsonBuilder(name);
-  }
-  if (config?.mode === "bigint") {
-    return new SQLiteBigIntBuilder(name);
-  }
-  return new SQLiteBlobBufferBuilder(name);
-}
-
-// node_modules/drizzle-orm/sqlite-core/columns/custom.js
-class SQLiteCustomColumnBuilder extends SQLiteColumnBuilder {
-  static [entityKind] = "SQLiteCustomColumnBuilder";
-  constructor(name, fieldConfig, customTypeParams) {
-    super(name, "custom", "SQLiteCustomColumn");
-    this.config.fieldConfig = fieldConfig;
-    this.config.customTypeParams = customTypeParams;
-  }
-  build(table) {
-    return new SQLiteCustomColumn(table, this.config);
-  }
-}
-
-class SQLiteCustomColumn extends SQLiteColumn {
-  static [entityKind] = "SQLiteCustomColumn";
-  sqlName;
-  mapTo;
-  mapFrom;
-  constructor(table, config) {
-    super(table, config);
-    this.sqlName = config.customTypeParams.dataType(config.fieldConfig);
-    this.mapTo = config.customTypeParams.toDriver;
-    this.mapFrom = config.customTypeParams.fromDriver;
-  }
-  getSQLType() {
-    return this.sqlName;
-  }
-  mapFromDriverValue(value) {
-    return typeof this.mapFrom === "function" ? this.mapFrom(value) : value;
-  }
-  mapToDriverValue(value) {
-    return typeof this.mapTo === "function" ? this.mapTo(value) : value;
-  }
-}
-function customType(customTypeParams) {
-  return (a, b) => {
-    const { name, config } = getColumnNameAndConfig(a, b);
-    return new SQLiteCustomColumnBuilder(name, config, customTypeParams);
-  };
-}
-
-// node_modules/drizzle-orm/sqlite-core/columns/integer.js
-class SQLiteBaseIntegerBuilder extends SQLiteColumnBuilder {
-  static [entityKind] = "SQLiteBaseIntegerBuilder";
-  constructor(name, dataType, columnType) {
-    super(name, dataType, columnType);
-    this.config.autoIncrement = false;
-  }
-  primaryKey(config) {
-    if (config?.autoIncrement) {
-      this.config.autoIncrement = true;
-    }
-    this.config.hasDefault = true;
-    return super.primaryKey();
-  }
-}
-
-class SQLiteBaseInteger extends SQLiteColumn {
-  static [entityKind] = "SQLiteBaseInteger";
-  autoIncrement = this.config.autoIncrement;
-  getSQLType() {
-    return "integer";
-  }
-}
-
-class SQLiteIntegerBuilder extends SQLiteBaseIntegerBuilder {
-  static [entityKind] = "SQLiteIntegerBuilder";
-  constructor(name) {
-    super(name, "number", "SQLiteInteger");
-  }
-  build(table) {
-    return new SQLiteInteger(table, this.config);
-  }
-}
-
-class SQLiteInteger extends SQLiteBaseInteger {
-  static [entityKind] = "SQLiteInteger";
-}
-
-class SQLiteTimestampBuilder extends SQLiteBaseIntegerBuilder {
-  static [entityKind] = "SQLiteTimestampBuilder";
-  constructor(name, mode) {
-    super(name, "date", "SQLiteTimestamp");
-    this.config.mode = mode;
-  }
-  defaultNow() {
-    return this.default(sql`(cast((julianday('now') - 2440587.5)*86400000 as integer))`);
-  }
-  build(table) {
-    return new SQLiteTimestamp(table, this.config);
-  }
-}
-
-class SQLiteTimestamp extends SQLiteBaseInteger {
-  static [entityKind] = "SQLiteTimestamp";
-  mode = this.config.mode;
-  mapFromDriverValue(value) {
-    if (this.config.mode === "timestamp") {
-      return new Date(value * 1000);
-    }
-    return new Date(value);
-  }
-  mapToDriverValue(value) {
-    const unix = value.getTime();
-    if (this.config.mode === "timestamp") {
-      return Math.floor(unix / 1000);
-    }
-    return unix;
-  }
-}
-
-class SQLiteBooleanBuilder extends SQLiteBaseIntegerBuilder {
-  static [entityKind] = "SQLiteBooleanBuilder";
-  constructor(name, mode) {
-    super(name, "boolean", "SQLiteBoolean");
-    this.config.mode = mode;
-  }
-  build(table) {
-    return new SQLiteBoolean(table, this.config);
-  }
-}
-
-class SQLiteBoolean extends SQLiteBaseInteger {
-  static [entityKind] = "SQLiteBoolean";
-  mode = this.config.mode;
-  mapFromDriverValue(value) {
-    return Number(value) === 1;
-  }
-  mapToDriverValue(value) {
-    return value ? 1 : 0;
-  }
-}
-function integer(a, b) {
-  const { name, config } = getColumnNameAndConfig(a, b);
-  if (config?.mode === "timestamp" || config?.mode === "timestamp_ms") {
-    return new SQLiteTimestampBuilder(name, config.mode);
-  }
-  if (config?.mode === "boolean") {
-    return new SQLiteBooleanBuilder(name, config.mode);
-  }
-  return new SQLiteIntegerBuilder(name);
-}
-
-// node_modules/drizzle-orm/sqlite-core/columns/numeric.js
-class SQLiteNumericBuilder extends SQLiteColumnBuilder {
-  static [entityKind] = "SQLiteNumericBuilder";
-  constructor(name) {
-    super(name, "string", "SQLiteNumeric");
-  }
-  build(table) {
-    return new SQLiteNumeric(table, this.config);
-  }
-}
-
-class SQLiteNumeric extends SQLiteColumn {
-  static [entityKind] = "SQLiteNumeric";
-  mapFromDriverValue(value) {
-    if (typeof value === "string")
-      return value;
-    return String(value);
-  }
-  getSQLType() {
-    return "numeric";
-  }
-}
-
-class SQLiteNumericNumberBuilder extends SQLiteColumnBuilder {
-  static [entityKind] = "SQLiteNumericNumberBuilder";
-  constructor(name) {
-    super(name, "number", "SQLiteNumericNumber");
-  }
-  build(table) {
-    return new SQLiteNumericNumber(table, this.config);
-  }
-}
-
-class SQLiteNumericNumber extends SQLiteColumn {
-  static [entityKind] = "SQLiteNumericNumber";
-  mapFromDriverValue(value) {
-    if (typeof value === "number")
-      return value;
-    return Number(value);
-  }
-  mapToDriverValue = String;
-  getSQLType() {
-    return "numeric";
-  }
-}
-
-class SQLiteNumericBigIntBuilder extends SQLiteColumnBuilder {
-  static [entityKind] = "SQLiteNumericBigIntBuilder";
-  constructor(name) {
-    super(name, "bigint", "SQLiteNumericBigInt");
-  }
-  build(table) {
-    return new SQLiteNumericBigInt(table, this.config);
-  }
-}
-
-class SQLiteNumericBigInt extends SQLiteColumn {
-  static [entityKind] = "SQLiteNumericBigInt";
-  mapFromDriverValue = BigInt;
-  mapToDriverValue = String;
-  getSQLType() {
-    return "numeric";
-  }
-}
-function numeric(a, b) {
-  const { name, config } = getColumnNameAndConfig(a, b);
-  const mode = config?.mode;
-  return mode === "number" ? new SQLiteNumericNumberBuilder(name) : mode === "bigint" ? new SQLiteNumericBigIntBuilder(name) : new SQLiteNumericBuilder(name);
-}
-
-// node_modules/drizzle-orm/sqlite-core/columns/real.js
-class SQLiteRealBuilder extends SQLiteColumnBuilder {
-  static [entityKind] = "SQLiteRealBuilder";
-  constructor(name) {
-    super(name, "number", "SQLiteReal");
-  }
-  build(table) {
-    return new SQLiteReal(table, this.config);
-  }
-}
-
-class SQLiteReal extends SQLiteColumn {
-  static [entityKind] = "SQLiteReal";
-  getSQLType() {
-    return "real";
-  }
-}
-function real(name) {
-  return new SQLiteRealBuilder(name ?? "");
-}
-
-// node_modules/drizzle-orm/sqlite-core/columns/text.js
-class SQLiteTextBuilder extends SQLiteColumnBuilder {
-  static [entityKind] = "SQLiteTextBuilder";
-  constructor(name, config) {
-    super(name, "string", "SQLiteText");
-    this.config.enumValues = config.enum;
-    this.config.length = config.length;
-  }
-  build(table) {
-    return new SQLiteText(table, this.config);
-  }
-}
-
-class SQLiteText extends SQLiteColumn {
-  static [entityKind] = "SQLiteText";
-  enumValues = this.config.enumValues;
-  length = this.config.length;
-  constructor(table, config) {
-    super(table, config);
-  }
-  getSQLType() {
-    return `text${this.config.length ? `(${this.config.length})` : ""}`;
-  }
-}
-
-class SQLiteTextJsonBuilder extends SQLiteColumnBuilder {
-  static [entityKind] = "SQLiteTextJsonBuilder";
-  constructor(name) {
-    super(name, "json", "SQLiteTextJson");
-  }
-  build(table) {
-    return new SQLiteTextJson(table, this.config);
-  }
-}
-
-class SQLiteTextJson extends SQLiteColumn {
-  static [entityKind] = "SQLiteTextJson";
-  getSQLType() {
-    return "text";
-  }
-  mapFromDriverValue(value) {
-    return JSON.parse(value);
-  }
-  mapToDriverValue(value) {
-    return JSON.stringify(value);
-  }
-}
-function text(a, b = {}) {
-  const { name, config } = getColumnNameAndConfig(a, b);
-  if (config.mode === "json") {
-    return new SQLiteTextJsonBuilder(name);
-  }
-  return new SQLiteTextBuilder(name, config);
-}
-
-// node_modules/drizzle-orm/sqlite-core/columns/all.js
-function getSQLiteColumnBuilders() {
-  return {
-    blob,
-    customType,
-    integer,
-    numeric,
-    real,
-    text
-  };
-}
-
-// node_modules/drizzle-orm/sqlite-core/table.js
-var InlineForeignKeys2 = Symbol.for("drizzle:SQLiteInlineForeignKeys");
-
-class SQLiteTable extends Table {
-  static [entityKind] = "SQLiteTable";
-  static Symbol = Object.assign({}, Table.Symbol, {
-    InlineForeignKeys: InlineForeignKeys2
-  });
-  [Table.Symbol.Columns];
-  [InlineForeignKeys2] = [];
-  [Table.Symbol.ExtraConfigBuilder] = undefined;
-}
-function sqliteTableBase(name, columns, extraConfig, schema, baseName = name) {
-  const rawTable = new SQLiteTable(name, schema, baseName);
-  const parsedColumns = typeof columns === "function" ? columns(getSQLiteColumnBuilders()) : columns;
-  const builtColumns = Object.fromEntries(Object.entries(parsedColumns).map(([name2, colBuilderBase]) => {
-    const colBuilder = colBuilderBase;
-    colBuilder.setName(name2);
-    const column = colBuilder.build(rawTable);
-    rawTable[InlineForeignKeys2].push(...colBuilder.buildForeignKeys(column, rawTable));
-    return [name2, column];
-  }));
-  const table = Object.assign(rawTable, builtColumns);
-  table[Table.Symbol.Columns] = builtColumns;
-  table[Table.Symbol.ExtraConfigColumns] = builtColumns;
-  if (extraConfig) {
-    table[SQLiteTable.Symbol.ExtraConfigBuilder] = extraConfig;
-  }
-  return table;
-}
-var sqliteTable = (name, columns, extraConfig) => {
-  return sqliteTableBase(name, columns, extraConfig);
-};
-
-// node_modules/drizzle-orm/sqlite-core/utils.js
-function extractUsedTable(table) {
-  if (is(table, SQLiteTable)) {
-    return [`${table[Table.Symbol.BaseName]}`];
-  }
-  if (is(table, Subquery)) {
-    return table._.usedTables ?? [];
-  }
-  if (is(table, SQL)) {
-    return table.usedTables ?? [];
-  }
-  return [];
-}
-
-// node_modules/drizzle-orm/sqlite-core/query-builders/delete.js
-class SQLiteDeleteBase extends QueryPromise {
-  constructor(table, session, dialect, withList) {
-    super();
-    this.table = table;
-    this.session = session;
-    this.dialect = dialect;
-    this.config = { table, withList };
-  }
-  static [entityKind] = "SQLiteDelete";
-  config;
-  where(where) {
-    this.config.where = where;
-    return this;
-  }
-  orderBy(...columns) {
-    if (typeof columns[0] === "function") {
-      const orderBy = columns[0](new Proxy(this.config.table[Table.Symbol.Columns], new SelectionProxyHandler({ sqlAliasedBehavior: "alias", sqlBehavior: "sql" })));
-      const orderByArray = Array.isArray(orderBy) ? orderBy : [orderBy];
-      this.config.orderBy = orderByArray;
-    } else {
-      const orderByArray = columns;
-      this.config.orderBy = orderByArray;
-    }
-    return this;
-  }
-  limit(limit) {
-    this.config.limit = limit;
-    return this;
-  }
-  returning(fields = this.table[SQLiteTable.Symbol.Columns]) {
-    this.config.returning = orderSelectedFields(fields);
-    return this;
-  }
-  getSQL() {
-    return this.dialect.buildDeleteQuery(this.config);
-  }
-  toSQL() {
-    const { typings: _typings, ...rest } = this.dialect.sqlToQuery(this.getSQL());
-    return rest;
-  }
-  _prepare(isOneTimeQuery = true) {
-    return this.session[isOneTimeQuery ? "prepareOneTimeQuery" : "prepareQuery"](this.dialect.sqlToQuery(this.getSQL()), this.config.returning, this.config.returning ? "all" : "run", true, undefined, {
-      type: "delete",
-      tables: extractUsedTable(this.config.table)
-    });
-  }
-  prepare() {
-    return this._prepare(false);
-  }
-  run = (placeholderValues) => {
-    return this._prepare().run(placeholderValues);
-  };
-  all = (placeholderValues) => {
-    return this._prepare().all(placeholderValues);
-  };
-  get = (placeholderValues) => {
-    return this._prepare().get(placeholderValues);
-  };
-  values = (placeholderValues) => {
-    return this._prepare().values(placeholderValues);
-  };
-  async execute(placeholderValues) {
-    return this._prepare().execute(placeholderValues);
-  }
-  $dynamic() {
-    return this;
-  }
-}
-
-// node_modules/drizzle-orm/casing.js
-function toSnakeCase(input) {
-  const words = input.replace(/['\u2019]/g, "").match(/[\da-z]+|[A-Z]+(?![a-z])|[A-Z][\da-z]+/g) ?? [];
-  return words.map((word) => word.toLowerCase()).join("_");
-}
-function toCamelCase(input) {
-  const words = input.replace(/['\u2019]/g, "").match(/[\da-z]+|[A-Z]+(?![a-z])|[A-Z][\da-z]+/g) ?? [];
-  return words.reduce((acc, word, i) => {
-    const formattedWord = i === 0 ? word.toLowerCase() : `${word[0].toUpperCase()}${word.slice(1)}`;
-    return acc + formattedWord;
-  }, "");
-}
-function noopCase(input) {
-  return input;
-}
-
-class CasingCache {
-  static [entityKind] = "CasingCache";
-  cache = {};
-  cachedTables = {};
-  convert;
-  constructor(casing) {
-    this.convert = casing === "snake_case" ? toSnakeCase : casing === "camelCase" ? toCamelCase : noopCase;
-  }
-  getColumnCasing(column) {
-    if (!column.keyAsName)
-      return column.name;
-    const schema = column.table[Table.Symbol.Schema] ?? "public";
-    const tableName = column.table[Table.Symbol.OriginalName];
-    const key = `${schema}.${tableName}.${column.name}`;
-    if (!this.cache[key]) {
-      this.cacheTable(column.table);
-    }
-    return this.cache[key];
-  }
-  cacheTable(table) {
-    const schema = table[Table.Symbol.Schema] ?? "public";
-    const tableName = table[Table.Symbol.OriginalName];
-    const tableKey = `${schema}.${tableName}`;
-    if (!this.cachedTables[tableKey]) {
-      for (const column of Object.values(table[Table.Symbol.Columns])) {
-        const columnKey = `${tableKey}.${column.name}`;
-        this.cache[columnKey] = this.convert(column.name);
-      }
-      this.cachedTables[tableKey] = true;
-    }
-  }
-  clearCache() {
-    this.cache = {};
-    this.cachedTables = {};
-  }
-}
-
-// node_modules/drizzle-orm/sqlite-core/view-base.js
-class SQLiteViewBase extends View {
-  static [entityKind] = "SQLiteViewBase";
-}
-
-// node_modules/drizzle-orm/sqlite-core/dialect.js
-class SQLiteDialect {
-  static [entityKind] = "SQLiteDialect";
-  casing;
-  constructor(config) {
-    this.casing = new CasingCache(config?.casing);
-  }
-  escapeName(name) {
-    return `"${name}"`;
-  }
-  escapeParam(_num) {
-    return "?";
-  }
-  escapeString(str) {
-    return `'${str.replace(/'/g, "''")}'`;
-  }
-  buildWithCTE(queries) {
-    if (!queries?.length)
-      return;
-    const withSqlChunks = [sql`with `];
-    for (const [i, w] of queries.entries()) {
-      withSqlChunks.push(sql`${sql.identifier(w._.alias)} as (${w._.sql})`);
-      if (i < queries.length - 1) {
-        withSqlChunks.push(sql`, `);
-      }
-    }
-    withSqlChunks.push(sql` `);
-    return sql.join(withSqlChunks);
-  }
-  buildDeleteQuery({ table, where, returning, withList, limit, orderBy }) {
-    const withSql = this.buildWithCTE(withList);
-    const returningSql = returning ? sql` returning ${this.buildSelection(returning, { isSingleTable: true })}` : undefined;
-    const whereSql = where ? sql` where ${where}` : undefined;
-    const orderBySql = this.buildOrderBy(orderBy);
-    const limitSql = this.buildLimit(limit);
-    return sql`${withSql}delete from ${table}${whereSql}${returningSql}${orderBySql}${limitSql}`;
-  }
-  buildUpdateSet(table, set) {
-    const tableColumns = table[Table.Symbol.Columns];
-    const columnNames = Object.keys(tableColumns).filter((colName) => set[colName] !== undefined || tableColumns[colName]?.onUpdateFn !== undefined);
-    const setSize = columnNames.length;
-    return sql.join(columnNames.flatMap((colName, i) => {
-      const col = tableColumns[colName];
-      const onUpdateFnResult = col.onUpdateFn?.();
-      const value = set[colName] ?? (is(onUpdateFnResult, SQL) ? onUpdateFnResult : sql.param(onUpdateFnResult, col));
-      const res = sql`${sql.identifier(this.casing.getColumnCasing(col))} = ${value}`;
-      if (i < setSize - 1) {
-        return [res, sql.raw(", ")];
-      }
-      return [res];
-    }));
-  }
-  buildUpdateQuery({ table, set, where, returning, withList, joins, from, limit, orderBy }) {
-    const withSql = this.buildWithCTE(withList);
-    const setSql = this.buildUpdateSet(table, set);
-    const fromSql = from && sql.join([sql.raw(" from "), this.buildFromTable(from)]);
-    const joinsSql = this.buildJoins(joins);
-    const returningSql = returning ? sql` returning ${this.buildSelection(returning, { isSingleTable: true })}` : undefined;
-    const whereSql = where ? sql` where ${where}` : undefined;
-    const orderBySql = this.buildOrderBy(orderBy);
-    const limitSql = this.buildLimit(limit);
-    return sql`${withSql}update ${table} set ${setSql}${fromSql}${joinsSql}${whereSql}${returningSql}${orderBySql}${limitSql}`;
-  }
-  buildSelection(fields, { isSingleTable = false } = {}) {
-    const columnsLen = fields.length;
-    const chunks = fields.flatMap(({ field }, i) => {
-      const chunk = [];
-      if (is(field, SQL.Aliased) && field.isSelectionField) {
-        chunk.push(sql.identifier(field.fieldAlias));
-      } else if (is(field, SQL.Aliased) || is(field, SQL)) {
-        const query = is(field, SQL.Aliased) ? field.sql : field;
-        if (isSingleTable) {
-          chunk.push(new SQL(query.queryChunks.map((c) => {
-            if (is(c, Column)) {
-              return sql.identifier(this.casing.getColumnCasing(c));
-            }
-            return c;
-          })));
-        } else {
-          chunk.push(query);
-        }
-        if (is(field, SQL.Aliased)) {
-          chunk.push(sql` as ${sql.identifier(field.fieldAlias)}`);
-        }
-      } else if (is(field, Column)) {
-        const tableName = field.table[Table.Symbol.Name];
-        if (field.columnType === "SQLiteNumericBigInt") {
-          if (isSingleTable) {
-            chunk.push(sql`cast(${sql.identifier(this.casing.getColumnCasing(field))} as text)`);
-          } else {
-            chunk.push(sql`cast(${sql.identifier(tableName)}.${sql.identifier(this.casing.getColumnCasing(field))} as text)`);
-          }
-        } else {
-          if (isSingleTable) {
-            chunk.push(sql.identifier(this.casing.getColumnCasing(field)));
-          } else {
-            chunk.push(sql`${sql.identifier(tableName)}.${sql.identifier(this.casing.getColumnCasing(field))}`);
-          }
-        }
-      } else if (is(field, Subquery)) {
-        const entries = Object.entries(field._.selectedFields);
-        if (entries.length === 1) {
-          const entry = entries[0][1];
-          const fieldDecoder = is(entry, SQL) ? entry.decoder : is(entry, Column) ? { mapFromDriverValue: (v) => entry.mapFromDriverValue(v) } : entry.sql.decoder;
-          if (fieldDecoder)
-            field._.sql.decoder = fieldDecoder;
-        }
-        chunk.push(field);
-      }
-      if (i < columnsLen - 1) {
-        chunk.push(sql`, `);
-      }
-      return chunk;
-    });
-    return sql.join(chunks);
-  }
-  buildJoins(joins) {
-    if (!joins || joins.length === 0) {
-      return;
-    }
-    const joinsArray = [];
-    if (joins) {
-      for (const [index, joinMeta] of joins.entries()) {
-        if (index === 0) {
-          joinsArray.push(sql` `);
-        }
-        const table = joinMeta.table;
-        const onSql = joinMeta.on ? sql` on ${joinMeta.on}` : undefined;
-        if (is(table, SQLiteTable)) {
-          const tableName = table[SQLiteTable.Symbol.Name];
-          const tableSchema = table[SQLiteTable.Symbol.Schema];
-          const origTableName = table[SQLiteTable.Symbol.OriginalName];
-          const alias = tableName === origTableName ? undefined : joinMeta.alias;
-          joinsArray.push(sql`${sql.raw(joinMeta.joinType)} join ${tableSchema ? sql`${sql.identifier(tableSchema)}.` : undefined}${sql.identifier(origTableName)}${alias && sql` ${sql.identifier(alias)}`}${onSql}`);
-        } else {
-          joinsArray.push(sql`${sql.raw(joinMeta.joinType)} join ${table}${onSql}`);
-        }
-        if (index < joins.length - 1) {
-          joinsArray.push(sql` `);
-        }
-      }
-    }
-    return sql.join(joinsArray);
-  }
-  buildLimit(limit) {
-    return typeof limit === "object" || typeof limit === "number" && limit >= 0 ? sql` limit ${limit}` : undefined;
-  }
-  buildOrderBy(orderBy) {
-    const orderByList = [];
-    if (orderBy) {
-      for (const [index, orderByValue] of orderBy.entries()) {
-        orderByList.push(orderByValue);
-        if (index < orderBy.length - 1) {
-          orderByList.push(sql`, `);
-        }
-      }
-    }
-    return orderByList.length > 0 ? sql` order by ${sql.join(orderByList)}` : undefined;
-  }
-  buildFromTable(table) {
-    if (is(table, Table) && table[Table.Symbol.IsAlias]) {
-      return sql`${sql`${sql.identifier(table[Table.Symbol.Schema] ?? "")}.`.if(table[Table.Symbol.Schema])}${sql.identifier(table[Table.Symbol.OriginalName])} ${sql.identifier(table[Table.Symbol.Name])}`;
-    }
-    return table;
-  }
-  buildSelectQuery({
-    withList,
-    fields,
-    fieldsFlat,
-    where,
-    having,
-    table,
-    joins,
-    orderBy,
-    groupBy,
-    limit,
-    offset,
-    distinct,
-    setOperators
-  }) {
-    const fieldsList = fieldsFlat ?? orderSelectedFields(fields);
-    for (const f of fieldsList) {
-      if (is(f.field, Column) && getTableName(f.field.table) !== (is(table, Subquery) ? table._.alias : is(table, SQLiteViewBase) ? table[ViewBaseConfig].name : is(table, SQL) ? undefined : getTableName(table)) && !((table2) => joins?.some(({ alias }) => alias === (table2[Table.Symbol.IsAlias] ? getTableName(table2) : table2[Table.Symbol.BaseName])))(f.field.table)) {
-        const tableName = getTableName(f.field.table);
-        throw new Error(`Your "${f.path.join("->")}" field references a column "${tableName}"."${f.field.name}", but the table "${tableName}" is not part of the query! Did you forget to join it?`);
-      }
-    }
-    const isSingleTable = !joins || joins.length === 0;
-    const withSql = this.buildWithCTE(withList);
-    const distinctSql = distinct ? sql` distinct` : undefined;
-    const selection = this.buildSelection(fieldsList, { isSingleTable });
-    const tableSql = this.buildFromTable(table);
-    const joinsSql = this.buildJoins(joins);
-    const whereSql = where ? sql` where ${where}` : undefined;
-    const havingSql = having ? sql` having ${having}` : undefined;
-    const groupByList = [];
-    if (groupBy) {
-      for (const [index, groupByValue] of groupBy.entries()) {
-        groupByList.push(groupByValue);
-        if (index < groupBy.length - 1) {
-          groupByList.push(sql`, `);
-        }
-      }
-    }
-    const groupBySql = groupByList.length > 0 ? sql` group by ${sql.join(groupByList)}` : undefined;
-    const orderBySql = this.buildOrderBy(orderBy);
-    const limitSql = this.buildLimit(limit);
-    const offsetSql = offset ? sql` offset ${offset}` : undefined;
-    const finalQuery = sql`${withSql}select${distinctSql} ${selection} from ${tableSql}${joinsSql}${whereSql}${groupBySql}${havingSql}${orderBySql}${limitSql}${offsetSql}`;
-    if (setOperators.length > 0) {
-      return this.buildSetOperations(finalQuery, setOperators);
-    }
-    return finalQuery;
-  }
-  buildSetOperations(leftSelect, setOperators) {
-    const [setOperator, ...rest] = setOperators;
-    if (!setOperator) {
-      throw new Error("Cannot pass undefined values to any set operator");
-    }
-    if (rest.length === 0) {
-      return this.buildSetOperationQuery({ leftSelect, setOperator });
-    }
-    return this.buildSetOperations(this.buildSetOperationQuery({ leftSelect, setOperator }), rest);
-  }
-  buildSetOperationQuery({
-    leftSelect,
-    setOperator: { type, isAll, rightSelect, limit, orderBy, offset }
-  }) {
-    const leftChunk = sql`${leftSelect.getSQL()} `;
-    const rightChunk = sql`${rightSelect.getSQL()}`;
-    let orderBySql;
-    if (orderBy && orderBy.length > 0) {
-      const orderByValues = [];
-      for (const singleOrderBy of orderBy) {
-        if (is(singleOrderBy, SQLiteColumn)) {
-          orderByValues.push(sql.identifier(singleOrderBy.name));
-        } else if (is(singleOrderBy, SQL)) {
-          for (let i = 0;i < singleOrderBy.queryChunks.length; i++) {
-            const chunk = singleOrderBy.queryChunks[i];
-            if (is(chunk, SQLiteColumn)) {
-              singleOrderBy.queryChunks[i] = sql.identifier(this.casing.getColumnCasing(chunk));
-            }
-          }
-          orderByValues.push(sql`${singleOrderBy}`);
-        } else {
-          orderByValues.push(sql`${singleOrderBy}`);
-        }
-      }
-      orderBySql = sql` order by ${sql.join(orderByValues, sql`, `)}`;
-    }
-    const limitSql = typeof limit === "object" || typeof limit === "number" && limit >= 0 ? sql` limit ${limit}` : undefined;
-    const operatorChunk = sql.raw(`${type} ${isAll ? "all " : ""}`);
-    const offsetSql = offset ? sql` offset ${offset}` : undefined;
-    return sql`${leftChunk}${operatorChunk}${rightChunk}${orderBySql}${limitSql}${offsetSql}`;
-  }
-  buildInsertQuery({ table, values: valuesOrSelect, onConflict, returning, withList, select }) {
-    const valuesSqlList = [];
-    const columns = table[Table.Symbol.Columns];
-    const colEntries = Object.entries(columns).filter(([_, col]) => !col.shouldDisableInsert());
-    const insertOrder = colEntries.map(([, column]) => sql.identifier(this.casing.getColumnCasing(column)));
-    if (select) {
-      const select2 = valuesOrSelect;
-      if (is(select2, SQL)) {
-        valuesSqlList.push(select2);
-      } else {
-        valuesSqlList.push(select2.getSQL());
-      }
-    } else {
-      const values = valuesOrSelect;
-      valuesSqlList.push(sql.raw("values "));
-      for (const [valueIndex, value] of values.entries()) {
-        const valueList = [];
-        for (const [fieldName, col] of colEntries) {
-          const colValue = value[fieldName];
-          if (colValue === undefined || is(colValue, Param) && colValue.value === undefined) {
-            let defaultValue;
-            if (col.default !== null && col.default !== undefined) {
-              defaultValue = is(col.default, SQL) ? col.default : sql.param(col.default, col);
-            } else if (col.defaultFn !== undefined) {
-              const defaultFnResult = col.defaultFn();
-              defaultValue = is(defaultFnResult, SQL) ? defaultFnResult : sql.param(defaultFnResult, col);
-            } else if (!col.default && col.onUpdateFn !== undefined) {
-              const onUpdateFnResult = col.onUpdateFn();
-              defaultValue = is(onUpdateFnResult, SQL) ? onUpdateFnResult : sql.param(onUpdateFnResult, col);
-            } else {
-              defaultValue = sql`null`;
-            }
-            valueList.push(defaultValue);
-          } else {
-            valueList.push(colValue);
-          }
-        }
-        valuesSqlList.push(valueList);
-        if (valueIndex < values.length - 1) {
-          valuesSqlList.push(sql`, `);
-        }
-      }
-    }
-    const withSql = this.buildWithCTE(withList);
-    const valuesSql = sql.join(valuesSqlList);
-    const returningSql = returning ? sql` returning ${this.buildSelection(returning, { isSingleTable: true })}` : undefined;
-    const onConflictSql = onConflict?.length ? sql.join(onConflict) : undefined;
-    return sql`${withSql}insert into ${table} ${insertOrder} ${valuesSql}${onConflictSql}${returningSql}`;
-  }
-  sqlToQuery(sql2, invokeSource) {
-    return sql2.toQuery({
-      casing: this.casing,
-      escapeName: this.escapeName,
-      escapeParam: this.escapeParam,
-      escapeString: this.escapeString,
-      invokeSource
-    });
-  }
-  buildRelationalQuery({
-    fullSchema,
-    schema,
-    tableNamesMap,
-    table,
-    tableConfig,
-    queryConfig: config,
-    tableAlias,
-    nestedQueryRelation,
-    joinOn
-  }) {
-    let selection = [];
-    let limit, offset, orderBy = [], where;
-    const joins = [];
-    if (config === true) {
-      const selectionEntries = Object.entries(tableConfig.columns);
-      selection = selectionEntries.map(([key, value]) => ({
-        dbKey: value.name,
-        tsKey: key,
-        field: aliasedTableColumn(value, tableAlias),
-        relationTableTsKey: undefined,
-        isJson: false,
-        selection: []
-      }));
-    } else {
-      const aliasedColumns = Object.fromEntries(Object.entries(tableConfig.columns).map(([key, value]) => [key, aliasedTableColumn(value, tableAlias)]));
-      if (config.where) {
-        const whereSql = typeof config.where === "function" ? config.where(aliasedColumns, getOperators()) : config.where;
-        where = whereSql && mapColumnsInSQLToAlias(whereSql, tableAlias);
-      }
-      const fieldsSelection = [];
-      let selectedColumns = [];
-      if (config.columns) {
-        let isIncludeMode = false;
-        for (const [field, value] of Object.entries(config.columns)) {
-          if (value === undefined) {
-            continue;
-          }
-          if (field in tableConfig.columns) {
-            if (!isIncludeMode && value === true) {
-              isIncludeMode = true;
-            }
-            selectedColumns.push(field);
-          }
-        }
-        if (selectedColumns.length > 0) {
-          selectedColumns = isIncludeMode ? selectedColumns.filter((c) => config.columns?.[c] === true) : Object.keys(tableConfig.columns).filter((key) => !selectedColumns.includes(key));
-        }
-      } else {
-        selectedColumns = Object.keys(tableConfig.columns);
-      }
-      for (const field of selectedColumns) {
-        const column = tableConfig.columns[field];
-        fieldsSelection.push({ tsKey: field, value: column });
-      }
-      let selectedRelations = [];
-      if (config.with) {
-        selectedRelations = Object.entries(config.with).filter((entry) => !!entry[1]).map(([tsKey, queryConfig]) => ({ tsKey, queryConfig, relation: tableConfig.relations[tsKey] }));
-      }
-      let extras;
-      if (config.extras) {
-        extras = typeof config.extras === "function" ? config.extras(aliasedColumns, { sql }) : config.extras;
-        for (const [tsKey, value] of Object.entries(extras)) {
-          fieldsSelection.push({
-            tsKey,
-            value: mapColumnsInAliasedSQLToAlias(value, tableAlias)
-          });
-        }
-      }
-      for (const { tsKey, value } of fieldsSelection) {
-        selection.push({
-          dbKey: is(value, SQL.Aliased) ? value.fieldAlias : tableConfig.columns[tsKey].name,
-          tsKey,
-          field: is(value, Column) ? aliasedTableColumn(value, tableAlias) : value,
-          relationTableTsKey: undefined,
-          isJson: false,
-          selection: []
-        });
-      }
-      let orderByOrig = typeof config.orderBy === "function" ? config.orderBy(aliasedColumns, getOrderByOperators()) : config.orderBy ?? [];
-      if (!Array.isArray(orderByOrig)) {
-        orderByOrig = [orderByOrig];
-      }
-      orderBy = orderByOrig.map((orderByValue) => {
-        if (is(orderByValue, Column)) {
-          return aliasedTableColumn(orderByValue, tableAlias);
-        }
-        return mapColumnsInSQLToAlias(orderByValue, tableAlias);
-      });
-      limit = config.limit;
-      offset = config.offset;
-      for (const {
-        tsKey: selectedRelationTsKey,
-        queryConfig: selectedRelationConfigValue,
-        relation
-      } of selectedRelations) {
-        const normalizedRelation = normalizeRelation(schema, tableNamesMap, relation);
-        const relationTableName = getTableUniqueName(relation.referencedTable);
-        const relationTableTsName = tableNamesMap[relationTableName];
-        const relationTableAlias = `${tableAlias}_${selectedRelationTsKey}`;
-        const joinOn2 = and(...normalizedRelation.fields.map((field2, i) => eq(aliasedTableColumn(normalizedRelation.references[i], relationTableAlias), aliasedTableColumn(field2, tableAlias))));
-        const builtRelation = this.buildRelationalQuery({
-          fullSchema,
-          schema,
-          tableNamesMap,
-          table: fullSchema[relationTableTsName],
-          tableConfig: schema[relationTableTsName],
-          queryConfig: is(relation, One) ? selectedRelationConfigValue === true ? { limit: 1 } : { ...selectedRelationConfigValue, limit: 1 } : selectedRelationConfigValue,
-          tableAlias: relationTableAlias,
-          joinOn: joinOn2,
-          nestedQueryRelation: relation
-        });
-        const field = sql`(${builtRelation.sql})`.as(selectedRelationTsKey);
-        selection.push({
-          dbKey: selectedRelationTsKey,
-          tsKey: selectedRelationTsKey,
-          field,
-          relationTableTsKey: relationTableTsName,
-          isJson: true,
-          selection: builtRelation.selection
-        });
-      }
-    }
-    if (selection.length === 0) {
-      throw new DrizzleError({
-        message: `No fields selected for table "${tableConfig.tsName}" ("${tableAlias}"). You need to have at least one item in "columns", "with" or "extras". If you need to select all columns, omit the "columns" key or set it to undefined.`
-      });
-    }
-    let result;
-    where = and(joinOn, where);
-    if (nestedQueryRelation) {
-      let field = sql`json_array(${sql.join(selection.map(({ field: field2 }) => is(field2, SQLiteColumn) ? sql.identifier(this.casing.getColumnCasing(field2)) : is(field2, SQL.Aliased) ? field2.sql : field2), sql`, `)})`;
-      if (is(nestedQueryRelation, Many)) {
-        field = sql`coalesce(json_group_array(${field}), json_array())`;
-      }
-      const nestedSelection = [{
-        dbKey: "data",
-        tsKey: "data",
-        field: field.as("data"),
-        isJson: true,
-        relationTableTsKey: tableConfig.tsName,
-        selection
-      }];
-      const needsSubquery = limit !== undefined || offset !== undefined || orderBy.length > 0;
-      if (needsSubquery) {
-        result = this.buildSelectQuery({
-          table: aliasedTable(table, tableAlias),
-          fields: {},
-          fieldsFlat: [
-            {
-              path: [],
-              field: sql.raw("*")
-            }
-          ],
-          where,
-          limit,
-          offset,
-          orderBy,
-          setOperators: []
-        });
-        where = undefined;
-        limit = undefined;
-        offset = undefined;
-        orderBy = undefined;
-      } else {
-        result = aliasedTable(table, tableAlias);
-      }
-      result = this.buildSelectQuery({
-        table: is(result, SQLiteTable) ? result : new Subquery(result, {}, tableAlias),
-        fields: {},
-        fieldsFlat: nestedSelection.map(({ field: field2 }) => ({
-          path: [],
-          field: is(field2, Column) ? aliasedTableColumn(field2, tableAlias) : field2
-        })),
-        joins,
-        where,
-        limit,
-        offset,
-        orderBy,
-        setOperators: []
-      });
-    } else {
-      result = this.buildSelectQuery({
-        table: aliasedTable(table, tableAlias),
-        fields: {},
-        fieldsFlat: selection.map(({ field }) => ({
-          path: [],
-          field: is(field, Column) ? aliasedTableColumn(field, tableAlias) : field
-        })),
-        joins,
-        where,
-        limit,
-        offset,
-        orderBy,
-        setOperators: []
-      });
-    }
-    return {
-      tableTsKey: tableConfig.tsName,
-      sql: result,
-      selection
-    };
-  }
-}
-
-class SQLiteSyncDialect extends SQLiteDialect {
-  static [entityKind] = "SQLiteSyncDialect";
-  migrate(migrations, session, config) {
-    const migrationsTable = config === undefined ? "__drizzle_migrations" : typeof config === "string" ? "__drizzle_migrations" : config.migrationsTable ?? "__drizzle_migrations";
-    const migrationTableCreate = sql`
-			CREATE TABLE IF NOT EXISTS ${sql.identifier(migrationsTable)} (
-				id SERIAL PRIMARY KEY,
-				hash text NOT NULL,
-				created_at numeric
-			)
-		`;
-    session.run(migrationTableCreate);
-    const dbMigrations = session.values(sql`SELECT id, hash, created_at FROM ${sql.identifier(migrationsTable)} ORDER BY created_at DESC LIMIT 1`);
-    const lastDbMigration = dbMigrations[0] ?? undefined;
-    session.run(sql`BEGIN`);
-    try {
-      for (const migration of migrations) {
-        if (!lastDbMigration || Number(lastDbMigration[2]) < migration.folderMillis) {
-          for (const stmt of migration.sql) {
-            session.run(sql.raw(stmt));
-          }
-          session.run(sql`INSERT INTO ${sql.identifier(migrationsTable)} ("hash", "created_at") VALUES(${migration.hash}, ${migration.folderMillis})`);
-        }
-      }
-      session.run(sql`COMMIT`);
-    } catch (e) {
-      session.run(sql`ROLLBACK`);
-      throw e;
-    }
-  }
-}
-
-class SQLiteAsyncDialect extends SQLiteDialect {
-  static [entityKind] = "SQLiteAsyncDialect";
-  async migrate(migrations, session, config) {
-    const migrationsTable = config === undefined ? "__drizzle_migrations" : typeof config === "string" ? "__drizzle_migrations" : config.migrationsTable ?? "__drizzle_migrations";
-    const migrationTableCreate = sql`
-			CREATE TABLE IF NOT EXISTS ${sql.identifier(migrationsTable)} (
-				id SERIAL PRIMARY KEY,
-				hash text NOT NULL,
-				created_at numeric
-			)
-		`;
-    await session.run(migrationTableCreate);
-    const dbMigrations = await session.values(sql`SELECT id, hash, created_at FROM ${sql.identifier(migrationsTable)} ORDER BY created_at DESC LIMIT 1`);
-    const lastDbMigration = dbMigrations[0] ?? undefined;
-    await session.transaction(async (tx) => {
-      for (const migration of migrations) {
-        if (!lastDbMigration || Number(lastDbMigration[2]) < migration.folderMillis) {
-          for (const stmt of migration.sql) {
-            await tx.run(sql.raw(stmt));
-          }
-          await tx.run(sql`INSERT INTO ${sql.identifier(migrationsTable)} ("hash", "created_at") VALUES(${migration.hash}, ${migration.folderMillis})`);
-        }
-      }
-    });
-  }
-}
-
-// node_modules/drizzle-orm/query-builders/query-builder.js
-class TypedQueryBuilder {
-  static [entityKind] = "TypedQueryBuilder";
-  getSelectedFields() {
-    return this._.selectedFields;
-  }
-}
-
-// node_modules/drizzle-orm/sqlite-core/query-builders/select.js
-class SQLiteSelectBuilder {
-  static [entityKind] = "SQLiteSelectBuilder";
-  fields;
-  session;
-  dialect;
-  withList;
-  distinct;
-  constructor(config) {
-    this.fields = config.fields;
-    this.session = config.session;
-    this.dialect = config.dialect;
-    this.withList = config.withList;
-    this.distinct = config.distinct;
-  }
-  from(source) {
-    const isPartialSelect = !!this.fields;
-    let fields;
-    if (this.fields) {
-      fields = this.fields;
-    } else if (is(source, Subquery)) {
-      fields = Object.fromEntries(Object.keys(source._.selectedFields).map((key) => [key, source[key]]));
-    } else if (is(source, SQLiteViewBase)) {
-      fields = source[ViewBaseConfig].selectedFields;
-    } else if (is(source, SQL)) {
-      fields = {};
-    } else {
-      fields = getTableColumns(source);
-    }
-    return new SQLiteSelectBase({
-      table: source,
-      fields,
-      isPartialSelect,
-      session: this.session,
-      dialect: this.dialect,
-      withList: this.withList,
-      distinct: this.distinct
-    });
-  }
-}
-
-class SQLiteSelectQueryBuilderBase extends TypedQueryBuilder {
-  static [entityKind] = "SQLiteSelectQueryBuilder";
-  _;
-  config;
-  joinsNotNullableMap;
-  tableName;
-  isPartialSelect;
-  session;
-  dialect;
-  cacheConfig = undefined;
-  usedTables = /* @__PURE__ */ new Set;
-  constructor({ table, fields, isPartialSelect, session, dialect, withList, distinct }) {
-    super();
-    this.config = {
-      withList,
-      table,
-      fields: { ...fields },
-      distinct,
-      setOperators: []
-    };
-    this.isPartialSelect = isPartialSelect;
-    this.session = session;
-    this.dialect = dialect;
-    this._ = {
-      selectedFields: fields,
-      config: this.config
-    };
-    this.tableName = getTableLikeName(table);
-    this.joinsNotNullableMap = typeof this.tableName === "string" ? { [this.tableName]: true } : {};
-    for (const item of extractUsedTable(table))
-      this.usedTables.add(item);
-  }
-  getUsedTables() {
-    return [...this.usedTables];
-  }
-  createJoin(joinType) {
-    return (table, on) => {
-      const baseTableName = this.tableName;
-      const tableName = getTableLikeName(table);
-      for (const item of extractUsedTable(table))
-        this.usedTables.add(item);
-      if (typeof tableName === "string" && this.config.joins?.some((join) => join.alias === tableName)) {
-        throw new Error(`Alias "${tableName}" is already used in this query`);
-      }
-      if (!this.isPartialSelect) {
-        if (Object.keys(this.joinsNotNullableMap).length === 1 && typeof baseTableName === "string") {
-          this.config.fields = {
-            [baseTableName]: this.config.fields
-          };
-        }
-        if (typeof tableName === "string" && !is(table, SQL)) {
-          const selection = is(table, Subquery) ? table._.selectedFields : is(table, View) ? table[ViewBaseConfig].selectedFields : table[Table.Symbol.Columns];
-          this.config.fields[tableName] = selection;
-        }
-      }
-      if (typeof on === "function") {
-        on = on(new Proxy(this.config.fields, new SelectionProxyHandler({ sqlAliasedBehavior: "sql", sqlBehavior: "sql" })));
-      }
-      if (!this.config.joins) {
-        this.config.joins = [];
-      }
-      this.config.joins.push({ on, table, joinType, alias: tableName });
-      if (typeof tableName === "string") {
-        switch (joinType) {
-          case "left": {
-            this.joinsNotNullableMap[tableName] = false;
-            break;
-          }
-          case "right": {
-            this.joinsNotNullableMap = Object.fromEntries(Object.entries(this.joinsNotNullableMap).map(([key]) => [key, false]));
-            this.joinsNotNullableMap[tableName] = true;
-            break;
-          }
-          case "cross":
-          case "inner": {
-            this.joinsNotNullableMap[tableName] = true;
-            break;
-          }
-          case "full": {
-            this.joinsNotNullableMap = Object.fromEntries(Object.entries(this.joinsNotNullableMap).map(([key]) => [key, false]));
-            this.joinsNotNullableMap[tableName] = false;
-            break;
-          }
-        }
-      }
-      return this;
-    };
-  }
-  leftJoin = this.createJoin("left");
-  rightJoin = this.createJoin("right");
-  innerJoin = this.createJoin("inner");
-  fullJoin = this.createJoin("full");
-  crossJoin = this.createJoin("cross");
-  createSetOperator(type, isAll) {
-    return (rightSelection) => {
-      const rightSelect = typeof rightSelection === "function" ? rightSelection(getSQLiteSetOperators()) : rightSelection;
-      if (!haveSameKeys(this.getSelectedFields(), rightSelect.getSelectedFields())) {
-        throw new Error("Set operator error (union / intersect / except): selected fields are not the same or are in a different order");
-      }
-      this.config.setOperators.push({ type, isAll, rightSelect });
-      return this;
-    };
-  }
-  union = this.createSetOperator("union", false);
-  unionAll = this.createSetOperator("union", true);
-  intersect = this.createSetOperator("intersect", false);
-  except = this.createSetOperator("except", false);
-  addSetOperators(setOperators) {
-    this.config.setOperators.push(...setOperators);
-    return this;
-  }
-  where(where) {
-    if (typeof where === "function") {
-      where = where(new Proxy(this.config.fields, new SelectionProxyHandler({ sqlAliasedBehavior: "sql", sqlBehavior: "sql" })));
-    }
-    this.config.where = where;
-    return this;
-  }
-  having(having) {
-    if (typeof having === "function") {
-      having = having(new Proxy(this.config.fields, new SelectionProxyHandler({ sqlAliasedBehavior: "sql", sqlBehavior: "sql" })));
-    }
-    this.config.having = having;
-    return this;
-  }
-  groupBy(...columns) {
-    if (typeof columns[0] === "function") {
-      const groupBy = columns[0](new Proxy(this.config.fields, new SelectionProxyHandler({ sqlAliasedBehavior: "alias", sqlBehavior: "sql" })));
-      this.config.groupBy = Array.isArray(groupBy) ? groupBy : [groupBy];
-    } else {
-      this.config.groupBy = columns;
-    }
-    return this;
-  }
-  orderBy(...columns) {
-    if (typeof columns[0] === "function") {
-      const orderBy = columns[0](new Proxy(this.config.fields, new SelectionProxyHandler({ sqlAliasedBehavior: "alias", sqlBehavior: "sql" })));
-      const orderByArray = Array.isArray(orderBy) ? orderBy : [orderBy];
-      if (this.config.setOperators.length > 0) {
-        this.config.setOperators.at(-1).orderBy = orderByArray;
-      } else {
-        this.config.orderBy = orderByArray;
-      }
-    } else {
-      const orderByArray = columns;
-      if (this.config.setOperators.length > 0) {
-        this.config.setOperators.at(-1).orderBy = orderByArray;
-      } else {
-        this.config.orderBy = orderByArray;
-      }
-    }
-    return this;
-  }
-  limit(limit) {
-    if (this.config.setOperators.length > 0) {
-      this.config.setOperators.at(-1).limit = limit;
-    } else {
-      this.config.limit = limit;
-    }
-    return this;
-  }
-  offset(offset) {
-    if (this.config.setOperators.length > 0) {
-      this.config.setOperators.at(-1).offset = offset;
-    } else {
-      this.config.offset = offset;
-    }
-    return this;
-  }
-  getSQL() {
-    return this.dialect.buildSelectQuery(this.config);
-  }
-  toSQL() {
-    const { typings: _typings, ...rest } = this.dialect.sqlToQuery(this.getSQL());
-    return rest;
-  }
-  as(alias) {
-    const usedTables = [];
-    usedTables.push(...extractUsedTable(this.config.table));
-    if (this.config.joins) {
-      for (const it of this.config.joins)
-        usedTables.push(...extractUsedTable(it.table));
-    }
-    return new Proxy(new Subquery(this.getSQL(), this.config.fields, alias, false, [...new Set(usedTables)]), new SelectionProxyHandler({ alias, sqlAliasedBehavior: "alias", sqlBehavior: "error" }));
-  }
-  getSelectedFields() {
-    return new Proxy(this.config.fields, new SelectionProxyHandler({ alias: this.tableName, sqlAliasedBehavior: "alias", sqlBehavior: "error" }));
-  }
-  $dynamic() {
-    return this;
-  }
-}
-
-class SQLiteSelectBase extends SQLiteSelectQueryBuilderBase {
-  static [entityKind] = "SQLiteSelect";
-  _prepare(isOneTimeQuery = true) {
-    if (!this.session) {
-      throw new Error("Cannot execute a query on a query builder. Please use a database instance instead.");
-    }
-    const fieldsList = orderSelectedFields(this.config.fields);
-    const query = this.session[isOneTimeQuery ? "prepareOneTimeQuery" : "prepareQuery"](this.dialect.sqlToQuery(this.getSQL()), fieldsList, "all", true, undefined, {
-      type: "select",
-      tables: [...this.usedTables]
-    }, this.cacheConfig);
-    query.joinsNotNullableMap = this.joinsNotNullableMap;
-    return query;
-  }
-  $withCache(config) {
-    this.cacheConfig = config === undefined ? { config: {}, enable: true, autoInvalidate: true } : config === false ? { enable: false } : { enable: true, autoInvalidate: true, ...config };
-    return this;
-  }
-  prepare() {
-    return this._prepare(false);
-  }
-  run = (placeholderValues) => {
-    return this._prepare().run(placeholderValues);
-  };
-  all = (placeholderValues) => {
-    return this._prepare().all(placeholderValues);
-  };
-  get = (placeholderValues) => {
-    return this._prepare().get(placeholderValues);
-  };
-  values = (placeholderValues) => {
-    return this._prepare().values(placeholderValues);
-  };
-  async execute() {
-    return this.all();
-  }
-}
-applyMixins(SQLiteSelectBase, [QueryPromise]);
-function createSetOperator(type, isAll) {
-  return (leftSelect, rightSelect, ...restSelects) => {
-    const setOperators = [rightSelect, ...restSelects].map((select) => ({
-      type,
-      isAll,
-      rightSelect: select
-    }));
-    for (const setOperator of setOperators) {
-      if (!haveSameKeys(leftSelect.getSelectedFields(), setOperator.rightSelect.getSelectedFields())) {
-        throw new Error("Set operator error (union / intersect / except): selected fields are not the same or are in a different order");
-      }
-    }
-    return leftSelect.addSetOperators(setOperators);
-  };
-}
-var getSQLiteSetOperators = () => ({
-  union,
-  unionAll,
-  intersect,
-  except
-});
-var union = createSetOperator("union", false);
-var unionAll = createSetOperator("union", true);
-var intersect = createSetOperator("intersect", false);
-var except = createSetOperator("except", false);
-
-// node_modules/drizzle-orm/sqlite-core/query-builders/query-builder.js
-class QueryBuilder {
-  static [entityKind] = "SQLiteQueryBuilder";
-  dialect;
-  dialectConfig;
-  constructor(dialect) {
-    this.dialect = is(dialect, SQLiteDialect) ? dialect : undefined;
-    this.dialectConfig = is(dialect, SQLiteDialect) ? undefined : dialect;
-  }
-  $with = (alias, selection) => {
-    const queryBuilder = this;
-    const as = (qb) => {
-      if (typeof qb === "function") {
-        qb = qb(queryBuilder);
-      }
-      return new Proxy(new WithSubquery(qb.getSQL(), selection ?? ("getSelectedFields" in qb ? qb.getSelectedFields() ?? {} : {}), alias, true), new SelectionProxyHandler({ alias, sqlAliasedBehavior: "alias", sqlBehavior: "error" }));
-    };
-    return { as };
-  };
-  with(...queries) {
-    const self = this;
-    function select(fields) {
-      return new SQLiteSelectBuilder({
-        fields: fields ?? undefined,
-        session: undefined,
-        dialect: self.getDialect(),
-        withList: queries
-      });
-    }
-    function selectDistinct(fields) {
-      return new SQLiteSelectBuilder({
-        fields: fields ?? undefined,
-        session: undefined,
-        dialect: self.getDialect(),
-        withList: queries,
-        distinct: true
-      });
-    }
-    return { select, selectDistinct };
-  }
-  select(fields) {
-    return new SQLiteSelectBuilder({ fields: fields ?? undefined, session: undefined, dialect: this.getDialect() });
-  }
-  selectDistinct(fields) {
-    return new SQLiteSelectBuilder({
-      fields: fields ?? undefined,
-      session: undefined,
-      dialect: this.getDialect(),
-      distinct: true
-    });
-  }
-  getDialect() {
-    if (!this.dialect) {
-      this.dialect = new SQLiteSyncDialect(this.dialectConfig);
-    }
-    return this.dialect;
-  }
-}
-
-// node_modules/drizzle-orm/sqlite-core/query-builders/insert.js
-class SQLiteInsertBuilder {
-  constructor(table, session, dialect, withList) {
-    this.table = table;
-    this.session = session;
-    this.dialect = dialect;
-    this.withList = withList;
-  }
-  static [entityKind] = "SQLiteInsertBuilder";
-  values(values) {
-    values = Array.isArray(values) ? values : [values];
-    if (values.length === 0) {
-      throw new Error("values() must be called with at least one value");
-    }
-    const mappedValues = values.map((entry) => {
-      const result = {};
-      const cols = this.table[Table.Symbol.Columns];
-      for (const colKey of Object.keys(entry)) {
-        const colValue = entry[colKey];
-        result[colKey] = is(colValue, SQL) ? colValue : new Param(colValue, cols[colKey]);
-      }
-      return result;
-    });
-    return new SQLiteInsertBase(this.table, mappedValues, this.session, this.dialect, this.withList);
-  }
-  select(selectQuery) {
-    const select = typeof selectQuery === "function" ? selectQuery(new QueryBuilder) : selectQuery;
-    if (!is(select, SQL) && !haveSameKeys(this.table[Columns], select._.selectedFields)) {
-      throw new Error("Insert select error: selected fields are not the same or are in a different order compared to the table definition");
-    }
-    return new SQLiteInsertBase(this.table, select, this.session, this.dialect, this.withList, true);
-  }
-}
-
-class SQLiteInsertBase extends QueryPromise {
-  constructor(table, values, session, dialect, withList, select) {
-    super();
-    this.session = session;
-    this.dialect = dialect;
-    this.config = { table, values, withList, select };
-  }
-  static [entityKind] = "SQLiteInsert";
-  config;
-  returning(fields = this.config.table[SQLiteTable.Symbol.Columns]) {
-    this.config.returning = orderSelectedFields(fields);
-    return this;
-  }
-  onConflictDoNothing(config = {}) {
-    if (!this.config.onConflict)
-      this.config.onConflict = [];
-    if (config.target === undefined) {
-      this.config.onConflict.push(sql` on conflict do nothing`);
-    } else {
-      const targetSql = Array.isArray(config.target) ? sql`${config.target}` : sql`${[config.target]}`;
-      const whereSql = config.where ? sql` where ${config.where}` : sql``;
-      this.config.onConflict.push(sql` on conflict ${targetSql} do nothing${whereSql}`);
-    }
-    return this;
-  }
-  onConflictDoUpdate(config) {
-    if (config.where && (config.targetWhere || config.setWhere)) {
-      throw new Error('You cannot use both "where" and "targetWhere"/"setWhere" at the same time - "where" is deprecated, use "targetWhere" or "setWhere" instead.');
-    }
-    if (!this.config.onConflict)
-      this.config.onConflict = [];
-    const whereSql = config.where ? sql` where ${config.where}` : undefined;
-    const targetWhereSql = config.targetWhere ? sql` where ${config.targetWhere}` : undefined;
-    const setWhereSql = config.setWhere ? sql` where ${config.setWhere}` : undefined;
-    const targetSql = Array.isArray(config.target) ? sql`${config.target}` : sql`${[config.target]}`;
-    const setSql = this.dialect.buildUpdateSet(this.config.table, mapUpdateSet(this.config.table, config.set));
-    this.config.onConflict.push(sql` on conflict ${targetSql}${targetWhereSql} do update set ${setSql}${whereSql}${setWhereSql}`);
-    return this;
-  }
-  getSQL() {
-    return this.dialect.buildInsertQuery(this.config);
-  }
-  toSQL() {
-    const { typings: _typings, ...rest } = this.dialect.sqlToQuery(this.getSQL());
-    return rest;
-  }
-  _prepare(isOneTimeQuery = true) {
-    return this.session[isOneTimeQuery ? "prepareOneTimeQuery" : "prepareQuery"](this.dialect.sqlToQuery(this.getSQL()), this.config.returning, this.config.returning ? "all" : "run", true, undefined, {
-      type: "insert",
-      tables: extractUsedTable(this.config.table)
-    });
-  }
-  prepare() {
-    return this._prepare(false);
-  }
-  run = (placeholderValues) => {
-    return this._prepare().run(placeholderValues);
-  };
-  all = (placeholderValues) => {
-    return this._prepare().all(placeholderValues);
-  };
-  get = (placeholderValues) => {
-    return this._prepare().get(placeholderValues);
-  };
-  values = (placeholderValues) => {
-    return this._prepare().values(placeholderValues);
-  };
-  async execute() {
-    return this.config.returning ? this.all() : this.run();
-  }
-  $dynamic() {
-    return this;
-  }
-}
-
-// node_modules/drizzle-orm/sqlite-core/query-builders/update.js
-class SQLiteUpdateBuilder {
-  constructor(table, session, dialect, withList) {
-    this.table = table;
-    this.session = session;
-    this.dialect = dialect;
-    this.withList = withList;
-  }
-  static [entityKind] = "SQLiteUpdateBuilder";
-  set(values) {
-    return new SQLiteUpdateBase(this.table, mapUpdateSet(this.table, values), this.session, this.dialect, this.withList);
-  }
-}
-
-class SQLiteUpdateBase extends QueryPromise {
-  constructor(table, set, session, dialect, withList) {
-    super();
-    this.session = session;
-    this.dialect = dialect;
-    this.config = { set, table, withList, joins: [] };
-  }
-  static [entityKind] = "SQLiteUpdate";
-  config;
-  from(source) {
-    this.config.from = source;
-    return this;
-  }
-  createJoin(joinType) {
-    return (table, on) => {
-      const tableName = getTableLikeName(table);
-      if (typeof tableName === "string" && this.config.joins.some((join) => join.alias === tableName)) {
-        throw new Error(`Alias "${tableName}" is already used in this query`);
-      }
-      if (typeof on === "function") {
-        const from = this.config.from ? is(table, SQLiteTable) ? table[Table.Symbol.Columns] : is(table, Subquery) ? table._.selectedFields : is(table, SQLiteViewBase) ? table[ViewBaseConfig].selectedFields : undefined : undefined;
-        on = on(new Proxy(this.config.table[Table.Symbol.Columns], new SelectionProxyHandler({ sqlAliasedBehavior: "sql", sqlBehavior: "sql" })), from && new Proxy(from, new SelectionProxyHandler({ sqlAliasedBehavior: "sql", sqlBehavior: "sql" })));
-      }
-      this.config.joins.push({ on, table, joinType, alias: tableName });
-      return this;
-    };
-  }
-  leftJoin = this.createJoin("left");
-  rightJoin = this.createJoin("right");
-  innerJoin = this.createJoin("inner");
-  fullJoin = this.createJoin("full");
-  where(where) {
-    this.config.where = where;
-    return this;
-  }
-  orderBy(...columns) {
-    if (typeof columns[0] === "function") {
-      const orderBy = columns[0](new Proxy(this.config.table[Table.Symbol.Columns], new SelectionProxyHandler({ sqlAliasedBehavior: "alias", sqlBehavior: "sql" })));
-      const orderByArray = Array.isArray(orderBy) ? orderBy : [orderBy];
-      this.config.orderBy = orderByArray;
-    } else {
-      const orderByArray = columns;
-      this.config.orderBy = orderByArray;
-    }
-    return this;
-  }
-  limit(limit) {
-    this.config.limit = limit;
-    return this;
-  }
-  returning(fields = this.config.table[SQLiteTable.Symbol.Columns]) {
-    this.config.returning = orderSelectedFields(fields);
-    return this;
-  }
-  getSQL() {
-    return this.dialect.buildUpdateQuery(this.config);
-  }
-  toSQL() {
-    const { typings: _typings, ...rest } = this.dialect.sqlToQuery(this.getSQL());
-    return rest;
-  }
-  _prepare(isOneTimeQuery = true) {
-    return this.session[isOneTimeQuery ? "prepareOneTimeQuery" : "prepareQuery"](this.dialect.sqlToQuery(this.getSQL()), this.config.returning, this.config.returning ? "all" : "run", true, undefined, {
-      type: "insert",
-      tables: extractUsedTable(this.config.table)
-    });
-  }
-  prepare() {
-    return this._prepare(false);
-  }
-  run = (placeholderValues) => {
-    return this._prepare().run(placeholderValues);
-  };
-  all = (placeholderValues) => {
-    return this._prepare().all(placeholderValues);
-  };
-  get = (placeholderValues) => {
-    return this._prepare().get(placeholderValues);
-  };
-  values = (placeholderValues) => {
-    return this._prepare().values(placeholderValues);
-  };
-  async execute() {
-    return this.config.returning ? this.all() : this.run();
-  }
-  $dynamic() {
-    return this;
-  }
-}
-
-// node_modules/drizzle-orm/sqlite-core/query-builders/count.js
-class SQLiteCountBuilder extends SQL {
-  constructor(params) {
-    super(SQLiteCountBuilder.buildEmbeddedCount(params.source, params.filters).queryChunks);
-    this.params = params;
-    this.session = params.session;
-    this.sql = SQLiteCountBuilder.buildCount(params.source, params.filters);
-  }
-  sql;
-  static [entityKind] = "SQLiteCountBuilderAsync";
-  [Symbol.toStringTag] = "SQLiteCountBuilderAsync";
-  session;
-  static buildEmbeddedCount(source, filters) {
-    return sql`(select count(*) from ${source}${sql.raw(" where ").if(filters)}${filters})`;
-  }
-  static buildCount(source, filters) {
-    return sql`select count(*) from ${source}${sql.raw(" where ").if(filters)}${filters}`;
-  }
-  then(onfulfilled, onrejected) {
-    return Promise.resolve(this.session.count(this.sql)).then(onfulfilled, onrejected);
-  }
-  catch(onRejected) {
-    return this.then(undefined, onRejected);
-  }
-  finally(onFinally) {
-    return this.then((value) => {
-      onFinally?.();
-      return value;
-    }, (reason) => {
-      onFinally?.();
-      throw reason;
-    });
-  }
-}
-
-// node_modules/drizzle-orm/sqlite-core/query-builders/query.js
-class RelationalQueryBuilder {
-  constructor(mode, fullSchema, schema, tableNamesMap, table, tableConfig, dialect, session) {
-    this.mode = mode;
-    this.fullSchema = fullSchema;
-    this.schema = schema;
-    this.tableNamesMap = tableNamesMap;
-    this.table = table;
-    this.tableConfig = tableConfig;
-    this.dialect = dialect;
-    this.session = session;
-  }
-  static [entityKind] = "SQLiteAsyncRelationalQueryBuilder";
-  findMany(config) {
-    return this.mode === "sync" ? new SQLiteSyncRelationalQuery(this.fullSchema, this.schema, this.tableNamesMap, this.table, this.tableConfig, this.dialect, this.session, config ? config : {}, "many") : new SQLiteRelationalQuery(this.fullSchema, this.schema, this.tableNamesMap, this.table, this.tableConfig, this.dialect, this.session, config ? config : {}, "many");
-  }
-  findFirst(config) {
-    return this.mode === "sync" ? new SQLiteSyncRelationalQuery(this.fullSchema, this.schema, this.tableNamesMap, this.table, this.tableConfig, this.dialect, this.session, config ? { ...config, limit: 1 } : { limit: 1 }, "first") : new SQLiteRelationalQuery(this.fullSchema, this.schema, this.tableNamesMap, this.table, this.tableConfig, this.dialect, this.session, config ? { ...config, limit: 1 } : { limit: 1 }, "first");
-  }
-}
-
-class SQLiteRelationalQuery extends QueryPromise {
-  constructor(fullSchema, schema, tableNamesMap, table, tableConfig, dialect, session, config, mode) {
-    super();
-    this.fullSchema = fullSchema;
-    this.schema = schema;
-    this.tableNamesMap = tableNamesMap;
-    this.table = table;
-    this.tableConfig = tableConfig;
-    this.dialect = dialect;
-    this.session = session;
-    this.config = config;
-    this.mode = mode;
-  }
-  static [entityKind] = "SQLiteAsyncRelationalQuery";
-  mode;
-  getSQL() {
-    return this.dialect.buildRelationalQuery({
-      fullSchema: this.fullSchema,
-      schema: this.schema,
-      tableNamesMap: this.tableNamesMap,
-      table: this.table,
-      tableConfig: this.tableConfig,
-      queryConfig: this.config,
-      tableAlias: this.tableConfig.tsName
-    }).sql;
-  }
-  _prepare(isOneTimeQuery = false) {
-    const { query, builtQuery } = this._toSQL();
-    return this.session[isOneTimeQuery ? "prepareOneTimeQuery" : "prepareQuery"](builtQuery, undefined, this.mode === "first" ? "get" : "all", true, (rawRows, mapColumnValue) => {
-      const rows = rawRows.map((row) => mapRelationalRow(this.schema, this.tableConfig, row, query.selection, mapColumnValue));
-      if (this.mode === "first") {
-        return rows[0];
-      }
-      return rows;
-    });
-  }
-  prepare() {
-    return this._prepare(false);
-  }
-  _toSQL() {
-    const query = this.dialect.buildRelationalQuery({
-      fullSchema: this.fullSchema,
-      schema: this.schema,
-      tableNamesMap: this.tableNamesMap,
-      table: this.table,
-      tableConfig: this.tableConfig,
-      queryConfig: this.config,
-      tableAlias: this.tableConfig.tsName
-    });
-    const builtQuery = this.dialect.sqlToQuery(query.sql);
-    return { query, builtQuery };
-  }
-  toSQL() {
-    return this._toSQL().builtQuery;
-  }
-  executeRaw() {
-    if (this.mode === "first") {
-      return this._prepare(false).get();
-    }
-    return this._prepare(false).all();
-  }
-  async execute() {
-    return this.executeRaw();
-  }
-}
-
-class SQLiteSyncRelationalQuery extends SQLiteRelationalQuery {
-  static [entityKind] = "SQLiteSyncRelationalQuery";
-  sync() {
-    return this.executeRaw();
-  }
-}
-
-// node_modules/drizzle-orm/sqlite-core/query-builders/raw.js
-class SQLiteRaw extends QueryPromise {
-  constructor(execute, getSQL, action, dialect, mapBatchResult) {
-    super();
-    this.execute = execute;
-    this.getSQL = getSQL;
-    this.dialect = dialect;
-    this.mapBatchResult = mapBatchResult;
-    this.config = { action };
-  }
-  static [entityKind] = "SQLiteRaw";
-  config;
-  getQuery() {
-    return { ...this.dialect.sqlToQuery(this.getSQL()), method: this.config.action };
-  }
-  mapResult(result, isFromBatch) {
-    return isFromBatch ? this.mapBatchResult(result) : result;
-  }
-  _prepare() {
-    return this;
-  }
-  isResponseInArrayMode() {
-    return false;
-  }
-}
-
-// node_modules/drizzle-orm/sqlite-core/db.js
-class BaseSQLiteDatabase {
-  constructor(resultKind, dialect, session, schema) {
-    this.resultKind = resultKind;
-    this.dialect = dialect;
-    this.session = session;
-    this._ = schema ? {
-      schema: schema.schema,
-      fullSchema: schema.fullSchema,
-      tableNamesMap: schema.tableNamesMap
-    } : {
-      schema: undefined,
-      fullSchema: {},
-      tableNamesMap: {}
-    };
-    this.query = {};
-    const query = this.query;
-    if (this._.schema) {
-      for (const [tableName, columns] of Object.entries(this._.schema)) {
-        query[tableName] = new RelationalQueryBuilder(resultKind, schema.fullSchema, this._.schema, this._.tableNamesMap, schema.fullSchema[tableName], columns, dialect, session);
-      }
-    }
-    this.$cache = { invalidate: async (_params) => {} };
-  }
-  static [entityKind] = "BaseSQLiteDatabase";
-  query;
-  $with = (alias, selection) => {
-    const self = this;
-    const as = (qb) => {
-      if (typeof qb === "function") {
-        qb = qb(new QueryBuilder(self.dialect));
-      }
-      return new Proxy(new WithSubquery(qb.getSQL(), selection ?? ("getSelectedFields" in qb ? qb.getSelectedFields() ?? {} : {}), alias, true), new SelectionProxyHandler({ alias, sqlAliasedBehavior: "alias", sqlBehavior: "error" }));
-    };
-    return { as };
-  };
-  $count(source, filters) {
-    return new SQLiteCountBuilder({ source, filters, session: this.session });
-  }
-  with(...queries) {
-    const self = this;
-    function select(fields) {
-      return new SQLiteSelectBuilder({
-        fields: fields ?? undefined,
-        session: self.session,
-        dialect: self.dialect,
-        withList: queries
-      });
-    }
-    function selectDistinct(fields) {
-      return new SQLiteSelectBuilder({
-        fields: fields ?? undefined,
-        session: self.session,
-        dialect: self.dialect,
-        withList: queries,
-        distinct: true
-      });
-    }
-    function update(table) {
-      return new SQLiteUpdateBuilder(table, self.session, self.dialect, queries);
-    }
-    function insert(into) {
-      return new SQLiteInsertBuilder(into, self.session, self.dialect, queries);
-    }
-    function delete_(from) {
-      return new SQLiteDeleteBase(from, self.session, self.dialect, queries);
-    }
-    return { select, selectDistinct, update, insert, delete: delete_ };
-  }
-  select(fields) {
-    return new SQLiteSelectBuilder({ fields: fields ?? undefined, session: this.session, dialect: this.dialect });
-  }
-  selectDistinct(fields) {
-    return new SQLiteSelectBuilder({
-      fields: fields ?? undefined,
-      session: this.session,
-      dialect: this.dialect,
-      distinct: true
-    });
-  }
-  update(table) {
-    return new SQLiteUpdateBuilder(table, this.session, this.dialect);
-  }
-  $cache;
-  insert(into) {
-    return new SQLiteInsertBuilder(into, this.session, this.dialect);
-  }
-  delete(from) {
-    return new SQLiteDeleteBase(from, this.session, this.dialect);
-  }
-  run(query) {
-    const sequel = typeof query === "string" ? sql.raw(query) : query.getSQL();
-    if (this.resultKind === "async") {
-      return new SQLiteRaw(async () => this.session.run(sequel), () => sequel, "run", this.dialect, this.session.extractRawRunValueFromBatchResult.bind(this.session));
-    }
-    return this.session.run(sequel);
-  }
-  all(query) {
-    const sequel = typeof query === "string" ? sql.raw(query) : query.getSQL();
-    if (this.resultKind === "async") {
-      return new SQLiteRaw(async () => this.session.all(sequel), () => sequel, "all", this.dialect, this.session.extractRawAllValueFromBatchResult.bind(this.session));
-    }
-    return this.session.all(sequel);
-  }
-  get(query) {
-    const sequel = typeof query === "string" ? sql.raw(query) : query.getSQL();
-    if (this.resultKind === "async") {
-      return new SQLiteRaw(async () => this.session.get(sequel), () => sequel, "get", this.dialect, this.session.extractRawGetValueFromBatchResult.bind(this.session));
-    }
-    return this.session.get(sequel);
-  }
-  values(query) {
-    const sequel = typeof query === "string" ? sql.raw(query) : query.getSQL();
-    if (this.resultKind === "async") {
-      return new SQLiteRaw(async () => this.session.values(sequel), () => sequel, "values", this.dialect, this.session.extractRawValuesValueFromBatchResult.bind(this.session));
-    }
-    return this.session.values(sequel);
-  }
-  transaction(transaction, config) {
-    return this.session.transaction(transaction, config);
-  }
-}
-
-// node_modules/drizzle-orm/cache/core/cache.js
-class Cache {
-  static [entityKind] = "Cache";
-}
-
-class NoopCache extends Cache {
-  strategy() {
-    return "all";
-  }
-  static [entityKind] = "NoopCache";
-  async get(_key) {
-    return;
-  }
-  async put(_hashedQuery, _response, _tables, _config) {}
-  async onMutate(_params) {}
-}
-async function hashQuery(sql2, params) {
-  const dataToHash = `${sql2}-${JSON.stringify(params)}`;
-  const encoder = new TextEncoder;
-  const data = encoder.encode(dataToHash);
-  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-  const hashArray = [...new Uint8Array(hashBuffer)];
-  const hashHex = hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
-  return hashHex;
-}
-
-// node_modules/drizzle-orm/sqlite-core/session.js
-class ExecuteResultSync extends QueryPromise {
-  constructor(resultCb) {
-    super();
-    this.resultCb = resultCb;
-  }
-  static [entityKind] = "ExecuteResultSync";
-  async execute() {
-    return this.resultCb();
-  }
-  sync() {
-    return this.resultCb();
-  }
-}
-
-class SQLitePreparedQuery {
-  constructor(mode, executeMethod, query, cache, queryMetadata, cacheConfig) {
-    this.mode = mode;
-    this.executeMethod = executeMethod;
-    this.query = query;
-    this.cache = cache;
-    this.queryMetadata = queryMetadata;
-    this.cacheConfig = cacheConfig;
-    if (cache && cache.strategy() === "all" && cacheConfig === undefined) {
-      this.cacheConfig = { enable: true, autoInvalidate: true };
-    }
-    if (!this.cacheConfig?.enable) {
-      this.cacheConfig = undefined;
-    }
-  }
-  static [entityKind] = "PreparedQuery";
-  joinsNotNullableMap;
-  async queryWithCache(queryString, params, query) {
-    if (this.cache === undefined || is(this.cache, NoopCache) || this.queryMetadata === undefined) {
-      try {
-        return await query();
-      } catch (e) {
-        throw new DrizzleQueryError(queryString, params, e);
-      }
-    }
-    if (this.cacheConfig && !this.cacheConfig.enable) {
-      try {
-        return await query();
-      } catch (e) {
-        throw new DrizzleQueryError(queryString, params, e);
-      }
-    }
-    if ((this.queryMetadata.type === "insert" || this.queryMetadata.type === "update" || this.queryMetadata.type === "delete") && this.queryMetadata.tables.length > 0) {
-      try {
-        const [res] = await Promise.all([
-          query(),
-          this.cache.onMutate({ tables: this.queryMetadata.tables })
-        ]);
-        return res;
-      } catch (e) {
-        throw new DrizzleQueryError(queryString, params, e);
-      }
-    }
-    if (!this.cacheConfig) {
-      try {
-        return await query();
-      } catch (e) {
-        throw new DrizzleQueryError(queryString, params, e);
-      }
-    }
-    if (this.queryMetadata.type === "select") {
-      const fromCache = await this.cache.get(this.cacheConfig.tag ?? await hashQuery(queryString, params), this.queryMetadata.tables, this.cacheConfig.tag !== undefined, this.cacheConfig.autoInvalidate);
-      if (fromCache === undefined) {
-        let result;
-        try {
-          result = await query();
-        } catch (e) {
-          throw new DrizzleQueryError(queryString, params, e);
-        }
-        await this.cache.put(this.cacheConfig.tag ?? await hashQuery(queryString, params), result, this.cacheConfig.autoInvalidate ? this.queryMetadata.tables : [], this.cacheConfig.tag !== undefined, this.cacheConfig.config);
-        return result;
-      }
-      return fromCache;
-    }
-    try {
-      return await query();
-    } catch (e) {
-      throw new DrizzleQueryError(queryString, params, e);
-    }
-  }
-  getQuery() {
-    return this.query;
-  }
-  mapRunResult(result, _isFromBatch) {
-    return result;
-  }
-  mapAllResult(_result, _isFromBatch) {
-    throw new Error("Not implemented");
-  }
-  mapGetResult(_result, _isFromBatch) {
-    throw new Error("Not implemented");
-  }
-  execute(placeholderValues) {
-    if (this.mode === "async") {
-      return this[this.executeMethod](placeholderValues);
-    }
-    return new ExecuteResultSync(() => this[this.executeMethod](placeholderValues));
-  }
-  mapResult(response, isFromBatch) {
-    switch (this.executeMethod) {
-      case "run": {
-        return this.mapRunResult(response, isFromBatch);
-      }
-      case "all": {
-        return this.mapAllResult(response, isFromBatch);
-      }
-      case "get": {
-        return this.mapGetResult(response, isFromBatch);
-      }
-    }
-  }
-}
-
-class SQLiteSession {
-  constructor(dialect) {
-    this.dialect = dialect;
-  }
-  static [entityKind] = "SQLiteSession";
-  prepareOneTimeQuery(query, fields, executeMethod, isResponseInArrayMode, customResultMapper, queryMetadata, cacheConfig) {
-    return this.prepareQuery(query, fields, executeMethod, isResponseInArrayMode, customResultMapper, queryMetadata, cacheConfig);
-  }
-  run(query) {
-    const staticQuery = this.dialect.sqlToQuery(query);
-    try {
-      return this.prepareOneTimeQuery(staticQuery, undefined, "run", false).run();
-    } catch (err) {
-      throw new DrizzleError({ cause: err, message: `Failed to run the query '${staticQuery.sql}'` });
-    }
-  }
-  extractRawRunValueFromBatchResult(result) {
-    return result;
-  }
-  all(query) {
-    return this.prepareOneTimeQuery(this.dialect.sqlToQuery(query), undefined, "run", false).all();
-  }
-  extractRawAllValueFromBatchResult(_result) {
-    throw new Error("Not implemented");
-  }
-  get(query) {
-    return this.prepareOneTimeQuery(this.dialect.sqlToQuery(query), undefined, "run", false).get();
-  }
-  extractRawGetValueFromBatchResult(_result) {
-    throw new Error("Not implemented");
-  }
-  values(query) {
-    return this.prepareOneTimeQuery(this.dialect.sqlToQuery(query), undefined, "run", false).values();
-  }
-  async count(sql2) {
-    const result = await this.values(sql2);
-    return result[0][0];
-  }
-  extractRawValuesValueFromBatchResult(_result) {
-    throw new Error("Not implemented");
-  }
-}
-
-class SQLiteTransaction extends BaseSQLiteDatabase {
-  constructor(resultType, dialect, session, schema, nestedIndex = 0) {
-    super(resultType, dialect, session, schema);
-    this.schema = schema;
-    this.nestedIndex = nestedIndex;
-  }
-  static [entityKind] = "SQLiteTransaction";
-  rollback() {
-    throw new TransactionRollbackError;
-  }
-}
-
-// node_modules/drizzle-orm/libsql/session.js
-class LibSQLSession extends SQLiteSession {
-  constructor(client, dialect, schema, options, tx) {
-    super(dialect);
-    this.client = client;
-    this.schema = schema;
-    this.options = options;
-    this.tx = tx;
-    this.logger = options.logger ?? new NoopLogger;
-    this.cache = options.cache ?? new NoopCache;
-  }
-  static [entityKind] = "LibSQLSession";
-  logger;
-  cache;
-  prepareQuery(query, fields, executeMethod, isResponseInArrayMode, customResultMapper, queryMetadata, cacheConfig) {
-    return new LibSQLPreparedQuery(this.client, query, this.logger, this.cache, queryMetadata, cacheConfig, fields, this.tx, executeMethod, isResponseInArrayMode, customResultMapper);
-  }
-  async batch(queries) {
-    const preparedQueries = [];
-    const builtQueries = [];
-    for (const query of queries) {
-      const preparedQuery = query._prepare();
-      const builtQuery = preparedQuery.getQuery();
-      preparedQueries.push(preparedQuery);
-      builtQueries.push({ sql: builtQuery.sql, args: builtQuery.params });
-    }
-    const batchResults = await this.client.batch(builtQueries);
-    return batchResults.map((result, i) => preparedQueries[i].mapResult(result, true));
-  }
-  async migrate(queries) {
-    const preparedQueries = [];
-    const builtQueries = [];
-    for (const query of queries) {
-      const preparedQuery = query._prepare();
-      const builtQuery = preparedQuery.getQuery();
-      preparedQueries.push(preparedQuery);
-      builtQueries.push({ sql: builtQuery.sql, args: builtQuery.params });
-    }
-    const batchResults = await this.client.migrate(builtQueries);
-    return batchResults.map((result, i) => preparedQueries[i].mapResult(result, true));
-  }
-  async transaction(transaction, _config) {
-    const libsqlTx = await this.client.transaction();
-    const session = new LibSQLSession(this.client, this.dialect, this.schema, this.options, libsqlTx);
-    const tx = new LibSQLTransaction("async", this.dialect, session, this.schema);
-    try {
-      const result = await transaction(tx);
-      await libsqlTx.commit();
-      return result;
-    } catch (err) {
-      await libsqlTx.rollback();
-      throw err;
-    }
-  }
-  extractRawAllValueFromBatchResult(result) {
-    return result.rows;
-  }
-  extractRawGetValueFromBatchResult(result) {
-    return result.rows[0];
-  }
-  extractRawValuesValueFromBatchResult(result) {
-    return result.rows;
-  }
-}
-
-class LibSQLTransaction extends SQLiteTransaction {
-  static [entityKind] = "LibSQLTransaction";
-  async transaction(transaction) {
-    const savepointName = `sp${this.nestedIndex}`;
-    const tx = new LibSQLTransaction("async", this.dialect, this.session, this.schema, this.nestedIndex + 1);
-    await this.session.run(sql.raw(`savepoint ${savepointName}`));
-    try {
-      const result = await transaction(tx);
-      await this.session.run(sql.raw(`release savepoint ${savepointName}`));
-      return result;
-    } catch (err) {
-      await this.session.run(sql.raw(`rollback to savepoint ${savepointName}`));
-      throw err;
-    }
-  }
-}
-
-class LibSQLPreparedQuery extends SQLitePreparedQuery {
-  constructor(client, query, logger, cache, queryMetadata, cacheConfig, fields, tx, executeMethod, _isResponseInArrayMode, customResultMapper) {
-    super("async", executeMethod, query, cache, queryMetadata, cacheConfig);
-    this.client = client;
-    this.logger = logger;
-    this.fields = fields;
-    this.tx = tx;
-    this._isResponseInArrayMode = _isResponseInArrayMode;
-    this.customResultMapper = customResultMapper;
-    this.customResultMapper = customResultMapper;
-    this.fields = fields;
-  }
-  static [entityKind] = "LibSQLPreparedQuery";
-  async run(placeholderValues) {
-    const params = fillPlaceholders(this.query.params, placeholderValues ?? {});
-    this.logger.logQuery(this.query.sql, params);
-    return await this.queryWithCache(this.query.sql, params, async () => {
-      const stmt = { sql: this.query.sql, args: params };
-      return this.tx ? this.tx.execute(stmt) : this.client.execute(stmt);
-    });
-  }
-  async all(placeholderValues) {
-    const { fields, logger, query, tx, client, customResultMapper } = this;
-    if (!fields && !customResultMapper) {
-      const params = fillPlaceholders(query.params, placeholderValues ?? {});
-      logger.logQuery(query.sql, params);
-      return await this.queryWithCache(query.sql, params, async () => {
-        const stmt = { sql: query.sql, args: params };
-        return (tx ? tx.execute(stmt) : client.execute(stmt)).then(({ rows: rows2 }) => this.mapAllResult(rows2));
-      });
-    }
-    const rows = await this.values(placeholderValues);
-    return this.mapAllResult(rows);
-  }
-  mapAllResult(rows, isFromBatch) {
-    if (isFromBatch) {
-      rows = rows.rows;
-    }
-    if (!this.fields && !this.customResultMapper) {
-      return rows.map((row) => normalizeRow(row));
-    }
-    if (this.customResultMapper) {
-      return this.customResultMapper(rows, normalizeFieldValue);
-    }
-    return rows.map((row) => {
-      return mapResultRow(this.fields, Array.prototype.slice.call(row).map((v) => normalizeFieldValue(v)), this.joinsNotNullableMap);
-    });
-  }
-  async get(placeholderValues) {
-    const { fields, logger, query, tx, client, customResultMapper } = this;
-    if (!fields && !customResultMapper) {
-      const params = fillPlaceholders(query.params, placeholderValues ?? {});
-      logger.logQuery(query.sql, params);
-      return await this.queryWithCache(query.sql, params, async () => {
-        const stmt = { sql: query.sql, args: params };
-        return (tx ? tx.execute(stmt) : client.execute(stmt)).then(({ rows: rows2 }) => this.mapGetResult(rows2));
-      });
-    }
-    const rows = await this.values(placeholderValues);
-    return this.mapGetResult(rows);
-  }
-  mapGetResult(rows, isFromBatch) {
-    if (isFromBatch) {
-      rows = rows.rows;
-    }
-    const row = rows[0];
-    if (!this.fields && !this.customResultMapper) {
-      return normalizeRow(row);
-    }
-    if (!row) {
-      return;
-    }
-    if (this.customResultMapper) {
-      return this.customResultMapper(rows, normalizeFieldValue);
-    }
-    return mapResultRow(this.fields, Array.prototype.slice.call(row).map((v) => normalizeFieldValue(v)), this.joinsNotNullableMap);
-  }
-  async values(placeholderValues) {
-    const params = fillPlaceholders(this.query.params, placeholderValues ?? {});
-    this.logger.logQuery(this.query.sql, params);
-    return await this.queryWithCache(this.query.sql, params, async () => {
-      const stmt = { sql: this.query.sql, args: params };
-      return (this.tx ? this.tx.execute(stmt) : this.client.execute(stmt)).then(({ rows }) => rows);
-    });
-  }
-  isResponseInArrayMode() {
-    return this._isResponseInArrayMode;
-  }
-}
-function normalizeRow(obj) {
-  return Object.keys(obj).reduce((acc, key) => {
-    if (Object.prototype.propertyIsEnumerable.call(obj, key)) {
-      acc[key] = obj[key];
-    }
-    return acc;
-  }, {});
-}
-function normalizeFieldValue(value) {
-  if (typeof ArrayBuffer !== "undefined" && value instanceof ArrayBuffer) {
-    if (typeof Buffer !== "undefined") {
-      if (!(value instanceof Buffer)) {
-        return Buffer.from(value);
-      }
-      return value;
-    }
-    if (typeof TextDecoder !== "undefined") {
-      return new TextDecoder().decode(value);
-    }
-    throw new Error("TextDecoder is not available. Please provide either Buffer or TextDecoder polyfill.");
-  }
-  return value;
-}
-
-// node_modules/drizzle-orm/libsql/driver-core.js
-class LibSQLDatabase extends BaseSQLiteDatabase {
-  static [entityKind] = "LibSQLDatabase";
-  async batch(batch) {
-    return this.session.batch(batch);
-  }
-}
-function construct(client, config = {}) {
-  const dialect = new SQLiteAsyncDialect({ casing: config.casing });
-  let logger;
-  if (config.logger === true) {
-    logger = new DefaultLogger;
-  } else if (config.logger !== false) {
-    logger = config.logger;
-  }
-  let schema;
-  if (config.schema) {
-    const tablesConfig = extractTablesRelationalConfig(config.schema, createTableRelationsHelpers);
-    schema = {
-      fullSchema: config.schema,
-      schema: tablesConfig.tables,
-      tableNamesMap: tablesConfig.tableNamesMap
-    };
-  }
-  const session = new LibSQLSession(client, dialect, schema, { logger, cache: config.cache }, undefined);
-  const db = new LibSQLDatabase("async", dialect, session, schema);
-  db.$client = client;
-  db.$cache = config.cache;
-  if (db.$cache) {
-    db.$cache["invalidate"] = config.cache?.onMutate;
-  }
-  return db;
-}
-
-// node_modules/drizzle-orm/libsql/driver.js
-function drizzle(...params) {
-  if (typeof params[0] === "string") {
-    const instance = createClient({
-      url: params[0]
-    });
-    return construct(instance, params[1]);
-  }
-  if (isConfig(params[0])) {
-    const { connection, client, ...drizzleConfig } = params[0];
-    if (client)
-      return construct(client, drizzleConfig);
-    const instance = typeof connection === "string" ? createClient({ url: connection }) : createClient(connection);
-    return construct(instance, drizzleConfig);
-  }
-  return construct(params[0], params[1]);
-}
-((drizzle2) => {
-  function mock(config) {
-    return construct({}, config);
-  }
-  drizzle2.mock = mock;
-})(drizzle || (drizzle = {}));
-
 // node_modules/zod/v4/classic/external.js
 var exports_external = {};
 __export(exports_external, {
@@ -18804,7 +11192,7 @@ __export(exports_external, {
   url: () => url,
   uppercase: () => _uppercase,
   unknown: () => unknown,
-  union: () => union2,
+  union: () => union,
   undefined: () => _undefined3,
   ulid: () => ulid2,
   uint64: () => uint64,
@@ -18822,7 +11210,7 @@ __export(exports_external, {
   success: () => success,
   stringbool: () => stringbool,
   stringFormat: () => stringFormat,
-  string: () => string3,
+  string: () => string2,
   strictObject: () => strictObject,
   startsWith: () => _startsWith,
   slugify: () => _slugify,
@@ -18835,7 +11223,7 @@ __export(exports_external, {
   safeEncode: () => safeEncode2,
   safeDecodeAsync: () => safeDecodeAsync2,
   safeDecode: () => safeDecode2,
-  registry: () => registry,
+  registry: () => registry2,
   regexes: () => exports_regexes,
   regex: () => _regex,
   refine: () => refine,
@@ -18853,8 +11241,8 @@ __export(exports_external, {
   parse: () => parse4,
   overwrite: () => _overwrite,
   optional: () => optional,
-  object: () => object2,
-  number: () => number3,
+  object: () => object,
+  number: () => number2,
   nullish: () => nullish2,
   nullable: () => nullable,
   null: () => _null3,
@@ -18918,14 +11306,14 @@ __export(exports_external, {
   enum: () => _enum2,
   endsWith: () => _endsWith,
   encodeAsync: () => encodeAsync2,
-  encode: () => encode3,
+  encode: () => encode2,
   emoji: () => emoji2,
   email: () => email2,
   e164: () => e1642,
   discriminatedUnion: () => discriminatedUnion,
   describe: () => describe2,
   decodeAsync: () => decodeAsync2,
-  decode: () => decode3,
+  decode: () => decode2,
   date: () => date3,
   custom: () => custom,
   cuid2: () => cuid22,
@@ -18939,11 +11327,11 @@ __export(exports_external, {
   cidrv4: () => cidrv42,
   check: () => check,
   catch: () => _catch2,
-  boolean: () => boolean3,
+  boolean: () => boolean2,
   bigint: () => bigint2,
   base64url: () => base64url2,
   base64: () => base642,
-  array: () => array2,
+  array: () => array,
   any: () => any,
   _function: () => _function,
   _default: () => _default2,
@@ -19034,7 +11422,7 @@ __export(exports_external, {
 // node_modules/zod/v4/core/index.js
 var exports_core2 = {};
 __export(exports_core2, {
-  version: () => version3,
+  version: () => version,
   util: () => exports_util,
   treeifyError: () => treeifyError,
   toJSONSchema: () => toJSONSchema,
@@ -19045,7 +11433,7 @@ __export(exports_core2, {
   safeEncode: () => safeEncode,
   safeDecodeAsync: () => safeDecodeAsync,
   safeDecode: () => safeDecode,
-  registry: () => registry,
+  registry: () => registry2,
   regexes: () => exports_regexes,
   process: () => process2,
   prettifyError: () => prettifyError,
@@ -19064,10 +11452,10 @@ __export(exports_core2, {
   finalize: () => finalize,
   extractDefs: () => extractDefs,
   encodeAsync: () => encodeAsync,
-  encode: () => encode2,
+  encode: () => encode,
   describe: () => describe,
   decodeAsync: () => decodeAsync,
-  decode: () => decode2,
+  decode: () => decode,
   createToJSONSchemaMethod: () => createToJSONSchemaMethod,
   createStandardJSONSchemaMethod: () => createStandardJSONSchemaMethod,
   config: () => config,
@@ -19171,14 +11559,14 @@ __export(exports_core2, {
   _enum: () => _enum,
   _endsWith: () => _endsWith,
   _encodeAsync: () => _encodeAsync,
-  _encode: () => _encode2,
+  _encode: () => _encode,
   _emoji: () => _emoji2,
   _email: () => _email,
   _e164: () => _e164,
   _discriminatedUnion: () => _discriminatedUnion,
   _default: () => _default,
   _decodeAsync: () => _decodeAsync,
-  _decode: () => _decode2,
+  _decode: () => _decode,
   _date: () => _date,
   _custom: () => _custom,
   _cuid2: () => _cuid2,
@@ -19225,7 +11613,7 @@ __export(exports_core2, {
   $ZodStringFormat: () => $ZodStringFormat,
   $ZodString: () => $ZodString,
   $ZodSet: () => $ZodSet,
-  $ZodRegistry: () => $ZodRegistry,
+  $ZodRegistry: () => $ZodRegistry2,
   $ZodRecord: () => $ZodRecord,
   $ZodRealError: () => $ZodRealError,
   $ZodReadonly: () => $ZodReadonly,
@@ -19406,7 +11794,7 @@ __export(exports_util, {
   partial: () => partial,
   parsedType: () => parsedType,
   optionalKeys: () => optionalKeys,
-  omit: () => omit,
+  omit: () => omit2,
   objectClone: () => objectClone,
   numKeys: () => numKeys,
   nullish: () => nullish,
@@ -19467,8 +11855,8 @@ function getEnumValues(entries) {
   const values = Object.entries(entries).filter(([k, _]) => numericValues.indexOf(+k) === -1).map(([_, v]) => v);
   return values;
 }
-function joinValues(array2, separator = "|") {
-  return array2.map((val) => stringifyPrimitive(val)).join(separator);
+function joinValues(array, separator = "|") {
+  return array.map((val) => stringifyPrimitive(val)).join(separator);
 }
 function jsonStringifyReplacer(_, value) {
   if (typeof value === "bigint")
@@ -19512,9 +11900,9 @@ function floatSafeRemainder(val, step) {
   return valInt % stepInt / 10 ** decCount;
 }
 var EVALUATING = Symbol("evaluating");
-function defineLazy(object2, key, getter) {
+function defineLazy(object, key, getter) {
   let value = undefined;
-  Object.defineProperty(object2, key, {
+  Object.defineProperty(object, key, {
     get() {
       if (value === EVALUATING) {
         return;
@@ -19526,7 +11914,7 @@ function defineLazy(object2, key, getter) {
       return value;
     },
     set(v) {
-      Object.defineProperty(object2, key, {
+      Object.defineProperty(object, key, {
         value: v
       });
     },
@@ -19785,7 +12173,7 @@ function pick(schema, mask) {
   });
   return clone(schema, def);
 }
-function omit(schema, mask) {
+function omit2(schema, mask) {
   const currDef = schema._zod.def;
   const checks = currDef.checks;
   const hasChecks = checks && checks.length > 0;
@@ -20247,15 +12635,15 @@ var _safeParseAsync = (_Err) => async (schema, value, _ctx) => {
   } : { success: true, data: result.value };
 };
 var safeParseAsync = /* @__PURE__ */ _safeParseAsync($ZodRealError);
-var _encode2 = (_Err) => (schema, value, _ctx) => {
+var _encode = (_Err) => (schema, value, _ctx) => {
   const ctx = _ctx ? Object.assign(_ctx, { direction: "backward" }) : { direction: "backward" };
   return _parse(_Err)(schema, value, ctx);
 };
-var encode2 = /* @__PURE__ */ _encode2($ZodRealError);
-var _decode2 = (_Err) => (schema, value, _ctx) => {
+var encode = /* @__PURE__ */ _encode($ZodRealError);
+var _decode = (_Err) => (schema, value, _ctx) => {
   return _parse(_Err)(schema, value, _ctx);
 };
-var decode2 = /* @__PURE__ */ _decode2($ZodRealError);
+var decode = /* @__PURE__ */ _decode($ZodRealError);
 var _encodeAsync = (_Err) => async (schema, value, _ctx) => {
   const ctx = _ctx ? Object.assign(_ctx, { direction: "backward" }) : { direction: "backward" };
   return _parseAsync(_Err)(schema, value, ctx);
@@ -20296,7 +12684,7 @@ __export(exports_regexes, {
   undefined: () => _undefined,
   ulid: () => ulid,
   time: () => time,
-  string: () => string2,
+  string: () => string,
   sha512_hex: () => sha512_hex,
   sha512_base64url: () => sha512_base64url,
   sha512_base64: () => sha512_base64,
@@ -20310,7 +12698,7 @@ __export(exports_regexes, {
   sha1_base64url: () => sha1_base64url,
   sha1_base64: () => sha1_base64,
   rfc5322Email: () => rfc5322Email,
-  number: () => number2,
+  number: () => number,
   null: () => _null,
   nanoid: () => nanoid,
   md5_hex: () => md5_hex,
@@ -20321,7 +12709,7 @@ __export(exports_regexes, {
   ksuid: () => ksuid,
   ipv6: () => ipv6,
   ipv4: () => ipv4,
-  integer: () => integer2,
+  integer: () => integer,
   idnEmail: () => idnEmail,
   html5Email: () => html5Email,
   hostname: () => hostname,
@@ -20340,7 +12728,7 @@ __export(exports_regexes, {
   cidrv6: () => cidrv6,
   cidrv4: () => cidrv4,
   browserEmail: () => browserEmail,
-  boolean: () => boolean2,
+  boolean: () => boolean,
   bigint: () => bigint,
   base64url: () => base64url,
   base64: () => base64
@@ -20354,10 +12742,10 @@ var nanoid = /^[a-zA-Z0-9_-]{21}$/;
 var duration = /^P(?:(\d+W)|(?!.*W)(?=\d|T\d)(\d+Y)?(\d+M)?(\d+D)?(T(?=\d)(\d+H)?(\d+M)?(\d+([.,]\d+)?S)?)?)$/;
 var extendedDuration = /^[-+]?P(?!$)(?:(?:[-+]?\d+Y)|(?:[-+]?\d+[.,]\d+Y$))?(?:(?:[-+]?\d+M)|(?:[-+]?\d+[.,]\d+M$))?(?:(?:[-+]?\d+W)|(?:[-+]?\d+[.,]\d+W$))?(?:(?:[-+]?\d+D)|(?:[-+]?\d+[.,]\d+D$))?(?:T(?=[\d+-])(?:(?:[-+]?\d+H)|(?:[-+]?\d+[.,]\d+H$))?(?:(?:[-+]?\d+M)|(?:[-+]?\d+[.,]\d+M$))?(?:[-+]?\d+(?:[.,]\d+)?S)?)??$/;
 var guid = /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$/;
-var uuid = (version3) => {
-  if (!version3)
+var uuid = (version) => {
+  if (!version)
     return /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$/;
-  return new RegExp(`^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-${version3}[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12})$`);
+  return new RegExp(`^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-${version}[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12})$`);
 };
 var uuid4 = /* @__PURE__ */ uuid(4);
 var uuid6 = /* @__PURE__ */ uuid(6);
@@ -20405,14 +12793,14 @@ function datetime(args) {
   const timeRegex = `${time2}(?:${opts.join("|")})`;
   return new RegExp(`^${dateSource}T(?:${timeRegex})$`);
 }
-var string2 = (params) => {
+var string = (params) => {
   const regex = params ? `[\\s\\S]{${params?.minimum ?? 0},${params?.maximum ?? ""}}` : `[\\s\\S]*`;
   return new RegExp(`^${regex}$`);
 };
 var bigint = /^-?\d+n?$/;
-var integer2 = /^-?\d+$/;
-var number2 = /^-?\d+(?:\.\d+)?$/;
-var boolean2 = /^(?:true|false)$/i;
+var integer = /^-?\d+$/;
+var number = /^-?\d+(?:\.\d+)?$/;
+var boolean = /^(?:true|false)$/i;
 var _null = /^null$/i;
 var _undefined = /^undefined$/i;
 var lowercase = /^[^A-Z]*$/;
@@ -20542,7 +12930,7 @@ var $ZodCheckNumberFormat = /* @__PURE__ */ $constructor("$ZodCheckNumberFormat"
     bag.minimum = minimum;
     bag.maximum = maximum;
     if (isInt)
-      bag.pattern = integer2;
+      bag.pattern = integer;
   });
   inst._zod.check = (payload) => {
     const input = payload.value;
@@ -21026,7 +13414,7 @@ class Doc {
 }
 
 // node_modules/zod/v4/core/versions.js
-var version3 = {
+var version = {
   major: 4,
   minor: 3,
   patch: 6
@@ -21038,7 +13426,7 @@ var $ZodType = /* @__PURE__ */ $constructor("$ZodType", (inst, def) => {
   inst ?? (inst = {});
   inst._zod.def = def;
   inst._zod.bag = inst._zod.bag || {};
-  inst._zod.version = version3;
+  inst._zod.version = version;
   const checks = [...inst._zod.def.checks ?? []];
   if (inst._zod.traits.has("$ZodCheck")) {
     checks.unshift(inst);
@@ -21144,7 +13532,7 @@ var $ZodType = /* @__PURE__ */ $constructor("$ZodType", (inst, def) => {
 });
 var $ZodString = /* @__PURE__ */ $constructor("$ZodString", (inst, def) => {
   $ZodType.init(inst, def);
-  inst._zod.pattern = [...inst?._zod.bag?.patterns ?? []].pop() ?? string2(inst._zod.bag);
+  inst._zod.pattern = [...inst?._zod.bag?.patterns ?? []].pop() ?? string(inst._zod.bag);
   inst._zod.parse = (payload, _) => {
     if (def.coerce)
       try {
@@ -21453,7 +13841,7 @@ var $ZodCustomStringFormat = /* @__PURE__ */ $constructor("$ZodCustomStringForma
 });
 var $ZodNumber = /* @__PURE__ */ $constructor("$ZodNumber", (inst, def) => {
   $ZodType.init(inst, def);
-  inst._zod.pattern = inst._zod.bag.pattern ?? number2;
+  inst._zod.pattern = inst._zod.bag.pattern ?? number;
   inst._zod.parse = (payload, _ctx) => {
     if (def.coerce)
       try {
@@ -21480,7 +13868,7 @@ var $ZodNumberFormat = /* @__PURE__ */ $constructor("$ZodNumberFormat", (inst, d
 });
 var $ZodBoolean = /* @__PURE__ */ $constructor("$ZodBoolean", (inst, def) => {
   $ZodType.init(inst, def);
-  inst._zod.pattern = boolean2;
+  inst._zod.pattern = boolean;
   inst._zod.parse = (payload, _ctx) => {
     if (def.coerce)
       try {
@@ -21736,8 +14124,8 @@ function handleCatchall(proms, input, payload, ctx, def, inst) {
 }
 var $ZodObject = /* @__PURE__ */ $constructor("$ZodObject", (inst, def) => {
   $ZodType.init(inst, def);
-  const desc2 = Object.getOwnPropertyDescriptor(def, "shape");
-  if (!desc2?.get) {
+  const desc = Object.getOwnPropertyDescriptor(def, "shape");
+  if (!desc?.get) {
     const sh = def.shape;
     Object.defineProperty(def, "shape", {
       get: () => {
@@ -22315,7 +14703,7 @@ var $ZodRecord = /* @__PURE__ */ $constructor("$ZodRecord", (inst, def) => {
         if (keyResult instanceof Promise) {
           throw new Error("Async schemas not supported in object keys currently");
         }
-        const checkNumericKey = typeof key === "string" && number2.test(key) && keyResult.issues.length;
+        const checkNumericKey = typeof key === "string" && number.test(key) && keyResult.issues.length;
         if (checkNumericKey) {
           const retryResult = def.keyType._zod.run({ value: Number(key), issues: [] }, ctx);
           if (retryResult instanceof Promise) {
@@ -25981,11 +18369,11 @@ function ko_default() {
   };
 }
 // node_modules/zod/v4/locales/lt.js
-var capitalizeFirstCharacter = (text2) => {
-  return text2.charAt(0).toUpperCase() + text2.slice(1);
+var capitalizeFirstCharacter = (text) => {
+  return text.charAt(0).toUpperCase() + text.slice(1);
 };
-function getUnitTypeFromNumber(number3) {
-  const abs = Math.abs(number3);
+function getUnitTypeFromNumber(number2) {
+  const abs = Math.abs(number2);
   const last = abs % 10;
   const last2 = abs % 100;
   if (last2 >= 11 && last2 <= 19 || last === 0)
@@ -28525,7 +20913,7 @@ var _a;
 var $output = Symbol("ZodOutput");
 var $input = Symbol("ZodInput");
 
-class $ZodRegistry {
+class $ZodRegistry2 {
   constructor() {
     this._map = new WeakMap;
     this._idmap = new Map;
@@ -28565,10 +20953,10 @@ class $ZodRegistry {
     return this._map.has(schema);
   }
 }
-function registry() {
-  return new $ZodRegistry;
+function registry2() {
+  return new $ZodRegistry2;
 }
-(_a = globalThis).__zod_globalRegistry ?? (_a.__zod_globalRegistry = registry());
+(_a = globalThis).__zod_globalRegistry ?? (_a.__zod_globalRegistry = registry2());
 var globalRegistry = globalThis.__zod_globalRegistry;
 // node_modules/zod/v4/core/api.js
 function _string(Class2, params) {
@@ -30348,21 +22736,21 @@ var allProcessors = {
 };
 function toJSONSchema(input, params) {
   if ("_idmap" in input) {
-    const registry2 = input;
+    const registry3 = input;
     const ctx2 = initializeContext({ ...params, processors: allProcessors });
     const defs = {};
-    for (const entry of registry2._idmap.entries()) {
+    for (const entry of registry3._idmap.entries()) {
       const [_, schema] = entry;
       process2(schema, ctx2);
     }
     const schemas = {};
     const external = {
-      registry: registry2,
+      registry: registry3,
       uri: params?.uri,
       defs
     };
     ctx2.external = external;
-    for (const entry of registry2._idmap.entries()) {
+    for (const entry of registry3._idmap.entries()) {
       const [key, schema] = entry;
       extractDefs(ctx2, schema);
       schemas[key] = finalize(ctx2, schema);
@@ -30453,7 +22841,7 @@ __export(exports_schemas2, {
   uuid: () => uuid2,
   url: () => url,
   unknown: () => unknown,
-  union: () => union2,
+  union: () => union,
   undefined: () => _undefined3,
   ulid: () => ulid2,
   uint64: () => uint64,
@@ -30466,7 +22854,7 @@ __export(exports_schemas2, {
   success: () => success,
   stringbool: () => stringbool,
   stringFormat: () => stringFormat,
-  string: () => string3,
+  string: () => string2,
   strictObject: () => strictObject,
   set: () => set,
   refine: () => refine,
@@ -30478,8 +22866,8 @@ __export(exports_schemas2, {
   pipe: () => pipe,
   partialRecord: () => partialRecord,
   optional: () => optional,
-  object: () => object2,
-  number: () => number3,
+  object: () => object,
+  number: () => number2,
   nullish: () => nullish2,
   nullable: () => nullable,
   null: () => _null3,
@@ -30531,11 +22919,11 @@ __export(exports_schemas2, {
   cidrv4: () => cidrv42,
   check: () => check,
   catch: () => _catch2,
-  boolean: () => boolean3,
+  boolean: () => boolean2,
   bigint: () => bigint2,
   base64url: () => base64url2,
   base64: () => base642,
-  array: () => array2,
+  array: () => array,
   any: () => any,
   _function: () => _function,
   _default: () => _default2,
@@ -30725,8 +23113,8 @@ var parse4 = /* @__PURE__ */ _parse(ZodRealError);
 var parseAsync2 = /* @__PURE__ */ _parseAsync(ZodRealError);
 var safeParse2 = /* @__PURE__ */ _safeParse(ZodRealError);
 var safeParseAsync2 = /* @__PURE__ */ _safeParseAsync(ZodRealError);
-var encode3 = /* @__PURE__ */ _encode2(ZodRealError);
-var decode3 = /* @__PURE__ */ _decode2(ZodRealError);
+var encode2 = /* @__PURE__ */ _encode(ZodRealError);
+var decode2 = /* @__PURE__ */ _decode(ZodRealError);
 var encodeAsync2 = /* @__PURE__ */ _encodeAsync(ZodRealError);
 var decodeAsync2 = /* @__PURE__ */ _decodeAsync(ZodRealError);
 var safeEncode2 = /* @__PURE__ */ _safeEncode(ZodRealError);
@@ -30769,8 +23157,8 @@ var ZodType = /* @__PURE__ */ $constructor("ZodType", (inst, def) => {
   inst.parseAsync = async (data, params) => parseAsync2(inst, data, params, { callee: inst.parseAsync });
   inst.safeParseAsync = async (data, params) => safeParseAsync2(inst, data, params);
   inst.spa = inst.safeParseAsync;
-  inst.encode = (data, params) => encode3(inst, data, params);
-  inst.decode = (data, params) => decode3(inst, data, params);
+  inst.encode = (data, params) => encode2(inst, data, params);
+  inst.decode = (data, params) => decode2(inst, data, params);
   inst.encodeAsync = async (data, params) => encodeAsync2(inst, data, params);
   inst.decodeAsync = async (data, params) => decodeAsync2(inst, data, params);
   inst.safeEncode = (data, params) => safeEncode2(inst, data, params);
@@ -30785,8 +23173,8 @@ var ZodType = /* @__PURE__ */ $constructor("ZodType", (inst, def) => {
   inst.nullable = () => nullable(inst);
   inst.nullish = () => optional(nullable(inst));
   inst.nonoptional = (params) => nonoptional(inst, params);
-  inst.array = () => array2(inst);
-  inst.or = (arg) => union2([inst, arg]);
+  inst.array = () => array(inst);
+  inst.or = (arg) => union([inst, arg]);
   inst.and = (arg) => intersection(inst, arg);
   inst.transform = (tx) => pipe(inst, transform(tx));
   inst.default = (def2) => _default2(inst, def2);
@@ -30873,7 +23261,7 @@ var ZodString = /* @__PURE__ */ $constructor("ZodString", (inst, def) => {
   inst.time = (params) => inst.check(time2(params));
   inst.duration = (params) => inst.check(duration2(params));
 });
-function string3(params) {
+function string2(params) {
   return _string(ZodString, params);
 }
 var ZodStringFormat = /* @__PURE__ */ $constructor("ZodStringFormat", (inst, def) => {
@@ -31083,7 +23471,7 @@ var ZodNumber = /* @__PURE__ */ $constructor("ZodNumber", (inst, def) => {
   inst.isFinite = true;
   inst.format = bag.format ?? null;
 });
-function number3(params) {
+function number2(params) {
   return _number(ZodNumber, params);
 }
 var ZodNumberFormat = /* @__PURE__ */ $constructor("ZodNumberFormat", (inst, def) => {
@@ -31110,7 +23498,7 @@ var ZodBoolean = /* @__PURE__ */ $constructor("ZodBoolean", (inst, def) => {
   ZodType.init(inst, def);
   inst._zod.processJSONSchema = (ctx, json, params) => booleanProcessor(inst, ctx, json, params);
 });
-function boolean3(params) {
+function boolean2(params) {
   return _boolean(ZodBoolean, params);
 }
 var ZodBigInt = /* @__PURE__ */ $constructor("ZodBigInt", (inst, def) => {
@@ -31228,7 +23616,7 @@ var ZodArray = /* @__PURE__ */ $constructor("ZodArray", (inst, def) => {
   inst.length = (len, params) => inst.check(_length(len, params));
   inst.unwrap = () => inst.element;
 });
-function array2(element, params) {
+function array(element, params) {
   return _array(ZodArray, element, params);
 }
 function keyof(schema) {
@@ -31260,7 +23648,7 @@ var ZodObject = /* @__PURE__ */ $constructor("ZodObject", (inst, def) => {
   inst.partial = (...args) => exports_util.partial(ZodOptional, inst, args[0]);
   inst.required = (...args) => exports_util.required(ZodNonOptional, inst, args[0]);
 });
-function object2(shape, params) {
+function object(shape, params) {
   const def = {
     type: "object",
     shape: shape ?? {},
@@ -31290,7 +23678,7 @@ var ZodUnion = /* @__PURE__ */ $constructor("ZodUnion", (inst, def) => {
   inst._zod.processJSONSchema = (ctx, json, params) => unionProcessor(inst, ctx, json, params);
   inst.options = def.options;
 });
-function union2(options, params) {
+function union(options, params) {
   return new ZodUnion({
     type: "union",
     options,
@@ -31747,7 +24135,7 @@ var ZodFunction = /* @__PURE__ */ $constructor("ZodFunction", (inst, def) => {
 function _function(params) {
   return new ZodFunction({
     type: "function",
-    input: Array.isArray(params?.input) ? tuple(params?.input) : params?.input ?? array2(unknown()),
+    input: Array.isArray(params?.input) ? tuple(params?.input) : params?.input ?? array(unknown()),
     output: params?.output ?? unknown()
   });
 }
@@ -31803,7 +24191,7 @@ var stringbool = (...args) => _stringbool({
 }, ...args);
 function json(params) {
   const jsonSchema = lazy(() => {
-    return union2([string3(params), number3(), boolean3(), _null3(), array2(jsonSchema), record(string3(), jsonSchema)]);
+    return union([string2(params), number2(), boolean2(), _null3(), array(jsonSchema), record(string2(), jsonSchema)]);
   });
   return jsonSchema;
 }
@@ -32283,10 +24671,10 @@ function fromJSONSchema(schema, params) {
   if (typeof schema === "boolean") {
     return schema ? z.any() : z.never();
   }
-  const version4 = detectVersion(schema, params?.defaultTarget);
+  const version2 = detectVersion(schema, params?.defaultTarget);
   const defs = schema.$defs || schema.definitions || {};
   const ctx = {
-    version: version4,
+    version: version2,
     defs,
     refs: new Map,
     processing: new Set,
@@ -32298,19 +24686,19 @@ function fromJSONSchema(schema, params) {
 // node_modules/zod/v4/classic/coerce.js
 var exports_coerce = {};
 __export(exports_coerce, {
-  string: () => string4,
-  number: () => number4,
+  string: () => string3,
+  number: () => number3,
   date: () => date4,
-  boolean: () => boolean4,
+  boolean: () => boolean3,
   bigint: () => bigint3
 });
-function string4(params) {
+function string3(params) {
   return _coercedString(ZodString, params);
 }
-function number4(params) {
+function number3(params) {
   return _coercedNumber(ZodNumber, params);
 }
-function boolean4(params) {
+function boolean3(params) {
   return _coercedBoolean(ZodBoolean, params);
 }
 function bigint3(params) {
@@ -32322,6 +24710,9164 @@ function date4(params) {
 
 // node_modules/zod/v4/classic/external.js
 config(en_default());
+// node_modules/@hono/zod-openapi/dist/index.js
+function isObject2(x) {
+  return typeof x === "object" && x !== null;
+}
+function isZod(x) {
+  if (!x)
+    return false;
+  if (!isObject2(x))
+    return false;
+  return typeof x.parse === "function" && typeof x.safeParse === "function" && typeof x.parseAsync === "function" && typeof x.safeParseAsync === "function";
+}
+var OpenAPIHono = class OpenAPIHono2 extends Hono2 {
+  openAPIRegistry;
+  defaultHook;
+  constructor(init) {
+    super(init);
+    this.openAPIRegistry = new $OpenAPIRegistry;
+    this.defaultHook = init === null || init === undefined ? undefined : init.defaultHook;
+  }
+  openapi = ({ middleware: routeMiddleware, hide, ...route }, handler, hook = this.defaultHook) => {
+    var _route$request, _route$request2, _route$request3, _route$request4, _route$request5;
+    if (!hide)
+      this.openAPIRegistry.registerPath(route);
+    const validators = [];
+    if ((_route$request = route.request) === null || _route$request === undefined ? undefined : _route$request.query) {
+      const validator2 = zValidator("query", route.request.query, hook);
+      validators.push(validator2);
+    }
+    if ((_route$request2 = route.request) === null || _route$request2 === undefined ? undefined : _route$request2.params) {
+      const validator2 = zValidator("param", route.request.params, hook);
+      validators.push(validator2);
+    }
+    if ((_route$request3 = route.request) === null || _route$request3 === undefined ? undefined : _route$request3.headers) {
+      const validator2 = zValidator("header", route.request.headers, hook);
+      validators.push(validator2);
+    }
+    if ((_route$request4 = route.request) === null || _route$request4 === undefined ? undefined : _route$request4.cookies) {
+      const validator2 = zValidator("cookie", route.request.cookies, hook);
+      validators.push(validator2);
+    }
+    const bodyContent = (_route$request5 = route.request) === null || _route$request5 === undefined || (_route$request5 = _route$request5.body) === null || _route$request5 === undefined ? undefined : _route$request5.content;
+    if (bodyContent)
+      for (const mediaType of Object.keys(bodyContent)) {
+        if (!bodyContent[mediaType])
+          continue;
+        const schema = bodyContent[mediaType]["schema"];
+        if (!isZod(schema))
+          continue;
+        if (isJSONContentType(mediaType)) {
+          var _route$request6;
+          const validator2 = zValidator("json", schema, hook);
+          if ((_route$request6 = route.request) === null || _route$request6 === undefined || (_route$request6 = _route$request6.body) === null || _route$request6 === undefined ? undefined : _route$request6.required)
+            validators.push(validator2);
+          else {
+            const mw = async (c, next) => {
+              if (c.req.header("content-type")) {
+                if (isJSONContentType(c.req.header("content-type")))
+                  return await validator2(c, next);
+              }
+              c.req.addValidatedData("json", {});
+              await next();
+            };
+            validators.push(mw);
+          }
+        }
+        if (isFormContentType(mediaType)) {
+          var _route$request7;
+          const validator2 = zValidator("form", schema, hook);
+          if ((_route$request7 = route.request) === null || _route$request7 === undefined || (_route$request7 = _route$request7.body) === null || _route$request7 === undefined ? undefined : _route$request7.required)
+            validators.push(validator2);
+          else {
+            const mw = async (c, next) => {
+              if (c.req.header("content-type")) {
+                if (isFormContentType(c.req.header("content-type")))
+                  return await validator2(c, next);
+              }
+              c.req.addValidatedData("form", {});
+              await next();
+            };
+            validators.push(mw);
+          }
+        }
+      }
+    const middleware = routeMiddleware ? Array.isArray(routeMiddleware) ? routeMiddleware : [routeMiddleware] : [];
+    this.on([route.method], [route.path.replaceAll(/\/{(.+?)}/g, "/:$1")], ...middleware, ...validators, handler);
+    return this;
+  };
+  getOpenAPIDocument = (objectConfig, generatorConfig) => {
+    const document = new $OpenApiGeneratorV3(this.openAPIRegistry.definitions, generatorConfig).generateDocument(objectConfig);
+    return this._basePath ? addBasePathToDocument(document, this._basePath) : document;
+  };
+  getOpenAPI31Document = (objectConfig, generatorConfig) => {
+    const document = new $OpenApiGeneratorV31(this.openAPIRegistry.definitions, generatorConfig).generateDocument(objectConfig);
+    return this._basePath ? addBasePathToDocument(document, this._basePath) : document;
+  };
+  doc = (path, configureObject, configureGenerator) => {
+    return this.get(path, (c) => {
+      const objectConfig = typeof configureObject === "function" ? configureObject(c) : configureObject;
+      const generatorConfig = typeof configureGenerator === "function" ? configureGenerator(c) : configureGenerator;
+      try {
+        const document = this.getOpenAPIDocument(objectConfig, generatorConfig);
+        return c.json(document);
+      } catch (e) {
+        return c.json(e, 500);
+      }
+    });
+  };
+  doc31 = (path, configureObject, configureGenerator) => {
+    return this.get(path, (c) => {
+      const objectConfig = typeof configureObject === "function" ? configureObject(c) : configureObject;
+      const generatorConfig = typeof configureGenerator === "function" ? configureGenerator(c) : configureGenerator;
+      try {
+        const document = this.getOpenAPI31Document(objectConfig, generatorConfig);
+        return c.json(document);
+      } catch (e) {
+        return c.json(e, 500);
+      }
+    });
+  };
+  route(path, app) {
+    const pathForOpenAPI = path.replaceAll(/:([^\/]+)/g, "{$1}");
+    super.route(path, app);
+    if (!(app instanceof OpenAPIHono2))
+      return this;
+    app.openAPIRegistry.definitions.forEach((def) => {
+      switch (def.type) {
+        case "component":
+          return this.openAPIRegistry.registerComponent(def.componentType, def.name, def.component);
+        case "route":
+          this.openAPIRegistry.registerPath({
+            ...def.route,
+            path: mergePath(pathForOpenAPI, app._basePath.replaceAll(/:([^\/]+)/g, "{$1}"), def.route.path)
+          });
+          return;
+        case "webhook":
+          this.openAPIRegistry.registerWebhook({
+            ...def.webhook,
+            path: mergePath(pathForOpenAPI, app._basePath.replaceAll(/:([^\/]+)/g, "{$1}"), def.webhook.path)
+          });
+          return;
+        case "schema":
+          var _getOpenApiMetadata$_;
+          return this.openAPIRegistry.register((_getOpenApiMetadata$_ = $getOpenApiMetadata(def.schema)._internal) === null || _getOpenApiMetadata$_ === undefined ? undefined : _getOpenApiMetadata$_.refId, def.schema);
+        case "parameter":
+          var _getOpenApiMetadata$_2;
+          return this.openAPIRegistry.registerParameter((_getOpenApiMetadata$_2 = $getOpenApiMetadata(def.schema)._internal) === null || _getOpenApiMetadata$_2 === undefined ? undefined : _getOpenApiMetadata$_2.refId, def.schema);
+        default: {
+          const errorIfNotExhaustive = def;
+          throw new Error(`Unknown registry type: ${errorIfNotExhaustive}`);
+        }
+      }
+    });
+    return this;
+  }
+  basePath(path) {
+    return new OpenAPIHono2({
+      ...super.basePath(path),
+      defaultHook: this.defaultHook
+    });
+  }
+};
+var createRoute = (routeConfig) => {
+  const route = {
+    ...routeConfig,
+    getRoutingPath() {
+      return routeConfig.path.replaceAll(/\/{(.+?)}/g, "/:$1");
+    }
+  };
+  return Object.defineProperty(route, "getRoutingPath", { enumerable: false });
+};
+$extendZodWithOpenApi(exports_external);
+function addBasePathToDocument(document, basePath) {
+  const updatedPaths = {};
+  Object.keys(document.paths).forEach((path) => {
+    updatedPaths[mergePath(basePath.replaceAll(/:([^\/]+)/g, "{$1}"), path)] = document.paths[path];
+  });
+  return {
+    ...document,
+    paths: updatedPaths
+  };
+}
+function isJSONContentType(contentType) {
+  return /^application\/([a-z-\.]+\+)?json/.test(contentType);
+}
+function isFormContentType(contentType) {
+  return contentType.startsWith("multipart/form-data") || contentType.startsWith("application/x-www-form-urlencoded");
+}
+
+// node_modules/hono/dist/middleware/pretty-json/index.js
+var prettyJSON = (options) => {
+  const targetQuery = options?.query ?? "pretty";
+  return async function prettyJSON2(c, next) {
+    const pretty = options?.force || c.req.query(targetQuery) || c.req.query(targetQuery) === "";
+    await next();
+    if (pretty && c.res.headers.get("Content-Type")?.startsWith("application/json")) {
+      const obj = await c.res.json();
+      c.res = new Response(JSON.stringify(obj, null, options?.space ?? 2), c.res);
+    }
+  };
+};
+
+// src/modules/auth/auth.controller.ts
+class AuthController {
+  authService;
+  constructor(authService) {
+    this.authService = authService;
+  }
+  async register(c, payload) {
+    const response = await this.authService.register(payload);
+    return c.json({
+      success: true,
+      status: 201,
+      message: "Usuário registrado com sucesso",
+      data: response
+    }, 201);
+  }
+  async login(c, payload) {
+    const response = await this.authService.login(payload);
+    return c.json({
+      success: true,
+      status: 200,
+      message: "Usuário autenticado com sucesso",
+      data: response
+    }, 200);
+  }
+}
+
+// node_modules/drizzle-orm/entity.js
+var entityKind = Symbol.for("drizzle:entityKind");
+var hasOwnEntityKind = Symbol.for("drizzle:hasOwnEntityKind");
+function is(value, type) {
+  if (!value || typeof value !== "object") {
+    return false;
+  }
+  if (value instanceof type) {
+    return true;
+  }
+  if (!Object.prototype.hasOwnProperty.call(type, entityKind)) {
+    throw new Error(`Class "${type.name ?? "<unknown>"}" doesn't look like a Drizzle entity. If this is incorrect and the class is provided by Drizzle, please report this as a bug.`);
+  }
+  let cls = Object.getPrototypeOf(value).constructor;
+  if (cls) {
+    while (cls) {
+      if (entityKind in cls && cls[entityKind] === type[entityKind]) {
+        return true;
+      }
+      cls = Object.getPrototypeOf(cls);
+    }
+  }
+  return false;
+}
+
+// node_modules/drizzle-orm/column.js
+class Column {
+  constructor(table, config2) {
+    this.table = table;
+    this.config = config2;
+    this.name = config2.name;
+    this.keyAsName = config2.keyAsName;
+    this.notNull = config2.notNull;
+    this.default = config2.default;
+    this.defaultFn = config2.defaultFn;
+    this.onUpdateFn = config2.onUpdateFn;
+    this.hasDefault = config2.hasDefault;
+    this.primary = config2.primaryKey;
+    this.isUnique = config2.isUnique;
+    this.uniqueName = config2.uniqueName;
+    this.uniqueType = config2.uniqueType;
+    this.dataType = config2.dataType;
+    this.columnType = config2.columnType;
+    this.generated = config2.generated;
+    this.generatedIdentity = config2.generatedIdentity;
+  }
+  static [entityKind] = "Column";
+  name;
+  keyAsName;
+  primary;
+  notNull;
+  default;
+  defaultFn;
+  onUpdateFn;
+  hasDefault;
+  isUnique;
+  uniqueName;
+  uniqueType;
+  dataType;
+  columnType;
+  enumValues = undefined;
+  generated = undefined;
+  generatedIdentity = undefined;
+  config;
+  mapFromDriverValue(value) {
+    return value;
+  }
+  mapToDriverValue(value) {
+    return value;
+  }
+  shouldDisableInsert() {
+    return this.config.generated !== undefined && this.config.generated.type !== "byDefault";
+  }
+}
+
+// node_modules/drizzle-orm/column-builder.js
+class ColumnBuilder {
+  static [entityKind] = "ColumnBuilder";
+  config;
+  constructor(name, dataType, columnType) {
+    this.config = {
+      name,
+      keyAsName: name === "",
+      notNull: false,
+      default: undefined,
+      hasDefault: false,
+      primaryKey: false,
+      isUnique: false,
+      uniqueName: undefined,
+      uniqueType: undefined,
+      dataType,
+      columnType,
+      generated: undefined
+    };
+  }
+  $type() {
+    return this;
+  }
+  notNull() {
+    this.config.notNull = true;
+    return this;
+  }
+  default(value) {
+    this.config.default = value;
+    this.config.hasDefault = true;
+    return this;
+  }
+  $defaultFn(fn) {
+    this.config.defaultFn = fn;
+    this.config.hasDefault = true;
+    return this;
+  }
+  $default = this.$defaultFn;
+  $onUpdateFn(fn) {
+    this.config.onUpdateFn = fn;
+    this.config.hasDefault = true;
+    return this;
+  }
+  $onUpdate = this.$onUpdateFn;
+  primaryKey() {
+    this.config.primaryKey = true;
+    this.config.notNull = true;
+    return this;
+  }
+  setName(name) {
+    if (this.config.name !== "")
+      return;
+    this.config.name = name;
+  }
+}
+
+// node_modules/drizzle-orm/table.utils.js
+var TableName = Symbol.for("drizzle:Name");
+
+// node_modules/drizzle-orm/tracing-utils.js
+function iife(fn, ...args) {
+  return fn(...args);
+}
+
+// node_modules/drizzle-orm/pg-core/unique-constraint.js
+function uniqueKeyName(table, columns) {
+  return `${table[TableName]}_${columns.join("_")}_unique`;
+}
+
+// node_modules/drizzle-orm/pg-core/columns/common.js
+class PgColumn extends Column {
+  constructor(table, config2) {
+    if (!config2.uniqueName) {
+      config2.uniqueName = uniqueKeyName(table, [config2.name]);
+    }
+    super(table, config2);
+    this.table = table;
+  }
+  static [entityKind] = "PgColumn";
+}
+
+class ExtraConfigColumn extends PgColumn {
+  static [entityKind] = "ExtraConfigColumn";
+  getSQLType() {
+    return this.getSQLType();
+  }
+  indexConfig = {
+    order: this.config.order ?? "asc",
+    nulls: this.config.nulls ?? "last",
+    opClass: this.config.opClass
+  };
+  defaultConfig = {
+    order: "asc",
+    nulls: "last",
+    opClass: undefined
+  };
+  asc() {
+    this.indexConfig.order = "asc";
+    return this;
+  }
+  desc() {
+    this.indexConfig.order = "desc";
+    return this;
+  }
+  nullsFirst() {
+    this.indexConfig.nulls = "first";
+    return this;
+  }
+  nullsLast() {
+    this.indexConfig.nulls = "last";
+    return this;
+  }
+  op(opClass) {
+    this.indexConfig.opClass = opClass;
+    return this;
+  }
+}
+
+// node_modules/drizzle-orm/pg-core/columns/enum.js
+class PgEnumObjectColumn extends PgColumn {
+  static [entityKind] = "PgEnumObjectColumn";
+  enum;
+  enumValues = this.config.enum.enumValues;
+  constructor(table, config2) {
+    super(table, config2);
+    this.enum = config2.enum;
+  }
+  getSQLType() {
+    return this.enum.enumName;
+  }
+}
+var isPgEnumSym = Symbol.for("drizzle:isPgEnum");
+function isPgEnum(obj) {
+  return !!obj && typeof obj === "function" && isPgEnumSym in obj && obj[isPgEnumSym] === true;
+}
+class PgEnumColumn extends PgColumn {
+  static [entityKind] = "PgEnumColumn";
+  enum = this.config.enum;
+  enumValues = this.config.enum.enumValues;
+  constructor(table, config2) {
+    super(table, config2);
+    this.enum = config2.enum;
+  }
+  getSQLType() {
+    return this.enum.enumName;
+  }
+}
+
+// node_modules/drizzle-orm/subquery.js
+class Subquery {
+  static [entityKind] = "Subquery";
+  constructor(sql, fields, alias, isWith = false, usedTables = []) {
+    this._ = {
+      brand: "Subquery",
+      sql,
+      selectedFields: fields,
+      alias,
+      isWith,
+      usedTables
+    };
+  }
+}
+
+class WithSubquery extends Subquery {
+  static [entityKind] = "WithSubquery";
+}
+
+// node_modules/drizzle-orm/version.js
+var version2 = "0.45.1";
+
+// node_modules/drizzle-orm/tracing.js
+var otel;
+var rawTracer;
+var tracer = {
+  startActiveSpan(name, fn) {
+    if (!otel) {
+      return fn();
+    }
+    if (!rawTracer) {
+      rawTracer = otel.trace.getTracer("drizzle-orm", version2);
+    }
+    return iife((otel2, rawTracer2) => rawTracer2.startActiveSpan(name, (span) => {
+      try {
+        return fn(span);
+      } catch (e) {
+        span.setStatus({
+          code: otel2.SpanStatusCode.ERROR,
+          message: e instanceof Error ? e.message : "Unknown error"
+        });
+        throw e;
+      } finally {
+        span.end();
+      }
+    }), otel, rawTracer);
+  }
+};
+
+// node_modules/drizzle-orm/view-common.js
+var ViewBaseConfig = Symbol.for("drizzle:ViewBaseConfig");
+
+// node_modules/drizzle-orm/table.js
+var Schema = Symbol.for("drizzle:Schema");
+var Columns = Symbol.for("drizzle:Columns");
+var ExtraConfigColumns = Symbol.for("drizzle:ExtraConfigColumns");
+var OriginalName = Symbol.for("drizzle:OriginalName");
+var BaseName = Symbol.for("drizzle:BaseName");
+var IsAlias = Symbol.for("drizzle:IsAlias");
+var ExtraConfigBuilder = Symbol.for("drizzle:ExtraConfigBuilder");
+var IsDrizzleTable = Symbol.for("drizzle:IsDrizzleTable");
+
+class Table {
+  static [entityKind] = "Table";
+  static Symbol = {
+    Name: TableName,
+    Schema,
+    OriginalName,
+    Columns,
+    ExtraConfigColumns,
+    BaseName,
+    IsAlias,
+    ExtraConfigBuilder
+  };
+  [TableName];
+  [OriginalName];
+  [Schema];
+  [Columns];
+  [ExtraConfigColumns];
+  [BaseName];
+  [IsAlias] = false;
+  [IsDrizzleTable] = true;
+  [ExtraConfigBuilder] = undefined;
+  constructor(name, schema, baseName) {
+    this[TableName] = this[OriginalName] = name;
+    this[Schema] = schema;
+    this[BaseName] = baseName;
+  }
+}
+function getTableName(table) {
+  return table[TableName];
+}
+function getTableUniqueName(table) {
+  return `${table[Schema] ?? "public"}.${table[TableName]}`;
+}
+
+// node_modules/drizzle-orm/sql/sql.js
+function isSQLWrapper(value) {
+  return value !== null && value !== undefined && typeof value.getSQL === "function";
+}
+function mergeQueries(queries) {
+  const result = { sql: "", params: [] };
+  for (const query of queries) {
+    result.sql += query.sql;
+    result.params.push(...query.params);
+    if (query.typings?.length) {
+      if (!result.typings) {
+        result.typings = [];
+      }
+      result.typings.push(...query.typings);
+    }
+  }
+  return result;
+}
+
+class StringChunk {
+  static [entityKind] = "StringChunk";
+  value;
+  constructor(value) {
+    this.value = Array.isArray(value) ? value : [value];
+  }
+  getSQL() {
+    return new SQL([this]);
+  }
+}
+
+class SQL {
+  constructor(queryChunks) {
+    this.queryChunks = queryChunks;
+    for (const chunk of queryChunks) {
+      if (is(chunk, Table)) {
+        const schemaName = chunk[Table.Symbol.Schema];
+        this.usedTables.push(schemaName === undefined ? chunk[Table.Symbol.Name] : schemaName + "." + chunk[Table.Symbol.Name]);
+      }
+    }
+  }
+  static [entityKind] = "SQL";
+  decoder = noopDecoder;
+  shouldInlineParams = false;
+  usedTables = [];
+  append(query) {
+    this.queryChunks.push(...query.queryChunks);
+    return this;
+  }
+  toQuery(config2) {
+    return tracer.startActiveSpan("drizzle.buildSQL", (span) => {
+      const query = this.buildQueryFromSourceParams(this.queryChunks, config2);
+      span?.setAttributes({
+        "drizzle.query.text": query.sql,
+        "drizzle.query.params": JSON.stringify(query.params)
+      });
+      return query;
+    });
+  }
+  buildQueryFromSourceParams(chunks, _config) {
+    const config2 = Object.assign({}, _config, {
+      inlineParams: _config.inlineParams || this.shouldInlineParams,
+      paramStartIndex: _config.paramStartIndex || { value: 0 }
+    });
+    const {
+      casing,
+      escapeName,
+      escapeParam,
+      prepareTyping,
+      inlineParams,
+      paramStartIndex
+    } = config2;
+    return mergeQueries(chunks.map((chunk) => {
+      if (is(chunk, StringChunk)) {
+        return { sql: chunk.value.join(""), params: [] };
+      }
+      if (is(chunk, Name)) {
+        return { sql: escapeName(chunk.value), params: [] };
+      }
+      if (chunk === undefined) {
+        return { sql: "", params: [] };
+      }
+      if (Array.isArray(chunk)) {
+        const result = [new StringChunk("(")];
+        for (const [i, p] of chunk.entries()) {
+          result.push(p);
+          if (i < chunk.length - 1) {
+            result.push(new StringChunk(", "));
+          }
+        }
+        result.push(new StringChunk(")"));
+        return this.buildQueryFromSourceParams(result, config2);
+      }
+      if (is(chunk, SQL)) {
+        return this.buildQueryFromSourceParams(chunk.queryChunks, {
+          ...config2,
+          inlineParams: inlineParams || chunk.shouldInlineParams
+        });
+      }
+      if (is(chunk, Table)) {
+        const schemaName = chunk[Table.Symbol.Schema];
+        const tableName = chunk[Table.Symbol.Name];
+        return {
+          sql: schemaName === undefined || chunk[IsAlias] ? escapeName(tableName) : escapeName(schemaName) + "." + escapeName(tableName),
+          params: []
+        };
+      }
+      if (is(chunk, Column)) {
+        const columnName = casing.getColumnCasing(chunk);
+        if (_config.invokeSource === "indexes") {
+          return { sql: escapeName(columnName), params: [] };
+        }
+        const schemaName = chunk.table[Table.Symbol.Schema];
+        return {
+          sql: chunk.table[IsAlias] || schemaName === undefined ? escapeName(chunk.table[Table.Symbol.Name]) + "." + escapeName(columnName) : escapeName(schemaName) + "." + escapeName(chunk.table[Table.Symbol.Name]) + "." + escapeName(columnName),
+          params: []
+        };
+      }
+      if (is(chunk, View)) {
+        const schemaName = chunk[ViewBaseConfig].schema;
+        const viewName = chunk[ViewBaseConfig].name;
+        return {
+          sql: schemaName === undefined || chunk[ViewBaseConfig].isAlias ? escapeName(viewName) : escapeName(schemaName) + "." + escapeName(viewName),
+          params: []
+        };
+      }
+      if (is(chunk, Param)) {
+        if (is(chunk.value, Placeholder)) {
+          return { sql: escapeParam(paramStartIndex.value++, chunk), params: [chunk], typings: ["none"] };
+        }
+        const mappedValue = chunk.value === null ? null : chunk.encoder.mapToDriverValue(chunk.value);
+        if (is(mappedValue, SQL)) {
+          return this.buildQueryFromSourceParams([mappedValue], config2);
+        }
+        if (inlineParams) {
+          return { sql: this.mapInlineParam(mappedValue, config2), params: [] };
+        }
+        let typings = ["none"];
+        if (prepareTyping) {
+          typings = [prepareTyping(chunk.encoder)];
+        }
+        return { sql: escapeParam(paramStartIndex.value++, mappedValue), params: [mappedValue], typings };
+      }
+      if (is(chunk, Placeholder)) {
+        return { sql: escapeParam(paramStartIndex.value++, chunk), params: [chunk], typings: ["none"] };
+      }
+      if (is(chunk, SQL.Aliased) && chunk.fieldAlias !== undefined) {
+        return { sql: escapeName(chunk.fieldAlias), params: [] };
+      }
+      if (is(chunk, Subquery)) {
+        if (chunk._.isWith) {
+          return { sql: escapeName(chunk._.alias), params: [] };
+        }
+        return this.buildQueryFromSourceParams([
+          new StringChunk("("),
+          chunk._.sql,
+          new StringChunk(") "),
+          new Name(chunk._.alias)
+        ], config2);
+      }
+      if (isPgEnum(chunk)) {
+        if (chunk.schema) {
+          return { sql: escapeName(chunk.schema) + "." + escapeName(chunk.enumName), params: [] };
+        }
+        return { sql: escapeName(chunk.enumName), params: [] };
+      }
+      if (isSQLWrapper(chunk)) {
+        if (chunk.shouldOmitSQLParens?.()) {
+          return this.buildQueryFromSourceParams([chunk.getSQL()], config2);
+        }
+        return this.buildQueryFromSourceParams([
+          new StringChunk("("),
+          chunk.getSQL(),
+          new StringChunk(")")
+        ], config2);
+      }
+      if (inlineParams) {
+        return { sql: this.mapInlineParam(chunk, config2), params: [] };
+      }
+      return { sql: escapeParam(paramStartIndex.value++, chunk), params: [chunk], typings: ["none"] };
+    }));
+  }
+  mapInlineParam(chunk, { escapeString }) {
+    if (chunk === null) {
+      return "null";
+    }
+    if (typeof chunk === "number" || typeof chunk === "boolean") {
+      return chunk.toString();
+    }
+    if (typeof chunk === "string") {
+      return escapeString(chunk);
+    }
+    if (typeof chunk === "object") {
+      const mappedValueAsString = chunk.toString();
+      if (mappedValueAsString === "[object Object]") {
+        return escapeString(JSON.stringify(chunk));
+      }
+      return escapeString(mappedValueAsString);
+    }
+    throw new Error("Unexpected param value: " + chunk);
+  }
+  getSQL() {
+    return this;
+  }
+  as(alias) {
+    if (alias === undefined) {
+      return this;
+    }
+    return new SQL.Aliased(this, alias);
+  }
+  mapWith(decoder) {
+    this.decoder = typeof decoder === "function" ? { mapFromDriverValue: decoder } : decoder;
+    return this;
+  }
+  inlineParams() {
+    this.shouldInlineParams = true;
+    return this;
+  }
+  if(condition) {
+    return condition ? this : undefined;
+  }
+}
+
+class Name {
+  constructor(value) {
+    this.value = value;
+  }
+  static [entityKind] = "Name";
+  brand;
+  getSQL() {
+    return new SQL([this]);
+  }
+}
+function isDriverValueEncoder(value) {
+  return typeof value === "object" && value !== null && "mapToDriverValue" in value && typeof value.mapToDriverValue === "function";
+}
+var noopDecoder = {
+  mapFromDriverValue: (value) => value
+};
+var noopEncoder = {
+  mapToDriverValue: (value) => value
+};
+var noopMapper = {
+  ...noopDecoder,
+  ...noopEncoder
+};
+
+class Param {
+  constructor(value, encoder = noopEncoder) {
+    this.value = value;
+    this.encoder = encoder;
+  }
+  static [entityKind] = "Param";
+  brand;
+  getSQL() {
+    return new SQL([this]);
+  }
+}
+function sql(strings, ...params) {
+  const queryChunks = [];
+  if (params.length > 0 || strings.length > 0 && strings[0] !== "") {
+    queryChunks.push(new StringChunk(strings[0]));
+  }
+  for (const [paramIndex, param2] of params.entries()) {
+    queryChunks.push(param2, new StringChunk(strings[paramIndex + 1]));
+  }
+  return new SQL(queryChunks);
+}
+((sql2) => {
+  function empty() {
+    return new SQL([]);
+  }
+  sql2.empty = empty;
+  function fromList(list) {
+    return new SQL(list);
+  }
+  sql2.fromList = fromList;
+  function raw2(str) {
+    return new SQL([new StringChunk(str)]);
+  }
+  sql2.raw = raw2;
+  function join(chunks, separator) {
+    const result = [];
+    for (const [i, chunk] of chunks.entries()) {
+      if (i > 0 && separator !== undefined) {
+        result.push(separator);
+      }
+      result.push(chunk);
+    }
+    return new SQL(result);
+  }
+  sql2.join = join;
+  function identifier(value) {
+    return new Name(value);
+  }
+  sql2.identifier = identifier;
+  function placeholder2(name2) {
+    return new Placeholder(name2);
+  }
+  sql2.placeholder = placeholder2;
+  function param2(value, encoder) {
+    return new Param(value, encoder);
+  }
+  sql2.param = param2;
+})(sql || (sql = {}));
+((SQL2) => {
+
+  class Aliased {
+    constructor(sql2, fieldAlias) {
+      this.sql = sql2;
+      this.fieldAlias = fieldAlias;
+    }
+    static [entityKind] = "SQL.Aliased";
+    isSelectionField = false;
+    getSQL() {
+      return this.sql;
+    }
+    clone() {
+      return new Aliased(this.sql, this.fieldAlias);
+    }
+  }
+  SQL2.Aliased = Aliased;
+})(SQL || (SQL = {}));
+
+class Placeholder {
+  constructor(name2) {
+    this.name = name2;
+  }
+  static [entityKind] = "Placeholder";
+  getSQL() {
+    return new SQL([this]);
+  }
+}
+function fillPlaceholders(params, values) {
+  return params.map((p) => {
+    if (is(p, Placeholder)) {
+      if (!(p.name in values)) {
+        throw new Error(`No value for placeholder "${p.name}" was provided`);
+      }
+      return values[p.name];
+    }
+    if (is(p, Param) && is(p.value, Placeholder)) {
+      if (!(p.value.name in values)) {
+        throw new Error(`No value for placeholder "${p.value.name}" was provided`);
+      }
+      return p.encoder.mapToDriverValue(values[p.value.name]);
+    }
+    return p;
+  });
+}
+var IsDrizzleView = Symbol.for("drizzle:IsDrizzleView");
+
+class View {
+  static [entityKind] = "View";
+  [ViewBaseConfig];
+  [IsDrizzleView] = true;
+  constructor({ name: name2, schema, selectedFields, query }) {
+    this[ViewBaseConfig] = {
+      name: name2,
+      originalName: name2,
+      schema,
+      selectedFields,
+      query,
+      isExisting: !query,
+      isAlias: false
+    };
+  }
+  getSQL() {
+    return new SQL([this]);
+  }
+}
+Column.prototype.getSQL = function() {
+  return new SQL([this]);
+};
+Table.prototype.getSQL = function() {
+  return new SQL([this]);
+};
+Subquery.prototype.getSQL = function() {
+  return new SQL([this]);
+};
+
+// node_modules/drizzle-orm/alias.js
+class ColumnAliasProxyHandler {
+  constructor(table) {
+    this.table = table;
+  }
+  static [entityKind] = "ColumnAliasProxyHandler";
+  get(columnObj, prop) {
+    if (prop === "table") {
+      return this.table;
+    }
+    return columnObj[prop];
+  }
+}
+
+class TableAliasProxyHandler {
+  constructor(alias, replaceOriginalName) {
+    this.alias = alias;
+    this.replaceOriginalName = replaceOriginalName;
+  }
+  static [entityKind] = "TableAliasProxyHandler";
+  get(target, prop) {
+    if (prop === Table.Symbol.IsAlias) {
+      return true;
+    }
+    if (prop === Table.Symbol.Name) {
+      return this.alias;
+    }
+    if (this.replaceOriginalName && prop === Table.Symbol.OriginalName) {
+      return this.alias;
+    }
+    if (prop === ViewBaseConfig) {
+      return {
+        ...target[ViewBaseConfig],
+        name: this.alias,
+        isAlias: true
+      };
+    }
+    if (prop === Table.Symbol.Columns) {
+      const columns = target[Table.Symbol.Columns];
+      if (!columns) {
+        return columns;
+      }
+      const proxiedColumns = {};
+      Object.keys(columns).map((key) => {
+        proxiedColumns[key] = new Proxy(columns[key], new ColumnAliasProxyHandler(new Proxy(target, this)));
+      });
+      return proxiedColumns;
+    }
+    const value = target[prop];
+    if (is(value, Column)) {
+      return new Proxy(value, new ColumnAliasProxyHandler(new Proxy(target, this)));
+    }
+    return value;
+  }
+}
+function aliasedTable(table, tableAlias) {
+  return new Proxy(table, new TableAliasProxyHandler(tableAlias, false));
+}
+function aliasedTableColumn(column, tableAlias) {
+  return new Proxy(column, new ColumnAliasProxyHandler(new Proxy(column.table, new TableAliasProxyHandler(tableAlias, false))));
+}
+function mapColumnsInAliasedSQLToAlias(query, alias) {
+  return new SQL.Aliased(mapColumnsInSQLToAlias(query.sql, alias), query.fieldAlias);
+}
+function mapColumnsInSQLToAlias(query, alias) {
+  return sql.join(query.queryChunks.map((c) => {
+    if (is(c, Column)) {
+      return aliasedTableColumn(c, alias);
+    }
+    if (is(c, SQL)) {
+      return mapColumnsInSQLToAlias(c, alias);
+    }
+    if (is(c, SQL.Aliased)) {
+      return mapColumnsInAliasedSQLToAlias(c, alias);
+    }
+    return c;
+  }));
+}
+
+// node_modules/drizzle-orm/errors.js
+class DrizzleError extends Error {
+  static [entityKind] = "DrizzleError";
+  constructor({ message, cause }) {
+    super(message);
+    this.name = "DrizzleError";
+    this.cause = cause;
+  }
+}
+
+class DrizzleQueryError extends Error {
+  constructor(query, params, cause) {
+    super(`Failed query: ${query}
+params: ${params}`);
+    this.query = query;
+    this.params = params;
+    this.cause = cause;
+    Error.captureStackTrace(this, DrizzleQueryError);
+    if (cause)
+      this.cause = cause;
+  }
+}
+
+class TransactionRollbackError extends DrizzleError {
+  static [entityKind] = "TransactionRollbackError";
+  constructor() {
+    super({ message: "Rollback" });
+  }
+}
+
+// node_modules/drizzle-orm/logger.js
+class ConsoleLogWriter {
+  static [entityKind] = "ConsoleLogWriter";
+  write(message) {
+    console.log(message);
+  }
+}
+
+class DefaultLogger {
+  static [entityKind] = "DefaultLogger";
+  writer;
+  constructor(config2) {
+    this.writer = config2?.writer ?? new ConsoleLogWriter;
+  }
+  logQuery(query, params) {
+    const stringifiedParams = params.map((p) => {
+      try {
+        return JSON.stringify(p);
+      } catch {
+        return String(p);
+      }
+    });
+    const paramsStr = stringifiedParams.length ? ` -- params: [${stringifiedParams.join(", ")}]` : "";
+    this.writer.write(`Query: ${query}${paramsStr}`);
+  }
+}
+
+class NoopLogger {
+  static [entityKind] = "NoopLogger";
+  logQuery() {}
+}
+
+// node_modules/drizzle-orm/query-promise.js
+class QueryPromise {
+  static [entityKind] = "QueryPromise";
+  [Symbol.toStringTag] = "QueryPromise";
+  catch(onRejected) {
+    return this.then(undefined, onRejected);
+  }
+  finally(onFinally) {
+    return this.then((value) => {
+      onFinally?.();
+      return value;
+    }, (reason) => {
+      onFinally?.();
+      throw reason;
+    });
+  }
+  then(onFulfilled, onRejected) {
+    return this.execute().then(onFulfilled, onRejected);
+  }
+}
+
+// node_modules/drizzle-orm/utils.js
+function mapResultRow(columns, row, joinsNotNullableMap) {
+  const nullifyMap = {};
+  const result = columns.reduce((result2, { path, field }, columnIndex) => {
+    let decoder;
+    if (is(field, Column)) {
+      decoder = field;
+    } else if (is(field, SQL)) {
+      decoder = field.decoder;
+    } else if (is(field, Subquery)) {
+      decoder = field._.sql.decoder;
+    } else {
+      decoder = field.sql.decoder;
+    }
+    let node = result2;
+    for (const [pathChunkIndex, pathChunk] of path.entries()) {
+      if (pathChunkIndex < path.length - 1) {
+        if (!(pathChunk in node)) {
+          node[pathChunk] = {};
+        }
+        node = node[pathChunk];
+      } else {
+        const rawValue = row[columnIndex];
+        const value = node[pathChunk] = rawValue === null ? null : decoder.mapFromDriverValue(rawValue);
+        if (joinsNotNullableMap && is(field, Column) && path.length === 2) {
+          const objectName = path[0];
+          if (!(objectName in nullifyMap)) {
+            nullifyMap[objectName] = value === null ? getTableName(field.table) : false;
+          } else if (typeof nullifyMap[objectName] === "string" && nullifyMap[objectName] !== getTableName(field.table)) {
+            nullifyMap[objectName] = false;
+          }
+        }
+      }
+    }
+    return result2;
+  }, {});
+  if (joinsNotNullableMap && Object.keys(nullifyMap).length > 0) {
+    for (const [objectName, tableName] of Object.entries(nullifyMap)) {
+      if (typeof tableName === "string" && !joinsNotNullableMap[tableName]) {
+        result[objectName] = null;
+      }
+    }
+  }
+  return result;
+}
+function orderSelectedFields(fields, pathPrefix) {
+  return Object.entries(fields).reduce((result, [name, field]) => {
+    if (typeof name !== "string") {
+      return result;
+    }
+    const newPath = pathPrefix ? [...pathPrefix, name] : [name];
+    if (is(field, Column) || is(field, SQL) || is(field, SQL.Aliased) || is(field, Subquery)) {
+      result.push({ path: newPath, field });
+    } else if (is(field, Table)) {
+      result.push(...orderSelectedFields(field[Table.Symbol.Columns], newPath));
+    } else {
+      result.push(...orderSelectedFields(field, newPath));
+    }
+    return result;
+  }, []);
+}
+function haveSameKeys(left, right) {
+  const leftKeys = Object.keys(left);
+  const rightKeys = Object.keys(right);
+  if (leftKeys.length !== rightKeys.length) {
+    return false;
+  }
+  for (const [index, key] of leftKeys.entries()) {
+    if (key !== rightKeys[index]) {
+      return false;
+    }
+  }
+  return true;
+}
+function mapUpdateSet(table, values) {
+  const entries = Object.entries(values).filter(([, value]) => value !== undefined).map(([key, value]) => {
+    if (is(value, SQL) || is(value, Column)) {
+      return [key, value];
+    } else {
+      return [key, new Param(value, table[Table.Symbol.Columns][key])];
+    }
+  });
+  if (entries.length === 0) {
+    throw new Error("No values to set");
+  }
+  return Object.fromEntries(entries);
+}
+function applyMixins(baseClass, extendedClasses) {
+  for (const extendedClass of extendedClasses) {
+    for (const name of Object.getOwnPropertyNames(extendedClass.prototype)) {
+      if (name === "constructor")
+        continue;
+      Object.defineProperty(baseClass.prototype, name, Object.getOwnPropertyDescriptor(extendedClass.prototype, name) || /* @__PURE__ */ Object.create(null));
+    }
+  }
+}
+function getTableColumns(table) {
+  return table[Table.Symbol.Columns];
+}
+function getTableLikeName(table) {
+  return is(table, Subquery) ? table._.alias : is(table, View) ? table[ViewBaseConfig].name : is(table, SQL) ? undefined : table[Table.Symbol.IsAlias] ? table[Table.Symbol.Name] : table[Table.Symbol.BaseName];
+}
+function getColumnNameAndConfig(a, b) {
+  return {
+    name: typeof a === "string" && a.length > 0 ? a : "",
+    config: typeof a === "object" ? a : b
+  };
+}
+function isConfig(data) {
+  if (typeof data !== "object" || data === null)
+    return false;
+  if (data.constructor.name !== "Object")
+    return false;
+  if ("logger" in data) {
+    const type = typeof data["logger"];
+    if (type !== "boolean" && (type !== "object" || typeof data["logger"]["logQuery"] !== "function") && type !== "undefined")
+      return false;
+    return true;
+  }
+  if ("schema" in data) {
+    const type = typeof data["schema"];
+    if (type !== "object" && type !== "undefined")
+      return false;
+    return true;
+  }
+  if ("casing" in data) {
+    const type = typeof data["casing"];
+    if (type !== "string" && type !== "undefined")
+      return false;
+    return true;
+  }
+  if ("mode" in data) {
+    if (data["mode"] !== "default" || data["mode"] !== "planetscale" || data["mode"] !== undefined)
+      return false;
+    return true;
+  }
+  if ("connection" in data) {
+    const type = typeof data["connection"];
+    if (type !== "string" && type !== "object" && type !== "undefined")
+      return false;
+    return true;
+  }
+  if ("client" in data) {
+    const type = typeof data["client"];
+    if (type !== "object" && type !== "function" && type !== "undefined")
+      return false;
+    return true;
+  }
+  if (Object.keys(data).length === 0)
+    return true;
+  return false;
+}
+var textDecoder = typeof TextDecoder === "undefined" ? null : new TextDecoder;
+
+// node_modules/drizzle-orm/pg-core/table.js
+var InlineForeignKeys = Symbol.for("drizzle:PgInlineForeignKeys");
+var EnableRLS = Symbol.for("drizzle:EnableRLS");
+
+class PgTable extends Table {
+  static [entityKind] = "PgTable";
+  static Symbol = Object.assign({}, Table.Symbol, {
+    InlineForeignKeys,
+    EnableRLS
+  });
+  [InlineForeignKeys] = [];
+  [EnableRLS] = false;
+  [Table.Symbol.ExtraConfigBuilder] = undefined;
+  [Table.Symbol.ExtraConfigColumns] = {};
+}
+
+// node_modules/drizzle-orm/pg-core/primary-keys.js
+class PrimaryKeyBuilder {
+  static [entityKind] = "PgPrimaryKeyBuilder";
+  columns;
+  name;
+  constructor(columns, name) {
+    this.columns = columns;
+    this.name = name;
+  }
+  build(table) {
+    return new PrimaryKey(table, this.columns, this.name);
+  }
+}
+
+class PrimaryKey {
+  constructor(table, columns, name) {
+    this.table = table;
+    this.columns = columns;
+    this.name = name;
+  }
+  static [entityKind] = "PgPrimaryKey";
+  columns;
+  name;
+  getName() {
+    return this.name ?? `${this.table[PgTable.Symbol.Name]}_${this.columns.map((column) => column.name).join("_")}_pk`;
+  }
+}
+
+// node_modules/drizzle-orm/sql/expressions/conditions.js
+function bindIfParam(value, column) {
+  if (isDriverValueEncoder(column) && !isSQLWrapper(value) && !is(value, Param) && !is(value, Placeholder) && !is(value, Column) && !is(value, Table) && !is(value, View)) {
+    return new Param(value, column);
+  }
+  return value;
+}
+var eq = (left, right) => {
+  return sql`${left} = ${bindIfParam(right, left)}`;
+};
+var ne = (left, right) => {
+  return sql`${left} <> ${bindIfParam(right, left)}`;
+};
+function and(...unfilteredConditions) {
+  const conditions = unfilteredConditions.filter((c) => c !== undefined);
+  if (conditions.length === 0) {
+    return;
+  }
+  if (conditions.length === 1) {
+    return new SQL(conditions);
+  }
+  return new SQL([
+    new StringChunk("("),
+    sql.join(conditions, new StringChunk(" and ")),
+    new StringChunk(")")
+  ]);
+}
+function or(...unfilteredConditions) {
+  const conditions = unfilteredConditions.filter((c) => c !== undefined);
+  if (conditions.length === 0) {
+    return;
+  }
+  if (conditions.length === 1) {
+    return new SQL(conditions);
+  }
+  return new SQL([
+    new StringChunk("("),
+    sql.join(conditions, new StringChunk(" or ")),
+    new StringChunk(")")
+  ]);
+}
+function not(condition) {
+  return sql`not ${condition}`;
+}
+var gt = (left, right) => {
+  return sql`${left} > ${bindIfParam(right, left)}`;
+};
+var gte = (left, right) => {
+  return sql`${left} >= ${bindIfParam(right, left)}`;
+};
+var lt = (left, right) => {
+  return sql`${left} < ${bindIfParam(right, left)}`;
+};
+var lte = (left, right) => {
+  return sql`${left} <= ${bindIfParam(right, left)}`;
+};
+function inArray(column, values) {
+  if (Array.isArray(values)) {
+    if (values.length === 0) {
+      return sql`false`;
+    }
+    return sql`${column} in ${values.map((v) => bindIfParam(v, column))}`;
+  }
+  return sql`${column} in ${bindIfParam(values, column)}`;
+}
+function notInArray(column, values) {
+  if (Array.isArray(values)) {
+    if (values.length === 0) {
+      return sql`true`;
+    }
+    return sql`${column} not in ${values.map((v) => bindIfParam(v, column))}`;
+  }
+  return sql`${column} not in ${bindIfParam(values, column)}`;
+}
+function isNull(value) {
+  return sql`${value} is null`;
+}
+function isNotNull(value) {
+  return sql`${value} is not null`;
+}
+function exists(subquery) {
+  return sql`exists ${subquery}`;
+}
+function notExists(subquery) {
+  return sql`not exists ${subquery}`;
+}
+function between(column, min, max) {
+  return sql`${column} between ${bindIfParam(min, column)} and ${bindIfParam(max, column)}`;
+}
+function notBetween(column, min, max) {
+  return sql`${column} not between ${bindIfParam(min, column)} and ${bindIfParam(max, column)}`;
+}
+function like(column, value) {
+  return sql`${column} like ${value}`;
+}
+function notLike(column, value) {
+  return sql`${column} not like ${value}`;
+}
+function ilike(column, value) {
+  return sql`${column} ilike ${value}`;
+}
+function notIlike(column, value) {
+  return sql`${column} not ilike ${value}`;
+}
+
+// node_modules/drizzle-orm/sql/expressions/select.js
+function asc(column) {
+  return sql`${column} asc`;
+}
+function desc(column) {
+  return sql`${column} desc`;
+}
+
+// node_modules/drizzle-orm/relations.js
+class Relation {
+  constructor(sourceTable, referencedTable, relationName) {
+    this.sourceTable = sourceTable;
+    this.referencedTable = referencedTable;
+    this.relationName = relationName;
+    this.referencedTableName = referencedTable[Table.Symbol.Name];
+  }
+  static [entityKind] = "Relation";
+  referencedTableName;
+  fieldName;
+}
+
+class Relations {
+  constructor(table, config2) {
+    this.table = table;
+    this.config = config2;
+  }
+  static [entityKind] = "Relations";
+}
+
+class One extends Relation {
+  constructor(sourceTable, referencedTable, config2, isNullable) {
+    super(sourceTable, referencedTable, config2?.relationName);
+    this.config = config2;
+    this.isNullable = isNullable;
+  }
+  static [entityKind] = "One";
+  withFieldName(fieldName) {
+    const relation = new One(this.sourceTable, this.referencedTable, this.config, this.isNullable);
+    relation.fieldName = fieldName;
+    return relation;
+  }
+}
+
+class Many extends Relation {
+  constructor(sourceTable, referencedTable, config2) {
+    super(sourceTable, referencedTable, config2?.relationName);
+    this.config = config2;
+  }
+  static [entityKind] = "Many";
+  withFieldName(fieldName) {
+    const relation = new Many(this.sourceTable, this.referencedTable, this.config);
+    relation.fieldName = fieldName;
+    return relation;
+  }
+}
+function getOperators() {
+  return {
+    and,
+    between,
+    eq,
+    exists,
+    gt,
+    gte,
+    ilike,
+    inArray,
+    isNull,
+    isNotNull,
+    like,
+    lt,
+    lte,
+    ne,
+    not,
+    notBetween,
+    notExists,
+    notLike,
+    notIlike,
+    notInArray,
+    or,
+    sql
+  };
+}
+function getOrderByOperators() {
+  return {
+    sql,
+    asc,
+    desc
+  };
+}
+function extractTablesRelationalConfig(schema, configHelpers) {
+  if (Object.keys(schema).length === 1 && "default" in schema && !is(schema["default"], Table)) {
+    schema = schema["default"];
+  }
+  const tableNamesMap = {};
+  const relationsBuffer = {};
+  const tablesConfig = {};
+  for (const [key, value] of Object.entries(schema)) {
+    if (is(value, Table)) {
+      const dbName = getTableUniqueName(value);
+      const bufferedRelations = relationsBuffer[dbName];
+      tableNamesMap[dbName] = key;
+      tablesConfig[key] = {
+        tsName: key,
+        dbName: value[Table.Symbol.Name],
+        schema: value[Table.Symbol.Schema],
+        columns: value[Table.Symbol.Columns],
+        relations: bufferedRelations?.relations ?? {},
+        primaryKey: bufferedRelations?.primaryKey ?? []
+      };
+      for (const column of Object.values(value[Table.Symbol.Columns])) {
+        if (column.primary) {
+          tablesConfig[key].primaryKey.push(column);
+        }
+      }
+      const extraConfig = value[Table.Symbol.ExtraConfigBuilder]?.(value[Table.Symbol.ExtraConfigColumns]);
+      if (extraConfig) {
+        for (const configEntry of Object.values(extraConfig)) {
+          if (is(configEntry, PrimaryKeyBuilder)) {
+            tablesConfig[key].primaryKey.push(...configEntry.columns);
+          }
+        }
+      }
+    } else if (is(value, Relations)) {
+      const dbName = getTableUniqueName(value.table);
+      const tableName = tableNamesMap[dbName];
+      const relations2 = value.config(configHelpers(value.table));
+      let primaryKey;
+      for (const [relationName, relation] of Object.entries(relations2)) {
+        if (tableName) {
+          const tableConfig = tablesConfig[tableName];
+          tableConfig.relations[relationName] = relation;
+          if (primaryKey) {
+            tableConfig.primaryKey.push(...primaryKey);
+          }
+        } else {
+          if (!(dbName in relationsBuffer)) {
+            relationsBuffer[dbName] = {
+              relations: {},
+              primaryKey
+            };
+          }
+          relationsBuffer[dbName].relations[relationName] = relation;
+        }
+      }
+    }
+  }
+  return { tables: tablesConfig, tableNamesMap };
+}
+function createOne(sourceTable) {
+  return function one(table, config2) {
+    return new One(sourceTable, table, config2, config2?.fields.reduce((res, f) => res && f.notNull, true) ?? false);
+  };
+}
+function createMany(sourceTable) {
+  return function many(referencedTable, config2) {
+    return new Many(sourceTable, referencedTable, config2);
+  };
+}
+function normalizeRelation(schema, tableNamesMap, relation) {
+  if (is(relation, One) && relation.config) {
+    return {
+      fields: relation.config.fields,
+      references: relation.config.references
+    };
+  }
+  const referencedTableTsName = tableNamesMap[getTableUniqueName(relation.referencedTable)];
+  if (!referencedTableTsName) {
+    throw new Error(`Table "${relation.referencedTable[Table.Symbol.Name]}" not found in schema`);
+  }
+  const referencedTableConfig = schema[referencedTableTsName];
+  if (!referencedTableConfig) {
+    throw new Error(`Table "${referencedTableTsName}" not found in schema`);
+  }
+  const sourceTable = relation.sourceTable;
+  const sourceTableTsName = tableNamesMap[getTableUniqueName(sourceTable)];
+  if (!sourceTableTsName) {
+    throw new Error(`Table "${sourceTable[Table.Symbol.Name]}" not found in schema`);
+  }
+  const reverseRelations = [];
+  for (const referencedTableRelation of Object.values(referencedTableConfig.relations)) {
+    if (relation.relationName && relation !== referencedTableRelation && referencedTableRelation.relationName === relation.relationName || !relation.relationName && referencedTableRelation.referencedTable === relation.sourceTable) {
+      reverseRelations.push(referencedTableRelation);
+    }
+  }
+  if (reverseRelations.length > 1) {
+    throw relation.relationName ? new Error(`There are multiple relations with name "${relation.relationName}" in table "${referencedTableTsName}"`) : new Error(`There are multiple relations between "${referencedTableTsName}" and "${relation.sourceTable[Table.Symbol.Name]}". Please specify relation name`);
+  }
+  if (reverseRelations[0] && is(reverseRelations[0], One) && reverseRelations[0].config) {
+    return {
+      fields: reverseRelations[0].config.references,
+      references: reverseRelations[0].config.fields
+    };
+  }
+  throw new Error(`There is not enough information to infer relation "${sourceTableTsName}.${relation.fieldName}"`);
+}
+function createTableRelationsHelpers(sourceTable) {
+  return {
+    one: createOne(sourceTable),
+    many: createMany(sourceTable)
+  };
+}
+function mapRelationalRow(tablesConfig, tableConfig, row, buildQueryResultSelection, mapColumnValue = (value) => value) {
+  const result = {};
+  for (const [
+    selectionItemIndex,
+    selectionItem
+  ] of buildQueryResultSelection.entries()) {
+    if (selectionItem.isJson) {
+      const relation = tableConfig.relations[selectionItem.tsKey];
+      const rawSubRows = row[selectionItemIndex];
+      const subRows = typeof rawSubRows === "string" ? JSON.parse(rawSubRows) : rawSubRows;
+      result[selectionItem.tsKey] = is(relation, One) ? subRows && mapRelationalRow(tablesConfig, tablesConfig[selectionItem.relationTableTsKey], subRows, selectionItem.selection, mapColumnValue) : subRows.map((subRow) => mapRelationalRow(tablesConfig, tablesConfig[selectionItem.relationTableTsKey], subRow, selectionItem.selection, mapColumnValue));
+    } else {
+      const value = mapColumnValue(row[selectionItemIndex]);
+      const field = selectionItem.field;
+      let decoder;
+      if (is(field, Column)) {
+        decoder = field;
+      } else if (is(field, SQL)) {
+        decoder = field.decoder;
+      } else {
+        decoder = field.sql.decoder;
+      }
+      result[selectionItem.tsKey] = value === null ? null : decoder.mapFromDriverValue(value);
+    }
+  }
+  return result;
+}
+
+// node_modules/@libsql/core/lib-esm/api.js
+class LibsqlError extends Error {
+  code;
+  extendedCode;
+  rawCode;
+  constructor(message, code, extendedCode, rawCode, cause) {
+    if (code !== undefined) {
+      message = `${code}: ${message}`;
+    }
+    super(message, { cause });
+    this.code = code;
+    this.extendedCode = extendedCode;
+    this.rawCode = rawCode;
+    this.name = "LibsqlError";
+  }
+}
+
+class LibsqlBatchError extends LibsqlError {
+  statementIndex;
+  constructor(message, statementIndex, code, extendedCode, rawCode, cause) {
+    super(message, code, extendedCode, rawCode, cause);
+    this.statementIndex = statementIndex;
+    this.name = "LibsqlBatchError";
+  }
+}
+
+// node_modules/@libsql/core/lib-esm/uri.js
+function parseUri(text) {
+  const match2 = URI_RE.exec(text);
+  if (match2 === null) {
+    throw new LibsqlError(`The URL '${text}' is not in a valid format`, "URL_INVALID");
+  }
+  const groups = match2.groups;
+  const scheme = groups["scheme"];
+  const authority = groups["authority"] !== undefined ? parseAuthority(groups["authority"]) : undefined;
+  const path = percentDecode(groups["path"]);
+  const query = groups["query"] !== undefined ? parseQuery(groups["query"]) : undefined;
+  const fragment = groups["fragment"] !== undefined ? percentDecode(groups["fragment"]) : undefined;
+  return { scheme, authority, path, query, fragment };
+}
+var URI_RE = (() => {
+  const SCHEME = "(?<scheme>[A-Za-z][A-Za-z.+-]*)";
+  const AUTHORITY = "(?<authority>[^/?#]*)";
+  const PATH = "(?<path>[^?#]*)";
+  const QUERY = "(?<query>[^#]*)";
+  const FRAGMENT = "(?<fragment>.*)";
+  return new RegExp(`^${SCHEME}:(//${AUTHORITY})?${PATH}(\\?${QUERY})?(#${FRAGMENT})?$`, "su");
+})();
+function parseAuthority(text) {
+  const match2 = AUTHORITY_RE.exec(text);
+  if (match2 === null) {
+    throw new LibsqlError("The authority part of the URL is not in a valid format", "URL_INVALID");
+  }
+  const groups = match2.groups;
+  const host = percentDecode(groups["host_br"] ?? groups["host"]);
+  const port = groups["port"] ? parseInt(groups["port"], 10) : undefined;
+  const userinfo = groups["username"] !== undefined ? {
+    username: percentDecode(groups["username"]),
+    password: groups["password"] !== undefined ? percentDecode(groups["password"]) : undefined
+  } : undefined;
+  return { host, port, userinfo };
+}
+var AUTHORITY_RE = (() => {
+  return new RegExp(`^((?<username>[^:]*)(:(?<password>.*))?@)?((?<host>[^:\\[\\]]*)|(\\[(?<host_br>[^\\[\\]]*)\\]))(:(?<port>[0-9]*))?$`, "su");
+})();
+function parseQuery(text) {
+  const sequences = text.split("&");
+  const pairs = [];
+  for (const sequence of sequences) {
+    if (sequence === "") {
+      continue;
+    }
+    let key;
+    let value;
+    const splitIdx = sequence.indexOf("=");
+    if (splitIdx < 0) {
+      key = sequence;
+      value = "";
+    } else {
+      key = sequence.substring(0, splitIdx);
+      value = sequence.substring(splitIdx + 1);
+    }
+    pairs.push({
+      key: percentDecode(key.replaceAll("+", " ")),
+      value: percentDecode(value.replaceAll("+", " "))
+    });
+  }
+  return { pairs };
+}
+function percentDecode(text) {
+  try {
+    return decodeURIComponent(text);
+  } catch (e) {
+    if (e instanceof URIError) {
+      throw new LibsqlError(`URL component has invalid percent encoding: ${e}`, "URL_INVALID", undefined, undefined, e);
+    }
+    throw e;
+  }
+}
+function encodeBaseUrl(scheme, authority, path) {
+  if (authority === undefined) {
+    throw new LibsqlError(`URL with scheme ${JSON.stringify(scheme + ":")} requires authority (the "//" part)`, "URL_INVALID");
+  }
+  const schemeText = `${scheme}:`;
+  const hostText = encodeHost(authority.host);
+  const portText = encodePort(authority.port);
+  const userinfoText = encodeUserinfo(authority.userinfo);
+  const authorityText = `//${userinfoText}${hostText}${portText}`;
+  let pathText = path.split("/").map(encodeURIComponent).join("/");
+  if (pathText !== "" && !pathText.startsWith("/")) {
+    pathText = "/" + pathText;
+  }
+  return new URL(`${schemeText}${authorityText}${pathText}`);
+}
+function encodeHost(host) {
+  return host.includes(":") ? `[${encodeURI(host)}]` : encodeURI(host);
+}
+function encodePort(port) {
+  return port !== undefined ? `:${port}` : "";
+}
+function encodeUserinfo(userinfo) {
+  if (userinfo === undefined) {
+    return "";
+  }
+  const usernameText = encodeURIComponent(userinfo.username);
+  const passwordText = userinfo.password !== undefined ? `:${encodeURIComponent(userinfo.password)}` : "";
+  return `${usernameText}${passwordText}@`;
+}
+
+// node_modules/js-base64/base64.mjs
+var version3 = "3.7.8";
+var VERSION = version3;
+var _hasBuffer = typeof Buffer === "function";
+var _TD = typeof TextDecoder === "function" ? new TextDecoder : undefined;
+var _TE = typeof TextEncoder === "function" ? new TextEncoder : undefined;
+var b64ch = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+var b64chs = Array.prototype.slice.call(b64ch);
+var b64tab = ((a) => {
+  let tab = {};
+  a.forEach((c, i) => tab[c] = i);
+  return tab;
+})(b64chs);
+var b64re = /^(?:[A-Za-z\d+\/]{4})*?(?:[A-Za-z\d+\/]{2}(?:==)?|[A-Za-z\d+\/]{3}=?)?$/;
+var _fromCC = String.fromCharCode.bind(String);
+var _U8Afrom = typeof Uint8Array.from === "function" ? Uint8Array.from.bind(Uint8Array) : (it) => new Uint8Array(Array.prototype.slice.call(it, 0));
+var _mkUriSafe = (src) => src.replace(/=/g, "").replace(/[+\/]/g, (m0) => m0 == "+" ? "-" : "_");
+var _tidyB64 = (s) => s.replace(/[^A-Za-z0-9\+\/]/g, "");
+var btoaPolyfill = (bin) => {
+  let u32, c0, c1, c2, asc2 = "";
+  const pad = bin.length % 3;
+  for (let i = 0;i < bin.length; ) {
+    if ((c0 = bin.charCodeAt(i++)) > 255 || (c1 = bin.charCodeAt(i++)) > 255 || (c2 = bin.charCodeAt(i++)) > 255)
+      throw new TypeError("invalid character found");
+    u32 = c0 << 16 | c1 << 8 | c2;
+    asc2 += b64chs[u32 >> 18 & 63] + b64chs[u32 >> 12 & 63] + b64chs[u32 >> 6 & 63] + b64chs[u32 & 63];
+  }
+  return pad ? asc2.slice(0, pad - 3) + "===".substring(pad) : asc2;
+};
+var _btoa = typeof btoa === "function" ? (bin) => btoa(bin) : _hasBuffer ? (bin) => Buffer.from(bin, "binary").toString("base64") : btoaPolyfill;
+var _fromUint8Array = _hasBuffer ? (u8a) => Buffer.from(u8a).toString("base64") : (u8a) => {
+  const maxargs = 4096;
+  let strs = [];
+  for (let i = 0, l = u8a.length;i < l; i += maxargs) {
+    strs.push(_fromCC.apply(null, u8a.subarray(i, i + maxargs)));
+  }
+  return _btoa(strs.join(""));
+};
+var fromUint8Array = (u8a, urlsafe = false) => urlsafe ? _mkUriSafe(_fromUint8Array(u8a)) : _fromUint8Array(u8a);
+var cb_utob = (c) => {
+  if (c.length < 2) {
+    var cc = c.charCodeAt(0);
+    return cc < 128 ? c : cc < 2048 ? _fromCC(192 | cc >>> 6) + _fromCC(128 | cc & 63) : _fromCC(224 | cc >>> 12 & 15) + _fromCC(128 | cc >>> 6 & 63) + _fromCC(128 | cc & 63);
+  } else {
+    var cc = 65536 + (c.charCodeAt(0) - 55296) * 1024 + (c.charCodeAt(1) - 56320);
+    return _fromCC(240 | cc >>> 18 & 7) + _fromCC(128 | cc >>> 12 & 63) + _fromCC(128 | cc >>> 6 & 63) + _fromCC(128 | cc & 63);
+  }
+};
+var re_utob = /[\uD800-\uDBFF][\uDC00-\uDFFFF]|[^\x00-\x7F]/g;
+var utob = (u) => u.replace(re_utob, cb_utob);
+var _encode2 = _hasBuffer ? (s) => Buffer.from(s, "utf8").toString("base64") : _TE ? (s) => _fromUint8Array(_TE.encode(s)) : (s) => _btoa(utob(s));
+var encode3 = (src, urlsafe = false) => urlsafe ? _mkUriSafe(_encode2(src)) : _encode2(src);
+var encodeURI2 = (src) => encode3(src, true);
+var re_btou = /[\xC0-\xDF][\x80-\xBF]|[\xE0-\xEF][\x80-\xBF]{2}|[\xF0-\xF7][\x80-\xBF]{3}/g;
+var cb_btou = (cccc) => {
+  switch (cccc.length) {
+    case 4:
+      var cp = (7 & cccc.charCodeAt(0)) << 18 | (63 & cccc.charCodeAt(1)) << 12 | (63 & cccc.charCodeAt(2)) << 6 | 63 & cccc.charCodeAt(3), offset = cp - 65536;
+      return _fromCC((offset >>> 10) + 55296) + _fromCC((offset & 1023) + 56320);
+    case 3:
+      return _fromCC((15 & cccc.charCodeAt(0)) << 12 | (63 & cccc.charCodeAt(1)) << 6 | 63 & cccc.charCodeAt(2));
+    default:
+      return _fromCC((31 & cccc.charCodeAt(0)) << 6 | 63 & cccc.charCodeAt(1));
+  }
+};
+var btou = (b) => b.replace(re_btou, cb_btou);
+var atobPolyfill = (asc2) => {
+  asc2 = asc2.replace(/\s+/g, "");
+  if (!b64re.test(asc2))
+    throw new TypeError("malformed base64.");
+  asc2 += "==".slice(2 - (asc2.length & 3));
+  let u24, r1, r2;
+  let binArray = [];
+  for (let i = 0;i < asc2.length; ) {
+    u24 = b64tab[asc2.charAt(i++)] << 18 | b64tab[asc2.charAt(i++)] << 12 | (r1 = b64tab[asc2.charAt(i++)]) << 6 | (r2 = b64tab[asc2.charAt(i++)]);
+    if (r1 === 64) {
+      binArray.push(_fromCC(u24 >> 16 & 255));
+    } else if (r2 === 64) {
+      binArray.push(_fromCC(u24 >> 16 & 255, u24 >> 8 & 255));
+    } else {
+      binArray.push(_fromCC(u24 >> 16 & 255, u24 >> 8 & 255, u24 & 255));
+    }
+  }
+  return binArray.join("");
+};
+var _atob = typeof atob === "function" ? (asc2) => atob(_tidyB64(asc2)) : _hasBuffer ? (asc2) => Buffer.from(asc2, "base64").toString("binary") : atobPolyfill;
+var _toUint8Array = _hasBuffer ? (a) => _U8Afrom(Buffer.from(a, "base64")) : (a) => _U8Afrom(_atob(a).split("").map((c) => c.charCodeAt(0)));
+var toUint8Array = (a) => _toUint8Array(_unURI(a));
+var _decode2 = _hasBuffer ? (a) => Buffer.from(a, "base64").toString("utf8") : _TD ? (a) => _TD.decode(_toUint8Array(a)) : (a) => btou(_atob(a));
+var _unURI = (a) => _tidyB64(a.replace(/[-_]/g, (m0) => m0 == "-" ? "+" : "/"));
+var decode3 = (src) => _decode2(_unURI(src));
+var isValid = (src) => {
+  if (typeof src !== "string")
+    return false;
+  const s = src.replace(/\s+/g, "").replace(/={0,2}$/, "");
+  return !/[^\s0-9a-zA-Z\+/]/.test(s) || !/[^\s0-9a-zA-Z\-_]/.test(s);
+};
+var _noEnum = (v) => {
+  return {
+    value: v,
+    enumerable: false,
+    writable: true,
+    configurable: true
+  };
+};
+var extendString = function() {
+  const _add = (name, body) => Object.defineProperty(String.prototype, name, _noEnum(body));
+  _add("fromBase64", function() {
+    return decode3(this);
+  });
+  _add("toBase64", function(urlsafe) {
+    return encode3(this, urlsafe);
+  });
+  _add("toBase64URI", function() {
+    return encode3(this, true);
+  });
+  _add("toBase64URL", function() {
+    return encode3(this, true);
+  });
+  _add("toUint8Array", function() {
+    return toUint8Array(this);
+  });
+};
+var extendUint8Array = function() {
+  const _add = (name, body) => Object.defineProperty(Uint8Array.prototype, name, _noEnum(body));
+  _add("toBase64", function(urlsafe) {
+    return fromUint8Array(this, urlsafe);
+  });
+  _add("toBase64URI", function() {
+    return fromUint8Array(this, true);
+  });
+  _add("toBase64URL", function() {
+    return fromUint8Array(this, true);
+  });
+};
+var extendBuiltins = () => {
+  extendString();
+  extendUint8Array();
+};
+var gBase64 = {
+  version: version3,
+  VERSION,
+  atob: _atob,
+  atobPolyfill,
+  btoa: _btoa,
+  btoaPolyfill,
+  fromBase64: decode3,
+  toBase64: encode3,
+  encode: encode3,
+  encodeURI: encodeURI2,
+  encodeURL: encodeURI2,
+  utob,
+  btou,
+  decode: decode3,
+  isValid,
+  fromUint8Array,
+  toUint8Array,
+  extendString,
+  extendUint8Array,
+  extendBuiltins
+};
+
+// node_modules/@libsql/core/lib-esm/util.js
+var supportedUrlLink = "https://github.com/libsql/libsql-client-ts#supported-urls";
+function transactionModeToBegin(mode) {
+  if (mode === "write") {
+    return "BEGIN IMMEDIATE";
+  } else if (mode === "read") {
+    return "BEGIN TRANSACTION READONLY";
+  } else if (mode === "deferred") {
+    return "BEGIN DEFERRED";
+  } else {
+    throw RangeError('Unknown transaction mode, supported values are "write", "read" and "deferred"');
+  }
+}
+
+class ResultSetImpl {
+  columns;
+  columnTypes;
+  rows;
+  rowsAffected;
+  lastInsertRowid;
+  constructor(columns, columnTypes, rows, rowsAffected, lastInsertRowid) {
+    this.columns = columns;
+    this.columnTypes = columnTypes;
+    this.rows = rows;
+    this.rowsAffected = rowsAffected;
+    this.lastInsertRowid = lastInsertRowid;
+  }
+  toJSON() {
+    return {
+      columns: this.columns,
+      columnTypes: this.columnTypes,
+      rows: this.rows.map(rowToJson),
+      rowsAffected: this.rowsAffected,
+      lastInsertRowid: this.lastInsertRowid !== undefined ? "" + this.lastInsertRowid : null
+    };
+  }
+}
+function rowToJson(row) {
+  return Array.prototype.map.call(row, valueToJson);
+}
+function valueToJson(value) {
+  if (typeof value === "bigint") {
+    return "" + value;
+  } else if (value instanceof ArrayBuffer) {
+    return gBase64.fromUint8Array(new Uint8Array(value));
+  } else {
+    return value;
+  }
+}
+
+// node_modules/@libsql/core/lib-esm/config.js
+var inMemoryMode = ":memory:";
+function isInMemoryConfig(config2) {
+  return config2.scheme === "file" && (config2.path === ":memory:" || config2.path.startsWith(":memory:?"));
+}
+function expandConfig(config2, preferHttp) {
+  if (typeof config2 !== "object") {
+    throw new TypeError(`Expected client configuration as object, got ${typeof config2}`);
+  }
+  let { url: url2, authToken, tls, intMode, concurrency } = config2;
+  concurrency = Math.max(0, concurrency || 20);
+  intMode ??= "number";
+  let connectionQueryParams = [];
+  if (url2 === inMemoryMode) {
+    url2 = "file::memory:";
+  }
+  const uri = parseUri(url2);
+  const originalUriScheme = uri.scheme.toLowerCase();
+  const isInMemoryMode = originalUriScheme === "file" && uri.path === inMemoryMode && uri.authority === undefined;
+  let queryParamsDef;
+  if (isInMemoryMode) {
+    queryParamsDef = {
+      cache: {
+        values: ["shared", "private"],
+        update: (key, value) => connectionQueryParams.push(`${key}=${value}`)
+      }
+    };
+  } else {
+    queryParamsDef = {
+      tls: {
+        values: ["0", "1"],
+        update: (_, value) => tls = value === "1"
+      },
+      authToken: {
+        update: (_, value) => authToken = value
+      }
+    };
+  }
+  for (const { key, value } of uri.query?.pairs ?? []) {
+    if (!Object.hasOwn(queryParamsDef, key)) {
+      throw new LibsqlError(`Unsupported URL query parameter ${JSON.stringify(key)}`, "URL_PARAM_NOT_SUPPORTED");
+    }
+    const queryParamDef = queryParamsDef[key];
+    if (queryParamDef.values !== undefined && !queryParamDef.values.includes(value)) {
+      throw new LibsqlError(`Unknown value for the "${key}" query argument: ${JSON.stringify(value)}. Supported values are: [${queryParamDef.values.map((x) => '"' + x + '"').join(", ")}]`, "URL_INVALID");
+    }
+    if (queryParamDef.update !== undefined) {
+      queryParamDef?.update(key, value);
+    }
+  }
+  const connectionQueryParamsString = connectionQueryParams.length === 0 ? "" : `?${connectionQueryParams.join("&")}`;
+  const path = uri.path + connectionQueryParamsString;
+  let scheme;
+  if (originalUriScheme === "libsql") {
+    if (tls === false) {
+      if (uri.authority?.port === undefined) {
+        throw new LibsqlError('A "libsql:" URL with ?tls=0 must specify an explicit port', "URL_INVALID");
+      }
+      scheme = preferHttp ? "http" : "ws";
+    } else {
+      scheme = preferHttp ? "https" : "wss";
+    }
+  } else {
+    scheme = originalUriScheme;
+  }
+  if (scheme === "http" || scheme === "ws") {
+    tls ??= false;
+  } else {
+    tls ??= true;
+  }
+  if (scheme !== "http" && scheme !== "ws" && scheme !== "https" && scheme !== "wss" && scheme !== "file") {
+    throw new LibsqlError('The client supports only "libsql:", "wss:", "ws:", "https:", "http:" and "file:" URLs, ' + `got ${JSON.stringify(uri.scheme + ":")}. ` + `For more information, please read ${supportedUrlLink}`, "URL_SCHEME_NOT_SUPPORTED");
+  }
+  if (intMode !== "number" && intMode !== "bigint" && intMode !== "string") {
+    throw new TypeError(`Invalid value for intMode, expected "number", "bigint" or "string", got ${JSON.stringify(intMode)}`);
+  }
+  if (uri.fragment !== undefined) {
+    throw new LibsqlError(`URL fragments are not supported: ${JSON.stringify("#" + uri.fragment)}`, "URL_INVALID");
+  }
+  if (isInMemoryMode) {
+    return {
+      scheme: "file",
+      tls: false,
+      path,
+      intMode,
+      concurrency,
+      syncUrl: config2.syncUrl,
+      syncInterval: config2.syncInterval,
+      readYourWrites: config2.readYourWrites,
+      offline: config2.offline,
+      fetch: config2.fetch,
+      authToken: undefined,
+      encryptionKey: undefined,
+      remoteEncryptionKey: undefined,
+      authority: undefined
+    };
+  }
+  return {
+    scheme,
+    tls,
+    authority: uri.authority,
+    path,
+    authToken,
+    intMode,
+    concurrency,
+    encryptionKey: config2.encryptionKey,
+    remoteEncryptionKey: config2.remoteEncryptionKey,
+    syncUrl: config2.syncUrl,
+    syncInterval: config2.syncInterval,
+    readYourWrites: config2.readYourWrites,
+    offline: config2.offline,
+    fetch: config2.fetch
+  };
+}
+
+// node_modules/@libsql/client/lib-esm/sqlite3.js
+var import_libsql = __toESM(require_libsql(), 1);
+import { Buffer as Buffer2 } from "node:buffer";
+function _createClient(config2) {
+  if (config2.scheme !== "file") {
+    throw new LibsqlError(`URL scheme ${JSON.stringify(config2.scheme + ":")} is not supported by the local sqlite3 client. ` + `For more information, please read ${supportedUrlLink}`, "URL_SCHEME_NOT_SUPPORTED");
+  }
+  const authority = config2.authority;
+  if (authority !== undefined) {
+    const host = authority.host.toLowerCase();
+    if (host !== "" && host !== "localhost") {
+      throw new LibsqlError(`Invalid host in file URL: ${JSON.stringify(authority.host)}. ` + 'A "file:" URL with an absolute path should start with one slash ("file:/absolute/path.db") ' + 'or with three slashes ("file:///absolute/path.db"). ' + `For more information, please read ${supportedUrlLink}`, "URL_INVALID");
+    }
+    if (authority.port !== undefined) {
+      throw new LibsqlError("File URL cannot have a port", "URL_INVALID");
+    }
+    if (authority.userinfo !== undefined) {
+      throw new LibsqlError("File URL cannot have username and password", "URL_INVALID");
+    }
+  }
+  let isInMemory = isInMemoryConfig(config2);
+  if (isInMemory && config2.syncUrl) {
+    throw new LibsqlError(`Embedded replica must use file for local db but URI with in-memory mode were provided instead: ${config2.path}`, "URL_INVALID");
+  }
+  let path = config2.path;
+  if (isInMemory) {
+    path = `${config2.scheme}:${config2.path}`;
+  }
+  const options = {
+    authToken: config2.authToken,
+    encryptionKey: config2.encryptionKey,
+    remoteEncryptionKey: config2.remoteEncryptionKey,
+    syncUrl: config2.syncUrl,
+    syncPeriod: config2.syncInterval,
+    readYourWrites: config2.readYourWrites,
+    offline: config2.offline
+  };
+  const db = new import_libsql.default(path, options);
+  executeStmt(db, "SELECT 1 AS checkThatTheDatabaseCanBeOpened", config2.intMode);
+  return new Sqlite3Client(path, options, db, config2.intMode);
+}
+
+class Sqlite3Client {
+  #path;
+  #options;
+  #db;
+  #intMode;
+  closed;
+  protocol;
+  constructor(path, options, db, intMode) {
+    this.#path = path;
+    this.#options = options;
+    this.#db = db;
+    this.#intMode = intMode;
+    this.closed = false;
+    this.protocol = "file";
+  }
+  async execute(stmtOrSql, args) {
+    let stmt;
+    if (typeof stmtOrSql === "string") {
+      stmt = {
+        sql: stmtOrSql,
+        args: args || []
+      };
+    } else {
+      stmt = stmtOrSql;
+    }
+    this.#checkNotClosed();
+    return executeStmt(this.#getDb(), stmt, this.#intMode);
+  }
+  async batch(stmts, mode = "deferred") {
+    this.#checkNotClosed();
+    const db = this.#getDb();
+    try {
+      executeStmt(db, transactionModeToBegin(mode), this.#intMode);
+      const resultSets = [];
+      for (let i = 0;i < stmts.length; i++) {
+        try {
+          if (!db.inTransaction) {
+            throw new LibsqlBatchError("The transaction has been rolled back", i, "TRANSACTION_CLOSED");
+          }
+          const stmt = stmts[i];
+          const normalizedStmt = Array.isArray(stmt) ? { sql: stmt[0], args: stmt[1] || [] } : stmt;
+          resultSets.push(executeStmt(db, normalizedStmt, this.#intMode));
+        } catch (e) {
+          if (e instanceof LibsqlBatchError) {
+            throw e;
+          }
+          if (e instanceof LibsqlError) {
+            throw new LibsqlBatchError(e.message, i, e.code, e.extendedCode, e.rawCode, e.cause instanceof Error ? e.cause : undefined);
+          }
+          throw e;
+        }
+      }
+      executeStmt(db, "COMMIT", this.#intMode);
+      return resultSets;
+    } finally {
+      if (db.inTransaction) {
+        executeStmt(db, "ROLLBACK", this.#intMode);
+      }
+    }
+  }
+  async migrate(stmts) {
+    this.#checkNotClosed();
+    const db = this.#getDb();
+    try {
+      executeStmt(db, "PRAGMA foreign_keys=off", this.#intMode);
+      executeStmt(db, transactionModeToBegin("deferred"), this.#intMode);
+      const resultSets = [];
+      for (let i = 0;i < stmts.length; i++) {
+        try {
+          if (!db.inTransaction) {
+            throw new LibsqlBatchError("The transaction has been rolled back", i, "TRANSACTION_CLOSED");
+          }
+          resultSets.push(executeStmt(db, stmts[i], this.#intMode));
+        } catch (e) {
+          if (e instanceof LibsqlBatchError) {
+            throw e;
+          }
+          if (e instanceof LibsqlError) {
+            throw new LibsqlBatchError(e.message, i, e.code, e.extendedCode, e.rawCode, e.cause instanceof Error ? e.cause : undefined);
+          }
+          throw e;
+        }
+      }
+      executeStmt(db, "COMMIT", this.#intMode);
+      return resultSets;
+    } finally {
+      if (db.inTransaction) {
+        executeStmt(db, "ROLLBACK", this.#intMode);
+      }
+      executeStmt(db, "PRAGMA foreign_keys=on", this.#intMode);
+    }
+  }
+  async transaction(mode = "write") {
+    const db = this.#getDb();
+    executeStmt(db, transactionModeToBegin(mode), this.#intMode);
+    this.#db = null;
+    return new Sqlite3Transaction(db, this.#intMode);
+  }
+  async executeMultiple(sql2) {
+    this.#checkNotClosed();
+    const db = this.#getDb();
+    try {
+      return executeMultiple(db, sql2);
+    } finally {
+      if (db.inTransaction) {
+        executeStmt(db, "ROLLBACK", this.#intMode);
+      }
+    }
+  }
+  async sync() {
+    this.#checkNotClosed();
+    const rep = await this.#getDb().sync();
+    return {
+      frames_synced: rep.frames_synced,
+      frame_no: rep.frame_no
+    };
+  }
+  async reconnect() {
+    try {
+      if (!this.closed && this.#db !== null) {
+        this.#db.close();
+      }
+    } finally {
+      this.#db = new import_libsql.default(this.#path, this.#options);
+      this.closed = false;
+    }
+  }
+  close() {
+    this.closed = true;
+    if (this.#db !== null) {
+      this.#db.close();
+      this.#db = null;
+    }
+  }
+  #checkNotClosed() {
+    if (this.closed) {
+      throw new LibsqlError("The client is closed", "CLIENT_CLOSED");
+    }
+  }
+  #getDb() {
+    if (this.#db === null) {
+      this.#db = new import_libsql.default(this.#path, this.#options);
+    }
+    return this.#db;
+  }
+}
+
+class Sqlite3Transaction {
+  #database;
+  #intMode;
+  constructor(database, intMode) {
+    this.#database = database;
+    this.#intMode = intMode;
+  }
+  async execute(stmtOrSql, args) {
+    let stmt;
+    if (typeof stmtOrSql === "string") {
+      stmt = {
+        sql: stmtOrSql,
+        args: args || []
+      };
+    } else {
+      stmt = stmtOrSql;
+    }
+    this.#checkNotClosed();
+    return executeStmt(this.#database, stmt, this.#intMode);
+  }
+  async batch(stmts) {
+    const resultSets = [];
+    for (let i = 0;i < stmts.length; i++) {
+      try {
+        this.#checkNotClosed();
+        const stmt = stmts[i];
+        const normalizedStmt = Array.isArray(stmt) ? { sql: stmt[0], args: stmt[1] || [] } : stmt;
+        resultSets.push(executeStmt(this.#database, normalizedStmt, this.#intMode));
+      } catch (e) {
+        if (e instanceof LibsqlBatchError) {
+          throw e;
+        }
+        if (e instanceof LibsqlError) {
+          throw new LibsqlBatchError(e.message, i, e.code, e.extendedCode, e.rawCode, e.cause instanceof Error ? e.cause : undefined);
+        }
+        throw e;
+      }
+    }
+    return resultSets;
+  }
+  async executeMultiple(sql2) {
+    this.#checkNotClosed();
+    return executeMultiple(this.#database, sql2);
+  }
+  async rollback() {
+    if (!this.#database.open) {
+      return;
+    }
+    this.#checkNotClosed();
+    executeStmt(this.#database, "ROLLBACK", this.#intMode);
+  }
+  async commit() {
+    this.#checkNotClosed();
+    executeStmt(this.#database, "COMMIT", this.#intMode);
+  }
+  close() {
+    if (this.#database.inTransaction) {
+      executeStmt(this.#database, "ROLLBACK", this.#intMode);
+    }
+  }
+  get closed() {
+    return !this.#database.inTransaction;
+  }
+  #checkNotClosed() {
+    if (this.closed) {
+      throw new LibsqlError("The transaction is closed", "TRANSACTION_CLOSED");
+    }
+  }
+}
+function executeStmt(db, stmt, intMode) {
+  let sql2;
+  let args;
+  if (typeof stmt === "string") {
+    sql2 = stmt;
+    args = [];
+  } else {
+    sql2 = stmt.sql;
+    if (Array.isArray(stmt.args)) {
+      args = stmt.args.map((value) => valueToSql(value, intMode));
+    } else {
+      args = {};
+      for (const name in stmt.args) {
+        const argName = name[0] === "@" || name[0] === "$" || name[0] === ":" ? name.substring(1) : name;
+        args[argName] = valueToSql(stmt.args[name], intMode);
+      }
+    }
+  }
+  try {
+    const sqlStmt = db.prepare(sql2);
+    sqlStmt.safeIntegers(true);
+    let returnsData = true;
+    try {
+      sqlStmt.raw(true);
+    } catch {
+      returnsData = false;
+    }
+    if (returnsData) {
+      const columns = Array.from(sqlStmt.columns().map((col) => col.name));
+      const columnTypes = Array.from(sqlStmt.columns().map((col) => col.type ?? ""));
+      const rows = sqlStmt.all(args).map((sqlRow) => {
+        return rowFromSql(sqlRow, columns, intMode);
+      });
+      const rowsAffected = 0;
+      const lastInsertRowid = undefined;
+      return new ResultSetImpl(columns, columnTypes, rows, rowsAffected, lastInsertRowid);
+    } else {
+      const info = sqlStmt.run(args);
+      const rowsAffected = info.changes;
+      const lastInsertRowid = BigInt(info.lastInsertRowid);
+      return new ResultSetImpl([], [], [], rowsAffected, lastInsertRowid);
+    }
+  } catch (e) {
+    throw mapSqliteError(e);
+  }
+}
+function rowFromSql(sqlRow, columns, intMode) {
+  const row = {};
+  Object.defineProperty(row, "length", { value: sqlRow.length });
+  for (let i = 0;i < sqlRow.length; ++i) {
+    const value = valueFromSql(sqlRow[i], intMode);
+    Object.defineProperty(row, i, { value });
+    const column = columns[i];
+    if (!Object.hasOwn(row, column)) {
+      Object.defineProperty(row, column, {
+        value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+      });
+    }
+  }
+  return row;
+}
+function valueFromSql(sqlValue, intMode) {
+  if (typeof sqlValue === "bigint") {
+    if (intMode === "number") {
+      if (sqlValue < minSafeBigint || sqlValue > maxSafeBigint) {
+        throw new RangeError("Received integer which cannot be safely represented as a JavaScript number");
+      }
+      return Number(sqlValue);
+    } else if (intMode === "bigint") {
+      return sqlValue;
+    } else if (intMode === "string") {
+      return "" + sqlValue;
+    } else {
+      throw new Error("Invalid value for IntMode");
+    }
+  } else if (sqlValue instanceof Buffer2) {
+    return sqlValue.buffer;
+  }
+  return sqlValue;
+}
+var minSafeBigint = -9007199254740991n;
+var maxSafeBigint = 9007199254740991n;
+function valueToSql(value, intMode) {
+  if (typeof value === "number") {
+    if (!Number.isFinite(value)) {
+      throw new RangeError("Only finite numbers (not Infinity or NaN) can be passed as arguments");
+    }
+    return value;
+  } else if (typeof value === "bigint") {
+    if (value < minInteger || value > maxInteger) {
+      throw new RangeError("bigint is too large to be represented as a 64-bit integer and passed as argument");
+    }
+    return value;
+  } else if (typeof value === "boolean") {
+    switch (intMode) {
+      case "bigint":
+        return value ? 1n : 0n;
+      case "string":
+        return value ? "1" : "0";
+      default:
+        return value ? 1 : 0;
+    }
+  } else if (value instanceof ArrayBuffer) {
+    return Buffer2.from(value);
+  } else if (value instanceof Date) {
+    return value.valueOf();
+  } else if (value === undefined) {
+    throw new TypeError("undefined cannot be passed as argument to the database");
+  } else {
+    return value;
+  }
+}
+var minInteger = -9223372036854775808n;
+var maxInteger = 9223372036854775807n;
+function executeMultiple(db, sql2) {
+  try {
+    db.exec(sql2);
+  } catch (e) {
+    throw mapSqliteError(e);
+  }
+}
+function mapSqliteError(e) {
+  if (e instanceof import_libsql.default.SqliteError) {
+    const extendedCode = e.code;
+    const code = mapToBaseCode(e.rawCode);
+    return new LibsqlError(e.message, code, extendedCode, e.rawCode, e);
+  }
+  return e;
+}
+function mapToBaseCode(rawCode) {
+  if (rawCode === undefined) {
+    return "SQLITE_UNKNOWN";
+  }
+  const baseCode = rawCode & 255;
+  return sqliteErrorCodes[baseCode] ?? `SQLITE_UNKNOWN_${baseCode.toString()}`;
+}
+var sqliteErrorCodes = {
+  1: "SQLITE_ERROR",
+  2: "SQLITE_INTERNAL",
+  3: "SQLITE_PERM",
+  4: "SQLITE_ABORT",
+  5: "SQLITE_BUSY",
+  6: "SQLITE_LOCKED",
+  7: "SQLITE_NOMEM",
+  8: "SQLITE_READONLY",
+  9: "SQLITE_INTERRUPT",
+  10: "SQLITE_IOERR",
+  11: "SQLITE_CORRUPT",
+  12: "SQLITE_NOTFOUND",
+  13: "SQLITE_FULL",
+  14: "SQLITE_CANTOPEN",
+  15: "SQLITE_PROTOCOL",
+  16: "SQLITE_EMPTY",
+  17: "SQLITE_SCHEMA",
+  18: "SQLITE_TOOBIG",
+  19: "SQLITE_CONSTRAINT",
+  20: "SQLITE_MISMATCH",
+  21: "SQLITE_MISUSE",
+  22: "SQLITE_NOLFS",
+  23: "SQLITE_AUTH",
+  24: "SQLITE_FORMAT",
+  25: "SQLITE_RANGE",
+  26: "SQLITE_NOTADB",
+  27: "SQLITE_NOTICE",
+  28: "SQLITE_WARNING"
+};
+
+// node_modules/ws/wrapper.mjs
+var import_stream = __toESM(require_stream(), 1);
+var import_receiver = __toESM(require_receiver(), 1);
+var import_sender = __toESM(require_sender(), 1);
+var import_websocket = __toESM(require_websocket(), 1);
+var import_websocket_server = __toESM(require_websocket_server(), 1);
+
+// node_modules/@libsql/hrana-client/lib-esm/client.js
+class Client {
+  constructor() {
+    this.intMode = "number";
+  }
+  intMode;
+}
+
+// node_modules/@libsql/hrana-client/lib-esm/errors.js
+class ClientError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "ClientError";
+  }
+}
+
+class ProtoError extends ClientError {
+  constructor(message) {
+    super(message);
+    this.name = "ProtoError";
+  }
+}
+
+class ResponseError extends ClientError {
+  code;
+  proto;
+  constructor(message, protoError) {
+    super(message);
+    this.name = "ResponseError";
+    this.code = protoError.code;
+    this.proto = protoError;
+    this.stack = undefined;
+  }
+}
+
+class ClosedError extends ClientError {
+  constructor(message, cause) {
+    if (cause !== undefined) {
+      super(`${message}: ${cause}`);
+      this.cause = cause;
+    } else {
+      super(message);
+    }
+    this.name = "ClosedError";
+  }
+}
+
+class WebSocketUnsupportedError extends ClientError {
+  constructor(message) {
+    super(message);
+    this.name = "WebSocketUnsupportedError";
+  }
+}
+
+class WebSocketError extends ClientError {
+  constructor(message) {
+    super(message);
+    this.name = "WebSocketError";
+  }
+}
+
+class HttpServerError extends ClientError {
+  status;
+  constructor(message, status) {
+    super(message);
+    this.status = status;
+    this.name = "HttpServerError";
+  }
+}
+class ProtocolVersionError extends ClientError {
+  constructor(message) {
+    super(message);
+    this.name = "ProtocolVersionError";
+  }
+}
+
+class InternalError extends ClientError {
+  constructor(message) {
+    super(message);
+    this.name = "InternalError";
+  }
+}
+
+class MisuseError extends ClientError {
+  constructor(message) {
+    super(message);
+    this.name = "MisuseError";
+  }
+}
+
+// node_modules/@libsql/hrana-client/lib-esm/encoding/json/decode.js
+function string4(value) {
+  if (typeof value === "string") {
+    return value;
+  }
+  throw typeError(value, "string");
+}
+function stringOpt(value) {
+  if (value === null || value === undefined) {
+    return;
+  } else if (typeof value === "string") {
+    return value;
+  }
+  throw typeError(value, "string or null");
+}
+function number4(value) {
+  if (typeof value === "number") {
+    return value;
+  }
+  throw typeError(value, "number");
+}
+function boolean4(value) {
+  if (typeof value === "boolean") {
+    return value;
+  }
+  throw typeError(value, "boolean");
+}
+function array2(value) {
+  if (Array.isArray(value)) {
+    return value;
+  }
+  throw typeError(value, "array");
+}
+function object2(value) {
+  if (value !== null && typeof value === "object" && !Array.isArray(value)) {
+    return value;
+  }
+  throw typeError(value, "object");
+}
+function arrayObjectsMap(value, fun) {
+  return array2(value).map((elemValue) => fun(object2(elemValue)));
+}
+function typeError(value, expected) {
+  if (value === undefined) {
+    return new ProtoError(`Expected ${expected}, but the property was missing`);
+  }
+  let received = typeof value;
+  if (value === null) {
+    received = "null";
+  } else if (Array.isArray(value)) {
+    received = "array";
+  }
+  return new ProtoError(`Expected ${expected}, received ${received}`);
+}
+function readJsonObject(value, fun) {
+  return fun(object2(value));
+}
+// node_modules/@libsql/hrana-client/lib-esm/encoding/json/encode.js
+class ObjectWriter {
+  #output;
+  #isFirst;
+  constructor(output) {
+    this.#output = output;
+    this.#isFirst = false;
+  }
+  begin() {
+    this.#output.push("{");
+    this.#isFirst = true;
+  }
+  end() {
+    this.#output.push("}");
+    this.#isFirst = false;
+  }
+  #key(name) {
+    if (this.#isFirst) {
+      this.#output.push('"');
+      this.#isFirst = false;
+    } else {
+      this.#output.push(',"');
+    }
+    this.#output.push(name);
+    this.#output.push('":');
+  }
+  string(name, value) {
+    this.#key(name);
+    this.#output.push(JSON.stringify(value));
+  }
+  stringRaw(name, value) {
+    this.#key(name);
+    this.#output.push('"');
+    this.#output.push(value);
+    this.#output.push('"');
+  }
+  number(name, value) {
+    this.#key(name);
+    this.#output.push("" + value);
+  }
+  boolean(name, value) {
+    this.#key(name);
+    this.#output.push(value ? "true" : "false");
+  }
+  object(name, value, valueFun) {
+    this.#key(name);
+    this.begin();
+    valueFun(this, value);
+    this.end();
+  }
+  arrayObjects(name, values, valueFun) {
+    this.#key(name);
+    this.#output.push("[");
+    for (let i = 0;i < values.length; ++i) {
+      if (i !== 0) {
+        this.#output.push(",");
+      }
+      this.begin();
+      valueFun(this, values[i]);
+      this.end();
+    }
+    this.#output.push("]");
+  }
+}
+function writeJsonObject(value, fun) {
+  const output = [];
+  const writer = new ObjectWriter(output);
+  writer.begin();
+  fun(writer, value);
+  writer.end();
+  return output.join("");
+}
+// node_modules/@libsql/hrana-client/lib-esm/encoding/protobuf/util.js
+var VARINT = 0;
+var FIXED_64 = 1;
+var LENGTH_DELIMITED = 2;
+var FIXED_32 = 5;
+
+// node_modules/@libsql/hrana-client/lib-esm/encoding/protobuf/decode.js
+class MessageReader {
+  #array;
+  #view;
+  #pos;
+  constructor(array3) {
+    this.#array = array3;
+    this.#view = new DataView(array3.buffer, array3.byteOffset, array3.byteLength);
+    this.#pos = 0;
+  }
+  varint() {
+    let value = 0;
+    for (let shift = 0;; shift += 7) {
+      const byte = this.#array[this.#pos++];
+      value |= (byte & 127) << shift;
+      if (!(byte & 128)) {
+        break;
+      }
+    }
+    return value;
+  }
+  varintBig() {
+    let value = 0n;
+    for (let shift = 0n;; shift += 7n) {
+      const byte = this.#array[this.#pos++];
+      value |= BigInt(byte & 127) << shift;
+      if (!(byte & 128)) {
+        break;
+      }
+    }
+    return value;
+  }
+  bytes(length) {
+    const array3 = new Uint8Array(this.#array.buffer, this.#array.byteOffset + this.#pos, length);
+    this.#pos += length;
+    return array3;
+  }
+  double() {
+    const value = this.#view.getFloat64(this.#pos, true);
+    this.#pos += 8;
+    return value;
+  }
+  skipVarint() {
+    for (;; ) {
+      const byte = this.#array[this.#pos++];
+      if (!(byte & 128)) {
+        break;
+      }
+    }
+  }
+  skip(count) {
+    this.#pos += count;
+  }
+  eof() {
+    return this.#pos >= this.#array.byteLength;
+  }
+}
+
+class FieldReader {
+  #reader;
+  #wireType;
+  constructor(reader) {
+    this.#reader = reader;
+    this.#wireType = -1;
+  }
+  setup(wireType) {
+    this.#wireType = wireType;
+  }
+  #expect(expectedWireType) {
+    if (this.#wireType !== expectedWireType) {
+      throw new ProtoError(`Expected wire type ${expectedWireType}, got ${this.#wireType}`);
+    }
+    this.#wireType = -1;
+  }
+  bytes() {
+    this.#expect(LENGTH_DELIMITED);
+    const length = this.#reader.varint();
+    return this.#reader.bytes(length);
+  }
+  string() {
+    return new TextDecoder().decode(this.bytes());
+  }
+  message(def) {
+    return readProtobufMessage(this.bytes(), def);
+  }
+  int32() {
+    this.#expect(VARINT);
+    return this.#reader.varint();
+  }
+  uint32() {
+    return this.int32();
+  }
+  bool() {
+    return this.int32() !== 0;
+  }
+  uint64() {
+    this.#expect(VARINT);
+    return this.#reader.varintBig();
+  }
+  sint64() {
+    const value = this.uint64();
+    return value >> 1n ^ -(value & 1n);
+  }
+  double() {
+    this.#expect(FIXED_64);
+    return this.#reader.double();
+  }
+  maybeSkip() {
+    if (this.#wireType < 0) {
+      return;
+    } else if (this.#wireType === VARINT) {
+      this.#reader.skipVarint();
+    } else if (this.#wireType === FIXED_64) {
+      this.#reader.skip(8);
+    } else if (this.#wireType === LENGTH_DELIMITED) {
+      const length = this.#reader.varint();
+      this.#reader.skip(length);
+    } else if (this.#wireType === FIXED_32) {
+      this.#reader.skip(4);
+    } else {
+      throw new ProtoError(`Unexpected wire type ${this.#wireType}`);
+    }
+    this.#wireType = -1;
+  }
+}
+function readProtobufMessage(data, def) {
+  const msgReader = new MessageReader(data);
+  const fieldReader = new FieldReader(msgReader);
+  let value = def.default();
+  while (!msgReader.eof()) {
+    const key = msgReader.varint();
+    const tag = key >> 3;
+    const wireType = key & 7;
+    fieldReader.setup(wireType);
+    const tagFun = def[tag];
+    if (tagFun !== undefined) {
+      const returnedValue = tagFun(fieldReader, value);
+      if (returnedValue !== undefined) {
+        value = returnedValue;
+      }
+    }
+    fieldReader.maybeSkip();
+  }
+  return value;
+}
+// node_modules/@libsql/hrana-client/lib-esm/encoding/protobuf/encode.js
+class MessageWriter {
+  #buf;
+  #array;
+  #view;
+  #pos;
+  constructor() {
+    this.#buf = new ArrayBuffer(256);
+    this.#array = new Uint8Array(this.#buf);
+    this.#view = new DataView(this.#buf);
+    this.#pos = 0;
+  }
+  #ensure(extra) {
+    if (this.#pos + extra <= this.#buf.byteLength) {
+      return;
+    }
+    let newCap = this.#buf.byteLength;
+    while (newCap < this.#pos + extra) {
+      newCap *= 2;
+    }
+    const newBuf = new ArrayBuffer(newCap);
+    const newArray = new Uint8Array(newBuf);
+    const newView = new DataView(newBuf);
+    newArray.set(new Uint8Array(this.#buf, 0, this.#pos));
+    this.#buf = newBuf;
+    this.#array = newArray;
+    this.#view = newView;
+  }
+  #varint(value) {
+    this.#ensure(5);
+    value = 0 | value;
+    do {
+      let byte = value & 127;
+      value >>>= 7;
+      byte |= value ? 128 : 0;
+      this.#array[this.#pos++] = byte;
+    } while (value);
+  }
+  #varintBig(value) {
+    this.#ensure(10);
+    value = value & 0xffffffffffffffffn;
+    do {
+      let byte = Number(value & 0x7fn);
+      value >>= 7n;
+      byte |= value ? 128 : 0;
+      this.#array[this.#pos++] = byte;
+    } while (value);
+  }
+  #tag(tag, wireType) {
+    this.#varint(tag << 3 | wireType);
+  }
+  bytes(tag, value) {
+    this.#tag(tag, LENGTH_DELIMITED);
+    this.#varint(value.byteLength);
+    this.#ensure(value.byteLength);
+    this.#array.set(value, this.#pos);
+    this.#pos += value.byteLength;
+  }
+  string(tag, value) {
+    this.bytes(tag, new TextEncoder().encode(value));
+  }
+  message(tag, value, fun) {
+    const writer = new MessageWriter;
+    fun(writer, value);
+    this.bytes(tag, writer.data());
+  }
+  int32(tag, value) {
+    this.#tag(tag, VARINT);
+    this.#varint(value);
+  }
+  uint32(tag, value) {
+    this.int32(tag, value);
+  }
+  bool(tag, value) {
+    this.int32(tag, value ? 1 : 0);
+  }
+  sint64(tag, value) {
+    this.#tag(tag, VARINT);
+    this.#varintBig(value << 1n ^ value >> 63n);
+  }
+  double(tag, value) {
+    this.#tag(tag, FIXED_64);
+    this.#ensure(8);
+    this.#view.setFloat64(this.#pos, value, true);
+    this.#pos += 8;
+  }
+  data() {
+    return new Uint8Array(this.#buf, 0, this.#pos);
+  }
+}
+function writeProtobufMessage(value, fun) {
+  const w = new MessageWriter;
+  fun(w, value);
+  return w.data();
+}
+// node_modules/@libsql/hrana-client/lib-esm/id_alloc.js
+class IdAlloc {
+  #usedIds;
+  #freeIds;
+  constructor() {
+    this.#usedIds = new Set;
+    this.#freeIds = new Set;
+  }
+  alloc() {
+    for (const freeId2 of this.#freeIds) {
+      this.#freeIds.delete(freeId2);
+      this.#usedIds.add(freeId2);
+      if (!this.#usedIds.has(this.#usedIds.size - 1)) {
+        this.#freeIds.add(this.#usedIds.size - 1);
+      }
+      return freeId2;
+    }
+    const freeId = this.#usedIds.size;
+    this.#usedIds.add(freeId);
+    return freeId;
+  }
+  free(id) {
+    if (!this.#usedIds.delete(id)) {
+      throw new InternalError("Freeing an id that is not allocated");
+    }
+    this.#freeIds.delete(this.#usedIds.size);
+    if (id < this.#usedIds.size) {
+      this.#freeIds.add(id);
+    }
+  }
+}
+
+// node_modules/@libsql/hrana-client/lib-esm/util.js
+function impossible(value, message) {
+  throw new InternalError(message);
+}
+
+// node_modules/@libsql/hrana-client/lib-esm/value.js
+function valueToProto(value) {
+  if (value === null) {
+    return null;
+  } else if (typeof value === "string") {
+    return value;
+  } else if (typeof value === "number") {
+    if (!Number.isFinite(value)) {
+      throw new RangeError("Only finite numbers (not Infinity or NaN) can be passed as arguments");
+    }
+    return value;
+  } else if (typeof value === "bigint") {
+    if (value < minInteger2 || value > maxInteger2) {
+      throw new RangeError("This bigint value is too large to be represented as a 64-bit integer and passed as argument");
+    }
+    return value;
+  } else if (typeof value === "boolean") {
+    return value ? 1n : 0n;
+  } else if (value instanceof ArrayBuffer) {
+    return new Uint8Array(value);
+  } else if (value instanceof Uint8Array) {
+    return value;
+  } else if (value instanceof Date) {
+    return +value.valueOf();
+  } else if (typeof value === "object") {
+    return "" + value.toString();
+  } else {
+    throw new TypeError("Unsupported type of value");
+  }
+}
+var minInteger2 = -9223372036854775808n;
+var maxInteger2 = 9223372036854775807n;
+function valueFromProto(value, intMode) {
+  if (value === null) {
+    return null;
+  } else if (typeof value === "number") {
+    return value;
+  } else if (typeof value === "string") {
+    return value;
+  } else if (typeof value === "bigint") {
+    if (intMode === "number") {
+      const num = Number(value);
+      if (!Number.isSafeInteger(num)) {
+        throw new RangeError("Received integer which is too large to be safely represented as a JavaScript number");
+      }
+      return num;
+    } else if (intMode === "bigint") {
+      return value;
+    } else if (intMode === "string") {
+      return "" + value;
+    } else {
+      throw new MisuseError("Invalid value for IntMode");
+    }
+  } else if (value instanceof Uint8Array) {
+    return value.slice().buffer;
+  } else if (value === undefined) {
+    throw new ProtoError("Received unrecognized type of Value");
+  } else {
+    throw impossible(value, "Impossible type of Value");
+  }
+}
+
+// node_modules/@libsql/hrana-client/lib-esm/result.js
+function stmtResultFromProto(result) {
+  return {
+    affectedRowCount: result.affectedRowCount,
+    lastInsertRowid: result.lastInsertRowid,
+    columnNames: result.cols.map((col) => col.name),
+    columnDecltypes: result.cols.map((col) => col.decltype)
+  };
+}
+function rowsResultFromProto(result, intMode) {
+  const stmtResult = stmtResultFromProto(result);
+  const rows = result.rows.map((row) => rowFromProto(stmtResult.columnNames, row, intMode));
+  return { ...stmtResult, rows };
+}
+function rowResultFromProto(result, intMode) {
+  const stmtResult = stmtResultFromProto(result);
+  let row;
+  if (result.rows.length > 0) {
+    row = rowFromProto(stmtResult.columnNames, result.rows[0], intMode);
+  }
+  return { ...stmtResult, row };
+}
+function valueResultFromProto(result, intMode) {
+  const stmtResult = stmtResultFromProto(result);
+  let value;
+  if (result.rows.length > 0 && stmtResult.columnNames.length > 0) {
+    value = valueFromProto(result.rows[0][0], intMode);
+  }
+  return { ...stmtResult, value };
+}
+function rowFromProto(colNames, values, intMode) {
+  const row = {};
+  Object.defineProperty(row, "length", { value: values.length });
+  for (let i = 0;i < values.length; ++i) {
+    const value = valueFromProto(values[i], intMode);
+    Object.defineProperty(row, i, { value });
+    const colName = colNames[i];
+    if (colName !== undefined && !Object.hasOwn(row, colName)) {
+      Object.defineProperty(row, colName, { value, enumerable: true, configurable: true, writable: true });
+    }
+  }
+  return row;
+}
+function errorFromProto(error48) {
+  return new ResponseError(error48.message, error48);
+}
+
+// node_modules/@libsql/hrana-client/lib-esm/sql.js
+class Sql {
+  #owner;
+  #sqlId;
+  #closed;
+  constructor(owner, sqlId) {
+    this.#owner = owner;
+    this.#sqlId = sqlId;
+    this.#closed = undefined;
+  }
+  _getSqlId(owner) {
+    if (this.#owner !== owner) {
+      throw new MisuseError("Attempted to use SQL text opened with other object");
+    } else if (this.#closed !== undefined) {
+      throw new ClosedError("SQL text is closed", this.#closed);
+    }
+    return this.#sqlId;
+  }
+  close() {
+    this._setClosed(new ClientError("SQL text was manually closed"));
+  }
+  _setClosed(error48) {
+    if (this.#closed === undefined) {
+      this.#closed = error48;
+      this.#owner._closeSql(this.#sqlId);
+    }
+  }
+  get closed() {
+    return this.#closed !== undefined;
+  }
+}
+function sqlToProto(owner, sql2) {
+  if (sql2 instanceof Sql) {
+    return { sqlId: sql2._getSqlId(owner) };
+  } else {
+    return { sql: "" + sql2 };
+  }
+}
+
+// node_modules/@libsql/hrana-client/lib-esm/queue.js
+class Queue {
+  #pushStack;
+  #shiftStack;
+  constructor() {
+    this.#pushStack = [];
+    this.#shiftStack = [];
+  }
+  get length() {
+    return this.#pushStack.length + this.#shiftStack.length;
+  }
+  push(elem) {
+    this.#pushStack.push(elem);
+  }
+  shift() {
+    if (this.#shiftStack.length === 0 && this.#pushStack.length > 0) {
+      this.#shiftStack = this.#pushStack.reverse();
+      this.#pushStack = [];
+    }
+    return this.#shiftStack.pop();
+  }
+  first() {
+    return this.#shiftStack.length !== 0 ? this.#shiftStack[this.#shiftStack.length - 1] : this.#pushStack[0];
+  }
+}
+
+// node_modules/@libsql/hrana-client/lib-esm/stmt.js
+class Stmt {
+  sql;
+  _args;
+  _namedArgs;
+  constructor(sql2) {
+    this.sql = sql2;
+    this._args = [];
+    this._namedArgs = new Map;
+  }
+  bindIndexes(values) {
+    this._args.length = 0;
+    for (const value of values) {
+      this._args.push(valueToProto(value));
+    }
+    return this;
+  }
+  bindIndex(index, value) {
+    if (index !== (index | 0) || index <= 0) {
+      throw new RangeError("Index of a positional argument must be positive integer");
+    }
+    while (this._args.length < index) {
+      this._args.push(null);
+    }
+    this._args[index - 1] = valueToProto(value);
+    return this;
+  }
+  bindName(name, value) {
+    this._namedArgs.set(name, valueToProto(value));
+    return this;
+  }
+  unbindAll() {
+    this._args.length = 0;
+    this._namedArgs.clear();
+    return this;
+  }
+}
+function stmtToProto(sqlOwner, stmt, wantRows) {
+  let inSql;
+  let args = [];
+  let namedArgs = [];
+  if (stmt instanceof Stmt) {
+    inSql = stmt.sql;
+    args = stmt._args;
+    for (const [name, value] of stmt._namedArgs.entries()) {
+      namedArgs.push({ name, value });
+    }
+  } else if (Array.isArray(stmt)) {
+    inSql = stmt[0];
+    if (Array.isArray(stmt[1])) {
+      args = stmt[1].map((arg) => valueToProto(arg));
+    } else {
+      namedArgs = Object.entries(stmt[1]).map(([name, value]) => {
+        return { name, value: valueToProto(value) };
+      });
+    }
+  } else {
+    inSql = stmt;
+  }
+  const { sql: sql2, sqlId } = sqlToProto(sqlOwner, inSql);
+  return { sql: sql2, sqlId, args, namedArgs, wantRows };
+}
+
+// node_modules/@libsql/hrana-client/lib-esm/batch.js
+class Batch {
+  _stream;
+  #useCursor;
+  _steps;
+  #executed;
+  constructor(stream, useCursor) {
+    this._stream = stream;
+    this.#useCursor = useCursor;
+    this._steps = [];
+    this.#executed = false;
+  }
+  step() {
+    return new BatchStep(this);
+  }
+  execute() {
+    if (this.#executed) {
+      throw new MisuseError("This batch has already been executed");
+    }
+    this.#executed = true;
+    const batch = {
+      steps: this._steps.map((step) => step.proto)
+    };
+    if (this.#useCursor) {
+      return executeCursor(this._stream, this._steps, batch);
+    } else {
+      return executeRegular(this._stream, this._steps, batch);
+    }
+  }
+}
+function executeRegular(stream, steps, batch) {
+  return stream._batch(batch).then((result) => {
+    for (let step = 0;step < steps.length; ++step) {
+      const stepResult = result.stepResults.get(step);
+      const stepError = result.stepErrors.get(step);
+      steps[step].callback(stepResult, stepError);
+    }
+  });
+}
+async function executeCursor(stream, steps, batch) {
+  const cursor = await stream._openCursor(batch);
+  try {
+    let nextStep = 0;
+    let beginEntry = undefined;
+    let rows = [];
+    for (;; ) {
+      const entry = await cursor.next();
+      if (entry === undefined) {
+        break;
+      }
+      if (entry.type === "step_begin") {
+        if (entry.step < nextStep || entry.step >= steps.length) {
+          throw new ProtoError("Server produced StepBeginEntry for unexpected step");
+        } else if (beginEntry !== undefined) {
+          throw new ProtoError("Server produced StepBeginEntry before terminating previous step");
+        }
+        for (let step = nextStep;step < entry.step; ++step) {
+          steps[step].callback(undefined, undefined);
+        }
+        nextStep = entry.step + 1;
+        beginEntry = entry;
+        rows = [];
+      } else if (entry.type === "step_end") {
+        if (beginEntry === undefined) {
+          throw new ProtoError("Server produced StepEndEntry but no step is active");
+        }
+        const stmtResult = {
+          cols: beginEntry.cols,
+          rows,
+          affectedRowCount: entry.affectedRowCount,
+          lastInsertRowid: entry.lastInsertRowid
+        };
+        steps[beginEntry.step].callback(stmtResult, undefined);
+        beginEntry = undefined;
+        rows = [];
+      } else if (entry.type === "step_error") {
+        if (beginEntry === undefined) {
+          if (entry.step >= steps.length) {
+            throw new ProtoError("Server produced StepErrorEntry for unexpected step");
+          }
+          for (let step = nextStep;step < entry.step; ++step) {
+            steps[step].callback(undefined, undefined);
+          }
+        } else {
+          if (entry.step !== beginEntry.step) {
+            throw new ProtoError("Server produced StepErrorEntry for unexpected step");
+          }
+          beginEntry = undefined;
+          rows = [];
+        }
+        steps[entry.step].callback(undefined, entry.error);
+        nextStep = entry.step + 1;
+      } else if (entry.type === "row") {
+        if (beginEntry === undefined) {
+          throw new ProtoError("Server produced RowEntry but no step is active");
+        }
+        rows.push(entry.row);
+      } else if (entry.type === "error") {
+        throw errorFromProto(entry.error);
+      } else if (entry.type === "none") {
+        throw new ProtoError("Server produced unrecognized CursorEntry");
+      } else {
+        throw impossible(entry, "Impossible CursorEntry");
+      }
+    }
+    if (beginEntry !== undefined) {
+      throw new ProtoError("Server closed Cursor before terminating active step");
+    }
+    for (let step = nextStep;step < steps.length; ++step) {
+      steps[step].callback(undefined, undefined);
+    }
+  } finally {
+    cursor.close();
+  }
+}
+
+class BatchStep {
+  _batch;
+  #conds;
+  _index;
+  constructor(batch) {
+    this._batch = batch;
+    this.#conds = [];
+    this._index = undefined;
+  }
+  condition(cond) {
+    this.#conds.push(cond._proto);
+    return this;
+  }
+  query(stmt) {
+    return this.#add(stmt, true, rowsResultFromProto);
+  }
+  queryRow(stmt) {
+    return this.#add(stmt, true, rowResultFromProto);
+  }
+  queryValue(stmt) {
+    return this.#add(stmt, true, valueResultFromProto);
+  }
+  run(stmt) {
+    return this.#add(stmt, false, stmtResultFromProto);
+  }
+  #add(inStmt, wantRows, fromProto) {
+    if (this._index !== undefined) {
+      throw new MisuseError("This BatchStep has already been added to the batch");
+    }
+    const stmt = stmtToProto(this._batch._stream._sqlOwner(), inStmt, wantRows);
+    let condition;
+    if (this.#conds.length === 0) {
+      condition = undefined;
+    } else if (this.#conds.length === 1) {
+      condition = this.#conds[0];
+    } else {
+      condition = { type: "and", conds: this.#conds.slice() };
+    }
+    const proto = { stmt, condition };
+    return new Promise((outputCallback, errorCallback) => {
+      const callback = (stepResult, stepError) => {
+        if (stepResult !== undefined && stepError !== undefined) {
+          errorCallback(new ProtoError("Server returned both result and error"));
+        } else if (stepError !== undefined) {
+          errorCallback(errorFromProto(stepError));
+        } else if (stepResult !== undefined) {
+          outputCallback(fromProto(stepResult, this._batch._stream.intMode));
+        } else {
+          outputCallback(undefined);
+        }
+      };
+      this._index = this._batch._steps.length;
+      this._batch._steps.push({ proto, callback });
+    });
+  }
+}
+
+class BatchCond {
+  _batch;
+  _proto;
+  constructor(batch, proto) {
+    this._batch = batch;
+    this._proto = proto;
+  }
+  static ok(step) {
+    return new BatchCond(step._batch, { type: "ok", step: stepIndex(step) });
+  }
+  static error(step) {
+    return new BatchCond(step._batch, { type: "error", step: stepIndex(step) });
+  }
+  static not(cond) {
+    return new BatchCond(cond._batch, { type: "not", cond: cond._proto });
+  }
+  static and(batch, conds) {
+    for (const cond of conds) {
+      checkCondBatch(batch, cond);
+    }
+    return new BatchCond(batch, { type: "and", conds: conds.map((e) => e._proto) });
+  }
+  static or(batch, conds) {
+    for (const cond of conds) {
+      checkCondBatch(batch, cond);
+    }
+    return new BatchCond(batch, { type: "or", conds: conds.map((e) => e._proto) });
+  }
+  static isAutocommit(batch) {
+    batch._stream.client()._ensureVersion(3, "BatchCond.isAutocommit()");
+    return new BatchCond(batch, { type: "is_autocommit" });
+  }
+}
+function stepIndex(step) {
+  if (step._index === undefined) {
+    throw new MisuseError("Cannot add a condition referencing a step that has not been added to the batch");
+  }
+  return step._index;
+}
+function checkCondBatch(expectedBatch, cond) {
+  if (cond._batch !== expectedBatch) {
+    throw new MisuseError("Cannot mix BatchCond objects for different Batch objects");
+  }
+}
+
+// node_modules/@libsql/hrana-client/lib-esm/describe.js
+function describeResultFromProto(result) {
+  return {
+    paramNames: result.params.map((p) => p.name),
+    columns: result.cols,
+    isExplain: result.isExplain,
+    isReadonly: result.isReadonly
+  };
+}
+
+// node_modules/@libsql/hrana-client/lib-esm/stream.js
+class Stream {
+  constructor(intMode) {
+    this.intMode = intMode;
+  }
+  query(stmt) {
+    return this.#execute(stmt, true, rowsResultFromProto);
+  }
+  queryRow(stmt) {
+    return this.#execute(stmt, true, rowResultFromProto);
+  }
+  queryValue(stmt) {
+    return this.#execute(stmt, true, valueResultFromProto);
+  }
+  run(stmt) {
+    return this.#execute(stmt, false, stmtResultFromProto);
+  }
+  #execute(inStmt, wantRows, fromProto) {
+    const stmt = stmtToProto(this._sqlOwner(), inStmt, wantRows);
+    return this._execute(stmt).then((r) => fromProto(r, this.intMode));
+  }
+  batch(useCursor = false) {
+    return new Batch(this, useCursor);
+  }
+  describe(inSql) {
+    const protoSql = sqlToProto(this._sqlOwner(), inSql);
+    return this._describe(protoSql).then(describeResultFromProto);
+  }
+  sequence(inSql) {
+    const protoSql = sqlToProto(this._sqlOwner(), inSql);
+    return this._sequence(protoSql);
+  }
+  intMode;
+}
+
+// node_modules/@libsql/hrana-client/lib-esm/cursor.js
+class Cursor {
+}
+
+// node_modules/@libsql/hrana-client/lib-esm/ws/cursor.js
+var fetchChunkSize = 1000;
+var fetchQueueSize = 10;
+
+class WsCursor extends Cursor {
+  #client;
+  #stream;
+  #cursorId;
+  #entryQueue;
+  #fetchQueue;
+  #closed;
+  #done;
+  constructor(client, stream, cursorId) {
+    super();
+    this.#client = client;
+    this.#stream = stream;
+    this.#cursorId = cursorId;
+    this.#entryQueue = new Queue;
+    this.#fetchQueue = new Queue;
+    this.#closed = undefined;
+    this.#done = false;
+  }
+  async next() {
+    for (;; ) {
+      if (this.#closed !== undefined) {
+        throw new ClosedError("Cursor is closed", this.#closed);
+      }
+      while (!this.#done && this.#fetchQueue.length < fetchQueueSize) {
+        this.#fetchQueue.push(this.#fetch());
+      }
+      const entry = this.#entryQueue.shift();
+      if (this.#done || entry !== undefined) {
+        return entry;
+      }
+      await this.#fetchQueue.shift().then((response) => {
+        if (response === undefined) {
+          return;
+        }
+        for (const entry2 of response.entries) {
+          this.#entryQueue.push(entry2);
+        }
+        this.#done ||= response.done;
+      });
+    }
+  }
+  #fetch() {
+    return this.#stream._sendCursorRequest(this, {
+      type: "fetch_cursor",
+      cursorId: this.#cursorId,
+      maxCount: fetchChunkSize
+    }).then((resp) => resp, (error48) => {
+      this._setClosed(error48);
+      return;
+    });
+  }
+  _setClosed(error48) {
+    if (this.#closed !== undefined) {
+      return;
+    }
+    this.#closed = error48;
+    this.#stream._sendCursorRequest(this, {
+      type: "close_cursor",
+      cursorId: this.#cursorId
+    }).catch(() => {
+      return;
+    });
+    this.#stream._cursorClosed(this);
+  }
+  close() {
+    this._setClosed(new ClientError("Cursor was manually closed"));
+  }
+  get closed() {
+    return this.#closed !== undefined;
+  }
+}
+
+// node_modules/@libsql/hrana-client/lib-esm/ws/stream.js
+class WsStream extends Stream {
+  #client;
+  #streamId;
+  #queue;
+  #cursor;
+  #closing;
+  #closed;
+  static open(client) {
+    const streamId = client._streamIdAlloc.alloc();
+    const stream = new WsStream(client, streamId);
+    const responseCallback = () => {
+      return;
+    };
+    const errorCallback = (e) => stream.#setClosed(e);
+    const request = { type: "open_stream", streamId };
+    client._sendRequest(request, { responseCallback, errorCallback });
+    return stream;
+  }
+  constructor(client, streamId) {
+    super(client.intMode);
+    this.#client = client;
+    this.#streamId = streamId;
+    this.#queue = new Queue;
+    this.#cursor = undefined;
+    this.#closing = false;
+    this.#closed = undefined;
+  }
+  client() {
+    return this.#client;
+  }
+  _sqlOwner() {
+    return this.#client;
+  }
+  _execute(stmt) {
+    return this.#sendStreamRequest({
+      type: "execute",
+      streamId: this.#streamId,
+      stmt
+    }).then((response) => {
+      return response.result;
+    });
+  }
+  _batch(batch) {
+    return this.#sendStreamRequest({
+      type: "batch",
+      streamId: this.#streamId,
+      batch
+    }).then((response) => {
+      return response.result;
+    });
+  }
+  _describe(protoSql) {
+    this.#client._ensureVersion(2, "describe()");
+    return this.#sendStreamRequest({
+      type: "describe",
+      streamId: this.#streamId,
+      sql: protoSql.sql,
+      sqlId: protoSql.sqlId
+    }).then((response) => {
+      return response.result;
+    });
+  }
+  _sequence(protoSql) {
+    this.#client._ensureVersion(2, "sequence()");
+    return this.#sendStreamRequest({
+      type: "sequence",
+      streamId: this.#streamId,
+      sql: protoSql.sql,
+      sqlId: protoSql.sqlId
+    }).then((_response) => {
+      return;
+    });
+  }
+  getAutocommit() {
+    this.#client._ensureVersion(3, "getAutocommit()");
+    return this.#sendStreamRequest({
+      type: "get_autocommit",
+      streamId: this.#streamId
+    }).then((response) => {
+      return response.isAutocommit;
+    });
+  }
+  #sendStreamRequest(request) {
+    return new Promise((responseCallback, errorCallback) => {
+      this.#pushToQueue({ type: "request", request, responseCallback, errorCallback });
+    });
+  }
+  _openCursor(batch) {
+    this.#client._ensureVersion(3, "cursor");
+    return new Promise((cursorCallback, errorCallback) => {
+      this.#pushToQueue({ type: "cursor", batch, cursorCallback, errorCallback });
+    });
+  }
+  _sendCursorRequest(cursor, request) {
+    if (cursor !== this.#cursor) {
+      throw new InternalError("Cursor not associated with the stream attempted to execute a request");
+    }
+    return new Promise((responseCallback, errorCallback) => {
+      if (this.#closed !== undefined) {
+        errorCallback(new ClosedError("Stream is closed", this.#closed));
+      } else {
+        this.#client._sendRequest(request, { responseCallback, errorCallback });
+      }
+    });
+  }
+  _cursorClosed(cursor) {
+    if (cursor !== this.#cursor) {
+      throw new InternalError("Cursor was closed, but it was not associated with the stream");
+    }
+    this.#cursor = undefined;
+    this.#flushQueue();
+  }
+  #pushToQueue(entry) {
+    if (this.#closed !== undefined) {
+      entry.errorCallback(new ClosedError("Stream is closed", this.#closed));
+    } else if (this.#closing) {
+      entry.errorCallback(new ClosedError("Stream is closing", undefined));
+    } else {
+      this.#queue.push(entry);
+      this.#flushQueue();
+    }
+  }
+  #flushQueue() {
+    for (;; ) {
+      const entry = this.#queue.first();
+      if (entry === undefined && this.#cursor === undefined && this.#closing) {
+        this.#setClosed(new ClientError("Stream was gracefully closed"));
+        break;
+      } else if (entry?.type === "request" && this.#cursor === undefined) {
+        const { request, responseCallback, errorCallback } = entry;
+        this.#queue.shift();
+        this.#client._sendRequest(request, { responseCallback, errorCallback });
+      } else if (entry?.type === "cursor" && this.#cursor === undefined) {
+        const { batch, cursorCallback } = entry;
+        this.#queue.shift();
+        const cursorId = this.#client._cursorIdAlloc.alloc();
+        const cursor = new WsCursor(this.#client, this, cursorId);
+        const request = {
+          type: "open_cursor",
+          streamId: this.#streamId,
+          cursorId,
+          batch
+        };
+        const responseCallback = () => {
+          return;
+        };
+        const errorCallback = (e) => cursor._setClosed(e);
+        this.#client._sendRequest(request, { responseCallback, errorCallback });
+        this.#cursor = cursor;
+        cursorCallback(cursor);
+      } else {
+        break;
+      }
+    }
+  }
+  #setClosed(error48) {
+    if (this.#closed !== undefined) {
+      return;
+    }
+    this.#closed = error48;
+    if (this.#cursor !== undefined) {
+      this.#cursor._setClosed(error48);
+    }
+    for (;; ) {
+      const entry = this.#queue.shift();
+      if (entry !== undefined) {
+        entry.errorCallback(error48);
+      } else {
+        break;
+      }
+    }
+    const request = { type: "close_stream", streamId: this.#streamId };
+    const responseCallback = () => this.#client._streamIdAlloc.free(this.#streamId);
+    const errorCallback = () => {
+      return;
+    };
+    this.#client._sendRequest(request, { responseCallback, errorCallback });
+  }
+  close() {
+    this.#setClosed(new ClientError("Stream was manually closed"));
+  }
+  closeGracefully() {
+    this.#closing = true;
+    this.#flushQueue();
+  }
+  get closed() {
+    return this.#closed !== undefined || this.#closing;
+  }
+}
+
+// node_modules/@libsql/hrana-client/lib-esm/shared/json_encode.js
+function Stmt2(w, msg) {
+  if (msg.sql !== undefined) {
+    w.string("sql", msg.sql);
+  }
+  if (msg.sqlId !== undefined) {
+    w.number("sql_id", msg.sqlId);
+  }
+  w.arrayObjects("args", msg.args, Value);
+  w.arrayObjects("named_args", msg.namedArgs, NamedArg);
+  w.boolean("want_rows", msg.wantRows);
+}
+function NamedArg(w, msg) {
+  w.string("name", msg.name);
+  w.object("value", msg.value, Value);
+}
+function Batch2(w, msg) {
+  w.arrayObjects("steps", msg.steps, BatchStep2);
+}
+function BatchStep2(w, msg) {
+  if (msg.condition !== undefined) {
+    w.object("condition", msg.condition, BatchCond2);
+  }
+  w.object("stmt", msg.stmt, Stmt2);
+}
+function BatchCond2(w, msg) {
+  w.stringRaw("type", msg.type);
+  if (msg.type === "ok" || msg.type === "error") {
+    w.number("step", msg.step);
+  } else if (msg.type === "not") {
+    w.object("cond", msg.cond, BatchCond2);
+  } else if (msg.type === "and" || msg.type === "or") {
+    w.arrayObjects("conds", msg.conds, BatchCond2);
+  } else if (msg.type === "is_autocommit") {} else {
+    throw impossible(msg, "Impossible type of BatchCond");
+  }
+}
+function Value(w, msg) {
+  if (msg === null) {
+    w.stringRaw("type", "null");
+  } else if (typeof msg === "bigint") {
+    w.stringRaw("type", "integer");
+    w.stringRaw("value", "" + msg);
+  } else if (typeof msg === "number") {
+    w.stringRaw("type", "float");
+    w.number("value", msg);
+  } else if (typeof msg === "string") {
+    w.stringRaw("type", "text");
+    w.string("value", msg);
+  } else if (msg instanceof Uint8Array) {
+    w.stringRaw("type", "blob");
+    w.stringRaw("base64", gBase64.fromUint8Array(msg));
+  } else if (msg === undefined) {} else {
+    throw impossible(msg, "Impossible type of Value");
+  }
+}
+
+// node_modules/@libsql/hrana-client/lib-esm/ws/json_encode.js
+function ClientMsg(w, msg) {
+  w.stringRaw("type", msg.type);
+  if (msg.type === "hello") {
+    if (msg.jwt !== undefined) {
+      w.string("jwt", msg.jwt);
+    }
+  } else if (msg.type === "request") {
+    w.number("request_id", msg.requestId);
+    w.object("request", msg.request, Request2);
+  } else {
+    throw impossible(msg, "Impossible type of ClientMsg");
+  }
+}
+function Request2(w, msg) {
+  w.stringRaw("type", msg.type);
+  if (msg.type === "open_stream") {
+    w.number("stream_id", msg.streamId);
+  } else if (msg.type === "close_stream") {
+    w.number("stream_id", msg.streamId);
+  } else if (msg.type === "execute") {
+    w.number("stream_id", msg.streamId);
+    w.object("stmt", msg.stmt, Stmt2);
+  } else if (msg.type === "batch") {
+    w.number("stream_id", msg.streamId);
+    w.object("batch", msg.batch, Batch2);
+  } else if (msg.type === "open_cursor") {
+    w.number("stream_id", msg.streamId);
+    w.number("cursor_id", msg.cursorId);
+    w.object("batch", msg.batch, Batch2);
+  } else if (msg.type === "close_cursor") {
+    w.number("cursor_id", msg.cursorId);
+  } else if (msg.type === "fetch_cursor") {
+    w.number("cursor_id", msg.cursorId);
+    w.number("max_count", msg.maxCount);
+  } else if (msg.type === "sequence") {
+    w.number("stream_id", msg.streamId);
+    if (msg.sql !== undefined) {
+      w.string("sql", msg.sql);
+    }
+    if (msg.sqlId !== undefined) {
+      w.number("sql_id", msg.sqlId);
+    }
+  } else if (msg.type === "describe") {
+    w.number("stream_id", msg.streamId);
+    if (msg.sql !== undefined) {
+      w.string("sql", msg.sql);
+    }
+    if (msg.sqlId !== undefined) {
+      w.number("sql_id", msg.sqlId);
+    }
+  } else if (msg.type === "store_sql") {
+    w.number("sql_id", msg.sqlId);
+    w.string("sql", msg.sql);
+  } else if (msg.type === "close_sql") {
+    w.number("sql_id", msg.sqlId);
+  } else if (msg.type === "get_autocommit") {
+    w.number("stream_id", msg.streamId);
+  } else {
+    throw impossible(msg, "Impossible type of Request");
+  }
+}
+
+// node_modules/@libsql/hrana-client/lib-esm/shared/protobuf_encode.js
+function Stmt3(w, msg) {
+  if (msg.sql !== undefined) {
+    w.string(1, msg.sql);
+  }
+  if (msg.sqlId !== undefined) {
+    w.int32(2, msg.sqlId);
+  }
+  for (const arg of msg.args) {
+    w.message(3, arg, Value2);
+  }
+  for (const arg of msg.namedArgs) {
+    w.message(4, arg, NamedArg2);
+  }
+  w.bool(5, msg.wantRows);
+}
+function NamedArg2(w, msg) {
+  w.string(1, msg.name);
+  w.message(2, msg.value, Value2);
+}
+function Batch3(w, msg) {
+  for (const step of msg.steps) {
+    w.message(1, step, BatchStep3);
+  }
+}
+function BatchStep3(w, msg) {
+  if (msg.condition !== undefined) {
+    w.message(1, msg.condition, BatchCond3);
+  }
+  w.message(2, msg.stmt, Stmt3);
+}
+function BatchCond3(w, msg) {
+  if (msg.type === "ok") {
+    w.uint32(1, msg.step);
+  } else if (msg.type === "error") {
+    w.uint32(2, msg.step);
+  } else if (msg.type === "not") {
+    w.message(3, msg.cond, BatchCond3);
+  } else if (msg.type === "and") {
+    w.message(4, msg.conds, BatchCondList);
+  } else if (msg.type === "or") {
+    w.message(5, msg.conds, BatchCondList);
+  } else if (msg.type === "is_autocommit") {
+    w.message(6, undefined, Empty);
+  } else {
+    throw impossible(msg, "Impossible type of BatchCond");
+  }
+}
+function BatchCondList(w, msg) {
+  for (const cond of msg) {
+    w.message(1, cond, BatchCond3);
+  }
+}
+function Value2(w, msg) {
+  if (msg === null) {
+    w.message(1, undefined, Empty);
+  } else if (typeof msg === "bigint") {
+    w.sint64(2, msg);
+  } else if (typeof msg === "number") {
+    w.double(3, msg);
+  } else if (typeof msg === "string") {
+    w.string(4, msg);
+  } else if (msg instanceof Uint8Array) {
+    w.bytes(5, msg);
+  } else if (msg === undefined) {} else {
+    throw impossible(msg, "Impossible type of Value");
+  }
+}
+function Empty(_w, _msg) {}
+
+// node_modules/@libsql/hrana-client/lib-esm/ws/protobuf_encode.js
+function ClientMsg2(w, msg) {
+  if (msg.type === "hello") {
+    w.message(1, msg, HelloMsg);
+  } else if (msg.type === "request") {
+    w.message(2, msg, RequestMsg);
+  } else {
+    throw impossible(msg, "Impossible type of ClientMsg");
+  }
+}
+function HelloMsg(w, msg) {
+  if (msg.jwt !== undefined) {
+    w.string(1, msg.jwt);
+  }
+}
+function RequestMsg(w, msg) {
+  w.int32(1, msg.requestId);
+  const request = msg.request;
+  if (request.type === "open_stream") {
+    w.message(2, request, OpenStreamReq);
+  } else if (request.type === "close_stream") {
+    w.message(3, request, CloseStreamReq);
+  } else if (request.type === "execute") {
+    w.message(4, request, ExecuteReq);
+  } else if (request.type === "batch") {
+    w.message(5, request, BatchReq);
+  } else if (request.type === "open_cursor") {
+    w.message(6, request, OpenCursorReq);
+  } else if (request.type === "close_cursor") {
+    w.message(7, request, CloseCursorReq);
+  } else if (request.type === "fetch_cursor") {
+    w.message(8, request, FetchCursorReq);
+  } else if (request.type === "sequence") {
+    w.message(9, request, SequenceReq);
+  } else if (request.type === "describe") {
+    w.message(10, request, DescribeReq);
+  } else if (request.type === "store_sql") {
+    w.message(11, request, StoreSqlReq);
+  } else if (request.type === "close_sql") {
+    w.message(12, request, CloseSqlReq);
+  } else if (request.type === "get_autocommit") {
+    w.message(13, request, GetAutocommitReq);
+  } else {
+    throw impossible(request, "Impossible type of Request");
+  }
+}
+function OpenStreamReq(w, msg) {
+  w.int32(1, msg.streamId);
+}
+function CloseStreamReq(w, msg) {
+  w.int32(1, msg.streamId);
+}
+function ExecuteReq(w, msg) {
+  w.int32(1, msg.streamId);
+  w.message(2, msg.stmt, Stmt3);
+}
+function BatchReq(w, msg) {
+  w.int32(1, msg.streamId);
+  w.message(2, msg.batch, Batch3);
+}
+function OpenCursorReq(w, msg) {
+  w.int32(1, msg.streamId);
+  w.int32(2, msg.cursorId);
+  w.message(3, msg.batch, Batch3);
+}
+function CloseCursorReq(w, msg) {
+  w.int32(1, msg.cursorId);
+}
+function FetchCursorReq(w, msg) {
+  w.int32(1, msg.cursorId);
+  w.uint32(2, msg.maxCount);
+}
+function SequenceReq(w, msg) {
+  w.int32(1, msg.streamId);
+  if (msg.sql !== undefined) {
+    w.string(2, msg.sql);
+  }
+  if (msg.sqlId !== undefined) {
+    w.int32(3, msg.sqlId);
+  }
+}
+function DescribeReq(w, msg) {
+  w.int32(1, msg.streamId);
+  if (msg.sql !== undefined) {
+    w.string(2, msg.sql);
+  }
+  if (msg.sqlId !== undefined) {
+    w.int32(3, msg.sqlId);
+  }
+}
+function StoreSqlReq(w, msg) {
+  w.int32(1, msg.sqlId);
+  w.string(2, msg.sql);
+}
+function CloseSqlReq(w, msg) {
+  w.int32(1, msg.sqlId);
+}
+function GetAutocommitReq(w, msg) {
+  w.int32(1, msg.streamId);
+}
+
+// node_modules/@libsql/hrana-client/lib-esm/shared/json_decode.js
+function Error2(obj) {
+  const message = string4(obj["message"]);
+  const code = stringOpt(obj["code"]);
+  return { message, code };
+}
+function StmtResult(obj) {
+  const cols = arrayObjectsMap(obj["cols"], Col);
+  const rows = array2(obj["rows"]).map((rowObj) => arrayObjectsMap(rowObj, Value3));
+  const affectedRowCount = number4(obj["affected_row_count"]);
+  const lastInsertRowidStr = stringOpt(obj["last_insert_rowid"]);
+  const lastInsertRowid = lastInsertRowidStr !== undefined ? BigInt(lastInsertRowidStr) : undefined;
+  return { cols, rows, affectedRowCount, lastInsertRowid };
+}
+function Col(obj) {
+  const name = stringOpt(obj["name"]);
+  const decltype = stringOpt(obj["decltype"]);
+  return { name, decltype };
+}
+function BatchResult(obj) {
+  const stepResults = new Map;
+  array2(obj["step_results"]).forEach((value, i) => {
+    if (value !== null) {
+      stepResults.set(i, StmtResult(object2(value)));
+    }
+  });
+  const stepErrors = new Map;
+  array2(obj["step_errors"]).forEach((value, i) => {
+    if (value !== null) {
+      stepErrors.set(i, Error2(object2(value)));
+    }
+  });
+  return { stepResults, stepErrors };
+}
+function CursorEntry(obj) {
+  const type = string4(obj["type"]);
+  if (type === "step_begin") {
+    const step = number4(obj["step"]);
+    const cols = arrayObjectsMap(obj["cols"], Col);
+    return { type: "step_begin", step, cols };
+  } else if (type === "step_end") {
+    const affectedRowCount = number4(obj["affected_row_count"]);
+    const lastInsertRowidStr = stringOpt(obj["last_insert_rowid"]);
+    const lastInsertRowid = lastInsertRowidStr !== undefined ? BigInt(lastInsertRowidStr) : undefined;
+    return { type: "step_end", affectedRowCount, lastInsertRowid };
+  } else if (type === "step_error") {
+    const step = number4(obj["step"]);
+    const error48 = Error2(object2(obj["error"]));
+    return { type: "step_error", step, error: error48 };
+  } else if (type === "row") {
+    const row = arrayObjectsMap(obj["row"], Value3);
+    return { type: "row", row };
+  } else if (type === "error") {
+    const error48 = Error2(object2(obj["error"]));
+    return { type: "error", error: error48 };
+  } else {
+    throw new ProtoError("Unexpected type of CursorEntry");
+  }
+}
+function DescribeResult(obj) {
+  const params = arrayObjectsMap(obj["params"], DescribeParam);
+  const cols = arrayObjectsMap(obj["cols"], DescribeCol);
+  const isExplain = boolean4(obj["is_explain"]);
+  const isReadonly = boolean4(obj["is_readonly"]);
+  return { params, cols, isExplain, isReadonly };
+}
+function DescribeParam(obj) {
+  const name = stringOpt(obj["name"]);
+  return { name };
+}
+function DescribeCol(obj) {
+  const name = string4(obj["name"]);
+  const decltype = stringOpt(obj["decltype"]);
+  return { name, decltype };
+}
+function Value3(obj) {
+  const type = string4(obj["type"]);
+  if (type === "null") {
+    return null;
+  } else if (type === "integer") {
+    const value = string4(obj["value"]);
+    return BigInt(value);
+  } else if (type === "float") {
+    return number4(obj["value"]);
+  } else if (type === "text") {
+    return string4(obj["value"]);
+  } else if (type === "blob") {
+    return gBase64.toUint8Array(string4(obj["base64"]));
+  } else {
+    throw new ProtoError("Unexpected type of Value");
+  }
+}
+
+// node_modules/@libsql/hrana-client/lib-esm/ws/json_decode.js
+function ServerMsg(obj) {
+  const type = string4(obj["type"]);
+  if (type === "hello_ok") {
+    return { type: "hello_ok" };
+  } else if (type === "hello_error") {
+    const error48 = Error2(object2(obj["error"]));
+    return { type: "hello_error", error: error48 };
+  } else if (type === "response_ok") {
+    const requestId = number4(obj["request_id"]);
+    const response = Response2(object2(obj["response"]));
+    return { type: "response_ok", requestId, response };
+  } else if (type === "response_error") {
+    const requestId = number4(obj["request_id"]);
+    const error48 = Error2(object2(obj["error"]));
+    return { type: "response_error", requestId, error: error48 };
+  } else {
+    throw new ProtoError("Unexpected type of ServerMsg");
+  }
+}
+function Response2(obj) {
+  const type = string4(obj["type"]);
+  if (type === "open_stream") {
+    return { type: "open_stream" };
+  } else if (type === "close_stream") {
+    return { type: "close_stream" };
+  } else if (type === "execute") {
+    const result = StmtResult(object2(obj["result"]));
+    return { type: "execute", result };
+  } else if (type === "batch") {
+    const result = BatchResult(object2(obj["result"]));
+    return { type: "batch", result };
+  } else if (type === "open_cursor") {
+    return { type: "open_cursor" };
+  } else if (type === "close_cursor") {
+    return { type: "close_cursor" };
+  } else if (type === "fetch_cursor") {
+    const entries = arrayObjectsMap(obj["entries"], CursorEntry);
+    const done = boolean4(obj["done"]);
+    return { type: "fetch_cursor", entries, done };
+  } else if (type === "sequence") {
+    return { type: "sequence" };
+  } else if (type === "describe") {
+    const result = DescribeResult(object2(obj["result"]));
+    return { type: "describe", result };
+  } else if (type === "store_sql") {
+    return { type: "store_sql" };
+  } else if (type === "close_sql") {
+    return { type: "close_sql" };
+  } else if (type === "get_autocommit") {
+    const isAutocommit = boolean4(obj["is_autocommit"]);
+    return { type: "get_autocommit", isAutocommit };
+  } else {
+    throw new ProtoError("Unexpected type of Response");
+  }
+}
+
+// node_modules/@libsql/hrana-client/lib-esm/shared/protobuf_decode.js
+var Error3 = {
+  default() {
+    return { message: "", code: undefined };
+  },
+  1(r, msg) {
+    msg.message = r.string();
+  },
+  2(r, msg) {
+    msg.code = r.string();
+  }
+};
+var StmtResult2 = {
+  default() {
+    return {
+      cols: [],
+      rows: [],
+      affectedRowCount: 0,
+      lastInsertRowid: undefined
+    };
+  },
+  1(r, msg) {
+    msg.cols.push(r.message(Col2));
+  },
+  2(r, msg) {
+    msg.rows.push(r.message(Row));
+  },
+  3(r, msg) {
+    msg.affectedRowCount = Number(r.uint64());
+  },
+  4(r, msg) {
+    msg.lastInsertRowid = r.sint64();
+  }
+};
+var Col2 = {
+  default() {
+    return { name: undefined, decltype: undefined };
+  },
+  1(r, msg) {
+    msg.name = r.string();
+  },
+  2(r, msg) {
+    msg.decltype = r.string();
+  }
+};
+var Row = {
+  default() {
+    return [];
+  },
+  1(r, msg) {
+    msg.push(r.message(Value4));
+  }
+};
+var BatchResult2 = {
+  default() {
+    return { stepResults: new Map, stepErrors: new Map };
+  },
+  1(r, msg) {
+    const [key, value] = r.message(BatchResultStepResult);
+    msg.stepResults.set(key, value);
+  },
+  2(r, msg) {
+    const [key, value] = r.message(BatchResultStepError);
+    msg.stepErrors.set(key, value);
+  }
+};
+var BatchResultStepResult = {
+  default() {
+    return [0, StmtResult2.default()];
+  },
+  1(r, msg) {
+    msg[0] = r.uint32();
+  },
+  2(r, msg) {
+    msg[1] = r.message(StmtResult2);
+  }
+};
+var BatchResultStepError = {
+  default() {
+    return [0, Error3.default()];
+  },
+  1(r, msg) {
+    msg[0] = r.uint32();
+  },
+  2(r, msg) {
+    msg[1] = r.message(Error3);
+  }
+};
+var CursorEntry2 = {
+  default() {
+    return { type: "none" };
+  },
+  1(r) {
+    return r.message(StepBeginEntry);
+  },
+  2(r) {
+    return r.message(StepEndEntry);
+  },
+  3(r) {
+    return r.message(StepErrorEntry);
+  },
+  4(r) {
+    return { type: "row", row: r.message(Row) };
+  },
+  5(r) {
+    return { type: "error", error: r.message(Error3) };
+  }
+};
+var StepBeginEntry = {
+  default() {
+    return { type: "step_begin", step: 0, cols: [] };
+  },
+  1(r, msg) {
+    msg.step = r.uint32();
+  },
+  2(r, msg) {
+    msg.cols.push(r.message(Col2));
+  }
+};
+var StepEndEntry = {
+  default() {
+    return {
+      type: "step_end",
+      affectedRowCount: 0,
+      lastInsertRowid: undefined
+    };
+  },
+  1(r, msg) {
+    msg.affectedRowCount = r.uint32();
+  },
+  2(r, msg) {
+    msg.lastInsertRowid = r.uint64();
+  }
+};
+var StepErrorEntry = {
+  default() {
+    return {
+      type: "step_error",
+      step: 0,
+      error: Error3.default()
+    };
+  },
+  1(r, msg) {
+    msg.step = r.uint32();
+  },
+  2(r, msg) {
+    msg.error = r.message(Error3);
+  }
+};
+var DescribeResult2 = {
+  default() {
+    return {
+      params: [],
+      cols: [],
+      isExplain: false,
+      isReadonly: false
+    };
+  },
+  1(r, msg) {
+    msg.params.push(r.message(DescribeParam2));
+  },
+  2(r, msg) {
+    msg.cols.push(r.message(DescribeCol2));
+  },
+  3(r, msg) {
+    msg.isExplain = r.bool();
+  },
+  4(r, msg) {
+    msg.isReadonly = r.bool();
+  }
+};
+var DescribeParam2 = {
+  default() {
+    return { name: undefined };
+  },
+  1(r, msg) {
+    msg.name = r.string();
+  }
+};
+var DescribeCol2 = {
+  default() {
+    return { name: "", decltype: undefined };
+  },
+  1(r, msg) {
+    msg.name = r.string();
+  },
+  2(r, msg) {
+    msg.decltype = r.string();
+  }
+};
+var Value4 = {
+  default() {
+    return;
+  },
+  1(r) {
+    return null;
+  },
+  2(r) {
+    return r.sint64();
+  },
+  3(r) {
+    return r.double();
+  },
+  4(r) {
+    return r.string();
+  },
+  5(r) {
+    return r.bytes();
+  }
+};
+
+// node_modules/@libsql/hrana-client/lib-esm/ws/protobuf_decode.js
+var ServerMsg2 = {
+  default() {
+    return { type: "none" };
+  },
+  1(r) {
+    return { type: "hello_ok" };
+  },
+  2(r) {
+    return r.message(HelloErrorMsg);
+  },
+  3(r) {
+    return r.message(ResponseOkMsg);
+  },
+  4(r) {
+    return r.message(ResponseErrorMsg);
+  }
+};
+var HelloErrorMsg = {
+  default() {
+    return { type: "hello_error", error: Error3.default() };
+  },
+  1(r, msg) {
+    msg.error = r.message(Error3);
+  }
+};
+var ResponseErrorMsg = {
+  default() {
+    return { type: "response_error", requestId: 0, error: Error3.default() };
+  },
+  1(r, msg) {
+    msg.requestId = r.int32();
+  },
+  2(r, msg) {
+    msg.error = r.message(Error3);
+  }
+};
+var ResponseOkMsg = {
+  default() {
+    return {
+      type: "response_ok",
+      requestId: 0,
+      response: { type: "none" }
+    };
+  },
+  1(r, msg) {
+    msg.requestId = r.int32();
+  },
+  2(r, msg) {
+    msg.response = { type: "open_stream" };
+  },
+  3(r, msg) {
+    msg.response = { type: "close_stream" };
+  },
+  4(r, msg) {
+    msg.response = r.message(ExecuteResp);
+  },
+  5(r, msg) {
+    msg.response = r.message(BatchResp);
+  },
+  6(r, msg) {
+    msg.response = { type: "open_cursor" };
+  },
+  7(r, msg) {
+    msg.response = { type: "close_cursor" };
+  },
+  8(r, msg) {
+    msg.response = r.message(FetchCursorResp);
+  },
+  9(r, msg) {
+    msg.response = { type: "sequence" };
+  },
+  10(r, msg) {
+    msg.response = r.message(DescribeResp);
+  },
+  11(r, msg) {
+    msg.response = { type: "store_sql" };
+  },
+  12(r, msg) {
+    msg.response = { type: "close_sql" };
+  },
+  13(r, msg) {
+    msg.response = r.message(GetAutocommitResp);
+  }
+};
+var ExecuteResp = {
+  default() {
+    return { type: "execute", result: StmtResult2.default() };
+  },
+  1(r, msg) {
+    msg.result = r.message(StmtResult2);
+  }
+};
+var BatchResp = {
+  default() {
+    return { type: "batch", result: BatchResult2.default() };
+  },
+  1(r, msg) {
+    msg.result = r.message(BatchResult2);
+  }
+};
+var FetchCursorResp = {
+  default() {
+    return { type: "fetch_cursor", entries: [], done: false };
+  },
+  1(r, msg) {
+    msg.entries.push(r.message(CursorEntry2));
+  },
+  2(r, msg) {
+    msg.done = r.bool();
+  }
+};
+var DescribeResp = {
+  default() {
+    return { type: "describe", result: DescribeResult2.default() };
+  },
+  1(r, msg) {
+    msg.result = r.message(DescribeResult2);
+  }
+};
+var GetAutocommitResp = {
+  default() {
+    return { type: "get_autocommit", isAutocommit: false };
+  },
+  1(r, msg) {
+    msg.isAutocommit = r.bool();
+  }
+};
+
+// node_modules/@libsql/hrana-client/lib-esm/ws/client.js
+var subprotocolsV2 = new Map([
+  ["hrana2", { version: 2, encoding: "json" }],
+  ["hrana1", { version: 1, encoding: "json" }]
+]);
+var subprotocolsV3 = new Map([
+  ["hrana3-protobuf", { version: 3, encoding: "protobuf" }],
+  ["hrana3", { version: 3, encoding: "json" }],
+  ["hrana2", { version: 2, encoding: "json" }],
+  ["hrana1", { version: 1, encoding: "json" }]
+]);
+
+class WsClient extends Client {
+  #socket;
+  #openCallbacks;
+  #opened;
+  #closed;
+  #recvdHello;
+  #subprotocol;
+  #getVersionCalled;
+  #responseMap;
+  #requestIdAlloc;
+  _streamIdAlloc;
+  _cursorIdAlloc;
+  #sqlIdAlloc;
+  constructor(socket, jwt2) {
+    super();
+    this.#socket = socket;
+    this.#openCallbacks = [];
+    this.#opened = false;
+    this.#closed = undefined;
+    this.#recvdHello = false;
+    this.#subprotocol = undefined;
+    this.#getVersionCalled = false;
+    this.#responseMap = new Map;
+    this.#requestIdAlloc = new IdAlloc;
+    this._streamIdAlloc = new IdAlloc;
+    this._cursorIdAlloc = new IdAlloc;
+    this.#sqlIdAlloc = new IdAlloc;
+    this.#socket.binaryType = "arraybuffer";
+    this.#socket.addEventListener("open", () => this.#onSocketOpen());
+    this.#socket.addEventListener("close", (event) => this.#onSocketClose(event));
+    this.#socket.addEventListener("error", (event) => this.#onSocketError(event));
+    this.#socket.addEventListener("message", (event) => this.#onSocketMessage(event));
+    this.#send({ type: "hello", jwt: jwt2 });
+  }
+  #send(msg) {
+    if (this.#closed !== undefined) {
+      throw new InternalError("Trying to send a message on a closed client");
+    }
+    if (this.#opened) {
+      this.#sendToSocket(msg);
+    } else {
+      const openCallback = () => this.#sendToSocket(msg);
+      const errorCallback = () => {
+        return;
+      };
+      this.#openCallbacks.push({ openCallback, errorCallback });
+    }
+  }
+  #onSocketOpen() {
+    const protocol = this.#socket.protocol;
+    if (protocol === undefined) {
+      this.#setClosed(new ClientError("The `WebSocket.protocol` property is undefined. This most likely means that the WebSocket " + "implementation provided by the environment is broken. If you are using Miniflare 2, " + "please update to Miniflare 3, which fixes this problem."));
+      return;
+    } else if (protocol === "") {
+      this.#subprotocol = { version: 1, encoding: "json" };
+    } else {
+      this.#subprotocol = subprotocolsV3.get(protocol);
+      if (this.#subprotocol === undefined) {
+        this.#setClosed(new ProtoError(`Unrecognized WebSocket subprotocol: ${JSON.stringify(protocol)}`));
+        return;
+      }
+    }
+    for (const callbacks of this.#openCallbacks) {
+      callbacks.openCallback();
+    }
+    this.#openCallbacks.length = 0;
+    this.#opened = true;
+  }
+  #sendToSocket(msg) {
+    const encoding = this.#subprotocol.encoding;
+    if (encoding === "json") {
+      const jsonMsg = writeJsonObject(msg, ClientMsg);
+      this.#socket.send(jsonMsg);
+    } else if (encoding === "protobuf") {
+      const protobufMsg = writeProtobufMessage(msg, ClientMsg2);
+      this.#socket.send(protobufMsg);
+    } else {
+      throw impossible(encoding, "Impossible encoding");
+    }
+  }
+  getVersion() {
+    return new Promise((versionCallback, errorCallback) => {
+      this.#getVersionCalled = true;
+      if (this.#closed !== undefined) {
+        errorCallback(this.#closed);
+      } else if (!this.#opened) {
+        const openCallback = () => versionCallback(this.#subprotocol.version);
+        this.#openCallbacks.push({ openCallback, errorCallback });
+      } else {
+        versionCallback(this.#subprotocol.version);
+      }
+    });
+  }
+  _ensureVersion(minVersion, feature) {
+    if (this.#subprotocol === undefined || !this.#getVersionCalled) {
+      throw new ProtocolVersionError(`${feature} is supported only on protocol version ${minVersion} and higher, ` + "but the version supported by the WebSocket server is not yet known. " + "Use Client.getVersion() to wait until the version is available.");
+    } else if (this.#subprotocol.version < minVersion) {
+      throw new ProtocolVersionError(`${feature} is supported on protocol version ${minVersion} and higher, ` + `but the WebSocket server only supports version ${this.#subprotocol.version}`);
+    }
+  }
+  _sendRequest(request, callbacks) {
+    if (this.#closed !== undefined) {
+      callbacks.errorCallback(new ClosedError("Client is closed", this.#closed));
+      return;
+    }
+    const requestId = this.#requestIdAlloc.alloc();
+    this.#responseMap.set(requestId, { ...callbacks, type: request.type });
+    this.#send({ type: "request", requestId, request });
+  }
+  #onSocketError(event) {
+    const eventMessage = event.message;
+    const message = eventMessage ?? "WebSocket was closed due to an error";
+    this.#setClosed(new WebSocketError(message));
+  }
+  #onSocketClose(event) {
+    let message = `WebSocket was closed with code ${event.code}`;
+    if (event.reason) {
+      message += `: ${event.reason}`;
+    }
+    this.#setClosed(new WebSocketError(message));
+  }
+  #setClosed(error48) {
+    if (this.#closed !== undefined) {
+      return;
+    }
+    this.#closed = error48;
+    for (const callbacks of this.#openCallbacks) {
+      callbacks.errorCallback(error48);
+    }
+    this.#openCallbacks.length = 0;
+    for (const [requestId, responseState] of this.#responseMap.entries()) {
+      responseState.errorCallback(error48);
+      this.#requestIdAlloc.free(requestId);
+    }
+    this.#responseMap.clear();
+    this.#socket.close();
+  }
+  #onSocketMessage(event) {
+    if (this.#closed !== undefined) {
+      return;
+    }
+    try {
+      let msg;
+      const encoding = this.#subprotocol.encoding;
+      if (encoding === "json") {
+        if (typeof event.data !== "string") {
+          this.#socket.close(3003, "Only text messages are accepted with JSON encoding");
+          this.#setClosed(new ProtoError("Received non-text message from server with JSON encoding"));
+          return;
+        }
+        msg = readJsonObject(JSON.parse(event.data), ServerMsg);
+      } else if (encoding === "protobuf") {
+        if (!(event.data instanceof ArrayBuffer)) {
+          this.#socket.close(3003, "Only binary messages are accepted with Protobuf encoding");
+          this.#setClosed(new ProtoError("Received non-binary message from server with Protobuf encoding"));
+          return;
+        }
+        msg = readProtobufMessage(new Uint8Array(event.data), ServerMsg2);
+      } else {
+        throw impossible(encoding, "Impossible encoding");
+      }
+      this.#handleMsg(msg);
+    } catch (e) {
+      this.#socket.close(3007, "Could not handle message");
+      this.#setClosed(e);
+    }
+  }
+  #handleMsg(msg) {
+    if (msg.type === "none") {
+      throw new ProtoError("Received an unrecognized ServerMsg");
+    } else if (msg.type === "hello_ok" || msg.type === "hello_error") {
+      if (this.#recvdHello) {
+        throw new ProtoError("Received a duplicated hello response");
+      }
+      this.#recvdHello = true;
+      if (msg.type === "hello_error") {
+        throw errorFromProto(msg.error);
+      }
+      return;
+    } else if (!this.#recvdHello) {
+      throw new ProtoError("Received a non-hello message before a hello response");
+    }
+    if (msg.type === "response_ok") {
+      const requestId = msg.requestId;
+      const responseState = this.#responseMap.get(requestId);
+      this.#responseMap.delete(requestId);
+      if (responseState === undefined) {
+        throw new ProtoError("Received unexpected OK response");
+      }
+      this.#requestIdAlloc.free(requestId);
+      try {
+        if (responseState.type !== msg.response.type) {
+          console.dir({ responseState, msg });
+          throw new ProtoError("Received unexpected type of response");
+        }
+        responseState.responseCallback(msg.response);
+      } catch (e) {
+        responseState.errorCallback(e);
+        throw e;
+      }
+    } else if (msg.type === "response_error") {
+      const requestId = msg.requestId;
+      const responseState = this.#responseMap.get(requestId);
+      this.#responseMap.delete(requestId);
+      if (responseState === undefined) {
+        throw new ProtoError("Received unexpected error response");
+      }
+      this.#requestIdAlloc.free(requestId);
+      responseState.errorCallback(errorFromProto(msg.error));
+    } else {
+      throw impossible(msg, "Impossible ServerMsg type");
+    }
+  }
+  openStream() {
+    return WsStream.open(this);
+  }
+  storeSql(sql2) {
+    this._ensureVersion(2, "storeSql()");
+    const sqlId = this.#sqlIdAlloc.alloc();
+    const sqlObj = new Sql(this, sqlId);
+    const responseCallback = () => {
+      return;
+    };
+    const errorCallback = (e) => sqlObj._setClosed(e);
+    const request = { type: "store_sql", sqlId, sql: sql2 };
+    this._sendRequest(request, { responseCallback, errorCallback });
+    return sqlObj;
+  }
+  _closeSql(sqlId) {
+    if (this.#closed !== undefined) {
+      return;
+    }
+    const responseCallback = () => this.#sqlIdAlloc.free(sqlId);
+    const errorCallback = (e) => this.#setClosed(e);
+    const request = { type: "close_sql", sqlId };
+    this._sendRequest(request, { responseCallback, errorCallback });
+  }
+  close() {
+    this.#setClosed(new ClientError("Client was manually closed"));
+  }
+  get closed() {
+    return this.#closed !== undefined;
+  }
+}
+
+// node_modules/@libsql/hrana-client/lib-esm/http/client.js
+var import_cross_fetch2 = __toESM(require_node_ponyfill(), 1);
+
+// node_modules/@libsql/hrana-client/lib-esm/http/stream.js
+var import_cross_fetch = __toESM(require_node_ponyfill(), 1);
+
+// node_modules/@libsql/hrana-client/lib-esm/queue_microtask.js
+var _queueMicrotask;
+if (typeof queueMicrotask !== "undefined") {
+  _queueMicrotask = queueMicrotask;
+} else {
+  const resolved = Promise.resolve();
+  _queueMicrotask = (callback) => {
+    resolved.then(callback);
+  };
+}
+
+// node_modules/@libsql/hrana-client/lib-esm/byte_queue.js
+class ByteQueue {
+  #array;
+  #shiftPos;
+  #pushPos;
+  constructor(initialCap) {
+    this.#array = new Uint8Array(new ArrayBuffer(initialCap));
+    this.#shiftPos = 0;
+    this.#pushPos = 0;
+  }
+  get length() {
+    return this.#pushPos - this.#shiftPos;
+  }
+  data() {
+    return this.#array.slice(this.#shiftPos, this.#pushPos);
+  }
+  push(chunk) {
+    this.#ensurePush(chunk.byteLength);
+    this.#array.set(chunk, this.#pushPos);
+    this.#pushPos += chunk.byteLength;
+  }
+  #ensurePush(pushLength) {
+    if (this.#pushPos + pushLength <= this.#array.byteLength) {
+      return;
+    }
+    const filledLength = this.#pushPos - this.#shiftPos;
+    if (filledLength + pushLength <= this.#array.byteLength && 2 * this.#pushPos >= this.#array.byteLength) {
+      this.#array.copyWithin(0, this.#shiftPos, this.#pushPos);
+    } else {
+      let newCap = this.#array.byteLength;
+      do {
+        newCap *= 2;
+      } while (filledLength + pushLength > newCap);
+      const newArray = new Uint8Array(new ArrayBuffer(newCap));
+      newArray.set(this.#array.slice(this.#shiftPos, this.#pushPos), 0);
+      this.#array = newArray;
+    }
+    this.#pushPos = filledLength;
+    this.#shiftPos = 0;
+  }
+  shift(length) {
+    this.#shiftPos += length;
+  }
+}
+
+// node_modules/@libsql/hrana-client/lib-esm/http/json_decode.js
+function PipelineRespBody(obj) {
+  const baton = stringOpt(obj["baton"]);
+  const baseUrl = stringOpt(obj["base_url"]);
+  const results = arrayObjectsMap(obj["results"], StreamResult);
+  return { baton, baseUrl, results };
+}
+function StreamResult(obj) {
+  const type = string4(obj["type"]);
+  if (type === "ok") {
+    const response = StreamResponse(object2(obj["response"]));
+    return { type: "ok", response };
+  } else if (type === "error") {
+    const error48 = Error2(object2(obj["error"]));
+    return { type: "error", error: error48 };
+  } else {
+    throw new ProtoError("Unexpected type of StreamResult");
+  }
+}
+function StreamResponse(obj) {
+  const type = string4(obj["type"]);
+  if (type === "close") {
+    return { type: "close" };
+  } else if (type === "execute") {
+    const result = StmtResult(object2(obj["result"]));
+    return { type: "execute", result };
+  } else if (type === "batch") {
+    const result = BatchResult(object2(obj["result"]));
+    return { type: "batch", result };
+  } else if (type === "sequence") {
+    return { type: "sequence" };
+  } else if (type === "describe") {
+    const result = DescribeResult(object2(obj["result"]));
+    return { type: "describe", result };
+  } else if (type === "store_sql") {
+    return { type: "store_sql" };
+  } else if (type === "close_sql") {
+    return { type: "close_sql" };
+  } else if (type === "get_autocommit") {
+    const isAutocommit = boolean4(obj["is_autocommit"]);
+    return { type: "get_autocommit", isAutocommit };
+  } else {
+    throw new ProtoError("Unexpected type of StreamResponse");
+  }
+}
+function CursorRespBody(obj) {
+  const baton = stringOpt(obj["baton"]);
+  const baseUrl = stringOpt(obj["base_url"]);
+  return { baton, baseUrl };
+}
+
+// node_modules/@libsql/hrana-client/lib-esm/http/protobuf_decode.js
+var PipelineRespBody2 = {
+  default() {
+    return { baton: undefined, baseUrl: undefined, results: [] };
+  },
+  1(r, msg) {
+    msg.baton = r.string();
+  },
+  2(r, msg) {
+    msg.baseUrl = r.string();
+  },
+  3(r, msg) {
+    msg.results.push(r.message(StreamResult2));
+  }
+};
+var StreamResult2 = {
+  default() {
+    return { type: "none" };
+  },
+  1(r) {
+    return { type: "ok", response: r.message(StreamResponse2) };
+  },
+  2(r) {
+    return { type: "error", error: r.message(Error3) };
+  }
+};
+var StreamResponse2 = {
+  default() {
+    return { type: "none" };
+  },
+  1(r) {
+    return { type: "close" };
+  },
+  2(r) {
+    return r.message(ExecuteStreamResp);
+  },
+  3(r) {
+    return r.message(BatchStreamResp);
+  },
+  4(r) {
+    return { type: "sequence" };
+  },
+  5(r) {
+    return r.message(DescribeStreamResp);
+  },
+  6(r) {
+    return { type: "store_sql" };
+  },
+  7(r) {
+    return { type: "close_sql" };
+  },
+  8(r) {
+    return r.message(GetAutocommitStreamResp);
+  }
+};
+var ExecuteStreamResp = {
+  default() {
+    return { type: "execute", result: StmtResult2.default() };
+  },
+  1(r, msg) {
+    msg.result = r.message(StmtResult2);
+  }
+};
+var BatchStreamResp = {
+  default() {
+    return { type: "batch", result: BatchResult2.default() };
+  },
+  1(r, msg) {
+    msg.result = r.message(BatchResult2);
+  }
+};
+var DescribeStreamResp = {
+  default() {
+    return { type: "describe", result: DescribeResult2.default() };
+  },
+  1(r, msg) {
+    msg.result = r.message(DescribeResult2);
+  }
+};
+var GetAutocommitStreamResp = {
+  default() {
+    return { type: "get_autocommit", isAutocommit: false };
+  },
+  1(r, msg) {
+    msg.isAutocommit = r.bool();
+  }
+};
+var CursorRespBody2 = {
+  default() {
+    return { baton: undefined, baseUrl: undefined };
+  },
+  1(r, msg) {
+    msg.baton = r.string();
+  },
+  2(r, msg) {
+    msg.baseUrl = r.string();
+  }
+};
+
+// node_modules/@libsql/hrana-client/lib-esm/http/cursor.js
+class HttpCursor extends Cursor {
+  #stream;
+  #encoding;
+  #reader;
+  #queue;
+  #closed;
+  #done;
+  constructor(stream, encoding) {
+    super();
+    this.#stream = stream;
+    this.#encoding = encoding;
+    this.#reader = undefined;
+    this.#queue = new ByteQueue(16 * 1024);
+    this.#closed = undefined;
+    this.#done = false;
+  }
+  async open(response) {
+    if (response.body === null) {
+      throw new ProtoError("No response body for cursor request");
+    }
+    this.#reader = response.body[Symbol.asyncIterator]();
+    const respBody = await this.#nextItem(CursorRespBody, CursorRespBody2);
+    if (respBody === undefined) {
+      throw new ProtoError("Empty response to cursor request");
+    }
+    return respBody;
+  }
+  next() {
+    return this.#nextItem(CursorEntry, CursorEntry2);
+  }
+  close() {
+    this._setClosed(new ClientError("Cursor was manually closed"));
+  }
+  _setClosed(error48) {
+    if (this.#closed !== undefined) {
+      return;
+    }
+    this.#closed = error48;
+    this.#stream._cursorClosed(this);
+    if (this.#reader !== undefined) {
+      this.#reader.return();
+    }
+  }
+  get closed() {
+    return this.#closed !== undefined;
+  }
+  async#nextItem(jsonFun, protobufDef) {
+    for (;; ) {
+      if (this.#done) {
+        return;
+      } else if (this.#closed !== undefined) {
+        throw new ClosedError("Cursor is closed", this.#closed);
+      }
+      if (this.#encoding === "json") {
+        const jsonData = this.#parseItemJson();
+        if (jsonData !== undefined) {
+          const jsonText = new TextDecoder().decode(jsonData);
+          const jsonValue = JSON.parse(jsonText);
+          return readJsonObject(jsonValue, jsonFun);
+        }
+      } else if (this.#encoding === "protobuf") {
+        const protobufData = this.#parseItemProtobuf();
+        if (protobufData !== undefined) {
+          return readProtobufMessage(protobufData, protobufDef);
+        }
+      } else {
+        throw impossible(this.#encoding, "Impossible encoding");
+      }
+      if (this.#reader === undefined) {
+        throw new InternalError("Attempted to read from HTTP cursor before it was opened");
+      }
+      const { value, done } = await this.#reader.next();
+      if (done && this.#queue.length === 0) {
+        this.#done = true;
+      } else if (done) {
+        throw new ProtoError("Unexpected end of cursor stream");
+      } else {
+        this.#queue.push(value);
+      }
+    }
+  }
+  #parseItemJson() {
+    const data = this.#queue.data();
+    const newlineByte = 10;
+    const newlinePos = data.indexOf(newlineByte);
+    if (newlinePos < 0) {
+      return;
+    }
+    const jsonData = data.slice(0, newlinePos);
+    this.#queue.shift(newlinePos + 1);
+    return jsonData;
+  }
+  #parseItemProtobuf() {
+    const data = this.#queue.data();
+    let varintValue = 0;
+    let varintLength = 0;
+    for (;; ) {
+      if (varintLength >= data.byteLength) {
+        return;
+      }
+      const byte = data[varintLength];
+      varintValue |= (byte & 127) << 7 * varintLength;
+      varintLength += 1;
+      if (!(byte & 128)) {
+        break;
+      }
+    }
+    if (data.byteLength < varintLength + varintValue) {
+      return;
+    }
+    const protobufData = data.slice(varintLength, varintLength + varintValue);
+    this.#queue.shift(varintLength + varintValue);
+    return protobufData;
+  }
+}
+
+// node_modules/@libsql/hrana-client/lib-esm/http/json_encode.js
+function PipelineReqBody(w, msg) {
+  if (msg.baton !== undefined) {
+    w.string("baton", msg.baton);
+  }
+  w.arrayObjects("requests", msg.requests, StreamRequest);
+}
+function StreamRequest(w, msg) {
+  w.stringRaw("type", msg.type);
+  if (msg.type === "close") {} else if (msg.type === "execute") {
+    w.object("stmt", msg.stmt, Stmt2);
+  } else if (msg.type === "batch") {
+    w.object("batch", msg.batch, Batch2);
+  } else if (msg.type === "sequence") {
+    if (msg.sql !== undefined) {
+      w.string("sql", msg.sql);
+    }
+    if (msg.sqlId !== undefined) {
+      w.number("sql_id", msg.sqlId);
+    }
+  } else if (msg.type === "describe") {
+    if (msg.sql !== undefined) {
+      w.string("sql", msg.sql);
+    }
+    if (msg.sqlId !== undefined) {
+      w.number("sql_id", msg.sqlId);
+    }
+  } else if (msg.type === "store_sql") {
+    w.number("sql_id", msg.sqlId);
+    w.string("sql", msg.sql);
+  } else if (msg.type === "close_sql") {
+    w.number("sql_id", msg.sqlId);
+  } else if (msg.type === "get_autocommit") {} else {
+    throw impossible(msg, "Impossible type of StreamRequest");
+  }
+}
+function CursorReqBody(w, msg) {
+  if (msg.baton !== undefined) {
+    w.string("baton", msg.baton);
+  }
+  w.object("batch", msg.batch, Batch2);
+}
+
+// node_modules/@libsql/hrana-client/lib-esm/http/protobuf_encode.js
+function PipelineReqBody2(w, msg) {
+  if (msg.baton !== undefined) {
+    w.string(1, msg.baton);
+  }
+  for (const req of msg.requests) {
+    w.message(2, req, StreamRequest2);
+  }
+}
+function StreamRequest2(w, msg) {
+  if (msg.type === "close") {
+    w.message(1, msg, CloseStreamReq2);
+  } else if (msg.type === "execute") {
+    w.message(2, msg, ExecuteStreamReq);
+  } else if (msg.type === "batch") {
+    w.message(3, msg, BatchStreamReq);
+  } else if (msg.type === "sequence") {
+    w.message(4, msg, SequenceStreamReq);
+  } else if (msg.type === "describe") {
+    w.message(5, msg, DescribeStreamReq);
+  } else if (msg.type === "store_sql") {
+    w.message(6, msg, StoreSqlStreamReq);
+  } else if (msg.type === "close_sql") {
+    w.message(7, msg, CloseSqlStreamReq);
+  } else if (msg.type === "get_autocommit") {
+    w.message(8, msg, GetAutocommitStreamReq);
+  } else {
+    throw impossible(msg, "Impossible type of StreamRequest");
+  }
+}
+function CloseStreamReq2(_w, _msg) {}
+function ExecuteStreamReq(w, msg) {
+  w.message(1, msg.stmt, Stmt3);
+}
+function BatchStreamReq(w, msg) {
+  w.message(1, msg.batch, Batch3);
+}
+function SequenceStreamReq(w, msg) {
+  if (msg.sql !== undefined) {
+    w.string(1, msg.sql);
+  }
+  if (msg.sqlId !== undefined) {
+    w.int32(2, msg.sqlId);
+  }
+}
+function DescribeStreamReq(w, msg) {
+  if (msg.sql !== undefined) {
+    w.string(1, msg.sql);
+  }
+  if (msg.sqlId !== undefined) {
+    w.int32(2, msg.sqlId);
+  }
+}
+function StoreSqlStreamReq(w, msg) {
+  w.int32(1, msg.sqlId);
+  w.string(2, msg.sql);
+}
+function CloseSqlStreamReq(w, msg) {
+  w.int32(1, msg.sqlId);
+}
+function GetAutocommitStreamReq(_w, _msg) {}
+function CursorReqBody2(w, msg) {
+  if (msg.baton !== undefined) {
+    w.string(1, msg.baton);
+  }
+  w.message(2, msg.batch, Batch3);
+}
+
+// node_modules/@libsql/hrana-client/lib-esm/http/stream.js
+class HttpStream extends Stream {
+  #client;
+  #baseUrl;
+  #jwt;
+  #fetch;
+  #remoteEncryptionKey;
+  #baton;
+  #queue;
+  #flushing;
+  #cursor;
+  #closing;
+  #closeQueued;
+  #closed;
+  #sqlIdAlloc;
+  constructor(client, baseUrl, jwt2, customFetch, remoteEncryptionKey) {
+    super(client.intMode);
+    this.#client = client;
+    this.#baseUrl = baseUrl.toString();
+    this.#jwt = jwt2;
+    this.#fetch = customFetch;
+    this.#remoteEncryptionKey = remoteEncryptionKey;
+    this.#baton = undefined;
+    this.#queue = new Queue;
+    this.#flushing = false;
+    this.#closing = false;
+    this.#closeQueued = false;
+    this.#closed = undefined;
+    this.#sqlIdAlloc = new IdAlloc;
+  }
+  client() {
+    return this.#client;
+  }
+  _sqlOwner() {
+    return this;
+  }
+  storeSql(sql2) {
+    const sqlId = this.#sqlIdAlloc.alloc();
+    this.#sendStreamRequest({ type: "store_sql", sqlId, sql: sql2 }).then(() => {
+      return;
+    }, (error48) => this._setClosed(error48));
+    return new Sql(this, sqlId);
+  }
+  _closeSql(sqlId) {
+    if (this.#closed !== undefined) {
+      return;
+    }
+    this.#sendStreamRequest({ type: "close_sql", sqlId }).then(() => this.#sqlIdAlloc.free(sqlId), (error48) => this._setClosed(error48));
+  }
+  _execute(stmt) {
+    return this.#sendStreamRequest({ type: "execute", stmt }).then((response) => {
+      return response.result;
+    });
+  }
+  _batch(batch) {
+    return this.#sendStreamRequest({ type: "batch", batch }).then((response) => {
+      return response.result;
+    });
+  }
+  _describe(protoSql) {
+    return this.#sendStreamRequest({
+      type: "describe",
+      sql: protoSql.sql,
+      sqlId: protoSql.sqlId
+    }).then((response) => {
+      return response.result;
+    });
+  }
+  _sequence(protoSql) {
+    return this.#sendStreamRequest({
+      type: "sequence",
+      sql: protoSql.sql,
+      sqlId: protoSql.sqlId
+    }).then((_response) => {
+      return;
+    });
+  }
+  getAutocommit() {
+    this.#client._ensureVersion(3, "getAutocommit()");
+    return this.#sendStreamRequest({
+      type: "get_autocommit"
+    }).then((response) => {
+      return response.isAutocommit;
+    });
+  }
+  #sendStreamRequest(request) {
+    return new Promise((responseCallback, errorCallback) => {
+      this.#pushToQueue({ type: "pipeline", request, responseCallback, errorCallback });
+    });
+  }
+  _openCursor(batch) {
+    return new Promise((cursorCallback, errorCallback) => {
+      this.#pushToQueue({ type: "cursor", batch, cursorCallback, errorCallback });
+    });
+  }
+  _cursorClosed(cursor) {
+    if (cursor !== this.#cursor) {
+      throw new InternalError("Cursor was closed, but it was not associated with the stream");
+    }
+    this.#cursor = undefined;
+    _queueMicrotask(() => this.#flushQueue());
+  }
+  close() {
+    this._setClosed(new ClientError("Stream was manually closed"));
+  }
+  closeGracefully() {
+    this.#closing = true;
+    _queueMicrotask(() => this.#flushQueue());
+  }
+  get closed() {
+    return this.#closed !== undefined || this.#closing;
+  }
+  _setClosed(error48) {
+    if (this.#closed !== undefined) {
+      return;
+    }
+    this.#closed = error48;
+    if (this.#cursor !== undefined) {
+      this.#cursor._setClosed(error48);
+    }
+    this.#client._streamClosed(this);
+    for (;; ) {
+      const entry = this.#queue.shift();
+      if (entry !== undefined) {
+        entry.errorCallback(error48);
+      } else {
+        break;
+      }
+    }
+    if ((this.#baton !== undefined || this.#flushing) && !this.#closeQueued) {
+      this.#queue.push({
+        type: "pipeline",
+        request: { type: "close" },
+        responseCallback: () => {
+          return;
+        },
+        errorCallback: () => {
+          return;
+        }
+      });
+      this.#closeQueued = true;
+      _queueMicrotask(() => this.#flushQueue());
+    }
+  }
+  #pushToQueue(entry) {
+    if (this.#closed !== undefined) {
+      throw new ClosedError("Stream is closed", this.#closed);
+    } else if (this.#closing) {
+      throw new ClosedError("Stream is closing", undefined);
+    } else {
+      this.#queue.push(entry);
+      _queueMicrotask(() => this.#flushQueue());
+    }
+  }
+  #flushQueue() {
+    if (this.#flushing || this.#cursor !== undefined) {
+      return;
+    }
+    if (this.#closing && this.#queue.length === 0) {
+      this._setClosed(new ClientError("Stream was gracefully closed"));
+      return;
+    }
+    const endpoint = this.#client._endpoint;
+    if (endpoint === undefined) {
+      this.#client._endpointPromise.then(() => this.#flushQueue(), (error48) => this._setClosed(error48));
+      return;
+    }
+    const firstEntry = this.#queue.shift();
+    if (firstEntry === undefined) {
+      return;
+    } else if (firstEntry.type === "pipeline") {
+      const pipeline = [firstEntry];
+      for (;; ) {
+        const entry = this.#queue.first();
+        if (entry !== undefined && entry.type === "pipeline") {
+          pipeline.push(entry);
+          this.#queue.shift();
+        } else if (entry === undefined && this.#closing && !this.#closeQueued) {
+          pipeline.push({
+            type: "pipeline",
+            request: { type: "close" },
+            responseCallback: () => {
+              return;
+            },
+            errorCallback: () => {
+              return;
+            }
+          });
+          this.#closeQueued = true;
+          break;
+        } else {
+          break;
+        }
+      }
+      this.#flushPipeline(endpoint, pipeline);
+    } else if (firstEntry.type === "cursor") {
+      this.#flushCursor(endpoint, firstEntry);
+    } else {
+      throw impossible(firstEntry, "Impossible type of QueueEntry");
+    }
+  }
+  #flushPipeline(endpoint, pipeline) {
+    this.#flush(() => this.#createPipelineRequest(pipeline, endpoint), (resp) => decodePipelineResponse(resp, endpoint.encoding), (respBody) => respBody.baton, (respBody) => respBody.baseUrl, (respBody) => handlePipelineResponse(pipeline, respBody), (error48) => pipeline.forEach((entry) => entry.errorCallback(error48)));
+  }
+  #flushCursor(endpoint, entry) {
+    const cursor = new HttpCursor(this, endpoint.encoding);
+    this.#cursor = cursor;
+    this.#flush(() => this.#createCursorRequest(entry, endpoint), (resp) => cursor.open(resp), (respBody) => respBody.baton, (respBody) => respBody.baseUrl, (_respBody) => entry.cursorCallback(cursor), (error48) => entry.errorCallback(error48));
+  }
+  #flush(createRequest, decodeResponse, getBaton, getBaseUrl, handleResponse, handleError) {
+    let promise2;
+    try {
+      const request = createRequest();
+      const fetch2 = this.#fetch;
+      promise2 = fetch2(request);
+    } catch (error48) {
+      promise2 = Promise.reject(error48);
+    }
+    this.#flushing = true;
+    promise2.then((resp) => {
+      if (!resp.ok) {
+        return errorFromResponse(resp).then((error48) => {
+          throw error48;
+        });
+      }
+      return decodeResponse(resp);
+    }).then((r) => {
+      this.#baton = getBaton(r);
+      this.#baseUrl = getBaseUrl(r) ?? this.#baseUrl;
+      handleResponse(r);
+    }).catch((error48) => {
+      this._setClosed(error48);
+      handleError(error48);
+    }).finally(() => {
+      this.#flushing = false;
+      this.#flushQueue();
+    });
+  }
+  #createPipelineRequest(pipeline, endpoint) {
+    return this.#createRequest(new URL(endpoint.pipelinePath, this.#baseUrl), {
+      baton: this.#baton,
+      requests: pipeline.map((entry) => entry.request)
+    }, endpoint.encoding, PipelineReqBody, PipelineReqBody2);
+  }
+  #createCursorRequest(entry, endpoint) {
+    if (endpoint.cursorPath === undefined) {
+      throw new ProtocolVersionError("Cursors are supported only on protocol version 3 and higher, " + `but the HTTP server only supports version ${endpoint.version}.`);
+    }
+    return this.#createRequest(new URL(endpoint.cursorPath, this.#baseUrl), {
+      baton: this.#baton,
+      batch: entry.batch
+    }, endpoint.encoding, CursorReqBody, CursorReqBody2);
+  }
+  #createRequest(url2, reqBody, encoding, jsonFun, protobufFun) {
+    let bodyData;
+    let contentType;
+    if (encoding === "json") {
+      bodyData = writeJsonObject(reqBody, jsonFun);
+      contentType = "application/json";
+    } else if (encoding === "protobuf") {
+      bodyData = writeProtobufMessage(reqBody, protobufFun);
+      contentType = "application/x-protobuf";
+    } else {
+      throw impossible(encoding, "Impossible encoding");
+    }
+    const headers = new import_cross_fetch.Headers;
+    headers.set("content-type", contentType);
+    if (this.#jwt !== undefined) {
+      headers.set("authorization", `Bearer ${this.#jwt}`);
+    }
+    if (this.#remoteEncryptionKey !== undefined) {
+      headers.set("x-turso-encryption-key", this.#remoteEncryptionKey);
+    }
+    return new import_cross_fetch.Request(url2.toString(), { method: "POST", headers, body: bodyData });
+  }
+}
+function handlePipelineResponse(pipeline, respBody) {
+  if (respBody.results.length !== pipeline.length) {
+    throw new ProtoError("Server returned unexpected number of pipeline results");
+  }
+  for (let i = 0;i < pipeline.length; ++i) {
+    const result = respBody.results[i];
+    const entry = pipeline[i];
+    if (result.type === "ok") {
+      if (result.response.type !== entry.request.type) {
+        throw new ProtoError("Received unexpected type of response");
+      }
+      entry.responseCallback(result.response);
+    } else if (result.type === "error") {
+      entry.errorCallback(errorFromProto(result.error));
+    } else if (result.type === "none") {
+      throw new ProtoError("Received unrecognized type of StreamResult");
+    } else {
+      throw impossible(result, "Received impossible type of StreamResult");
+    }
+  }
+}
+async function decodePipelineResponse(resp, encoding) {
+  if (encoding === "json") {
+    const respJson = await resp.json();
+    return readJsonObject(respJson, PipelineRespBody);
+  }
+  if (encoding === "protobuf") {
+    const respData = await resp.arrayBuffer();
+    return readProtobufMessage(new Uint8Array(respData), PipelineRespBody2);
+  }
+  await resp.body?.cancel();
+  throw impossible(encoding, "Impossible encoding");
+}
+async function errorFromResponse(resp) {
+  const respType = resp.headers.get("content-type") ?? "text/plain";
+  let message = `Server returned HTTP status ${resp.status}`;
+  if (respType === "application/json") {
+    const respBody = await resp.json();
+    if ("message" in respBody) {
+      return errorFromProto(respBody);
+    }
+    return new HttpServerError(message, resp.status);
+  }
+  if (respType === "text/plain") {
+    const respBody = (await resp.text()).trim();
+    if (respBody !== "") {
+      message += `: ${respBody}`;
+    }
+    return new HttpServerError(message, resp.status);
+  }
+  await resp.body?.cancel();
+  return new HttpServerError(message, resp.status);
+}
+
+// node_modules/@libsql/hrana-client/lib-esm/http/client.js
+var checkEndpoints = [
+  {
+    versionPath: "v3-protobuf",
+    pipelinePath: "v3-protobuf/pipeline",
+    cursorPath: "v3-protobuf/cursor",
+    version: 3,
+    encoding: "protobuf"
+  }
+];
+var fallbackEndpoint = {
+  versionPath: "v2",
+  pipelinePath: "v2/pipeline",
+  cursorPath: undefined,
+  version: 2,
+  encoding: "json"
+};
+
+class HttpClient extends Client {
+  #url;
+  #jwt;
+  #fetch;
+  #remoteEncryptionKey;
+  #closed;
+  #streams;
+  _endpointPromise;
+  _endpoint;
+  constructor(url2, jwt2, customFetch, remoteEncryptionKey, protocolVersion = 2) {
+    super();
+    this.#url = url2;
+    this.#jwt = jwt2;
+    this.#fetch = customFetch ?? import_cross_fetch2.fetch;
+    this.#remoteEncryptionKey = remoteEncryptionKey;
+    this.#closed = undefined;
+    this.#streams = new Set;
+    if (protocolVersion == 3) {
+      this._endpointPromise = findEndpoint(this.#fetch, this.#url);
+      this._endpointPromise.then((endpoint) => this._endpoint = endpoint, (error48) => this.#setClosed(error48));
+    } else {
+      this._endpointPromise = Promise.resolve(fallbackEndpoint);
+      this._endpointPromise.then((endpoint) => this._endpoint = endpoint, (error48) => this.#setClosed(error48));
+    }
+  }
+  async getVersion() {
+    if (this._endpoint !== undefined) {
+      return this._endpoint.version;
+    }
+    return (await this._endpointPromise).version;
+  }
+  _ensureVersion(minVersion, feature) {
+    if (minVersion <= fallbackEndpoint.version) {
+      return;
+    } else if (this._endpoint === undefined) {
+      throw new ProtocolVersionError(`${feature} is supported only on protocol version ${minVersion} and higher, ` + "but the version supported by the HTTP server is not yet known. " + "Use Client.getVersion() to wait until the version is available.");
+    } else if (this._endpoint.version < minVersion) {
+      throw new ProtocolVersionError(`${feature} is supported only on protocol version ${minVersion} and higher, ` + `but the HTTP server only supports version ${this._endpoint.version}.`);
+    }
+  }
+  openStream() {
+    if (this.#closed !== undefined) {
+      throw new ClosedError("Client is closed", this.#closed);
+    }
+    const stream = new HttpStream(this, this.#url, this.#jwt, this.#fetch, this.#remoteEncryptionKey);
+    this.#streams.add(stream);
+    return stream;
+  }
+  _streamClosed(stream) {
+    this.#streams.delete(stream);
+  }
+  close() {
+    this.#setClosed(new ClientError("Client was manually closed"));
+  }
+  get closed() {
+    return this.#closed !== undefined;
+  }
+  #setClosed(error48) {
+    if (this.#closed !== undefined) {
+      return;
+    }
+    this.#closed = error48;
+    for (const stream of Array.from(this.#streams)) {
+      stream._setClosed(new ClosedError("Client was closed", error48));
+    }
+  }
+}
+async function findEndpoint(customFetch, clientUrl) {
+  const fetch3 = customFetch;
+  for (const endpoint of checkEndpoints) {
+    const url2 = new URL(endpoint.versionPath, clientUrl);
+    const request = new import_cross_fetch2.Request(url2.toString(), { method: "GET" });
+    const response = await fetch3(request);
+    await response.arrayBuffer();
+    if (response.ok) {
+      return endpoint;
+    }
+  }
+  return fallbackEndpoint;
+}
+
+// node_modules/@libsql/hrana-client/lib-esm/index.js
+var import_cross_fetch3 = __toESM(require_node_ponyfill(), 1);
+function openWs(url2, jwt2, protocolVersion = 2) {
+  if (typeof import_websocket.default === "undefined") {
+    throw new WebSocketUnsupportedError("WebSockets are not supported in this environment");
+  }
+  var subprotocols = undefined;
+  if (protocolVersion == 3) {
+    subprotocols = Array.from(subprotocolsV3.keys());
+  } else {
+    subprotocols = Array.from(subprotocolsV2.keys());
+  }
+  const socket = new import_websocket.default(url2, subprotocols);
+  return new WsClient(socket, jwt2);
+}
+function openHttp(url2, jwt2, customFetch, remoteEncryptionKey, protocolVersion = 2) {
+  return new HttpClient(url2 instanceof URL ? url2 : new URL(url2), jwt2, customFetch, remoteEncryptionKey, protocolVersion);
+}
+
+// node_modules/@libsql/client/lib-esm/hrana.js
+class HranaTransaction {
+  #mode;
+  #version;
+  #started;
+  constructor(mode, version4) {
+    this.#mode = mode;
+    this.#version = version4;
+    this.#started = undefined;
+  }
+  execute(stmt) {
+    return this.batch([stmt]).then((results) => results[0]);
+  }
+  async batch(stmts) {
+    const stream = this._getStream();
+    if (stream.closed) {
+      throw new LibsqlError("Cannot execute statements because the transaction is closed", "TRANSACTION_CLOSED");
+    }
+    try {
+      const hranaStmts = stmts.map(stmtToHrana);
+      let rowsPromises;
+      if (this.#started === undefined) {
+        this._getSqlCache().apply(hranaStmts);
+        const batch = stream.batch(this.#version >= 3);
+        const beginStep = batch.step();
+        const beginPromise = beginStep.run(transactionModeToBegin(this.#mode));
+        let lastStep = beginStep;
+        rowsPromises = hranaStmts.map((hranaStmt) => {
+          const stmtStep = batch.step().condition(BatchCond.ok(lastStep));
+          if (this.#version >= 3) {
+            stmtStep.condition(BatchCond.not(BatchCond.isAutocommit(batch)));
+          }
+          const rowsPromise = stmtStep.query(hranaStmt);
+          rowsPromise.catch(() => {
+            return;
+          });
+          lastStep = stmtStep;
+          return rowsPromise;
+        });
+        this.#started = batch.execute().then(() => beginPromise).then(() => {
+          return;
+        });
+        try {
+          await this.#started;
+        } catch (e) {
+          this.close();
+          throw e;
+        }
+      } else {
+        if (this.#version < 3) {
+          await this.#started;
+        } else {}
+        this._getSqlCache().apply(hranaStmts);
+        const batch = stream.batch(this.#version >= 3);
+        let lastStep = undefined;
+        rowsPromises = hranaStmts.map((hranaStmt) => {
+          const stmtStep = batch.step();
+          if (lastStep !== undefined) {
+            stmtStep.condition(BatchCond.ok(lastStep));
+          }
+          if (this.#version >= 3) {
+            stmtStep.condition(BatchCond.not(BatchCond.isAutocommit(batch)));
+          }
+          const rowsPromise = stmtStep.query(hranaStmt);
+          rowsPromise.catch(() => {
+            return;
+          });
+          lastStep = stmtStep;
+          return rowsPromise;
+        });
+        await batch.execute();
+      }
+      const resultSets = [];
+      for (let i = 0;i < rowsPromises.length; i++) {
+        try {
+          const rows = await rowsPromises[i];
+          if (rows === undefined) {
+            throw new LibsqlBatchError("Statement in a transaction was not executed, " + "probably because the transaction has been rolled back", i, "TRANSACTION_CLOSED");
+          }
+          resultSets.push(resultSetFromHrana(rows));
+        } catch (e) {
+          if (e instanceof LibsqlBatchError) {
+            throw e;
+          }
+          const mappedError = mapHranaError(e);
+          if (mappedError instanceof LibsqlError) {
+            throw new LibsqlBatchError(mappedError.message, i, mappedError.code, mappedError.extendedCode, mappedError.rawCode, mappedError.cause instanceof Error ? mappedError.cause : undefined);
+          }
+          throw mappedError;
+        }
+      }
+      return resultSets;
+    } catch (e) {
+      throw mapHranaError(e);
+    }
+  }
+  async executeMultiple(sql2) {
+    const stream = this._getStream();
+    if (stream.closed) {
+      throw new LibsqlError("Cannot execute statements because the transaction is closed", "TRANSACTION_CLOSED");
+    }
+    try {
+      if (this.#started === undefined) {
+        this.#started = stream.run(transactionModeToBegin(this.#mode)).then(() => {
+          return;
+        });
+        try {
+          await this.#started;
+        } catch (e) {
+          this.close();
+          throw e;
+        }
+      } else {
+        await this.#started;
+      }
+      await stream.sequence(sql2);
+    } catch (e) {
+      throw mapHranaError(e);
+    }
+  }
+  async rollback() {
+    try {
+      const stream = this._getStream();
+      if (stream.closed) {
+        return;
+      }
+      if (this.#started !== undefined) {} else {
+        return;
+      }
+      const promise2 = stream.run("ROLLBACK").catch((e) => {
+        throw mapHranaError(e);
+      });
+      stream.closeGracefully();
+      await promise2;
+    } catch (e) {
+      throw mapHranaError(e);
+    } finally {
+      this.close();
+    }
+  }
+  async commit() {
+    try {
+      const stream = this._getStream();
+      if (stream.closed) {
+        throw new LibsqlError("Cannot commit the transaction because it is already closed", "TRANSACTION_CLOSED");
+      }
+      if (this.#started !== undefined) {
+        await this.#started;
+      } else {
+        return;
+      }
+      const promise2 = stream.run("COMMIT").catch((e) => {
+        throw mapHranaError(e);
+      });
+      stream.closeGracefully();
+      await promise2;
+    } catch (e) {
+      throw mapHranaError(e);
+    } finally {
+      this.close();
+    }
+  }
+}
+async function executeHranaBatch(mode, version4, batch, hranaStmts, disableForeignKeys = false) {
+  if (disableForeignKeys) {
+    batch.step().run("PRAGMA foreign_keys=off");
+  }
+  const beginStep = batch.step();
+  const beginPromise = beginStep.run(transactionModeToBegin(mode));
+  let lastStep = beginStep;
+  const stmtPromises = hranaStmts.map((hranaStmt) => {
+    const stmtStep = batch.step().condition(BatchCond.ok(lastStep));
+    if (version4 >= 3) {
+      stmtStep.condition(BatchCond.not(BatchCond.isAutocommit(batch)));
+    }
+    const stmtPromise = stmtStep.query(hranaStmt);
+    lastStep = stmtStep;
+    return stmtPromise;
+  });
+  const commitStep = batch.step().condition(BatchCond.ok(lastStep));
+  if (version4 >= 3) {
+    commitStep.condition(BatchCond.not(BatchCond.isAutocommit(batch)));
+  }
+  const commitPromise = commitStep.run("COMMIT");
+  const rollbackStep = batch.step().condition(BatchCond.not(BatchCond.ok(commitStep)));
+  rollbackStep.run("ROLLBACK").catch((_) => {
+    return;
+  });
+  if (disableForeignKeys) {
+    batch.step().run("PRAGMA foreign_keys=on");
+  }
+  await batch.execute();
+  const resultSets = [];
+  await beginPromise;
+  for (let i = 0;i < stmtPromises.length; i++) {
+    try {
+      const hranaRows = await stmtPromises[i];
+      if (hranaRows === undefined) {
+        throw new LibsqlBatchError("Statement in a batch was not executed, probably because the transaction has been rolled back", i, "TRANSACTION_CLOSED");
+      }
+      resultSets.push(resultSetFromHrana(hranaRows));
+    } catch (e) {
+      if (e instanceof LibsqlBatchError) {
+        throw e;
+      }
+      const mappedError = mapHranaError(e);
+      if (mappedError instanceof LibsqlError) {
+        throw new LibsqlBatchError(mappedError.message, i, mappedError.code, mappedError.extendedCode, mappedError.rawCode, mappedError.cause instanceof Error ? mappedError.cause : undefined);
+      }
+      throw mappedError;
+    }
+  }
+  await commitPromise;
+  return resultSets;
+}
+function stmtToHrana(stmt) {
+  let sql2;
+  let args;
+  if (Array.isArray(stmt)) {
+    [sql2, args] = stmt;
+  } else if (typeof stmt === "string") {
+    sql2 = stmt;
+  } else {
+    sql2 = stmt.sql;
+    args = stmt.args;
+  }
+  const hranaStmt = new Stmt(sql2);
+  if (args) {
+    if (Array.isArray(args)) {
+      hranaStmt.bindIndexes(args);
+    } else {
+      for (const [key, value] of Object.entries(args)) {
+        hranaStmt.bindName(key, value);
+      }
+    }
+  }
+  return hranaStmt;
+}
+function resultSetFromHrana(hranaRows) {
+  const columns = hranaRows.columnNames.map((c) => c ?? "");
+  const columnTypes = hranaRows.columnDecltypes.map((c) => c ?? "");
+  const rows = hranaRows.rows;
+  const rowsAffected = hranaRows.affectedRowCount;
+  const lastInsertRowid = hranaRows.lastInsertRowid !== undefined ? hranaRows.lastInsertRowid : undefined;
+  return new ResultSetImpl(columns, columnTypes, rows, rowsAffected, lastInsertRowid);
+}
+function mapHranaError(e) {
+  if (e instanceof ClientError) {
+    const code = mapHranaErrorCode(e);
+    return new LibsqlError(e.message, code, undefined, undefined, e);
+  }
+  return e;
+}
+function mapHranaErrorCode(e) {
+  if (e instanceof ResponseError && e.code !== undefined) {
+    return e.code;
+  } else if (e instanceof ProtoError) {
+    return "HRANA_PROTO_ERROR";
+  } else if (e instanceof ClosedError) {
+    return e.cause instanceof ClientError ? mapHranaErrorCode(e.cause) : "HRANA_CLOSED_ERROR";
+  } else if (e instanceof WebSocketError) {
+    return "HRANA_WEBSOCKET_ERROR";
+  } else if (e instanceof HttpServerError) {
+    return "SERVER_ERROR";
+  } else if (e instanceof ProtocolVersionError) {
+    return "PROTOCOL_VERSION_ERROR";
+  } else if (e instanceof InternalError) {
+    return "INTERNAL_ERROR";
+  } else {
+    return "UNKNOWN";
+  }
+}
+
+// node_modules/@libsql/client/lib-esm/sql_cache.js
+class SqlCache {
+  #owner;
+  #sqls;
+  capacity;
+  constructor(owner, capacity) {
+    this.#owner = owner;
+    this.#sqls = new Lru;
+    this.capacity = capacity;
+  }
+  apply(hranaStmts) {
+    if (this.capacity <= 0) {
+      return;
+    }
+    const usedSqlObjs = new Set;
+    for (const hranaStmt of hranaStmts) {
+      if (typeof hranaStmt.sql !== "string") {
+        continue;
+      }
+      const sqlText = hranaStmt.sql;
+      if (sqlText.length >= 5000) {
+        continue;
+      }
+      let sqlObj = this.#sqls.get(sqlText);
+      if (sqlObj === undefined) {
+        while (this.#sqls.size + 1 > this.capacity) {
+          const [evictSqlText, evictSqlObj] = this.#sqls.peekLru();
+          if (usedSqlObjs.has(evictSqlObj)) {
+            break;
+          }
+          evictSqlObj.close();
+          this.#sqls.delete(evictSqlText);
+        }
+        if (this.#sqls.size + 1 <= this.capacity) {
+          sqlObj = this.#owner.storeSql(sqlText);
+          this.#sqls.set(sqlText, sqlObj);
+        }
+      }
+      if (sqlObj !== undefined) {
+        hranaStmt.sql = sqlObj;
+        usedSqlObjs.add(sqlObj);
+      }
+    }
+  }
+}
+
+class Lru {
+  #cache;
+  constructor() {
+    this.#cache = new Map;
+  }
+  get(key) {
+    const value = this.#cache.get(key);
+    if (value !== undefined) {
+      this.#cache.delete(key);
+      this.#cache.set(key, value);
+    }
+    return value;
+  }
+  set(key, value) {
+    this.#cache.set(key, value);
+  }
+  peekLru() {
+    for (const entry of this.#cache.entries()) {
+      return entry;
+    }
+    return;
+  }
+  delete(key) {
+    this.#cache.delete(key);
+  }
+  get size() {
+    return this.#cache.size;
+  }
+}
+
+// node_modules/@libsql/client/lib-esm/ws.js
+var import_promise_limit = __toESM(require_promise_limit(), 1);
+function _createClient2(config2) {
+  if (config2.scheme !== "wss" && config2.scheme !== "ws") {
+    throw new LibsqlError('The WebSocket client supports only "libsql:", "wss:" and "ws:" URLs, ' + `got ${JSON.stringify(config2.scheme + ":")}. For more information, please read ${supportedUrlLink}`, "URL_SCHEME_NOT_SUPPORTED");
+  }
+  if (config2.encryptionKey !== undefined) {
+    throw new LibsqlError("Encryption key is not supported by the remote client.", "ENCRYPTION_KEY_NOT_SUPPORTED");
+  }
+  if (config2.scheme === "ws" && config2.tls) {
+    throw new LibsqlError(`A "ws:" URL cannot opt into TLS by using ?tls=1`, "URL_INVALID");
+  } else if (config2.scheme === "wss" && !config2.tls) {
+    throw new LibsqlError(`A "wss:" URL cannot opt out of TLS by using ?tls=0`, "URL_INVALID");
+  }
+  const url2 = encodeBaseUrl(config2.scheme, config2.authority, config2.path);
+  let client;
+  try {
+    client = openWs(url2, config2.authToken);
+  } catch (e) {
+    if (e instanceof WebSocketUnsupportedError) {
+      const suggestedScheme = config2.scheme === "wss" ? "https" : "http";
+      const suggestedUrl = encodeBaseUrl(suggestedScheme, config2.authority, config2.path);
+      throw new LibsqlError("This environment does not support WebSockets, please switch to the HTTP client by using " + `a "${suggestedScheme}:" URL (${JSON.stringify(suggestedUrl)}). ` + `For more information, please read ${supportedUrlLink}`, "WEBSOCKETS_NOT_SUPPORTED");
+    }
+    throw mapHranaError(e);
+  }
+  return new WsClient2(client, url2, config2.authToken, config2.intMode, config2.concurrency);
+}
+var maxConnAgeMillis = 60 * 1000;
+var sqlCacheCapacity = 100;
+
+class WsClient2 {
+  #url;
+  #authToken;
+  #intMode;
+  #connState;
+  #futureConnState;
+  closed;
+  protocol;
+  #isSchemaDatabase;
+  #promiseLimitFunction;
+  constructor(client, url2, authToken, intMode, concurrency) {
+    this.#url = url2;
+    this.#authToken = authToken;
+    this.#intMode = intMode;
+    this.#connState = this.#openConn(client);
+    this.#futureConnState = undefined;
+    this.closed = false;
+    this.protocol = "ws";
+    this.#promiseLimitFunction = import_promise_limit.default(concurrency);
+  }
+  async limit(fn) {
+    return this.#promiseLimitFunction(fn);
+  }
+  async execute(stmtOrSql, args) {
+    let stmt;
+    if (typeof stmtOrSql === "string") {
+      stmt = {
+        sql: stmtOrSql,
+        args: args || []
+      };
+    } else {
+      stmt = stmtOrSql;
+    }
+    return this.limit(async () => {
+      const streamState = await this.#openStream();
+      try {
+        const hranaStmt = stmtToHrana(stmt);
+        streamState.conn.sqlCache.apply([hranaStmt]);
+        const hranaRowsPromise = streamState.stream.query(hranaStmt);
+        streamState.stream.closeGracefully();
+        const hranaRowsResult = await hranaRowsPromise;
+        return resultSetFromHrana(hranaRowsResult);
+      } catch (e) {
+        throw mapHranaError(e);
+      } finally {
+        this._closeStream(streamState);
+      }
+    });
+  }
+  async batch(stmts, mode = "deferred") {
+    return this.limit(async () => {
+      const streamState = await this.#openStream();
+      try {
+        const normalizedStmts = stmts.map((stmt) => {
+          if (Array.isArray(stmt)) {
+            return {
+              sql: stmt[0],
+              args: stmt[1] || []
+            };
+          }
+          return stmt;
+        });
+        const hranaStmts = normalizedStmts.map(stmtToHrana);
+        const version4 = await streamState.conn.client.getVersion();
+        streamState.conn.sqlCache.apply(hranaStmts);
+        const batch = streamState.stream.batch(version4 >= 3);
+        const resultsPromise = executeHranaBatch(mode, version4, batch, hranaStmts);
+        const results = await resultsPromise;
+        return results;
+      } catch (e) {
+        throw mapHranaError(e);
+      } finally {
+        this._closeStream(streamState);
+      }
+    });
+  }
+  async migrate(stmts) {
+    return this.limit(async () => {
+      const streamState = await this.#openStream();
+      try {
+        const hranaStmts = stmts.map(stmtToHrana);
+        const version4 = await streamState.conn.client.getVersion();
+        const batch = streamState.stream.batch(version4 >= 3);
+        const resultsPromise = executeHranaBatch("deferred", version4, batch, hranaStmts, true);
+        const results = await resultsPromise;
+        return results;
+      } catch (e) {
+        throw mapHranaError(e);
+      } finally {
+        this._closeStream(streamState);
+      }
+    });
+  }
+  async transaction(mode = "write") {
+    return this.limit(async () => {
+      const streamState = await this.#openStream();
+      try {
+        const version4 = await streamState.conn.client.getVersion();
+        return new WsTransaction(this, streamState, mode, version4);
+      } catch (e) {
+        this._closeStream(streamState);
+        throw mapHranaError(e);
+      }
+    });
+  }
+  async executeMultiple(sql2) {
+    return this.limit(async () => {
+      const streamState = await this.#openStream();
+      try {
+        const promise2 = streamState.stream.sequence(sql2);
+        streamState.stream.closeGracefully();
+        await promise2;
+      } catch (e) {
+        throw mapHranaError(e);
+      } finally {
+        this._closeStream(streamState);
+      }
+    });
+  }
+  sync() {
+    throw new LibsqlError("sync not supported in ws mode", "SYNC_NOT_SUPPORTED");
+  }
+  async#openStream() {
+    if (this.closed) {
+      throw new LibsqlError("The client is closed", "CLIENT_CLOSED");
+    }
+    const now = new Date;
+    const ageMillis = now.valueOf() - this.#connState.openTime.valueOf();
+    if (ageMillis > maxConnAgeMillis && this.#futureConnState === undefined) {
+      const futureConnState = this.#openConn();
+      this.#futureConnState = futureConnState;
+      futureConnState.client.getVersion().then((_version) => {
+        if (this.#connState !== futureConnState) {
+          if (this.#connState.streamStates.size === 0) {
+            this.#connState.client.close();
+          } else {}
+        }
+        this.#connState = futureConnState;
+        this.#futureConnState = undefined;
+      }, (_e) => {
+        this.#futureConnState = undefined;
+      });
+    }
+    if (this.#connState.client.closed) {
+      try {
+        if (this.#futureConnState !== undefined) {
+          this.#connState = this.#futureConnState;
+        } else {
+          this.#connState = this.#openConn();
+        }
+      } catch (e) {
+        throw mapHranaError(e);
+      }
+    }
+    const connState = this.#connState;
+    try {
+      if (connState.useSqlCache === undefined) {
+        connState.useSqlCache = await connState.client.getVersion() >= 2;
+        if (connState.useSqlCache) {
+          connState.sqlCache.capacity = sqlCacheCapacity;
+        }
+      }
+      const stream = connState.client.openStream();
+      stream.intMode = this.#intMode;
+      const streamState = { conn: connState, stream };
+      connState.streamStates.add(streamState);
+      return streamState;
+    } catch (e) {
+      throw mapHranaError(e);
+    }
+  }
+  #openConn(client) {
+    try {
+      client ??= openWs(this.#url, this.#authToken);
+      return {
+        client,
+        useSqlCache: undefined,
+        sqlCache: new SqlCache(client, 0),
+        openTime: new Date,
+        streamStates: new Set
+      };
+    } catch (e) {
+      throw mapHranaError(e);
+    }
+  }
+  async reconnect() {
+    try {
+      for (const st of Array.from(this.#connState.streamStates)) {
+        try {
+          st.stream.close();
+        } catch {}
+      }
+      this.#connState.client.close();
+    } catch {}
+    if (this.#futureConnState) {
+      try {
+        this.#futureConnState.client.close();
+      } catch {}
+      this.#futureConnState = undefined;
+    }
+    const next = this.#openConn();
+    const version4 = await next.client.getVersion();
+    next.useSqlCache = version4 >= 2;
+    if (next.useSqlCache) {
+      next.sqlCache.capacity = sqlCacheCapacity;
+    }
+    this.#connState = next;
+    this.closed = false;
+  }
+  _closeStream(streamState) {
+    streamState.stream.close();
+    const connState = streamState.conn;
+    connState.streamStates.delete(streamState);
+    if (connState.streamStates.size === 0 && connState !== this.#connState) {
+      connState.client.close();
+    }
+  }
+  close() {
+    this.#connState.client.close();
+    this.closed = true;
+    if (this.#futureConnState) {
+      try {
+        this.#futureConnState.client.close();
+      } catch {}
+      this.#futureConnState = undefined;
+    }
+    this.closed = true;
+  }
+}
+
+class WsTransaction extends HranaTransaction {
+  #client;
+  #streamState;
+  constructor(client, state, mode, version4) {
+    super(mode, version4);
+    this.#client = client;
+    this.#streamState = state;
+  }
+  _getStream() {
+    return this.#streamState.stream;
+  }
+  _getSqlCache() {
+    return this.#streamState.conn.sqlCache;
+  }
+  close() {
+    this.#client._closeStream(this.#streamState);
+  }
+  get closed() {
+    return this.#streamState.stream.closed;
+  }
+}
+
+// node_modules/@libsql/client/lib-esm/http.js
+var import_promise_limit2 = __toESM(require_promise_limit(), 1);
+function _createClient3(config2) {
+  if (config2.scheme !== "https" && config2.scheme !== "http") {
+    throw new LibsqlError('The HTTP client supports only "libsql:", "https:" and "http:" URLs, ' + `got ${JSON.stringify(config2.scheme + ":")}. For more information, please read ${supportedUrlLink}`, "URL_SCHEME_NOT_SUPPORTED");
+  }
+  if (config2.encryptionKey !== undefined) {
+    throw new LibsqlError("Encryption key is not supported by the remote client.", "ENCRYPTION_KEY_NOT_SUPPORTED");
+  }
+  if (config2.scheme === "http" && config2.tls) {
+    throw new LibsqlError(`A "http:" URL cannot opt into TLS by using ?tls=1`, "URL_INVALID");
+  } else if (config2.scheme === "https" && !config2.tls) {
+    throw new LibsqlError(`A "https:" URL cannot opt out of TLS by using ?tls=0`, "URL_INVALID");
+  }
+  const url2 = encodeBaseUrl(config2.scheme, config2.authority, config2.path);
+  return new HttpClient2(url2, config2.authToken, config2.intMode, config2.fetch, config2.concurrency, config2.remoteEncryptionKey);
+}
+var sqlCacheCapacity2 = 30;
+
+class HttpClient2 {
+  #client;
+  protocol;
+  #url;
+  #intMode;
+  #customFetch;
+  #concurrency;
+  #authToken;
+  #remoteEncryptionKey;
+  #promiseLimitFunction;
+  constructor(url2, authToken, intMode, customFetch, concurrency, remoteEncryptionKey) {
+    this.#url = url2;
+    this.#authToken = authToken;
+    this.#intMode = intMode;
+    this.#customFetch = customFetch;
+    this.#concurrency = concurrency;
+    this.#remoteEncryptionKey = remoteEncryptionKey;
+    this.#client = openHttp(this.#url, this.#authToken, this.#customFetch, remoteEncryptionKey);
+    this.#client.intMode = this.#intMode;
+    this.protocol = "http";
+    this.#promiseLimitFunction = import_promise_limit2.default(this.#concurrency);
+  }
+  async limit(fn) {
+    return this.#promiseLimitFunction(fn);
+  }
+  async execute(stmtOrSql, args) {
+    let stmt;
+    if (typeof stmtOrSql === "string") {
+      stmt = {
+        sql: stmtOrSql,
+        args: args || []
+      };
+    } else {
+      stmt = stmtOrSql;
+    }
+    return this.limit(async () => {
+      try {
+        const hranaStmt = stmtToHrana(stmt);
+        let rowsPromise;
+        const stream = this.#client.openStream();
+        try {
+          rowsPromise = stream.query(hranaStmt);
+        } finally {
+          stream.closeGracefully();
+        }
+        const rowsResult = await rowsPromise;
+        return resultSetFromHrana(rowsResult);
+      } catch (e) {
+        throw mapHranaError(e);
+      }
+    });
+  }
+  async batch(stmts, mode = "deferred") {
+    return this.limit(async () => {
+      try {
+        const normalizedStmts = stmts.map((stmt) => {
+          if (Array.isArray(stmt)) {
+            return {
+              sql: stmt[0],
+              args: stmt[1] || []
+            };
+          }
+          return stmt;
+        });
+        const hranaStmts = normalizedStmts.map(stmtToHrana);
+        const version4 = await this.#client.getVersion();
+        let resultsPromise;
+        const stream = this.#client.openStream();
+        try {
+          const sqlCache = new SqlCache(stream, sqlCacheCapacity2);
+          sqlCache.apply(hranaStmts);
+          const batch = stream.batch(false);
+          resultsPromise = executeHranaBatch(mode, version4, batch, hranaStmts);
+        } finally {
+          stream.closeGracefully();
+        }
+        const results = await resultsPromise;
+        return results;
+      } catch (e) {
+        throw mapHranaError(e);
+      }
+    });
+  }
+  async migrate(stmts) {
+    return this.limit(async () => {
+      try {
+        const hranaStmts = stmts.map(stmtToHrana);
+        const version4 = await this.#client.getVersion();
+        let resultsPromise;
+        const stream = this.#client.openStream();
+        try {
+          const batch = stream.batch(false);
+          resultsPromise = executeHranaBatch("deferred", version4, batch, hranaStmts, true);
+        } finally {
+          stream.closeGracefully();
+        }
+        const results = await resultsPromise;
+        return results;
+      } catch (e) {
+        throw mapHranaError(e);
+      }
+    });
+  }
+  async transaction(mode = "write") {
+    return this.limit(async () => {
+      try {
+        const version4 = await this.#client.getVersion();
+        return new HttpTransaction(this.#client.openStream(), mode, version4);
+      } catch (e) {
+        throw mapHranaError(e);
+      }
+    });
+  }
+  async executeMultiple(sql2) {
+    return this.limit(async () => {
+      try {
+        let promise2;
+        const stream = this.#client.openStream();
+        try {
+          promise2 = stream.sequence(sql2);
+        } finally {
+          stream.closeGracefully();
+        }
+        await promise2;
+      } catch (e) {
+        throw mapHranaError(e);
+      }
+    });
+  }
+  sync() {
+    throw new LibsqlError("sync not supported in http mode", "SYNC_NOT_SUPPORTED");
+  }
+  close() {
+    this.#client.close();
+  }
+  async reconnect() {
+    try {
+      if (!this.closed) {
+        this.#client.close();
+      }
+    } finally {
+      this.#client = openHttp(this.#url, this.#authToken, this.#customFetch, this.#remoteEncryptionKey);
+      this.#client.intMode = this.#intMode;
+    }
+  }
+  get closed() {
+    return this.#client.closed;
+  }
+}
+
+class HttpTransaction extends HranaTransaction {
+  #stream;
+  #sqlCache;
+  constructor(stream, mode, version4) {
+    super(mode, version4);
+    this.#stream = stream;
+    this.#sqlCache = new SqlCache(stream, sqlCacheCapacity2);
+  }
+  _getStream() {
+    return this.#stream;
+  }
+  _getSqlCache() {
+    return this.#sqlCache;
+  }
+  close() {
+    this.#stream.close();
+  }
+  get closed() {
+    return this.#stream.closed;
+  }
+}
+
+// node_modules/@libsql/client/lib-esm/node.js
+function createClient(config2) {
+  return _createClient4(expandConfig(config2, true));
+}
+function _createClient4(config2) {
+  if (config2.scheme === "wss" || config2.scheme === "ws") {
+    return _createClient2(config2);
+  } else if (config2.scheme === "https" || config2.scheme === "http") {
+    return _createClient3(config2);
+  } else {
+    return _createClient(config2);
+  }
+}
+
+// node_modules/drizzle-orm/selection-proxy.js
+class SelectionProxyHandler {
+  static [entityKind] = "SelectionProxyHandler";
+  config;
+  constructor(config2) {
+    this.config = { ...config2 };
+  }
+  get(subquery, prop) {
+    if (prop === "_") {
+      return {
+        ...subquery["_"],
+        selectedFields: new Proxy(subquery._.selectedFields, this)
+      };
+    }
+    if (prop === ViewBaseConfig) {
+      return {
+        ...subquery[ViewBaseConfig],
+        selectedFields: new Proxy(subquery[ViewBaseConfig].selectedFields, this)
+      };
+    }
+    if (typeof prop === "symbol") {
+      return subquery[prop];
+    }
+    const columns = is(subquery, Subquery) ? subquery._.selectedFields : is(subquery, View) ? subquery[ViewBaseConfig].selectedFields : subquery;
+    const value = columns[prop];
+    if (is(value, SQL.Aliased)) {
+      if (this.config.sqlAliasedBehavior === "sql" && !value.isSelectionField) {
+        return value.sql;
+      }
+      const newValue = value.clone();
+      newValue.isSelectionField = true;
+      return newValue;
+    }
+    if (is(value, SQL)) {
+      if (this.config.sqlBehavior === "sql") {
+        return value;
+      }
+      throw new Error(`You tried to reference "${prop}" field from a subquery, which is a raw SQL field, but it doesn't have an alias declared. Please add an alias to the field using ".as('alias')" method.`);
+    }
+    if (is(value, Column)) {
+      if (this.config.alias) {
+        return new Proxy(value, new ColumnAliasProxyHandler(new Proxy(value.table, new TableAliasProxyHandler(this.config.alias, this.config.replaceOriginalName ?? false))));
+      }
+      return value;
+    }
+    if (typeof value !== "object" || value === null) {
+      return value;
+    }
+    return new Proxy(value, new SelectionProxyHandler(this.config));
+  }
+}
+
+// node_modules/drizzle-orm/sqlite-core/foreign-keys.js
+class ForeignKeyBuilder {
+  static [entityKind] = "SQLiteForeignKeyBuilder";
+  reference;
+  _onUpdate;
+  _onDelete;
+  constructor(config2, actions) {
+    this.reference = () => {
+      const { name, columns, foreignColumns } = config2();
+      return { name, columns, foreignTable: foreignColumns[0].table, foreignColumns };
+    };
+    if (actions) {
+      this._onUpdate = actions.onUpdate;
+      this._onDelete = actions.onDelete;
+    }
+  }
+  onUpdate(action) {
+    this._onUpdate = action;
+    return this;
+  }
+  onDelete(action) {
+    this._onDelete = action;
+    return this;
+  }
+  build(table) {
+    return new ForeignKey(table, this);
+  }
+}
+
+class ForeignKey {
+  constructor(table, builder) {
+    this.table = table;
+    this.reference = builder.reference;
+    this.onUpdate = builder._onUpdate;
+    this.onDelete = builder._onDelete;
+  }
+  static [entityKind] = "SQLiteForeignKey";
+  reference;
+  onUpdate;
+  onDelete;
+  getName() {
+    const { name, columns, foreignColumns } = this.reference();
+    const columnNames = columns.map((column) => column.name);
+    const foreignColumnNames = foreignColumns.map((column) => column.name);
+    const chunks = [
+      this.table[TableName],
+      ...columnNames,
+      foreignColumns[0].table[TableName],
+      ...foreignColumnNames
+    ];
+    return name ?? `${chunks.join("_")}_fk`;
+  }
+}
+
+// node_modules/drizzle-orm/sqlite-core/unique-constraint.js
+function uniqueKeyName2(table, columns) {
+  return `${table[TableName]}_${columns.join("_")}_unique`;
+}
+
+// node_modules/drizzle-orm/sqlite-core/columns/common.js
+class SQLiteColumnBuilder extends ColumnBuilder {
+  static [entityKind] = "SQLiteColumnBuilder";
+  foreignKeyConfigs = [];
+  references(ref, actions = {}) {
+    this.foreignKeyConfigs.push({ ref, actions });
+    return this;
+  }
+  unique(name) {
+    this.config.isUnique = true;
+    this.config.uniqueName = name;
+    return this;
+  }
+  generatedAlwaysAs(as, config2) {
+    this.config.generated = {
+      as,
+      type: "always",
+      mode: config2?.mode ?? "virtual"
+    };
+    return this;
+  }
+  buildForeignKeys(column, table) {
+    return this.foreignKeyConfigs.map(({ ref, actions }) => {
+      return ((ref2, actions2) => {
+        const builder = new ForeignKeyBuilder(() => {
+          const foreignColumn = ref2();
+          return { columns: [column], foreignColumns: [foreignColumn] };
+        });
+        if (actions2.onUpdate) {
+          builder.onUpdate(actions2.onUpdate);
+        }
+        if (actions2.onDelete) {
+          builder.onDelete(actions2.onDelete);
+        }
+        return builder.build(table);
+      })(ref, actions);
+    });
+  }
+}
+
+class SQLiteColumn extends Column {
+  constructor(table, config2) {
+    if (!config2.uniqueName) {
+      config2.uniqueName = uniqueKeyName2(table, [config2.name]);
+    }
+    super(table, config2);
+    this.table = table;
+  }
+  static [entityKind] = "SQLiteColumn";
+}
+
+// node_modules/drizzle-orm/sqlite-core/columns/blob.js
+class SQLiteBigIntBuilder extends SQLiteColumnBuilder {
+  static [entityKind] = "SQLiteBigIntBuilder";
+  constructor(name) {
+    super(name, "bigint", "SQLiteBigInt");
+  }
+  build(table) {
+    return new SQLiteBigInt(table, this.config);
+  }
+}
+
+class SQLiteBigInt extends SQLiteColumn {
+  static [entityKind] = "SQLiteBigInt";
+  getSQLType() {
+    return "blob";
+  }
+  mapFromDriverValue(value) {
+    if (typeof Buffer !== "undefined" && Buffer.from) {
+      const buf = Buffer.isBuffer(value) ? value : value instanceof ArrayBuffer ? Buffer.from(value) : value.buffer ? Buffer.from(value.buffer, value.byteOffset, value.byteLength) : Buffer.from(value);
+      return BigInt(buf.toString("utf8"));
+    }
+    return BigInt(textDecoder.decode(value));
+  }
+  mapToDriverValue(value) {
+    return Buffer.from(value.toString());
+  }
+}
+
+class SQLiteBlobJsonBuilder extends SQLiteColumnBuilder {
+  static [entityKind] = "SQLiteBlobJsonBuilder";
+  constructor(name) {
+    super(name, "json", "SQLiteBlobJson");
+  }
+  build(table) {
+    return new SQLiteBlobJson(table, this.config);
+  }
+}
+
+class SQLiteBlobJson extends SQLiteColumn {
+  static [entityKind] = "SQLiteBlobJson";
+  getSQLType() {
+    return "blob";
+  }
+  mapFromDriverValue(value) {
+    if (typeof Buffer !== "undefined" && Buffer.from) {
+      const buf = Buffer.isBuffer(value) ? value : value instanceof ArrayBuffer ? Buffer.from(value) : value.buffer ? Buffer.from(value.buffer, value.byteOffset, value.byteLength) : Buffer.from(value);
+      return JSON.parse(buf.toString("utf8"));
+    }
+    return JSON.parse(textDecoder.decode(value));
+  }
+  mapToDriverValue(value) {
+    return Buffer.from(JSON.stringify(value));
+  }
+}
+
+class SQLiteBlobBufferBuilder extends SQLiteColumnBuilder {
+  static [entityKind] = "SQLiteBlobBufferBuilder";
+  constructor(name) {
+    super(name, "buffer", "SQLiteBlobBuffer");
+  }
+  build(table) {
+    return new SQLiteBlobBuffer(table, this.config);
+  }
+}
+
+class SQLiteBlobBuffer extends SQLiteColumn {
+  static [entityKind] = "SQLiteBlobBuffer";
+  mapFromDriverValue(value) {
+    if (Buffer.isBuffer(value)) {
+      return value;
+    }
+    return Buffer.from(value);
+  }
+  getSQLType() {
+    return "blob";
+  }
+}
+function blob(a, b) {
+  const { name, config: config2 } = getColumnNameAndConfig(a, b);
+  if (config2?.mode === "json") {
+    return new SQLiteBlobJsonBuilder(name);
+  }
+  if (config2?.mode === "bigint") {
+    return new SQLiteBigIntBuilder(name);
+  }
+  return new SQLiteBlobBufferBuilder(name);
+}
+
+// node_modules/drizzle-orm/sqlite-core/columns/custom.js
+class SQLiteCustomColumnBuilder extends SQLiteColumnBuilder {
+  static [entityKind] = "SQLiteCustomColumnBuilder";
+  constructor(name, fieldConfig, customTypeParams) {
+    super(name, "custom", "SQLiteCustomColumn");
+    this.config.fieldConfig = fieldConfig;
+    this.config.customTypeParams = customTypeParams;
+  }
+  build(table) {
+    return new SQLiteCustomColumn(table, this.config);
+  }
+}
+
+class SQLiteCustomColumn extends SQLiteColumn {
+  static [entityKind] = "SQLiteCustomColumn";
+  sqlName;
+  mapTo;
+  mapFrom;
+  constructor(table, config2) {
+    super(table, config2);
+    this.sqlName = config2.customTypeParams.dataType(config2.fieldConfig);
+    this.mapTo = config2.customTypeParams.toDriver;
+    this.mapFrom = config2.customTypeParams.fromDriver;
+  }
+  getSQLType() {
+    return this.sqlName;
+  }
+  mapFromDriverValue(value) {
+    return typeof this.mapFrom === "function" ? this.mapFrom(value) : value;
+  }
+  mapToDriverValue(value) {
+    return typeof this.mapTo === "function" ? this.mapTo(value) : value;
+  }
+}
+function customType(customTypeParams) {
+  return (a, b) => {
+    const { name, config: config2 } = getColumnNameAndConfig(a, b);
+    return new SQLiteCustomColumnBuilder(name, config2, customTypeParams);
+  };
+}
+
+// node_modules/drizzle-orm/sqlite-core/columns/integer.js
+class SQLiteBaseIntegerBuilder extends SQLiteColumnBuilder {
+  static [entityKind] = "SQLiteBaseIntegerBuilder";
+  constructor(name, dataType, columnType) {
+    super(name, dataType, columnType);
+    this.config.autoIncrement = false;
+  }
+  primaryKey(config2) {
+    if (config2?.autoIncrement) {
+      this.config.autoIncrement = true;
+    }
+    this.config.hasDefault = true;
+    return super.primaryKey();
+  }
+}
+
+class SQLiteBaseInteger extends SQLiteColumn {
+  static [entityKind] = "SQLiteBaseInteger";
+  autoIncrement = this.config.autoIncrement;
+  getSQLType() {
+    return "integer";
+  }
+}
+
+class SQLiteIntegerBuilder extends SQLiteBaseIntegerBuilder {
+  static [entityKind] = "SQLiteIntegerBuilder";
+  constructor(name) {
+    super(name, "number", "SQLiteInteger");
+  }
+  build(table) {
+    return new SQLiteInteger(table, this.config);
+  }
+}
+
+class SQLiteInteger extends SQLiteBaseInteger {
+  static [entityKind] = "SQLiteInteger";
+}
+
+class SQLiteTimestampBuilder extends SQLiteBaseIntegerBuilder {
+  static [entityKind] = "SQLiteTimestampBuilder";
+  constructor(name, mode) {
+    super(name, "date", "SQLiteTimestamp");
+    this.config.mode = mode;
+  }
+  defaultNow() {
+    return this.default(sql`(cast((julianday('now') - 2440587.5)*86400000 as integer))`);
+  }
+  build(table) {
+    return new SQLiteTimestamp(table, this.config);
+  }
+}
+
+class SQLiteTimestamp extends SQLiteBaseInteger {
+  static [entityKind] = "SQLiteTimestamp";
+  mode = this.config.mode;
+  mapFromDriverValue(value) {
+    if (this.config.mode === "timestamp") {
+      return new Date(value * 1000);
+    }
+    return new Date(value);
+  }
+  mapToDriverValue(value) {
+    const unix = value.getTime();
+    if (this.config.mode === "timestamp") {
+      return Math.floor(unix / 1000);
+    }
+    return unix;
+  }
+}
+
+class SQLiteBooleanBuilder extends SQLiteBaseIntegerBuilder {
+  static [entityKind] = "SQLiteBooleanBuilder";
+  constructor(name, mode) {
+    super(name, "boolean", "SQLiteBoolean");
+    this.config.mode = mode;
+  }
+  build(table) {
+    return new SQLiteBoolean(table, this.config);
+  }
+}
+
+class SQLiteBoolean extends SQLiteBaseInteger {
+  static [entityKind] = "SQLiteBoolean";
+  mode = this.config.mode;
+  mapFromDriverValue(value) {
+    return Number(value) === 1;
+  }
+  mapToDriverValue(value) {
+    return value ? 1 : 0;
+  }
+}
+function integer2(a, b) {
+  const { name, config: config2 } = getColumnNameAndConfig(a, b);
+  if (config2?.mode === "timestamp" || config2?.mode === "timestamp_ms") {
+    return new SQLiteTimestampBuilder(name, config2.mode);
+  }
+  if (config2?.mode === "boolean") {
+    return new SQLiteBooleanBuilder(name, config2.mode);
+  }
+  return new SQLiteIntegerBuilder(name);
+}
+
+// node_modules/drizzle-orm/sqlite-core/columns/numeric.js
+class SQLiteNumericBuilder extends SQLiteColumnBuilder {
+  static [entityKind] = "SQLiteNumericBuilder";
+  constructor(name) {
+    super(name, "string", "SQLiteNumeric");
+  }
+  build(table) {
+    return new SQLiteNumeric(table, this.config);
+  }
+}
+
+class SQLiteNumeric extends SQLiteColumn {
+  static [entityKind] = "SQLiteNumeric";
+  mapFromDriverValue(value) {
+    if (typeof value === "string")
+      return value;
+    return String(value);
+  }
+  getSQLType() {
+    return "numeric";
+  }
+}
+
+class SQLiteNumericNumberBuilder extends SQLiteColumnBuilder {
+  static [entityKind] = "SQLiteNumericNumberBuilder";
+  constructor(name) {
+    super(name, "number", "SQLiteNumericNumber");
+  }
+  build(table) {
+    return new SQLiteNumericNumber(table, this.config);
+  }
+}
+
+class SQLiteNumericNumber extends SQLiteColumn {
+  static [entityKind] = "SQLiteNumericNumber";
+  mapFromDriverValue(value) {
+    if (typeof value === "number")
+      return value;
+    return Number(value);
+  }
+  mapToDriverValue = String;
+  getSQLType() {
+    return "numeric";
+  }
+}
+
+class SQLiteNumericBigIntBuilder extends SQLiteColumnBuilder {
+  static [entityKind] = "SQLiteNumericBigIntBuilder";
+  constructor(name) {
+    super(name, "bigint", "SQLiteNumericBigInt");
+  }
+  build(table) {
+    return new SQLiteNumericBigInt(table, this.config);
+  }
+}
+
+class SQLiteNumericBigInt extends SQLiteColumn {
+  static [entityKind] = "SQLiteNumericBigInt";
+  mapFromDriverValue = BigInt;
+  mapToDriverValue = String;
+  getSQLType() {
+    return "numeric";
+  }
+}
+function numeric(a, b) {
+  const { name, config: config2 } = getColumnNameAndConfig(a, b);
+  const mode = config2?.mode;
+  return mode === "number" ? new SQLiteNumericNumberBuilder(name) : mode === "bigint" ? new SQLiteNumericBigIntBuilder(name) : new SQLiteNumericBuilder(name);
+}
+
+// node_modules/drizzle-orm/sqlite-core/columns/real.js
+class SQLiteRealBuilder extends SQLiteColumnBuilder {
+  static [entityKind] = "SQLiteRealBuilder";
+  constructor(name) {
+    super(name, "number", "SQLiteReal");
+  }
+  build(table) {
+    return new SQLiteReal(table, this.config);
+  }
+}
+
+class SQLiteReal extends SQLiteColumn {
+  static [entityKind] = "SQLiteReal";
+  getSQLType() {
+    return "real";
+  }
+}
+function real(name) {
+  return new SQLiteRealBuilder(name ?? "");
+}
+
+// node_modules/drizzle-orm/sqlite-core/columns/text.js
+class SQLiteTextBuilder extends SQLiteColumnBuilder {
+  static [entityKind] = "SQLiteTextBuilder";
+  constructor(name, config2) {
+    super(name, "string", "SQLiteText");
+    this.config.enumValues = config2.enum;
+    this.config.length = config2.length;
+  }
+  build(table) {
+    return new SQLiteText(table, this.config);
+  }
+}
+
+class SQLiteText extends SQLiteColumn {
+  static [entityKind] = "SQLiteText";
+  enumValues = this.config.enumValues;
+  length = this.config.length;
+  constructor(table, config2) {
+    super(table, config2);
+  }
+  getSQLType() {
+    return `text${this.config.length ? `(${this.config.length})` : ""}`;
+  }
+}
+
+class SQLiteTextJsonBuilder extends SQLiteColumnBuilder {
+  static [entityKind] = "SQLiteTextJsonBuilder";
+  constructor(name) {
+    super(name, "json", "SQLiteTextJson");
+  }
+  build(table) {
+    return new SQLiteTextJson(table, this.config);
+  }
+}
+
+class SQLiteTextJson extends SQLiteColumn {
+  static [entityKind] = "SQLiteTextJson";
+  getSQLType() {
+    return "text";
+  }
+  mapFromDriverValue(value) {
+    return JSON.parse(value);
+  }
+  mapToDriverValue(value) {
+    return JSON.stringify(value);
+  }
+}
+function text(a, b = {}) {
+  const { name, config: config2 } = getColumnNameAndConfig(a, b);
+  if (config2.mode === "json") {
+    return new SQLiteTextJsonBuilder(name);
+  }
+  return new SQLiteTextBuilder(name, config2);
+}
+
+// node_modules/drizzle-orm/sqlite-core/columns/all.js
+function getSQLiteColumnBuilders() {
+  return {
+    blob,
+    customType,
+    integer: integer2,
+    numeric,
+    real,
+    text
+  };
+}
+
+// node_modules/drizzle-orm/sqlite-core/table.js
+var InlineForeignKeys2 = Symbol.for("drizzle:SQLiteInlineForeignKeys");
+
+class SQLiteTable extends Table {
+  static [entityKind] = "SQLiteTable";
+  static Symbol = Object.assign({}, Table.Symbol, {
+    InlineForeignKeys: InlineForeignKeys2
+  });
+  [Table.Symbol.Columns];
+  [InlineForeignKeys2] = [];
+  [Table.Symbol.ExtraConfigBuilder] = undefined;
+}
+function sqliteTableBase(name, columns, extraConfig, schema, baseName = name) {
+  const rawTable = new SQLiteTable(name, schema, baseName);
+  const parsedColumns = typeof columns === "function" ? columns(getSQLiteColumnBuilders()) : columns;
+  const builtColumns = Object.fromEntries(Object.entries(parsedColumns).map(([name2, colBuilderBase]) => {
+    const colBuilder = colBuilderBase;
+    colBuilder.setName(name2);
+    const column = colBuilder.build(rawTable);
+    rawTable[InlineForeignKeys2].push(...colBuilder.buildForeignKeys(column, rawTable));
+    return [name2, column];
+  }));
+  const table = Object.assign(rawTable, builtColumns);
+  table[Table.Symbol.Columns] = builtColumns;
+  table[Table.Symbol.ExtraConfigColumns] = builtColumns;
+  if (extraConfig) {
+    table[SQLiteTable.Symbol.ExtraConfigBuilder] = extraConfig;
+  }
+  return table;
+}
+var sqliteTable = (name, columns, extraConfig) => {
+  return sqliteTableBase(name, columns, extraConfig);
+};
+
+// node_modules/drizzle-orm/sqlite-core/utils.js
+function extractUsedTable(table) {
+  if (is(table, SQLiteTable)) {
+    return [`${table[Table.Symbol.BaseName]}`];
+  }
+  if (is(table, Subquery)) {
+    return table._.usedTables ?? [];
+  }
+  if (is(table, SQL)) {
+    return table.usedTables ?? [];
+  }
+  return [];
+}
+
+// node_modules/drizzle-orm/sqlite-core/query-builders/delete.js
+class SQLiteDeleteBase extends QueryPromise {
+  constructor(table, session, dialect, withList) {
+    super();
+    this.table = table;
+    this.session = session;
+    this.dialect = dialect;
+    this.config = { table, withList };
+  }
+  static [entityKind] = "SQLiteDelete";
+  config;
+  where(where) {
+    this.config.where = where;
+    return this;
+  }
+  orderBy(...columns) {
+    if (typeof columns[0] === "function") {
+      const orderBy = columns[0](new Proxy(this.config.table[Table.Symbol.Columns], new SelectionProxyHandler({ sqlAliasedBehavior: "alias", sqlBehavior: "sql" })));
+      const orderByArray = Array.isArray(orderBy) ? orderBy : [orderBy];
+      this.config.orderBy = orderByArray;
+    } else {
+      const orderByArray = columns;
+      this.config.orderBy = orderByArray;
+    }
+    return this;
+  }
+  limit(limit) {
+    this.config.limit = limit;
+    return this;
+  }
+  returning(fields = this.table[SQLiteTable.Symbol.Columns]) {
+    this.config.returning = orderSelectedFields(fields);
+    return this;
+  }
+  getSQL() {
+    return this.dialect.buildDeleteQuery(this.config);
+  }
+  toSQL() {
+    const { typings: _typings, ...rest } = this.dialect.sqlToQuery(this.getSQL());
+    return rest;
+  }
+  _prepare(isOneTimeQuery = true) {
+    return this.session[isOneTimeQuery ? "prepareOneTimeQuery" : "prepareQuery"](this.dialect.sqlToQuery(this.getSQL()), this.config.returning, this.config.returning ? "all" : "run", true, undefined, {
+      type: "delete",
+      tables: extractUsedTable(this.config.table)
+    });
+  }
+  prepare() {
+    return this._prepare(false);
+  }
+  run = (placeholderValues) => {
+    return this._prepare().run(placeholderValues);
+  };
+  all = (placeholderValues) => {
+    return this._prepare().all(placeholderValues);
+  };
+  get = (placeholderValues) => {
+    return this._prepare().get(placeholderValues);
+  };
+  values = (placeholderValues) => {
+    return this._prepare().values(placeholderValues);
+  };
+  async execute(placeholderValues) {
+    return this._prepare().execute(placeholderValues);
+  }
+  $dynamic() {
+    return this;
+  }
+}
+
+// node_modules/drizzle-orm/casing.js
+function toSnakeCase(input) {
+  const words = input.replace(/['\u2019]/g, "").match(/[\da-z]+|[A-Z]+(?![a-z])|[A-Z][\da-z]+/g) ?? [];
+  return words.map((word) => word.toLowerCase()).join("_");
+}
+function toCamelCase(input) {
+  const words = input.replace(/['\u2019]/g, "").match(/[\da-z]+|[A-Z]+(?![a-z])|[A-Z][\da-z]+/g) ?? [];
+  return words.reduce((acc, word, i) => {
+    const formattedWord = i === 0 ? word.toLowerCase() : `${word[0].toUpperCase()}${word.slice(1)}`;
+    return acc + formattedWord;
+  }, "");
+}
+function noopCase(input) {
+  return input;
+}
+
+class CasingCache {
+  static [entityKind] = "CasingCache";
+  cache = {};
+  cachedTables = {};
+  convert;
+  constructor(casing) {
+    this.convert = casing === "snake_case" ? toSnakeCase : casing === "camelCase" ? toCamelCase : noopCase;
+  }
+  getColumnCasing(column) {
+    if (!column.keyAsName)
+      return column.name;
+    const schema = column.table[Table.Symbol.Schema] ?? "public";
+    const tableName = column.table[Table.Symbol.OriginalName];
+    const key = `${schema}.${tableName}.${column.name}`;
+    if (!this.cache[key]) {
+      this.cacheTable(column.table);
+    }
+    return this.cache[key];
+  }
+  cacheTable(table) {
+    const schema = table[Table.Symbol.Schema] ?? "public";
+    const tableName = table[Table.Symbol.OriginalName];
+    const tableKey = `${schema}.${tableName}`;
+    if (!this.cachedTables[tableKey]) {
+      for (const column of Object.values(table[Table.Symbol.Columns])) {
+        const columnKey = `${tableKey}.${column.name}`;
+        this.cache[columnKey] = this.convert(column.name);
+      }
+      this.cachedTables[tableKey] = true;
+    }
+  }
+  clearCache() {
+    this.cache = {};
+    this.cachedTables = {};
+  }
+}
+
+// node_modules/drizzle-orm/sqlite-core/view-base.js
+class SQLiteViewBase extends View {
+  static [entityKind] = "SQLiteViewBase";
+}
+
+// node_modules/drizzle-orm/sqlite-core/dialect.js
+class SQLiteDialect {
+  static [entityKind] = "SQLiteDialect";
+  casing;
+  constructor(config2) {
+    this.casing = new CasingCache(config2?.casing);
+  }
+  escapeName(name) {
+    return `"${name}"`;
+  }
+  escapeParam(_num) {
+    return "?";
+  }
+  escapeString(str) {
+    return `'${str.replace(/'/g, "''")}'`;
+  }
+  buildWithCTE(queries) {
+    if (!queries?.length)
+      return;
+    const withSqlChunks = [sql`with `];
+    for (const [i, w] of queries.entries()) {
+      withSqlChunks.push(sql`${sql.identifier(w._.alias)} as (${w._.sql})`);
+      if (i < queries.length - 1) {
+        withSqlChunks.push(sql`, `);
+      }
+    }
+    withSqlChunks.push(sql` `);
+    return sql.join(withSqlChunks);
+  }
+  buildDeleteQuery({ table, where, returning, withList, limit, orderBy }) {
+    const withSql = this.buildWithCTE(withList);
+    const returningSql = returning ? sql` returning ${this.buildSelection(returning, { isSingleTable: true })}` : undefined;
+    const whereSql = where ? sql` where ${where}` : undefined;
+    const orderBySql = this.buildOrderBy(orderBy);
+    const limitSql = this.buildLimit(limit);
+    return sql`${withSql}delete from ${table}${whereSql}${returningSql}${orderBySql}${limitSql}`;
+  }
+  buildUpdateSet(table, set2) {
+    const tableColumns = table[Table.Symbol.Columns];
+    const columnNames = Object.keys(tableColumns).filter((colName) => set2[colName] !== undefined || tableColumns[colName]?.onUpdateFn !== undefined);
+    const setSize = columnNames.length;
+    return sql.join(columnNames.flatMap((colName, i) => {
+      const col = tableColumns[colName];
+      const onUpdateFnResult = col.onUpdateFn?.();
+      const value = set2[colName] ?? (is(onUpdateFnResult, SQL) ? onUpdateFnResult : sql.param(onUpdateFnResult, col));
+      const res = sql`${sql.identifier(this.casing.getColumnCasing(col))} = ${value}`;
+      if (i < setSize - 1) {
+        return [res, sql.raw(", ")];
+      }
+      return [res];
+    }));
+  }
+  buildUpdateQuery({ table, set: set2, where, returning, withList, joins, from, limit, orderBy }) {
+    const withSql = this.buildWithCTE(withList);
+    const setSql = this.buildUpdateSet(table, set2);
+    const fromSql = from && sql.join([sql.raw(" from "), this.buildFromTable(from)]);
+    const joinsSql = this.buildJoins(joins);
+    const returningSql = returning ? sql` returning ${this.buildSelection(returning, { isSingleTable: true })}` : undefined;
+    const whereSql = where ? sql` where ${where}` : undefined;
+    const orderBySql = this.buildOrderBy(orderBy);
+    const limitSql = this.buildLimit(limit);
+    return sql`${withSql}update ${table} set ${setSql}${fromSql}${joinsSql}${whereSql}${returningSql}${orderBySql}${limitSql}`;
+  }
+  buildSelection(fields, { isSingleTable = false } = {}) {
+    const columnsLen = fields.length;
+    const chunks = fields.flatMap(({ field }, i) => {
+      const chunk = [];
+      if (is(field, SQL.Aliased) && field.isSelectionField) {
+        chunk.push(sql.identifier(field.fieldAlias));
+      } else if (is(field, SQL.Aliased) || is(field, SQL)) {
+        const query = is(field, SQL.Aliased) ? field.sql : field;
+        if (isSingleTable) {
+          chunk.push(new SQL(query.queryChunks.map((c) => {
+            if (is(c, Column)) {
+              return sql.identifier(this.casing.getColumnCasing(c));
+            }
+            return c;
+          })));
+        } else {
+          chunk.push(query);
+        }
+        if (is(field, SQL.Aliased)) {
+          chunk.push(sql` as ${sql.identifier(field.fieldAlias)}`);
+        }
+      } else if (is(field, Column)) {
+        const tableName = field.table[Table.Symbol.Name];
+        if (field.columnType === "SQLiteNumericBigInt") {
+          if (isSingleTable) {
+            chunk.push(sql`cast(${sql.identifier(this.casing.getColumnCasing(field))} as text)`);
+          } else {
+            chunk.push(sql`cast(${sql.identifier(tableName)}.${sql.identifier(this.casing.getColumnCasing(field))} as text)`);
+          }
+        } else {
+          if (isSingleTable) {
+            chunk.push(sql.identifier(this.casing.getColumnCasing(field)));
+          } else {
+            chunk.push(sql`${sql.identifier(tableName)}.${sql.identifier(this.casing.getColumnCasing(field))}`);
+          }
+        }
+      } else if (is(field, Subquery)) {
+        const entries = Object.entries(field._.selectedFields);
+        if (entries.length === 1) {
+          const entry = entries[0][1];
+          const fieldDecoder = is(entry, SQL) ? entry.decoder : is(entry, Column) ? { mapFromDriverValue: (v) => entry.mapFromDriverValue(v) } : entry.sql.decoder;
+          if (fieldDecoder)
+            field._.sql.decoder = fieldDecoder;
+        }
+        chunk.push(field);
+      }
+      if (i < columnsLen - 1) {
+        chunk.push(sql`, `);
+      }
+      return chunk;
+    });
+    return sql.join(chunks);
+  }
+  buildJoins(joins) {
+    if (!joins || joins.length === 0) {
+      return;
+    }
+    const joinsArray = [];
+    if (joins) {
+      for (const [index, joinMeta] of joins.entries()) {
+        if (index === 0) {
+          joinsArray.push(sql` `);
+        }
+        const table = joinMeta.table;
+        const onSql = joinMeta.on ? sql` on ${joinMeta.on}` : undefined;
+        if (is(table, SQLiteTable)) {
+          const tableName = table[SQLiteTable.Symbol.Name];
+          const tableSchema = table[SQLiteTable.Symbol.Schema];
+          const origTableName = table[SQLiteTable.Symbol.OriginalName];
+          const alias = tableName === origTableName ? undefined : joinMeta.alias;
+          joinsArray.push(sql`${sql.raw(joinMeta.joinType)} join ${tableSchema ? sql`${sql.identifier(tableSchema)}.` : undefined}${sql.identifier(origTableName)}${alias && sql` ${sql.identifier(alias)}`}${onSql}`);
+        } else {
+          joinsArray.push(sql`${sql.raw(joinMeta.joinType)} join ${table}${onSql}`);
+        }
+        if (index < joins.length - 1) {
+          joinsArray.push(sql` `);
+        }
+      }
+    }
+    return sql.join(joinsArray);
+  }
+  buildLimit(limit) {
+    return typeof limit === "object" || typeof limit === "number" && limit >= 0 ? sql` limit ${limit}` : undefined;
+  }
+  buildOrderBy(orderBy) {
+    const orderByList = [];
+    if (orderBy) {
+      for (const [index, orderByValue] of orderBy.entries()) {
+        orderByList.push(orderByValue);
+        if (index < orderBy.length - 1) {
+          orderByList.push(sql`, `);
+        }
+      }
+    }
+    return orderByList.length > 0 ? sql` order by ${sql.join(orderByList)}` : undefined;
+  }
+  buildFromTable(table) {
+    if (is(table, Table) && table[Table.Symbol.IsAlias]) {
+      return sql`${sql`${sql.identifier(table[Table.Symbol.Schema] ?? "")}.`.if(table[Table.Symbol.Schema])}${sql.identifier(table[Table.Symbol.OriginalName])} ${sql.identifier(table[Table.Symbol.Name])}`;
+    }
+    return table;
+  }
+  buildSelectQuery({
+    withList,
+    fields,
+    fieldsFlat,
+    where,
+    having,
+    table,
+    joins,
+    orderBy,
+    groupBy,
+    limit,
+    offset,
+    distinct,
+    setOperators
+  }) {
+    const fieldsList = fieldsFlat ?? orderSelectedFields(fields);
+    for (const f of fieldsList) {
+      if (is(f.field, Column) && getTableName(f.field.table) !== (is(table, Subquery) ? table._.alias : is(table, SQLiteViewBase) ? table[ViewBaseConfig].name : is(table, SQL) ? undefined : getTableName(table)) && !((table2) => joins?.some(({ alias }) => alias === (table2[Table.Symbol.IsAlias] ? getTableName(table2) : table2[Table.Symbol.BaseName])))(f.field.table)) {
+        const tableName = getTableName(f.field.table);
+        throw new Error(`Your "${f.path.join("->")}" field references a column "${tableName}"."${f.field.name}", but the table "${tableName}" is not part of the query! Did you forget to join it?`);
+      }
+    }
+    const isSingleTable = !joins || joins.length === 0;
+    const withSql = this.buildWithCTE(withList);
+    const distinctSql = distinct ? sql` distinct` : undefined;
+    const selection = this.buildSelection(fieldsList, { isSingleTable });
+    const tableSql = this.buildFromTable(table);
+    const joinsSql = this.buildJoins(joins);
+    const whereSql = where ? sql` where ${where}` : undefined;
+    const havingSql = having ? sql` having ${having}` : undefined;
+    const groupByList = [];
+    if (groupBy) {
+      for (const [index, groupByValue] of groupBy.entries()) {
+        groupByList.push(groupByValue);
+        if (index < groupBy.length - 1) {
+          groupByList.push(sql`, `);
+        }
+      }
+    }
+    const groupBySql = groupByList.length > 0 ? sql` group by ${sql.join(groupByList)}` : undefined;
+    const orderBySql = this.buildOrderBy(orderBy);
+    const limitSql = this.buildLimit(limit);
+    const offsetSql = offset ? sql` offset ${offset}` : undefined;
+    const finalQuery = sql`${withSql}select${distinctSql} ${selection} from ${tableSql}${joinsSql}${whereSql}${groupBySql}${havingSql}${orderBySql}${limitSql}${offsetSql}`;
+    if (setOperators.length > 0) {
+      return this.buildSetOperations(finalQuery, setOperators);
+    }
+    return finalQuery;
+  }
+  buildSetOperations(leftSelect, setOperators) {
+    const [setOperator, ...rest] = setOperators;
+    if (!setOperator) {
+      throw new Error("Cannot pass undefined values to any set operator");
+    }
+    if (rest.length === 0) {
+      return this.buildSetOperationQuery({ leftSelect, setOperator });
+    }
+    return this.buildSetOperations(this.buildSetOperationQuery({ leftSelect, setOperator }), rest);
+  }
+  buildSetOperationQuery({
+    leftSelect,
+    setOperator: { type, isAll, rightSelect, limit, orderBy, offset }
+  }) {
+    const leftChunk = sql`${leftSelect.getSQL()} `;
+    const rightChunk = sql`${rightSelect.getSQL()}`;
+    let orderBySql;
+    if (orderBy && orderBy.length > 0) {
+      const orderByValues = [];
+      for (const singleOrderBy of orderBy) {
+        if (is(singleOrderBy, SQLiteColumn)) {
+          orderByValues.push(sql.identifier(singleOrderBy.name));
+        } else if (is(singleOrderBy, SQL)) {
+          for (let i = 0;i < singleOrderBy.queryChunks.length; i++) {
+            const chunk = singleOrderBy.queryChunks[i];
+            if (is(chunk, SQLiteColumn)) {
+              singleOrderBy.queryChunks[i] = sql.identifier(this.casing.getColumnCasing(chunk));
+            }
+          }
+          orderByValues.push(sql`${singleOrderBy}`);
+        } else {
+          orderByValues.push(sql`${singleOrderBy}`);
+        }
+      }
+      orderBySql = sql` order by ${sql.join(orderByValues, sql`, `)}`;
+    }
+    const limitSql = typeof limit === "object" || typeof limit === "number" && limit >= 0 ? sql` limit ${limit}` : undefined;
+    const operatorChunk = sql.raw(`${type} ${isAll ? "all " : ""}`);
+    const offsetSql = offset ? sql` offset ${offset}` : undefined;
+    return sql`${leftChunk}${operatorChunk}${rightChunk}${orderBySql}${limitSql}${offsetSql}`;
+  }
+  buildInsertQuery({ table, values: valuesOrSelect, onConflict, returning, withList, select }) {
+    const valuesSqlList = [];
+    const columns = table[Table.Symbol.Columns];
+    const colEntries = Object.entries(columns).filter(([_, col]) => !col.shouldDisableInsert());
+    const insertOrder = colEntries.map(([, column]) => sql.identifier(this.casing.getColumnCasing(column)));
+    if (select) {
+      const select2 = valuesOrSelect;
+      if (is(select2, SQL)) {
+        valuesSqlList.push(select2);
+      } else {
+        valuesSqlList.push(select2.getSQL());
+      }
+    } else {
+      const values = valuesOrSelect;
+      valuesSqlList.push(sql.raw("values "));
+      for (const [valueIndex, value] of values.entries()) {
+        const valueList = [];
+        for (const [fieldName, col] of colEntries) {
+          const colValue = value[fieldName];
+          if (colValue === undefined || is(colValue, Param) && colValue.value === undefined) {
+            let defaultValue;
+            if (col.default !== null && col.default !== undefined) {
+              defaultValue = is(col.default, SQL) ? col.default : sql.param(col.default, col);
+            } else if (col.defaultFn !== undefined) {
+              const defaultFnResult = col.defaultFn();
+              defaultValue = is(defaultFnResult, SQL) ? defaultFnResult : sql.param(defaultFnResult, col);
+            } else if (!col.default && col.onUpdateFn !== undefined) {
+              const onUpdateFnResult = col.onUpdateFn();
+              defaultValue = is(onUpdateFnResult, SQL) ? onUpdateFnResult : sql.param(onUpdateFnResult, col);
+            } else {
+              defaultValue = sql`null`;
+            }
+            valueList.push(defaultValue);
+          } else {
+            valueList.push(colValue);
+          }
+        }
+        valuesSqlList.push(valueList);
+        if (valueIndex < values.length - 1) {
+          valuesSqlList.push(sql`, `);
+        }
+      }
+    }
+    const withSql = this.buildWithCTE(withList);
+    const valuesSql = sql.join(valuesSqlList);
+    const returningSql = returning ? sql` returning ${this.buildSelection(returning, { isSingleTable: true })}` : undefined;
+    const onConflictSql = onConflict?.length ? sql.join(onConflict) : undefined;
+    return sql`${withSql}insert into ${table} ${insertOrder} ${valuesSql}${onConflictSql}${returningSql}`;
+  }
+  sqlToQuery(sql2, invokeSource) {
+    return sql2.toQuery({
+      casing: this.casing,
+      escapeName: this.escapeName,
+      escapeParam: this.escapeParam,
+      escapeString: this.escapeString,
+      invokeSource
+    });
+  }
+  buildRelationalQuery({
+    fullSchema,
+    schema,
+    tableNamesMap,
+    table,
+    tableConfig,
+    queryConfig: config2,
+    tableAlias,
+    nestedQueryRelation,
+    joinOn
+  }) {
+    let selection = [];
+    let limit, offset, orderBy = [], where;
+    const joins = [];
+    if (config2 === true) {
+      const selectionEntries = Object.entries(tableConfig.columns);
+      selection = selectionEntries.map(([key, value]) => ({
+        dbKey: value.name,
+        tsKey: key,
+        field: aliasedTableColumn(value, tableAlias),
+        relationTableTsKey: undefined,
+        isJson: false,
+        selection: []
+      }));
+    } else {
+      const aliasedColumns = Object.fromEntries(Object.entries(tableConfig.columns).map(([key, value]) => [key, aliasedTableColumn(value, tableAlias)]));
+      if (config2.where) {
+        const whereSql = typeof config2.where === "function" ? config2.where(aliasedColumns, getOperators()) : config2.where;
+        where = whereSql && mapColumnsInSQLToAlias(whereSql, tableAlias);
+      }
+      const fieldsSelection = [];
+      let selectedColumns = [];
+      if (config2.columns) {
+        let isIncludeMode = false;
+        for (const [field, value] of Object.entries(config2.columns)) {
+          if (value === undefined) {
+            continue;
+          }
+          if (field in tableConfig.columns) {
+            if (!isIncludeMode && value === true) {
+              isIncludeMode = true;
+            }
+            selectedColumns.push(field);
+          }
+        }
+        if (selectedColumns.length > 0) {
+          selectedColumns = isIncludeMode ? selectedColumns.filter((c) => config2.columns?.[c] === true) : Object.keys(tableConfig.columns).filter((key) => !selectedColumns.includes(key));
+        }
+      } else {
+        selectedColumns = Object.keys(tableConfig.columns);
+      }
+      for (const field of selectedColumns) {
+        const column = tableConfig.columns[field];
+        fieldsSelection.push({ tsKey: field, value: column });
+      }
+      let selectedRelations = [];
+      if (config2.with) {
+        selectedRelations = Object.entries(config2.with).filter((entry) => !!entry[1]).map(([tsKey, queryConfig]) => ({ tsKey, queryConfig, relation: tableConfig.relations[tsKey] }));
+      }
+      let extras;
+      if (config2.extras) {
+        extras = typeof config2.extras === "function" ? config2.extras(aliasedColumns, { sql }) : config2.extras;
+        for (const [tsKey, value] of Object.entries(extras)) {
+          fieldsSelection.push({
+            tsKey,
+            value: mapColumnsInAliasedSQLToAlias(value, tableAlias)
+          });
+        }
+      }
+      for (const { tsKey, value } of fieldsSelection) {
+        selection.push({
+          dbKey: is(value, SQL.Aliased) ? value.fieldAlias : tableConfig.columns[tsKey].name,
+          tsKey,
+          field: is(value, Column) ? aliasedTableColumn(value, tableAlias) : value,
+          relationTableTsKey: undefined,
+          isJson: false,
+          selection: []
+        });
+      }
+      let orderByOrig = typeof config2.orderBy === "function" ? config2.orderBy(aliasedColumns, getOrderByOperators()) : config2.orderBy ?? [];
+      if (!Array.isArray(orderByOrig)) {
+        orderByOrig = [orderByOrig];
+      }
+      orderBy = orderByOrig.map((orderByValue) => {
+        if (is(orderByValue, Column)) {
+          return aliasedTableColumn(orderByValue, tableAlias);
+        }
+        return mapColumnsInSQLToAlias(orderByValue, tableAlias);
+      });
+      limit = config2.limit;
+      offset = config2.offset;
+      for (const {
+        tsKey: selectedRelationTsKey,
+        queryConfig: selectedRelationConfigValue,
+        relation
+      } of selectedRelations) {
+        const normalizedRelation = normalizeRelation(schema, tableNamesMap, relation);
+        const relationTableName = getTableUniqueName(relation.referencedTable);
+        const relationTableTsName = tableNamesMap[relationTableName];
+        const relationTableAlias = `${tableAlias}_${selectedRelationTsKey}`;
+        const joinOn2 = and(...normalizedRelation.fields.map((field2, i) => eq(aliasedTableColumn(normalizedRelation.references[i], relationTableAlias), aliasedTableColumn(field2, tableAlias))));
+        const builtRelation = this.buildRelationalQuery({
+          fullSchema,
+          schema,
+          tableNamesMap,
+          table: fullSchema[relationTableTsName],
+          tableConfig: schema[relationTableTsName],
+          queryConfig: is(relation, One) ? selectedRelationConfigValue === true ? { limit: 1 } : { ...selectedRelationConfigValue, limit: 1 } : selectedRelationConfigValue,
+          tableAlias: relationTableAlias,
+          joinOn: joinOn2,
+          nestedQueryRelation: relation
+        });
+        const field = sql`(${builtRelation.sql})`.as(selectedRelationTsKey);
+        selection.push({
+          dbKey: selectedRelationTsKey,
+          tsKey: selectedRelationTsKey,
+          field,
+          relationTableTsKey: relationTableTsName,
+          isJson: true,
+          selection: builtRelation.selection
+        });
+      }
+    }
+    if (selection.length === 0) {
+      throw new DrizzleError({
+        message: `No fields selected for table "${tableConfig.tsName}" ("${tableAlias}"). You need to have at least one item in "columns", "with" or "extras". If you need to select all columns, omit the "columns" key or set it to undefined.`
+      });
+    }
+    let result;
+    where = and(joinOn, where);
+    if (nestedQueryRelation) {
+      let field = sql`json_array(${sql.join(selection.map(({ field: field2 }) => is(field2, SQLiteColumn) ? sql.identifier(this.casing.getColumnCasing(field2)) : is(field2, SQL.Aliased) ? field2.sql : field2), sql`, `)})`;
+      if (is(nestedQueryRelation, Many)) {
+        field = sql`coalesce(json_group_array(${field}), json_array())`;
+      }
+      const nestedSelection = [{
+        dbKey: "data",
+        tsKey: "data",
+        field: field.as("data"),
+        isJson: true,
+        relationTableTsKey: tableConfig.tsName,
+        selection
+      }];
+      const needsSubquery = limit !== undefined || offset !== undefined || orderBy.length > 0;
+      if (needsSubquery) {
+        result = this.buildSelectQuery({
+          table: aliasedTable(table, tableAlias),
+          fields: {},
+          fieldsFlat: [
+            {
+              path: [],
+              field: sql.raw("*")
+            }
+          ],
+          where,
+          limit,
+          offset,
+          orderBy,
+          setOperators: []
+        });
+        where = undefined;
+        limit = undefined;
+        offset = undefined;
+        orderBy = undefined;
+      } else {
+        result = aliasedTable(table, tableAlias);
+      }
+      result = this.buildSelectQuery({
+        table: is(result, SQLiteTable) ? result : new Subquery(result, {}, tableAlias),
+        fields: {},
+        fieldsFlat: nestedSelection.map(({ field: field2 }) => ({
+          path: [],
+          field: is(field2, Column) ? aliasedTableColumn(field2, tableAlias) : field2
+        })),
+        joins,
+        where,
+        limit,
+        offset,
+        orderBy,
+        setOperators: []
+      });
+    } else {
+      result = this.buildSelectQuery({
+        table: aliasedTable(table, tableAlias),
+        fields: {},
+        fieldsFlat: selection.map(({ field }) => ({
+          path: [],
+          field: is(field, Column) ? aliasedTableColumn(field, tableAlias) : field
+        })),
+        joins,
+        where,
+        limit,
+        offset,
+        orderBy,
+        setOperators: []
+      });
+    }
+    return {
+      tableTsKey: tableConfig.tsName,
+      sql: result,
+      selection
+    };
+  }
+}
+
+class SQLiteSyncDialect extends SQLiteDialect {
+  static [entityKind] = "SQLiteSyncDialect";
+  migrate(migrations, session, config2) {
+    const migrationsTable = config2 === undefined ? "__drizzle_migrations" : typeof config2 === "string" ? "__drizzle_migrations" : config2.migrationsTable ?? "__drizzle_migrations";
+    const migrationTableCreate = sql`
+			CREATE TABLE IF NOT EXISTS ${sql.identifier(migrationsTable)} (
+				id SERIAL PRIMARY KEY,
+				hash text NOT NULL,
+				created_at numeric
+			)
+		`;
+    session.run(migrationTableCreate);
+    const dbMigrations = session.values(sql`SELECT id, hash, created_at FROM ${sql.identifier(migrationsTable)} ORDER BY created_at DESC LIMIT 1`);
+    const lastDbMigration = dbMigrations[0] ?? undefined;
+    session.run(sql`BEGIN`);
+    try {
+      for (const migration of migrations) {
+        if (!lastDbMigration || Number(lastDbMigration[2]) < migration.folderMillis) {
+          for (const stmt of migration.sql) {
+            session.run(sql.raw(stmt));
+          }
+          session.run(sql`INSERT INTO ${sql.identifier(migrationsTable)} ("hash", "created_at") VALUES(${migration.hash}, ${migration.folderMillis})`);
+        }
+      }
+      session.run(sql`COMMIT`);
+    } catch (e) {
+      session.run(sql`ROLLBACK`);
+      throw e;
+    }
+  }
+}
+
+class SQLiteAsyncDialect extends SQLiteDialect {
+  static [entityKind] = "SQLiteAsyncDialect";
+  async migrate(migrations, session, config2) {
+    const migrationsTable = config2 === undefined ? "__drizzle_migrations" : typeof config2 === "string" ? "__drizzle_migrations" : config2.migrationsTable ?? "__drizzle_migrations";
+    const migrationTableCreate = sql`
+			CREATE TABLE IF NOT EXISTS ${sql.identifier(migrationsTable)} (
+				id SERIAL PRIMARY KEY,
+				hash text NOT NULL,
+				created_at numeric
+			)
+		`;
+    await session.run(migrationTableCreate);
+    const dbMigrations = await session.values(sql`SELECT id, hash, created_at FROM ${sql.identifier(migrationsTable)} ORDER BY created_at DESC LIMIT 1`);
+    const lastDbMigration = dbMigrations[0] ?? undefined;
+    await session.transaction(async (tx) => {
+      for (const migration of migrations) {
+        if (!lastDbMigration || Number(lastDbMigration[2]) < migration.folderMillis) {
+          for (const stmt of migration.sql) {
+            await tx.run(sql.raw(stmt));
+          }
+          await tx.run(sql`INSERT INTO ${sql.identifier(migrationsTable)} ("hash", "created_at") VALUES(${migration.hash}, ${migration.folderMillis})`);
+        }
+      }
+    });
+  }
+}
+
+// node_modules/drizzle-orm/query-builders/query-builder.js
+class TypedQueryBuilder {
+  static [entityKind] = "TypedQueryBuilder";
+  getSelectedFields() {
+    return this._.selectedFields;
+  }
+}
+
+// node_modules/drizzle-orm/sqlite-core/query-builders/select.js
+class SQLiteSelectBuilder {
+  static [entityKind] = "SQLiteSelectBuilder";
+  fields;
+  session;
+  dialect;
+  withList;
+  distinct;
+  constructor(config2) {
+    this.fields = config2.fields;
+    this.session = config2.session;
+    this.dialect = config2.dialect;
+    this.withList = config2.withList;
+    this.distinct = config2.distinct;
+  }
+  from(source) {
+    const isPartialSelect = !!this.fields;
+    let fields;
+    if (this.fields) {
+      fields = this.fields;
+    } else if (is(source, Subquery)) {
+      fields = Object.fromEntries(Object.keys(source._.selectedFields).map((key) => [key, source[key]]));
+    } else if (is(source, SQLiteViewBase)) {
+      fields = source[ViewBaseConfig].selectedFields;
+    } else if (is(source, SQL)) {
+      fields = {};
+    } else {
+      fields = getTableColumns(source);
+    }
+    return new SQLiteSelectBase({
+      table: source,
+      fields,
+      isPartialSelect,
+      session: this.session,
+      dialect: this.dialect,
+      withList: this.withList,
+      distinct: this.distinct
+    });
+  }
+}
+
+class SQLiteSelectQueryBuilderBase extends TypedQueryBuilder {
+  static [entityKind] = "SQLiteSelectQueryBuilder";
+  _;
+  config;
+  joinsNotNullableMap;
+  tableName;
+  isPartialSelect;
+  session;
+  dialect;
+  cacheConfig = undefined;
+  usedTables = /* @__PURE__ */ new Set;
+  constructor({ table, fields, isPartialSelect, session, dialect, withList, distinct }) {
+    super();
+    this.config = {
+      withList,
+      table,
+      fields: { ...fields },
+      distinct,
+      setOperators: []
+    };
+    this.isPartialSelect = isPartialSelect;
+    this.session = session;
+    this.dialect = dialect;
+    this._ = {
+      selectedFields: fields,
+      config: this.config
+    };
+    this.tableName = getTableLikeName(table);
+    this.joinsNotNullableMap = typeof this.tableName === "string" ? { [this.tableName]: true } : {};
+    for (const item of extractUsedTable(table))
+      this.usedTables.add(item);
+  }
+  getUsedTables() {
+    return [...this.usedTables];
+  }
+  createJoin(joinType) {
+    return (table, on) => {
+      const baseTableName = this.tableName;
+      const tableName = getTableLikeName(table);
+      for (const item of extractUsedTable(table))
+        this.usedTables.add(item);
+      if (typeof tableName === "string" && this.config.joins?.some((join) => join.alias === tableName)) {
+        throw new Error(`Alias "${tableName}" is already used in this query`);
+      }
+      if (!this.isPartialSelect) {
+        if (Object.keys(this.joinsNotNullableMap).length === 1 && typeof baseTableName === "string") {
+          this.config.fields = {
+            [baseTableName]: this.config.fields
+          };
+        }
+        if (typeof tableName === "string" && !is(table, SQL)) {
+          const selection = is(table, Subquery) ? table._.selectedFields : is(table, View) ? table[ViewBaseConfig].selectedFields : table[Table.Symbol.Columns];
+          this.config.fields[tableName] = selection;
+        }
+      }
+      if (typeof on === "function") {
+        on = on(new Proxy(this.config.fields, new SelectionProxyHandler({ sqlAliasedBehavior: "sql", sqlBehavior: "sql" })));
+      }
+      if (!this.config.joins) {
+        this.config.joins = [];
+      }
+      this.config.joins.push({ on, table, joinType, alias: tableName });
+      if (typeof tableName === "string") {
+        switch (joinType) {
+          case "left": {
+            this.joinsNotNullableMap[tableName] = false;
+            break;
+          }
+          case "right": {
+            this.joinsNotNullableMap = Object.fromEntries(Object.entries(this.joinsNotNullableMap).map(([key]) => [key, false]));
+            this.joinsNotNullableMap[tableName] = true;
+            break;
+          }
+          case "cross":
+          case "inner": {
+            this.joinsNotNullableMap[tableName] = true;
+            break;
+          }
+          case "full": {
+            this.joinsNotNullableMap = Object.fromEntries(Object.entries(this.joinsNotNullableMap).map(([key]) => [key, false]));
+            this.joinsNotNullableMap[tableName] = false;
+            break;
+          }
+        }
+      }
+      return this;
+    };
+  }
+  leftJoin = this.createJoin("left");
+  rightJoin = this.createJoin("right");
+  innerJoin = this.createJoin("inner");
+  fullJoin = this.createJoin("full");
+  crossJoin = this.createJoin("cross");
+  createSetOperator(type, isAll) {
+    return (rightSelection) => {
+      const rightSelect = typeof rightSelection === "function" ? rightSelection(getSQLiteSetOperators()) : rightSelection;
+      if (!haveSameKeys(this.getSelectedFields(), rightSelect.getSelectedFields())) {
+        throw new Error("Set operator error (union / intersect / except): selected fields are not the same or are in a different order");
+      }
+      this.config.setOperators.push({ type, isAll, rightSelect });
+      return this;
+    };
+  }
+  union = this.createSetOperator("union", false);
+  unionAll = this.createSetOperator("union", true);
+  intersect = this.createSetOperator("intersect", false);
+  except = this.createSetOperator("except", false);
+  addSetOperators(setOperators) {
+    this.config.setOperators.push(...setOperators);
+    return this;
+  }
+  where(where) {
+    if (typeof where === "function") {
+      where = where(new Proxy(this.config.fields, new SelectionProxyHandler({ sqlAliasedBehavior: "sql", sqlBehavior: "sql" })));
+    }
+    this.config.where = where;
+    return this;
+  }
+  having(having) {
+    if (typeof having === "function") {
+      having = having(new Proxy(this.config.fields, new SelectionProxyHandler({ sqlAliasedBehavior: "sql", sqlBehavior: "sql" })));
+    }
+    this.config.having = having;
+    return this;
+  }
+  groupBy(...columns) {
+    if (typeof columns[0] === "function") {
+      const groupBy = columns[0](new Proxy(this.config.fields, new SelectionProxyHandler({ sqlAliasedBehavior: "alias", sqlBehavior: "sql" })));
+      this.config.groupBy = Array.isArray(groupBy) ? groupBy : [groupBy];
+    } else {
+      this.config.groupBy = columns;
+    }
+    return this;
+  }
+  orderBy(...columns) {
+    if (typeof columns[0] === "function") {
+      const orderBy = columns[0](new Proxy(this.config.fields, new SelectionProxyHandler({ sqlAliasedBehavior: "alias", sqlBehavior: "sql" })));
+      const orderByArray = Array.isArray(orderBy) ? orderBy : [orderBy];
+      if (this.config.setOperators.length > 0) {
+        this.config.setOperators.at(-1).orderBy = orderByArray;
+      } else {
+        this.config.orderBy = orderByArray;
+      }
+    } else {
+      const orderByArray = columns;
+      if (this.config.setOperators.length > 0) {
+        this.config.setOperators.at(-1).orderBy = orderByArray;
+      } else {
+        this.config.orderBy = orderByArray;
+      }
+    }
+    return this;
+  }
+  limit(limit) {
+    if (this.config.setOperators.length > 0) {
+      this.config.setOperators.at(-1).limit = limit;
+    } else {
+      this.config.limit = limit;
+    }
+    return this;
+  }
+  offset(offset) {
+    if (this.config.setOperators.length > 0) {
+      this.config.setOperators.at(-1).offset = offset;
+    } else {
+      this.config.offset = offset;
+    }
+    return this;
+  }
+  getSQL() {
+    return this.dialect.buildSelectQuery(this.config);
+  }
+  toSQL() {
+    const { typings: _typings, ...rest } = this.dialect.sqlToQuery(this.getSQL());
+    return rest;
+  }
+  as(alias) {
+    const usedTables = [];
+    usedTables.push(...extractUsedTable(this.config.table));
+    if (this.config.joins) {
+      for (const it of this.config.joins)
+        usedTables.push(...extractUsedTable(it.table));
+    }
+    return new Proxy(new Subquery(this.getSQL(), this.config.fields, alias, false, [...new Set(usedTables)]), new SelectionProxyHandler({ alias, sqlAliasedBehavior: "alias", sqlBehavior: "error" }));
+  }
+  getSelectedFields() {
+    return new Proxy(this.config.fields, new SelectionProxyHandler({ alias: this.tableName, sqlAliasedBehavior: "alias", sqlBehavior: "error" }));
+  }
+  $dynamic() {
+    return this;
+  }
+}
+
+class SQLiteSelectBase extends SQLiteSelectQueryBuilderBase {
+  static [entityKind] = "SQLiteSelect";
+  _prepare(isOneTimeQuery = true) {
+    if (!this.session) {
+      throw new Error("Cannot execute a query on a query builder. Please use a database instance instead.");
+    }
+    const fieldsList = orderSelectedFields(this.config.fields);
+    const query = this.session[isOneTimeQuery ? "prepareOneTimeQuery" : "prepareQuery"](this.dialect.sqlToQuery(this.getSQL()), fieldsList, "all", true, undefined, {
+      type: "select",
+      tables: [...this.usedTables]
+    }, this.cacheConfig);
+    query.joinsNotNullableMap = this.joinsNotNullableMap;
+    return query;
+  }
+  $withCache(config2) {
+    this.cacheConfig = config2 === undefined ? { config: {}, enable: true, autoInvalidate: true } : config2 === false ? { enable: false } : { enable: true, autoInvalidate: true, ...config2 };
+    return this;
+  }
+  prepare() {
+    return this._prepare(false);
+  }
+  run = (placeholderValues) => {
+    return this._prepare().run(placeholderValues);
+  };
+  all = (placeholderValues) => {
+    return this._prepare().all(placeholderValues);
+  };
+  get = (placeholderValues) => {
+    return this._prepare().get(placeholderValues);
+  };
+  values = (placeholderValues) => {
+    return this._prepare().values(placeholderValues);
+  };
+  async execute() {
+    return this.all();
+  }
+}
+applyMixins(SQLiteSelectBase, [QueryPromise]);
+function createSetOperator(type, isAll) {
+  return (leftSelect, rightSelect, ...restSelects) => {
+    const setOperators = [rightSelect, ...restSelects].map((select) => ({
+      type,
+      isAll,
+      rightSelect: select
+    }));
+    for (const setOperator of setOperators) {
+      if (!haveSameKeys(leftSelect.getSelectedFields(), setOperator.rightSelect.getSelectedFields())) {
+        throw new Error("Set operator error (union / intersect / except): selected fields are not the same or are in a different order");
+      }
+    }
+    return leftSelect.addSetOperators(setOperators);
+  };
+}
+var getSQLiteSetOperators = () => ({
+  union: union2,
+  unionAll,
+  intersect,
+  except
+});
+var union2 = createSetOperator("union", false);
+var unionAll = createSetOperator("union", true);
+var intersect = createSetOperator("intersect", false);
+var except = createSetOperator("except", false);
+
+// node_modules/drizzle-orm/sqlite-core/query-builders/query-builder.js
+class QueryBuilder {
+  static [entityKind] = "SQLiteQueryBuilder";
+  dialect;
+  dialectConfig;
+  constructor(dialect) {
+    this.dialect = is(dialect, SQLiteDialect) ? dialect : undefined;
+    this.dialectConfig = is(dialect, SQLiteDialect) ? undefined : dialect;
+  }
+  $with = (alias, selection) => {
+    const queryBuilder = this;
+    const as = (qb) => {
+      if (typeof qb === "function") {
+        qb = qb(queryBuilder);
+      }
+      return new Proxy(new WithSubquery(qb.getSQL(), selection ?? ("getSelectedFields" in qb ? qb.getSelectedFields() ?? {} : {}), alias, true), new SelectionProxyHandler({ alias, sqlAliasedBehavior: "alias", sqlBehavior: "error" }));
+    };
+    return { as };
+  };
+  with(...queries) {
+    const self = this;
+    function select(fields) {
+      return new SQLiteSelectBuilder({
+        fields: fields ?? undefined,
+        session: undefined,
+        dialect: self.getDialect(),
+        withList: queries
+      });
+    }
+    function selectDistinct(fields) {
+      return new SQLiteSelectBuilder({
+        fields: fields ?? undefined,
+        session: undefined,
+        dialect: self.getDialect(),
+        withList: queries,
+        distinct: true
+      });
+    }
+    return { select, selectDistinct };
+  }
+  select(fields) {
+    return new SQLiteSelectBuilder({ fields: fields ?? undefined, session: undefined, dialect: this.getDialect() });
+  }
+  selectDistinct(fields) {
+    return new SQLiteSelectBuilder({
+      fields: fields ?? undefined,
+      session: undefined,
+      dialect: this.getDialect(),
+      distinct: true
+    });
+  }
+  getDialect() {
+    if (!this.dialect) {
+      this.dialect = new SQLiteSyncDialect(this.dialectConfig);
+    }
+    return this.dialect;
+  }
+}
+
+// node_modules/drizzle-orm/sqlite-core/query-builders/insert.js
+class SQLiteInsertBuilder {
+  constructor(table, session, dialect, withList) {
+    this.table = table;
+    this.session = session;
+    this.dialect = dialect;
+    this.withList = withList;
+  }
+  static [entityKind] = "SQLiteInsertBuilder";
+  values(values) {
+    values = Array.isArray(values) ? values : [values];
+    if (values.length === 0) {
+      throw new Error("values() must be called with at least one value");
+    }
+    const mappedValues = values.map((entry) => {
+      const result = {};
+      const cols = this.table[Table.Symbol.Columns];
+      for (const colKey of Object.keys(entry)) {
+        const colValue = entry[colKey];
+        result[colKey] = is(colValue, SQL) ? colValue : new Param(colValue, cols[colKey]);
+      }
+      return result;
+    });
+    return new SQLiteInsertBase(this.table, mappedValues, this.session, this.dialect, this.withList);
+  }
+  select(selectQuery) {
+    const select = typeof selectQuery === "function" ? selectQuery(new QueryBuilder) : selectQuery;
+    if (!is(select, SQL) && !haveSameKeys(this.table[Columns], select._.selectedFields)) {
+      throw new Error("Insert select error: selected fields are not the same or are in a different order compared to the table definition");
+    }
+    return new SQLiteInsertBase(this.table, select, this.session, this.dialect, this.withList, true);
+  }
+}
+
+class SQLiteInsertBase extends QueryPromise {
+  constructor(table, values, session, dialect, withList, select) {
+    super();
+    this.session = session;
+    this.dialect = dialect;
+    this.config = { table, values, withList, select };
+  }
+  static [entityKind] = "SQLiteInsert";
+  config;
+  returning(fields = this.config.table[SQLiteTable.Symbol.Columns]) {
+    this.config.returning = orderSelectedFields(fields);
+    return this;
+  }
+  onConflictDoNothing(config2 = {}) {
+    if (!this.config.onConflict)
+      this.config.onConflict = [];
+    if (config2.target === undefined) {
+      this.config.onConflict.push(sql` on conflict do nothing`);
+    } else {
+      const targetSql = Array.isArray(config2.target) ? sql`${config2.target}` : sql`${[config2.target]}`;
+      const whereSql = config2.where ? sql` where ${config2.where}` : sql``;
+      this.config.onConflict.push(sql` on conflict ${targetSql} do nothing${whereSql}`);
+    }
+    return this;
+  }
+  onConflictDoUpdate(config2) {
+    if (config2.where && (config2.targetWhere || config2.setWhere)) {
+      throw new Error('You cannot use both "where" and "targetWhere"/"setWhere" at the same time - "where" is deprecated, use "targetWhere" or "setWhere" instead.');
+    }
+    if (!this.config.onConflict)
+      this.config.onConflict = [];
+    const whereSql = config2.where ? sql` where ${config2.where}` : undefined;
+    const targetWhereSql = config2.targetWhere ? sql` where ${config2.targetWhere}` : undefined;
+    const setWhereSql = config2.setWhere ? sql` where ${config2.setWhere}` : undefined;
+    const targetSql = Array.isArray(config2.target) ? sql`${config2.target}` : sql`${[config2.target]}`;
+    const setSql = this.dialect.buildUpdateSet(this.config.table, mapUpdateSet(this.config.table, config2.set));
+    this.config.onConflict.push(sql` on conflict ${targetSql}${targetWhereSql} do update set ${setSql}${whereSql}${setWhereSql}`);
+    return this;
+  }
+  getSQL() {
+    return this.dialect.buildInsertQuery(this.config);
+  }
+  toSQL() {
+    const { typings: _typings, ...rest } = this.dialect.sqlToQuery(this.getSQL());
+    return rest;
+  }
+  _prepare(isOneTimeQuery = true) {
+    return this.session[isOneTimeQuery ? "prepareOneTimeQuery" : "prepareQuery"](this.dialect.sqlToQuery(this.getSQL()), this.config.returning, this.config.returning ? "all" : "run", true, undefined, {
+      type: "insert",
+      tables: extractUsedTable(this.config.table)
+    });
+  }
+  prepare() {
+    return this._prepare(false);
+  }
+  run = (placeholderValues) => {
+    return this._prepare().run(placeholderValues);
+  };
+  all = (placeholderValues) => {
+    return this._prepare().all(placeholderValues);
+  };
+  get = (placeholderValues) => {
+    return this._prepare().get(placeholderValues);
+  };
+  values = (placeholderValues) => {
+    return this._prepare().values(placeholderValues);
+  };
+  async execute() {
+    return this.config.returning ? this.all() : this.run();
+  }
+  $dynamic() {
+    return this;
+  }
+}
+
+// node_modules/drizzle-orm/sqlite-core/query-builders/update.js
+class SQLiteUpdateBuilder {
+  constructor(table, session, dialect, withList) {
+    this.table = table;
+    this.session = session;
+    this.dialect = dialect;
+    this.withList = withList;
+  }
+  static [entityKind] = "SQLiteUpdateBuilder";
+  set(values) {
+    return new SQLiteUpdateBase(this.table, mapUpdateSet(this.table, values), this.session, this.dialect, this.withList);
+  }
+}
+
+class SQLiteUpdateBase extends QueryPromise {
+  constructor(table, set2, session, dialect, withList) {
+    super();
+    this.session = session;
+    this.dialect = dialect;
+    this.config = { set: set2, table, withList, joins: [] };
+  }
+  static [entityKind] = "SQLiteUpdate";
+  config;
+  from(source) {
+    this.config.from = source;
+    return this;
+  }
+  createJoin(joinType) {
+    return (table, on) => {
+      const tableName = getTableLikeName(table);
+      if (typeof tableName === "string" && this.config.joins.some((join) => join.alias === tableName)) {
+        throw new Error(`Alias "${tableName}" is already used in this query`);
+      }
+      if (typeof on === "function") {
+        const from = this.config.from ? is(table, SQLiteTable) ? table[Table.Symbol.Columns] : is(table, Subquery) ? table._.selectedFields : is(table, SQLiteViewBase) ? table[ViewBaseConfig].selectedFields : undefined : undefined;
+        on = on(new Proxy(this.config.table[Table.Symbol.Columns], new SelectionProxyHandler({ sqlAliasedBehavior: "sql", sqlBehavior: "sql" })), from && new Proxy(from, new SelectionProxyHandler({ sqlAliasedBehavior: "sql", sqlBehavior: "sql" })));
+      }
+      this.config.joins.push({ on, table, joinType, alias: tableName });
+      return this;
+    };
+  }
+  leftJoin = this.createJoin("left");
+  rightJoin = this.createJoin("right");
+  innerJoin = this.createJoin("inner");
+  fullJoin = this.createJoin("full");
+  where(where) {
+    this.config.where = where;
+    return this;
+  }
+  orderBy(...columns) {
+    if (typeof columns[0] === "function") {
+      const orderBy = columns[0](new Proxy(this.config.table[Table.Symbol.Columns], new SelectionProxyHandler({ sqlAliasedBehavior: "alias", sqlBehavior: "sql" })));
+      const orderByArray = Array.isArray(orderBy) ? orderBy : [orderBy];
+      this.config.orderBy = orderByArray;
+    } else {
+      const orderByArray = columns;
+      this.config.orderBy = orderByArray;
+    }
+    return this;
+  }
+  limit(limit) {
+    this.config.limit = limit;
+    return this;
+  }
+  returning(fields = this.config.table[SQLiteTable.Symbol.Columns]) {
+    this.config.returning = orderSelectedFields(fields);
+    return this;
+  }
+  getSQL() {
+    return this.dialect.buildUpdateQuery(this.config);
+  }
+  toSQL() {
+    const { typings: _typings, ...rest } = this.dialect.sqlToQuery(this.getSQL());
+    return rest;
+  }
+  _prepare(isOneTimeQuery = true) {
+    return this.session[isOneTimeQuery ? "prepareOneTimeQuery" : "prepareQuery"](this.dialect.sqlToQuery(this.getSQL()), this.config.returning, this.config.returning ? "all" : "run", true, undefined, {
+      type: "insert",
+      tables: extractUsedTable(this.config.table)
+    });
+  }
+  prepare() {
+    return this._prepare(false);
+  }
+  run = (placeholderValues) => {
+    return this._prepare().run(placeholderValues);
+  };
+  all = (placeholderValues) => {
+    return this._prepare().all(placeholderValues);
+  };
+  get = (placeholderValues) => {
+    return this._prepare().get(placeholderValues);
+  };
+  values = (placeholderValues) => {
+    return this._prepare().values(placeholderValues);
+  };
+  async execute() {
+    return this.config.returning ? this.all() : this.run();
+  }
+  $dynamic() {
+    return this;
+  }
+}
+
+// node_modules/drizzle-orm/sqlite-core/query-builders/count.js
+class SQLiteCountBuilder extends SQL {
+  constructor(params) {
+    super(SQLiteCountBuilder.buildEmbeddedCount(params.source, params.filters).queryChunks);
+    this.params = params;
+    this.session = params.session;
+    this.sql = SQLiteCountBuilder.buildCount(params.source, params.filters);
+  }
+  sql;
+  static [entityKind] = "SQLiteCountBuilderAsync";
+  [Symbol.toStringTag] = "SQLiteCountBuilderAsync";
+  session;
+  static buildEmbeddedCount(source, filters) {
+    return sql`(select count(*) from ${source}${sql.raw(" where ").if(filters)}${filters})`;
+  }
+  static buildCount(source, filters) {
+    return sql`select count(*) from ${source}${sql.raw(" where ").if(filters)}${filters}`;
+  }
+  then(onfulfilled, onrejected) {
+    return Promise.resolve(this.session.count(this.sql)).then(onfulfilled, onrejected);
+  }
+  catch(onRejected) {
+    return this.then(undefined, onRejected);
+  }
+  finally(onFinally) {
+    return this.then((value) => {
+      onFinally?.();
+      return value;
+    }, (reason) => {
+      onFinally?.();
+      throw reason;
+    });
+  }
+}
+
+// node_modules/drizzle-orm/sqlite-core/query-builders/query.js
+class RelationalQueryBuilder {
+  constructor(mode, fullSchema, schema, tableNamesMap, table, tableConfig, dialect, session) {
+    this.mode = mode;
+    this.fullSchema = fullSchema;
+    this.schema = schema;
+    this.tableNamesMap = tableNamesMap;
+    this.table = table;
+    this.tableConfig = tableConfig;
+    this.dialect = dialect;
+    this.session = session;
+  }
+  static [entityKind] = "SQLiteAsyncRelationalQueryBuilder";
+  findMany(config2) {
+    return this.mode === "sync" ? new SQLiteSyncRelationalQuery(this.fullSchema, this.schema, this.tableNamesMap, this.table, this.tableConfig, this.dialect, this.session, config2 ? config2 : {}, "many") : new SQLiteRelationalQuery(this.fullSchema, this.schema, this.tableNamesMap, this.table, this.tableConfig, this.dialect, this.session, config2 ? config2 : {}, "many");
+  }
+  findFirst(config2) {
+    return this.mode === "sync" ? new SQLiteSyncRelationalQuery(this.fullSchema, this.schema, this.tableNamesMap, this.table, this.tableConfig, this.dialect, this.session, config2 ? { ...config2, limit: 1 } : { limit: 1 }, "first") : new SQLiteRelationalQuery(this.fullSchema, this.schema, this.tableNamesMap, this.table, this.tableConfig, this.dialect, this.session, config2 ? { ...config2, limit: 1 } : { limit: 1 }, "first");
+  }
+}
+
+class SQLiteRelationalQuery extends QueryPromise {
+  constructor(fullSchema, schema, tableNamesMap, table, tableConfig, dialect, session, config2, mode) {
+    super();
+    this.fullSchema = fullSchema;
+    this.schema = schema;
+    this.tableNamesMap = tableNamesMap;
+    this.table = table;
+    this.tableConfig = tableConfig;
+    this.dialect = dialect;
+    this.session = session;
+    this.config = config2;
+    this.mode = mode;
+  }
+  static [entityKind] = "SQLiteAsyncRelationalQuery";
+  mode;
+  getSQL() {
+    return this.dialect.buildRelationalQuery({
+      fullSchema: this.fullSchema,
+      schema: this.schema,
+      tableNamesMap: this.tableNamesMap,
+      table: this.table,
+      tableConfig: this.tableConfig,
+      queryConfig: this.config,
+      tableAlias: this.tableConfig.tsName
+    }).sql;
+  }
+  _prepare(isOneTimeQuery = false) {
+    const { query, builtQuery } = this._toSQL();
+    return this.session[isOneTimeQuery ? "prepareOneTimeQuery" : "prepareQuery"](builtQuery, undefined, this.mode === "first" ? "get" : "all", true, (rawRows, mapColumnValue) => {
+      const rows = rawRows.map((row) => mapRelationalRow(this.schema, this.tableConfig, row, query.selection, mapColumnValue));
+      if (this.mode === "first") {
+        return rows[0];
+      }
+      return rows;
+    });
+  }
+  prepare() {
+    return this._prepare(false);
+  }
+  _toSQL() {
+    const query = this.dialect.buildRelationalQuery({
+      fullSchema: this.fullSchema,
+      schema: this.schema,
+      tableNamesMap: this.tableNamesMap,
+      table: this.table,
+      tableConfig: this.tableConfig,
+      queryConfig: this.config,
+      tableAlias: this.tableConfig.tsName
+    });
+    const builtQuery = this.dialect.sqlToQuery(query.sql);
+    return { query, builtQuery };
+  }
+  toSQL() {
+    return this._toSQL().builtQuery;
+  }
+  executeRaw() {
+    if (this.mode === "first") {
+      return this._prepare(false).get();
+    }
+    return this._prepare(false).all();
+  }
+  async execute() {
+    return this.executeRaw();
+  }
+}
+
+class SQLiteSyncRelationalQuery extends SQLiteRelationalQuery {
+  static [entityKind] = "SQLiteSyncRelationalQuery";
+  sync() {
+    return this.executeRaw();
+  }
+}
+
+// node_modules/drizzle-orm/sqlite-core/query-builders/raw.js
+class SQLiteRaw extends QueryPromise {
+  constructor(execute, getSQL, action, dialect, mapBatchResult) {
+    super();
+    this.execute = execute;
+    this.getSQL = getSQL;
+    this.dialect = dialect;
+    this.mapBatchResult = mapBatchResult;
+    this.config = { action };
+  }
+  static [entityKind] = "SQLiteRaw";
+  config;
+  getQuery() {
+    return { ...this.dialect.sqlToQuery(this.getSQL()), method: this.config.action };
+  }
+  mapResult(result, isFromBatch) {
+    return isFromBatch ? this.mapBatchResult(result) : result;
+  }
+  _prepare() {
+    return this;
+  }
+  isResponseInArrayMode() {
+    return false;
+  }
+}
+
+// node_modules/drizzle-orm/sqlite-core/db.js
+class BaseSQLiteDatabase {
+  constructor(resultKind, dialect, session, schema) {
+    this.resultKind = resultKind;
+    this.dialect = dialect;
+    this.session = session;
+    this._ = schema ? {
+      schema: schema.schema,
+      fullSchema: schema.fullSchema,
+      tableNamesMap: schema.tableNamesMap
+    } : {
+      schema: undefined,
+      fullSchema: {},
+      tableNamesMap: {}
+    };
+    this.query = {};
+    const query = this.query;
+    if (this._.schema) {
+      for (const [tableName, columns] of Object.entries(this._.schema)) {
+        query[tableName] = new RelationalQueryBuilder(resultKind, schema.fullSchema, this._.schema, this._.tableNamesMap, schema.fullSchema[tableName], columns, dialect, session);
+      }
+    }
+    this.$cache = { invalidate: async (_params) => {} };
+  }
+  static [entityKind] = "BaseSQLiteDatabase";
+  query;
+  $with = (alias, selection) => {
+    const self = this;
+    const as = (qb) => {
+      if (typeof qb === "function") {
+        qb = qb(new QueryBuilder(self.dialect));
+      }
+      return new Proxy(new WithSubquery(qb.getSQL(), selection ?? ("getSelectedFields" in qb ? qb.getSelectedFields() ?? {} : {}), alias, true), new SelectionProxyHandler({ alias, sqlAliasedBehavior: "alias", sqlBehavior: "error" }));
+    };
+    return { as };
+  };
+  $count(source, filters) {
+    return new SQLiteCountBuilder({ source, filters, session: this.session });
+  }
+  with(...queries) {
+    const self = this;
+    function select(fields) {
+      return new SQLiteSelectBuilder({
+        fields: fields ?? undefined,
+        session: self.session,
+        dialect: self.dialect,
+        withList: queries
+      });
+    }
+    function selectDistinct(fields) {
+      return new SQLiteSelectBuilder({
+        fields: fields ?? undefined,
+        session: self.session,
+        dialect: self.dialect,
+        withList: queries,
+        distinct: true
+      });
+    }
+    function update(table) {
+      return new SQLiteUpdateBuilder(table, self.session, self.dialect, queries);
+    }
+    function insert(into) {
+      return new SQLiteInsertBuilder(into, self.session, self.dialect, queries);
+    }
+    function delete_(from) {
+      return new SQLiteDeleteBase(from, self.session, self.dialect, queries);
+    }
+    return { select, selectDistinct, update, insert, delete: delete_ };
+  }
+  select(fields) {
+    return new SQLiteSelectBuilder({ fields: fields ?? undefined, session: this.session, dialect: this.dialect });
+  }
+  selectDistinct(fields) {
+    return new SQLiteSelectBuilder({
+      fields: fields ?? undefined,
+      session: this.session,
+      dialect: this.dialect,
+      distinct: true
+    });
+  }
+  update(table) {
+    return new SQLiteUpdateBuilder(table, this.session, this.dialect);
+  }
+  $cache;
+  insert(into) {
+    return new SQLiteInsertBuilder(into, this.session, this.dialect);
+  }
+  delete(from) {
+    return new SQLiteDeleteBase(from, this.session, this.dialect);
+  }
+  run(query) {
+    const sequel = typeof query === "string" ? sql.raw(query) : query.getSQL();
+    if (this.resultKind === "async") {
+      return new SQLiteRaw(async () => this.session.run(sequel), () => sequel, "run", this.dialect, this.session.extractRawRunValueFromBatchResult.bind(this.session));
+    }
+    return this.session.run(sequel);
+  }
+  all(query) {
+    const sequel = typeof query === "string" ? sql.raw(query) : query.getSQL();
+    if (this.resultKind === "async") {
+      return new SQLiteRaw(async () => this.session.all(sequel), () => sequel, "all", this.dialect, this.session.extractRawAllValueFromBatchResult.bind(this.session));
+    }
+    return this.session.all(sequel);
+  }
+  get(query) {
+    const sequel = typeof query === "string" ? sql.raw(query) : query.getSQL();
+    if (this.resultKind === "async") {
+      return new SQLiteRaw(async () => this.session.get(sequel), () => sequel, "get", this.dialect, this.session.extractRawGetValueFromBatchResult.bind(this.session));
+    }
+    return this.session.get(sequel);
+  }
+  values(query) {
+    const sequel = typeof query === "string" ? sql.raw(query) : query.getSQL();
+    if (this.resultKind === "async") {
+      return new SQLiteRaw(async () => this.session.values(sequel), () => sequel, "values", this.dialect, this.session.extractRawValuesValueFromBatchResult.bind(this.session));
+    }
+    return this.session.values(sequel);
+  }
+  transaction(transaction, config2) {
+    return this.session.transaction(transaction, config2);
+  }
+}
+
+// node_modules/drizzle-orm/cache/core/cache.js
+class Cache {
+  static [entityKind] = "Cache";
+}
+
+class NoopCache extends Cache {
+  strategy() {
+    return "all";
+  }
+  static [entityKind] = "NoopCache";
+  async get(_key) {
+    return;
+  }
+  async put(_hashedQuery, _response, _tables, _config) {}
+  async onMutate(_params) {}
+}
+async function hashQuery(sql2, params) {
+  const dataToHash = `${sql2}-${JSON.stringify(params)}`;
+  const encoder = new TextEncoder;
+  const data = encoder.encode(dataToHash);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  const hashArray = [...new Uint8Array(hashBuffer)];
+  const hashHex = hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+  return hashHex;
+}
+
+// node_modules/drizzle-orm/sqlite-core/session.js
+class ExecuteResultSync extends QueryPromise {
+  constructor(resultCb) {
+    super();
+    this.resultCb = resultCb;
+  }
+  static [entityKind] = "ExecuteResultSync";
+  async execute() {
+    return this.resultCb();
+  }
+  sync() {
+    return this.resultCb();
+  }
+}
+
+class SQLitePreparedQuery {
+  constructor(mode, executeMethod, query, cache, queryMetadata, cacheConfig) {
+    this.mode = mode;
+    this.executeMethod = executeMethod;
+    this.query = query;
+    this.cache = cache;
+    this.queryMetadata = queryMetadata;
+    this.cacheConfig = cacheConfig;
+    if (cache && cache.strategy() === "all" && cacheConfig === undefined) {
+      this.cacheConfig = { enable: true, autoInvalidate: true };
+    }
+    if (!this.cacheConfig?.enable) {
+      this.cacheConfig = undefined;
+    }
+  }
+  static [entityKind] = "PreparedQuery";
+  joinsNotNullableMap;
+  async queryWithCache(queryString, params, query) {
+    if (this.cache === undefined || is(this.cache, NoopCache) || this.queryMetadata === undefined) {
+      try {
+        return await query();
+      } catch (e) {
+        throw new DrizzleQueryError(queryString, params, e);
+      }
+    }
+    if (this.cacheConfig && !this.cacheConfig.enable) {
+      try {
+        return await query();
+      } catch (e) {
+        throw new DrizzleQueryError(queryString, params, e);
+      }
+    }
+    if ((this.queryMetadata.type === "insert" || this.queryMetadata.type === "update" || this.queryMetadata.type === "delete") && this.queryMetadata.tables.length > 0) {
+      try {
+        const [res] = await Promise.all([
+          query(),
+          this.cache.onMutate({ tables: this.queryMetadata.tables })
+        ]);
+        return res;
+      } catch (e) {
+        throw new DrizzleQueryError(queryString, params, e);
+      }
+    }
+    if (!this.cacheConfig) {
+      try {
+        return await query();
+      } catch (e) {
+        throw new DrizzleQueryError(queryString, params, e);
+      }
+    }
+    if (this.queryMetadata.type === "select") {
+      const fromCache = await this.cache.get(this.cacheConfig.tag ?? await hashQuery(queryString, params), this.queryMetadata.tables, this.cacheConfig.tag !== undefined, this.cacheConfig.autoInvalidate);
+      if (fromCache === undefined) {
+        let result;
+        try {
+          result = await query();
+        } catch (e) {
+          throw new DrizzleQueryError(queryString, params, e);
+        }
+        await this.cache.put(this.cacheConfig.tag ?? await hashQuery(queryString, params), result, this.cacheConfig.autoInvalidate ? this.queryMetadata.tables : [], this.cacheConfig.tag !== undefined, this.cacheConfig.config);
+        return result;
+      }
+      return fromCache;
+    }
+    try {
+      return await query();
+    } catch (e) {
+      throw new DrizzleQueryError(queryString, params, e);
+    }
+  }
+  getQuery() {
+    return this.query;
+  }
+  mapRunResult(result, _isFromBatch) {
+    return result;
+  }
+  mapAllResult(_result, _isFromBatch) {
+    throw new Error("Not implemented");
+  }
+  mapGetResult(_result, _isFromBatch) {
+    throw new Error("Not implemented");
+  }
+  execute(placeholderValues) {
+    if (this.mode === "async") {
+      return this[this.executeMethod](placeholderValues);
+    }
+    return new ExecuteResultSync(() => this[this.executeMethod](placeholderValues));
+  }
+  mapResult(response, isFromBatch) {
+    switch (this.executeMethod) {
+      case "run": {
+        return this.mapRunResult(response, isFromBatch);
+      }
+      case "all": {
+        return this.mapAllResult(response, isFromBatch);
+      }
+      case "get": {
+        return this.mapGetResult(response, isFromBatch);
+      }
+    }
+  }
+}
+
+class SQLiteSession {
+  constructor(dialect) {
+    this.dialect = dialect;
+  }
+  static [entityKind] = "SQLiteSession";
+  prepareOneTimeQuery(query, fields, executeMethod, isResponseInArrayMode, customResultMapper, queryMetadata, cacheConfig) {
+    return this.prepareQuery(query, fields, executeMethod, isResponseInArrayMode, customResultMapper, queryMetadata, cacheConfig);
+  }
+  run(query) {
+    const staticQuery = this.dialect.sqlToQuery(query);
+    try {
+      return this.prepareOneTimeQuery(staticQuery, undefined, "run", false).run();
+    } catch (err) {
+      throw new DrizzleError({ cause: err, message: `Failed to run the query '${staticQuery.sql}'` });
+    }
+  }
+  extractRawRunValueFromBatchResult(result) {
+    return result;
+  }
+  all(query) {
+    return this.prepareOneTimeQuery(this.dialect.sqlToQuery(query), undefined, "run", false).all();
+  }
+  extractRawAllValueFromBatchResult(_result) {
+    throw new Error("Not implemented");
+  }
+  get(query) {
+    return this.prepareOneTimeQuery(this.dialect.sqlToQuery(query), undefined, "run", false).get();
+  }
+  extractRawGetValueFromBatchResult(_result) {
+    throw new Error("Not implemented");
+  }
+  values(query) {
+    return this.prepareOneTimeQuery(this.dialect.sqlToQuery(query), undefined, "run", false).values();
+  }
+  async count(sql2) {
+    const result = await this.values(sql2);
+    return result[0][0];
+  }
+  extractRawValuesValueFromBatchResult(_result) {
+    throw new Error("Not implemented");
+  }
+}
+
+class SQLiteTransaction extends BaseSQLiteDatabase {
+  constructor(resultType, dialect, session, schema, nestedIndex = 0) {
+    super(resultType, dialect, session, schema);
+    this.schema = schema;
+    this.nestedIndex = nestedIndex;
+  }
+  static [entityKind] = "SQLiteTransaction";
+  rollback() {
+    throw new TransactionRollbackError;
+  }
+}
+
+// node_modules/drizzle-orm/libsql/session.js
+class LibSQLSession extends SQLiteSession {
+  constructor(client, dialect, schema, options, tx) {
+    super(dialect);
+    this.client = client;
+    this.schema = schema;
+    this.options = options;
+    this.tx = tx;
+    this.logger = options.logger ?? new NoopLogger;
+    this.cache = options.cache ?? new NoopCache;
+  }
+  static [entityKind] = "LibSQLSession";
+  logger;
+  cache;
+  prepareQuery(query, fields, executeMethod, isResponseInArrayMode, customResultMapper, queryMetadata, cacheConfig) {
+    return new LibSQLPreparedQuery(this.client, query, this.logger, this.cache, queryMetadata, cacheConfig, fields, this.tx, executeMethod, isResponseInArrayMode, customResultMapper);
+  }
+  async batch(queries) {
+    const preparedQueries = [];
+    const builtQueries = [];
+    for (const query of queries) {
+      const preparedQuery = query._prepare();
+      const builtQuery = preparedQuery.getQuery();
+      preparedQueries.push(preparedQuery);
+      builtQueries.push({ sql: builtQuery.sql, args: builtQuery.params });
+    }
+    const batchResults = await this.client.batch(builtQueries);
+    return batchResults.map((result, i) => preparedQueries[i].mapResult(result, true));
+  }
+  async migrate(queries) {
+    const preparedQueries = [];
+    const builtQueries = [];
+    for (const query of queries) {
+      const preparedQuery = query._prepare();
+      const builtQuery = preparedQuery.getQuery();
+      preparedQueries.push(preparedQuery);
+      builtQueries.push({ sql: builtQuery.sql, args: builtQuery.params });
+    }
+    const batchResults = await this.client.migrate(builtQueries);
+    return batchResults.map((result, i) => preparedQueries[i].mapResult(result, true));
+  }
+  async transaction(transaction, _config) {
+    const libsqlTx = await this.client.transaction();
+    const session = new LibSQLSession(this.client, this.dialect, this.schema, this.options, libsqlTx);
+    const tx = new LibSQLTransaction("async", this.dialect, session, this.schema);
+    try {
+      const result = await transaction(tx);
+      await libsqlTx.commit();
+      return result;
+    } catch (err) {
+      await libsqlTx.rollback();
+      throw err;
+    }
+  }
+  extractRawAllValueFromBatchResult(result) {
+    return result.rows;
+  }
+  extractRawGetValueFromBatchResult(result) {
+    return result.rows[0];
+  }
+  extractRawValuesValueFromBatchResult(result) {
+    return result.rows;
+  }
+}
+
+class LibSQLTransaction extends SQLiteTransaction {
+  static [entityKind] = "LibSQLTransaction";
+  async transaction(transaction) {
+    const savepointName = `sp${this.nestedIndex}`;
+    const tx = new LibSQLTransaction("async", this.dialect, this.session, this.schema, this.nestedIndex + 1);
+    await this.session.run(sql.raw(`savepoint ${savepointName}`));
+    try {
+      const result = await transaction(tx);
+      await this.session.run(sql.raw(`release savepoint ${savepointName}`));
+      return result;
+    } catch (err) {
+      await this.session.run(sql.raw(`rollback to savepoint ${savepointName}`));
+      throw err;
+    }
+  }
+}
+
+class LibSQLPreparedQuery extends SQLitePreparedQuery {
+  constructor(client, query, logger, cache, queryMetadata, cacheConfig, fields, tx, executeMethod, _isResponseInArrayMode, customResultMapper) {
+    super("async", executeMethod, query, cache, queryMetadata, cacheConfig);
+    this.client = client;
+    this.logger = logger;
+    this.fields = fields;
+    this.tx = tx;
+    this._isResponseInArrayMode = _isResponseInArrayMode;
+    this.customResultMapper = customResultMapper;
+    this.customResultMapper = customResultMapper;
+    this.fields = fields;
+  }
+  static [entityKind] = "LibSQLPreparedQuery";
+  async run(placeholderValues) {
+    const params = fillPlaceholders(this.query.params, placeholderValues ?? {});
+    this.logger.logQuery(this.query.sql, params);
+    return await this.queryWithCache(this.query.sql, params, async () => {
+      const stmt = { sql: this.query.sql, args: params };
+      return this.tx ? this.tx.execute(stmt) : this.client.execute(stmt);
+    });
+  }
+  async all(placeholderValues) {
+    const { fields, logger, query, tx, client, customResultMapper } = this;
+    if (!fields && !customResultMapper) {
+      const params = fillPlaceholders(query.params, placeholderValues ?? {});
+      logger.logQuery(query.sql, params);
+      return await this.queryWithCache(query.sql, params, async () => {
+        const stmt = { sql: query.sql, args: params };
+        return (tx ? tx.execute(stmt) : client.execute(stmt)).then(({ rows: rows2 }) => this.mapAllResult(rows2));
+      });
+    }
+    const rows = await this.values(placeholderValues);
+    return this.mapAllResult(rows);
+  }
+  mapAllResult(rows, isFromBatch) {
+    if (isFromBatch) {
+      rows = rows.rows;
+    }
+    if (!this.fields && !this.customResultMapper) {
+      return rows.map((row) => normalizeRow(row));
+    }
+    if (this.customResultMapper) {
+      return this.customResultMapper(rows, normalizeFieldValue);
+    }
+    return rows.map((row) => {
+      return mapResultRow(this.fields, Array.prototype.slice.call(row).map((v) => normalizeFieldValue(v)), this.joinsNotNullableMap);
+    });
+  }
+  async get(placeholderValues) {
+    const { fields, logger, query, tx, client, customResultMapper } = this;
+    if (!fields && !customResultMapper) {
+      const params = fillPlaceholders(query.params, placeholderValues ?? {});
+      logger.logQuery(query.sql, params);
+      return await this.queryWithCache(query.sql, params, async () => {
+        const stmt = { sql: query.sql, args: params };
+        return (tx ? tx.execute(stmt) : client.execute(stmt)).then(({ rows: rows2 }) => this.mapGetResult(rows2));
+      });
+    }
+    const rows = await this.values(placeholderValues);
+    return this.mapGetResult(rows);
+  }
+  mapGetResult(rows, isFromBatch) {
+    if (isFromBatch) {
+      rows = rows.rows;
+    }
+    const row = rows[0];
+    if (!this.fields && !this.customResultMapper) {
+      return normalizeRow(row);
+    }
+    if (!row) {
+      return;
+    }
+    if (this.customResultMapper) {
+      return this.customResultMapper(rows, normalizeFieldValue);
+    }
+    return mapResultRow(this.fields, Array.prototype.slice.call(row).map((v) => normalizeFieldValue(v)), this.joinsNotNullableMap);
+  }
+  async values(placeholderValues) {
+    const params = fillPlaceholders(this.query.params, placeholderValues ?? {});
+    this.logger.logQuery(this.query.sql, params);
+    return await this.queryWithCache(this.query.sql, params, async () => {
+      const stmt = { sql: this.query.sql, args: params };
+      return (this.tx ? this.tx.execute(stmt) : this.client.execute(stmt)).then(({ rows }) => rows);
+    });
+  }
+  isResponseInArrayMode() {
+    return this._isResponseInArrayMode;
+  }
+}
+function normalizeRow(obj) {
+  return Object.keys(obj).reduce((acc, key) => {
+    if (Object.prototype.propertyIsEnumerable.call(obj, key)) {
+      acc[key] = obj[key];
+    }
+    return acc;
+  }, {});
+}
+function normalizeFieldValue(value) {
+  if (typeof ArrayBuffer !== "undefined" && value instanceof ArrayBuffer) {
+    if (typeof Buffer !== "undefined") {
+      if (!(value instanceof Buffer)) {
+        return Buffer.from(value);
+      }
+      return value;
+    }
+    if (typeof TextDecoder !== "undefined") {
+      return new TextDecoder().decode(value);
+    }
+    throw new Error("TextDecoder is not available. Please provide either Buffer or TextDecoder polyfill.");
+  }
+  return value;
+}
+
+// node_modules/drizzle-orm/libsql/driver-core.js
+class LibSQLDatabase extends BaseSQLiteDatabase {
+  static [entityKind] = "LibSQLDatabase";
+  async batch(batch) {
+    return this.session.batch(batch);
+  }
+}
+function construct(client, config2 = {}) {
+  const dialect = new SQLiteAsyncDialect({ casing: config2.casing });
+  let logger;
+  if (config2.logger === true) {
+    logger = new DefaultLogger;
+  } else if (config2.logger !== false) {
+    logger = config2.logger;
+  }
+  let schema;
+  if (config2.schema) {
+    const tablesConfig = extractTablesRelationalConfig(config2.schema, createTableRelationsHelpers);
+    schema = {
+      fullSchema: config2.schema,
+      schema: tablesConfig.tables,
+      tableNamesMap: tablesConfig.tableNamesMap
+    };
+  }
+  const session = new LibSQLSession(client, dialect, schema, { logger, cache: config2.cache }, undefined);
+  const db = new LibSQLDatabase("async", dialect, session, schema);
+  db.$client = client;
+  db.$cache = config2.cache;
+  if (db.$cache) {
+    db.$cache["invalidate"] = config2.cache?.onMutate;
+  }
+  return db;
+}
+
+// node_modules/drizzle-orm/libsql/driver.js
+function drizzle(...params) {
+  if (typeof params[0] === "string") {
+    const instance = createClient({
+      url: params[0]
+    });
+    return construct(instance, params[1]);
+  }
+  if (isConfig(params[0])) {
+    const { connection, client, ...drizzleConfig } = params[0];
+    if (client)
+      return construct(client, drizzleConfig);
+    const instance = typeof connection === "string" ? createClient({ url: connection }) : createClient(connection);
+    return construct(instance, drizzleConfig);
+  }
+  return construct(params[0], params[1]);
+}
+((drizzle2) => {
+  function mock(config2) {
+    return construct({}, config2);
+  }
+  drizzle2.mock = mock;
+})(drizzle || (drizzle = {}));
+
 // src/config/env.ts
 var envSchema = exports_external.object({
   NODE_ENV: exports_external.enum(["development", "test", "production"]).default("development"),
@@ -32361,7 +33907,7 @@ var logsTable = sqliteTable("logs_table", {
   id: text().primaryKey().$defaultFn(() => crypto.randomUUID()),
   timestamp: text().notNull(),
   severityText: text("severity_text").notNull(),
-  severityNumber: integer("severity_number").notNull(),
+  severityNumber: integer2("severity_number").notNull(),
   body: text().notNull(),
   attributes: text().notNull(),
   traceId: text("trace_id"),
@@ -32380,8 +33926,8 @@ class AuthRepository {
     const userSaved = await db.insert(usersTable).values(userToSave).returning({
       id: usersTable.id,
       name: usersTable.name
-    });
-    return userSaved[0];
+    }).onConflictDoNothing();
+    return userSaved[0] ?? null;
   }
   async findUserByEmail(email3) {
     const users = await db.select({
@@ -32393,16 +33939,76 @@ class AuthRepository {
   }
 }
 
+// src/shared/errors/error-codes.ts
+var ERROR_CODES = {
+  APP_ERROR: "app_error",
+  USER_ALREADY_EXISTS: "user_already_exists",
+  EMAIL_ALREADY_EXISTS: "email_already_exists",
+  REGISTER_FAILED: "register_failed",
+  INVALID_CREDENTIALS: "invalid_credentials",
+  LOGIN_FAILED: "login_failed",
+  TOKEN_GENERATION_FAILED: "token_generation_failed",
+  INVALID_TOKEN: "invalid_token",
+  MISSING_TOKEN: "missing_token",
+  NOT_FOUND: "not_found",
+  INTERNAL_ERROR: "internal_error"
+};
+
 // src/modules/auth/auth.schemas.ts
+var appErrorCodeValues = Object.values(ERROR_CODES);
+var appErrorCodeSchema = exports_external.enum(appErrorCodeValues).openapi({
+  description: "Códigos de erro de negócio disponíveis em src/shared/errors/error-codes.ts",
+  example: ERROR_CODES.INVALID_CREDENTIALS
+});
 var registerSchema = exports_external.object({
   name: exports_external.string().min(2, "Nome é obrigatório"),
   email: exports_external.email("Email inválido"),
   password: exports_external.string().min(6, "Senha deve ter no mínimo 6 caracteres")
-});
+}).openapi("RegisterRequest");
 var loginSchema = exports_external.object({
   email: exports_external.email("Email inválido"),
   password: exports_external.string().min(1, "Senha é obrigatória")
-});
+}).openapi("LoginRequest");
+var authUserSchema = exports_external.object({
+  id: exports_external.string(),
+  name: exports_external.string()
+}).openapi("AuthUser");
+var registerResponseSchema = exports_external.object({
+  success: exports_external.boolean(),
+  status: exports_external.number(),
+  message: exports_external.string(),
+  data: exports_external.object({
+    message: exports_external.string(),
+    user: authUserSchema.extend({
+      token: exports_external.string()
+    })
+  })
+}).openapi("RegisterResponse");
+var loginResponseSchema = exports_external.object({
+  success: exports_external.boolean(),
+  status: exports_external.number(),
+  message: exports_external.string(),
+  data: exports_external.object({
+    message: exports_external.string(),
+    id: exports_external.string(),
+    name: exports_external.string(),
+    token: exports_external.string()
+  })
+}).openapi("LoginResponse");
+var errorItemSchema = exports_external.object({
+  code: exports_external.union([appErrorCodeSchema, exports_external.string()]).openapi({
+    description: "Pode retornar um código de negócio (enum) ou um código técnico de validação (ex: invalid_string, too_small).",
+    example: ERROR_CODES.INVALID_CREDENTIALS
+  }),
+  message: exports_external.string(),
+  path: exports_external.string().optional()
+}).openapi("ApiErrorItem");
+var errorResponseSchema = exports_external.object({
+  success: exports_external.boolean().default(false),
+  status: exports_external.number(),
+  message: exports_external.string(),
+  errors: exports_external.array(errorItemSchema)
+}).openapi("ErrorResponse");
 
 // node_modules/hono/dist/utils/encode.js
 var decodeBase64Url = (str) => {
@@ -32944,7 +34550,7 @@ class AppError extends Error {
   code;
   details;
   headers;
-  constructor(status, message, code = "app_error", details = [], headers) {
+  constructor(status, message, code = ERROR_CODES.APP_ERROR, details = [], headers) {
     super(message);
     this.status = status;
     this.code = code;
@@ -33061,18 +34667,27 @@ async function generateJWT(payload) {
     logger.error("auth.jwt.sign_failed", {
       error: error48 instanceof Error ? error48.message : "unknown_error"
     });
-    throw new AppError(500, "Erro interno ao gerar token", "token_generation_failed");
+    throw new AppError(500, "Erro interno ao gerar token", ERROR_CODES.TOKEN_GENERATION_FAILED);
   }
 }
-async function validateJWT(token) {
+async function getUserFromJWT(token) {
   try {
-    await verify2(token, env.JWT_SECRET, algorithm);
-    return true;
+    const payload = await verify2(token, env.JWT_SECRET, algorithm);
+    if (typeof payload.id !== "string" || typeof payload.name !== "string") {
+      throw new AppError(401, "Usuário não autenticado", ERROR_CODES.INVALID_TOKEN, [{ code: ERROR_CODES.INVALID_TOKEN, message: "Usuário não autenticado" }], { "WWW-Authenticate": `Bearer error="${ERROR_CODES.INVALID_TOKEN}"` });
+    }
+    return {
+      id: payload.id,
+      name: payload.name
+    };
   } catch (error48) {
+    if (error48 instanceof AppError) {
+      throw error48;
+    }
     logger.warn("auth.jwt.invalid_token", {
       error: error48 instanceof Error ? error48.message : "invalid_token"
     });
-    throw new AppError(401, "Usuário não autenticado", "invalid_token", [{ code: "invalid_token", message: "Usuário não autenticado" }], { "WWW-Authenticate": 'Bearer error="invalid_token"' });
+    throw new AppError(401, "Usuário não autenticado", ERROR_CODES.INVALID_TOKEN, [{ code: ERROR_CODES.INVALID_TOKEN, message: "Usuário não autenticado" }], { "WWW-Authenticate": `Bearer error="${ERROR_CODES.INVALID_TOKEN}"` });
   }
 }
 
@@ -33089,6 +34704,9 @@ class AuthService {
         ...input,
         password: hash2
       });
+      if (!createdUser) {
+        throw new AppError(409, "Usuário já existe", ERROR_CODES.USER_ALREADY_EXISTS, [{ code: ERROR_CODES.USER_ALREADY_EXISTS, message: "Usuário já existe" }]);
+      }
       const token = await generateJWT({
         id: createdUser.id,
         name: createdUser.name
@@ -33106,21 +34724,21 @@ class AuthService {
       }
       const message = error48 instanceof Error ? error48.message : "unknown_error";
       if (message.includes("UNIQUE") || message.includes("unique")) {
-        throw new AppError(409, "Email já cadastrado", "email_already_exists", [{ code: "email_already_exists", message: "Email já cadastrado" }]);
+        throw new AppError(409, "Email já cadastrado", ERROR_CODES.EMAIL_ALREADY_EXISTS, [{ code: ERROR_CODES.EMAIL_ALREADY_EXISTS, message: "Email já cadastrado" }]);
       }
       logger.error("auth.register.unexpected_error", { error: message });
-      throw new AppError(500, "Erro interno ao criar usuário", "register_failed");
+      throw new AppError(500, "Erro interno ao criar usuário", ERROR_CODES.REGISTER_FAILED);
     }
   }
   async login(input) {
     try {
       const user = await this.authRepository.findUserByEmail(input.email);
       if (!user) {
-        throw new AppError(401, "Email e ou senha incorretos", "invalid_credentials");
+        throw new AppError(401, "Email e ou senha incorretos", ERROR_CODES.INVALID_CREDENTIALS);
       }
       const passwordIsValid = await Bun.password.verify(input.password, user.password);
       if (!passwordIsValid) {
-        throw new AppError(401, "Email e ou senha incorretos", "invalid_credentials");
+        throw new AppError(401, "Email e ou senha incorretos", ERROR_CODES.INVALID_CREDENTIALS);
       }
       const token = await generateJWT({
         id: user.id,
@@ -33139,19 +34757,179 @@ class AuthService {
       logger.error("auth.login.unexpected_error", {
         error: error48 instanceof Error ? error48.message : "unknown_error"
       });
-      throw new AppError(500, "Erro interno ao autenticar usuário", "login_failed");
+      throw new AppError(500, "Erro interno ao autenticar usuário", ERROR_CODES.LOGIN_FAILED);
     }
   }
 }
 
 // src/modules/auth/auth.routes.ts
-var authRoutes = new Hono2;
+var authRoutes = new OpenAPIHono;
 var authRepository = new AuthRepository;
 var authService = new AuthService(authRepository);
 var authController = new AuthController(authService);
-authRoutes.post("/register", zValidator2("json", registerSchema), (c) => authController.register(c));
-authRoutes.post("/login", zValidator2("json", loginSchema), (c) => authController.login(c));
+var registerRoute = createRoute({
+  method: "post",
+  path: "/register",
+  tags: ["Auth"],
+  summary: "Registra um novo usuário",
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: registerSchema
+        }
+      }
+    }
+  },
+  responses: {
+    201: {
+      description: "Usuário registrado com sucesso",
+      content: {
+        "application/json": {
+          schema: registerResponseSchema,
+          example: {
+            success: true,
+            status: 201,
+            message: "Usuário registrado com sucesso",
+            data: {
+              message: "Usuário criado com sucesso",
+              user: {
+                id: "usr_01JY2MKRF8K3P7D2A9Q4X1NB5T",
+                name: "Felipe Santos",
+                token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+              }
+            }
+          }
+        }
+      }
+    },
+    400: {
+      description: "Dados inválidos",
+      content: {
+        "application/json": {
+          schema: errorResponseSchema,
+          example: {
+            success: false,
+            status: 400,
+            message: "Dados inválidos",
+            errors: [
+              {
+                code: "too_small",
+                message: "Senha deve ter no mínimo 6 caracteres",
+                path: "password"
+              }
+            ]
+          }
+        }
+      }
+    },
+    409: {
+      description: "Usuário ou e-mail já cadastrado",
+      content: {
+        "application/json": {
+          schema: errorResponseSchema,
+          example: {
+            success: false,
+            status: 409,
+            message: "Email já cadastrado",
+            errors: [
+              {
+                code: "EMAIL_ALREADY_EXISTS",
+                message: "Email já cadastrado"
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+});
+var loginRoute = createRoute({
+  method: "post",
+  path: "/login",
+  tags: ["Auth"],
+  summary: "Autentica um usuário",
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: loginSchema
+        }
+      }
+    }
+  },
+  responses: {
+    200: {
+      description: "Login realizado com sucesso",
+      content: {
+        "application/json": {
+          schema: loginResponseSchema,
+          example: {
+            success: true,
+            status: 200,
+            message: "Usuário autenticado com sucesso",
+            data: {
+              message: "Login realizado com sucesso",
+              id: "usr_01JY2MKRF8K3P7D2A9Q4X1NB5T",
+              name: "Felipe Santos",
+              token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+            }
+          }
+        }
+      }
+    },
+    400: {
+      description: "Dados inválidos",
+      content: {
+        "application/json": {
+          schema: errorResponseSchema,
+          example: {
+            success: false,
+            status: 400,
+            message: "Dados inválidos",
+            errors: [
+              {
+                code: "invalid_string",
+                message: "Email inválido",
+                path: "email"
+              }
+            ]
+          }
+        }
+      }
+    },
+    401: {
+      description: "Credenciais inválidas",
+      content: {
+        "application/json": {
+          schema: errorResponseSchema,
+          example: {
+            success: false,
+            status: 401,
+            message: "Email e ou senha incorretos",
+            errors: [
+              {
+                code: "INVALID_CREDENTIALS",
+                message: "Email e ou senha incorretos"
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+});
+authRoutes.openapi(registerRoute, (c) => authController.register(c, c.req.valid("json")));
+authRoutes.openapi(loginRoute, (c) => authController.login(c, c.req.valid("json")));
 var auth_routes_default = authRoutes;
+
+// src/shared/http/error-response.ts
+var buildErrorResponse = (status, message, errors4 = []) => ({
+  success: false,
+  status,
+  message,
+  errors: errors4
+});
 
 // src/shared/middlewares/request-logger.ts
 async function requestLogger(c, next) {
@@ -33189,45 +34967,129 @@ var buildSuccessResponse = (status, message, data) => ({
 
 // src/shared/middlewares/response-envelope.ts
 async function responseEnvelope(c, next) {
+  if (c.req.path === "/openapi.json" || c.req.path.startsWith("/docs")) {
+    await next();
+    return;
+  }
   const originalJson = c.json.bind(c);
   c.json = (data, status, headers) => {
     const httpStatus = status ?? 200;
     const hasEnvelope = !!data && typeof data === "object" && "success" in data && "status" in data;
     if (httpStatus >= 400 || hasEnvelope) {
-      return originalJson(data, httpStatus, headers);
+      return originalJson(data, { status: httpStatus, headers });
     }
-    return originalJson(buildSuccessResponse(httpStatus, "Sucesso", data), httpStatus, headers);
+    return originalJson(buildSuccessResponse(httpStatus, "Sucesso", data), {
+      status: httpStatus,
+      headers
+    });
   };
   await next();
 }
 
 // src/app/create-app.ts
+var healthResponseSchema = exports_external.object({
+  success: exports_external.boolean(),
+  status: exports_external.number(),
+  message: exports_external.string(),
+  data: exports_external.object({
+    message: exports_external.string(),
+    uptime: exports_external.string()
+  })
+}).openapi("HealthResponse");
 function createApp() {
-  const app = new Hono2;
+  const app = new OpenAPIHono;
   const startedAt = Date.now();
   app.use(prettyJSON());
   app.use("*", requestLogger);
   app.use("*", responseEnvelope);
   app.route("/auth", auth_routes_default);
-  app.get("/health", (c) => {
+  const healthRoute = createRoute({
+    method: "get",
+    path: "/health",
+    tags: ["Health"],
+    summary: "Status de disponibilidade da API",
+    responses: {
+      200: {
+        description: "Serviço disponível",
+        content: {
+          "application/json": {
+            schema: healthResponseSchema,
+            example: {
+              success: true,
+              status: 200,
+              message: "API operacional",
+              data: {
+                message: "Serviço disponível",
+                uptime: "142s"
+              }
+            }
+          }
+        }
+      }
+    }
+  });
+  app.openapi(healthRoute, (c) => {
     return c.json({
-      message: "Serviço disponível",
-      uptime: `${Math.floor((Date.now() - startedAt) / 1000)}s`
+      success: true,
+      status: 200,
+      message: "API operacional",
+      data: {
+        message: "Serviço disponível",
+        uptime: `${Math.floor((Date.now() - startedAt) / 1000)}s`
+      }
     }, 200);
   });
-  app.use("/api/*", bearerAuth({
-    verifyToken: validateJWT,
-    noAuthenticationHeader: {
-      message: "Bearer é obrigatório"
+  app.use("/api/*", async (c, next) => {
+    const authorization = c.req.header("authorization");
+    if (!authorization || !authorization.startsWith("Bearer ")) {
+      throw new AppError(401, "Bearer é obrigatório", ERROR_CODES.MISSING_TOKEN, [{ code: ERROR_CODES.MISSING_TOKEN, message: "Bearer é obrigatório" }], { "WWW-Authenticate": 'Bearer realm="api"' });
     }
-  }));
-  app.get("/api/page", (c) => c.json({ message: "You are authorized" }, 200));
+    const token = authorization.slice("Bearer ".length).trim();
+    if (!token) {
+      throw new AppError(401, "Bearer é obrigatório", ERROR_CODES.MISSING_TOKEN, [{ code: ERROR_CODES.MISSING_TOKEN, message: "Bearer é obrigatório" }], { "WWW-Authenticate": 'Bearer realm="api"' });
+    }
+    const authUser = await getUserFromJWT(token);
+    c.set("authUser", authUser);
+    await next();
+  });
+  app.get("/api/page", (c) => {
+    const authUser = c.get("authUser");
+    return c.json({ message: "You are authorized", authUser }, 200);
+  });
+  app.doc("/openapi.json", {
+    openapi: "3.0.0",
+    info: {
+      title: "i-revenue API",
+      version: "1.0.0",
+      description: "Documentação da API"
+    }
+  });
+  app.get("/docs", (c) => c.html(`<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>i-revenue API Docs</title>
+    <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5/swagger-ui.css" />
+  </head>
+  <body>
+    <div id="swagger-ui"></div>
+    <script src="https://unpkg.com/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
+    <script>
+      SwaggerUIBundle({
+        url: '/openapi.json',
+        dom_id: '#swagger-ui',
+      })
+    </script>
+  </body>
+</html>`));
   app.notFound((c) => {
     const message = "Rota não encontrada";
-    return c.json(buildErrorResponse(404, message, [{ code: "not_found", message }]), 404);
+    return c.json(buildErrorResponse(404, message, [{ code: ERROR_CODES.NOT_FOUND, message }]), 404);
   });
   app.onError((error48, c) => {
     if (error48 instanceof AppError) {
+      const status = error48.status;
       if (error48.headers) {
         for (const [key, value] of Object.entries(error48.headers)) {
           c.header(key, value);
@@ -33240,7 +35102,7 @@ function createApp() {
         code: error48.code,
         message: error48.message
       });
-      return c.json(buildErrorResponse(error48.status, error48.message, error48.details.length ? error48.details : [{ code: error48.code, message: error48.message }]), error48.status);
+      return c.json(buildErrorResponse(status, error48.message, error48.details.length ? error48.details : [{ code: error48.code, message: error48.message }]), status);
     }
     logger.error("request.unhandled_error", {
       "http.request.method": c.req.method,
@@ -33249,7 +35111,7 @@ function createApp() {
       error: error48 instanceof Error ? error48.message : "unknown_error"
     });
     const message = "Erro interno do servidor";
-    return c.json(buildErrorResponse(500, message, [{ code: "internal_error", message }]), 500);
+    return c.json(buildErrorResponse(500, message, [{ code: ERROR_CODES.INTERNAL_ERROR, message }]), 500);
   });
   return app;
 }

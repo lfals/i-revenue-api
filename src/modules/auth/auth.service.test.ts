@@ -31,8 +31,8 @@ beforeAll(async () => {
     generateJWT: async ({ id }: { id: string }) => `token-${id}`,
   }))
 
-  const authServiceModule = await import('./auth.service')
-  const appErrorModule = await import('../../shared/errors/app-error')
+  const authServiceModule = await import('./auth.service.js')
+  const appErrorModule = await import('../../shared/errors/app-error.js')
 
   AuthService = authServiceModule.AuthService as AuthServiceCtor
   AppError = appErrorModule.AppError as AppErrorCtor

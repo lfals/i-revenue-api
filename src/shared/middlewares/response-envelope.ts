@@ -3,6 +3,11 @@ import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import { buildSuccessResponse } from '../http/success-response'
 
 export async function responseEnvelope(c: Context, next: Next) {
+  if (c.req.path === '/openapi.json' || c.req.path.startsWith('/docs')) {
+    await next()
+    return
+  }
+
   const originalJson = c.json.bind(c)
 
   c.json = ((data: unknown, status?: number, headers?: HeadersInit) => {

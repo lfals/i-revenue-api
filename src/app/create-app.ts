@@ -1,4 +1,4 @@
-import { Hono } from 'hono'
+import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { prettyJSON } from 'hono/pretty-json'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import authRoutes from '../modules/auth/auth.routes'
@@ -11,8 +11,20 @@ import { logger } from '../shared/logger/logger'
 import { requestLogger } from '../shared/middlewares/request-logger'
 import { responseEnvelope } from '../shared/middlewares/response-envelope'
 
+const healthResponseSchema = z
+  .object({
+    success: z.boolean(),
+    status: z.number(),
+    message: z.string(),
+    data: z.object({
+      message: z.string(),
+      uptime: z.string(),
+    }),
+  })
+  .openapi('HealthResponse')
+
 export function createApp() {
-  const app = new Hono<{ Variables: { authUser: JwtPayload } }>()
+  const app = new OpenAPIHono<{ Variables: { authUser: JwtPayload } }>()
   const startedAt = Date.now()
 
   app.use(prettyJSON())
@@ -21,11 +33,42 @@ export function createApp() {
 
   app.route('/auth', authRoutes)
 
-  app.get('/health', (c) => {
+  const healthRoute = createRoute({
+    method: 'get',
+    path: '/health',
+    tags: ['Health'],
+    summary: 'Status de disponibilidade da API',
+    responses: {
+      200: {
+        description: 'Serviço disponível',
+        content: {
+          'application/json': {
+            schema: healthResponseSchema,
+            example: {
+              success: true,
+              status: 200,
+              message: 'API operacional',
+              data: {
+                message: 'Serviço disponível',
+                uptime: '142s',
+              },
+            },
+          },
+        },
+      },
+    },
+  })
+
+  app.openapi(healthRoute, (c) => {
     return c.json(
       {
-        message: 'Serviço disponível',
-        uptime: `${Math.floor((Date.now() - startedAt) / 1000)}s`,
+        success: true,
+        status: 200,
+        message: 'API operacional',
+        data: {
+          message: 'Serviço disponível',
+          uptime: `${Math.floor((Date.now() - startedAt) / 1000)}s`,
+        },
       },
       200,
     )
@@ -64,6 +107,37 @@ export function createApp() {
     const authUser = c.get('authUser')
     return c.json({ message: 'You are authorized', authUser }, 200)
   })
+
+  app.doc('/openapi.json', {
+    openapi: '3.0.0',
+    info: {
+      title: 'i-revenue API',
+      version: '1.0.0',
+      description: 'Documentação da API',
+    },
+  })
+
+  app.get('/docs', (c) =>
+    c.html(`<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>i-revenue API Docs</title>
+    <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5/swagger-ui.css" />
+  </head>
+  <body>
+    <div id="swagger-ui"></div>
+    <script src="https://unpkg.com/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
+    <script>
+      SwaggerUIBundle({
+        url: '/openapi.json',
+        dom_id: '#swagger-ui',
+      })
+    </script>
+  </body>
+</html>`),
+  )
 
   app.notFound((c) => {
     const message = 'Rota não encontrada'
