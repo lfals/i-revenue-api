@@ -50,7 +50,7 @@ export class AuthService {
         message: 'Usuário criado com sucesso',
         user: {
           ...createdUser,
-          accessToken: tokens.accessToken,
+          token: tokens.accessToken,
         },
         refreshToken: tokens.refreshToken,
       }
@@ -97,7 +97,7 @@ export class AuthService {
         message: 'Login realizado com sucesso',
         id: user.id,
         name: user.name,
-        accessToken: tokens.accessToken,
+        token: tokens.accessToken,
         refreshToken: tokens.refreshToken,
       }
     } catch (error) {
@@ -131,7 +131,7 @@ export class AuthService {
         message: 'Token renovado com sucesso',
         id: user.id,
         name: user.name,
-        accessToken: tokens.accessToken,
+        token: tokens.accessToken,
         refreshToken: tokens.refreshToken,
       }
     } catch (error) {

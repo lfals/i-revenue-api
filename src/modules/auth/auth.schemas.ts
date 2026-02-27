@@ -30,7 +30,7 @@ export const authUserSchema = z.object({
 }).openapi('AuthUser')
 
 export const authTokenUserSchema = authUserSchema.extend({
-  accessToken: z.string(),
+  token: z.string(),
 }).openapi('AuthTokenUser')
 
 export const registerResponseSchema = z.object({

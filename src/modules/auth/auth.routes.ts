@@ -11,7 +11,7 @@ import {
 } from './auth.schemas'
 import { AuthService } from './auth.service'
 
-const authRoutes = new OpenAPIHono()
+const authRoutes = new OpenAPIHono<{ Variables: { userId: string } }>()
 
 const authRepository = new AuthRepository()
 const authService = new AuthService(authRepository)
@@ -44,7 +44,7 @@ const registerRoute = createRoute({
             data: {
               id: "f01d0190-7b66-4480-8fa3-3bbebaddb3cd",
               name: 'Felipe Santos',
-              accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+              token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
             },
           },
         },
@@ -119,7 +119,7 @@ const loginRoute = createRoute({
             data: {
               id: "f01d0190-7b66-4480-8fa3-3bbebaddb3cd",
               name: 'Felipe Santos',
-              accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+              token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
             },
           },
         },
@@ -183,7 +183,7 @@ const renewRoute = createRoute({
             data: {
               id: "f01d0190-7b66-4480-8fa3-3bbebaddb3cd",
               name: 'Felipe Santos',
-              accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+              token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
             },
           },
         },

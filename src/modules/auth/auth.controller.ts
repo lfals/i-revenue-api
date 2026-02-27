@@ -6,6 +6,7 @@ import type { LoginInput, RegisterInput } from './auth.schemas'
 import { AuthService } from './auth.service'
 
 const refreshTokenCookieName = 'refresh_token'
+type AuthContext = Context<{ Variables: { userId: string } }>
 
 function setRefreshTokenCookie(c: Context, refreshToken: string) {
   setCookie(c, refreshTokenCookieName, refreshToken, {
@@ -37,9 +38,10 @@ export class AuthController {
     )
   }
 
-  async login(c: Context, payload: LoginInput) {
+  async login(c: AuthContext, payload: LoginInput) {
     const response = await this.authService.login(payload)
     setRefreshTokenCookie(c, response.refreshToken)
+    c.set('userId', response.id)
 
     return c.json(
       {
@@ -49,7 +51,7 @@ export class AuthController {
         data: {
           id: response.id,
           name: response.name,
-          accessToken: response.accessToken,
+          token: response.token,
         },
       },
       200,
@@ -69,7 +71,7 @@ export class AuthController {
         data: {
           id: response.id,
           name: response.name,
-          accessToken: response.accessToken,
+          token: response.token,
         },
       },
       200,

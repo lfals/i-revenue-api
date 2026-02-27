@@ -310,7 +310,7 @@ describe('Auth renew endpoint', () => {
         message: string
         id: string
         name: string
-        accessToken: string
+        token: string
       }
     }
 
@@ -320,8 +320,8 @@ describe('Auth renew endpoint', () => {
     expect(body.message).toBe('Token renovado com sucesso')
     expect(body.data.id).toBe('user-renew')
     expect(body.data.name).toBe('Felps')
-    expect(typeof body.data.accessToken).toBe('string')
-    expect(body.data.accessToken.length).toBeGreaterThan(10)
+    expect(typeof body.data.token).toBe('string')
+    expect(body.data.token.length).toBeGreaterThan(10)
     expect(response.headers.get('set-cookie')).toContain('refresh_token=')
   })
 

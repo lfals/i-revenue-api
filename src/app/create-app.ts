@@ -30,7 +30,7 @@ const healthResponseSchema = z
   .openapi('HealthResponse')
 
 export function createApp() {
-  const app = new OpenAPIHono<{ Variables: { authUser: JwtPayload } }>()
+  const app = new OpenAPIHono<{ Variables: { authUser: JwtPayload; userId: string } }>()
   const apiVersion = packageJson.version
   const startedAt = Date.now()
   const allowedOrigins = new Set([

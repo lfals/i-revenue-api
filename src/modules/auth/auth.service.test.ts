@@ -69,14 +69,14 @@ describe('AuthService.register', () => {
       password: '123456',
     })) as {
       message: string
-      user: { id: string; name: string; accessToken: string }
+      user: { id: string; name: string; token: string }
       refreshToken: string
     }
 
     expect(result.message).toBe('Usuário criado com sucesso')
     expect(result.user.id).toBe('user-1')
     expect(result.user.name).toBe('Felps')
-    expect(result.user.accessToken).toBe('access-user-1')
+    expect(result.user.token).toBe('access-user-1')
     expect(result.refreshToken).toBe('refresh-user-1')
     expect(receivedPassword).not.toBe('123456')
     expect(await Bun.password.verify('123456', receivedPassword)).toBeTrue()
@@ -156,14 +156,14 @@ describe('AuthService.login', () => {
       message: string
       id: string
       name: string
-      accessToken: string
+      token: string
       refreshToken: string
     }
 
     expect(result.message).toBe('Login realizado com sucesso')
     expect(result.id).toBe('user-1')
     expect(result.name).toBe('Felps')
-    expect(result.accessToken).toBe('access-user-1')
+    expect(result.token).toBe('access-user-1')
     expect(result.refreshToken).toBe('refresh-user-1')
   })
 
@@ -252,14 +252,14 @@ describe('AuthService.renew', () => {
       message: string
       id: string
       name: string
-      accessToken: string
+      token: string
       refreshToken: string
     }
 
     expect(result.message).toBe('Token renovado com sucesso')
     expect(result.id).toBe('user-1')
     expect(result.name).toBe('Felps')
-    expect(result.accessToken).toBe('access-user-1')
+    expect(result.token).toBe('access-user-1')
     expect(result.refreshToken).toBe('refresh-user-1')
   })
 
