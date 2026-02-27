@@ -42,12 +42,9 @@ const registerRoute = createRoute({
             status: 201,
             message: 'Usuário registrado com sucesso',
             data: {
-              message: 'Usuário criado com sucesso',
-              user: {
-                id: "f01d0190-7b66-4480-8fa3-3bbebaddb3cd",
-                name: 'Felipe Santos',
-                accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
-              },
+              id: "f01d0190-7b66-4480-8fa3-3bbebaddb3cd",
+              name: 'Felipe Santos',
+              accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
             },
           },
         },
