@@ -272,6 +272,61 @@ describe('Secure routes auth context', () => {
   })
 })
 
+describe('Public auth routes', () => {
+  it('nao exige bearer token para register', async () => {
+    const app = createApp()
+    const response = await app.request('http://localhost/auth/register', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: 'A',
+        email: 'email-invalido',
+        password: '123',
+      }),
+    })
+    const body = (await response.json()) as {
+      success: boolean
+      status: number
+      message: string
+      errors: Array<{ code: string; message?: string; path?: string }>
+    }
+
+    expect(response.status).toBe(400)
+    expect(body.success).toBeFalse()
+    expect(body.status).toBe(400)
+    expect(body.message).not.toBe('Bearer é obrigatório')
+    expect(body.errors.length).toBeGreaterThan(0)
+  })
+
+  it('nao exige bearer token para login', async () => {
+    const app = createApp()
+    const response = await app.request('http://localhost/auth/login', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: 'email-invalido',
+        password: '',
+      }),
+    })
+    const body = (await response.json()) as {
+      success: boolean
+      status: number
+      message: string
+      errors: Array<{ code: string; message?: string; path?: string }>
+    }
+
+    expect(response.status).toBe(400)
+    expect(body.success).toBeFalse()
+    expect(body.status).toBe(400)
+    expect(body.message).not.toBe('Bearer é obrigatório')
+    expect(body.errors.length).toBeGreaterThan(0)
+  })
+})
+
 describe('CORS', () => {
   it('permite requisicoes de http://localhost:5173 com credentials', async () => {
     const app = createApp()

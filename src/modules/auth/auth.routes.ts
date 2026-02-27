@@ -22,6 +22,7 @@ const registerRoute = createRoute({
   path: '/register',
   tags: ['Auth'],
   summary: 'Registra um novo usuário',
+  security: [],
   request: {
     body: {
       content: {
@@ -97,6 +98,7 @@ const loginRoute = createRoute({
   path: '/login',
   tags: ['Auth'],
   summary: 'Autentica um usuário',
+  security: [],
   request: {
     body: {
       content: {
