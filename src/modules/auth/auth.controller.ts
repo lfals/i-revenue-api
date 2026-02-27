@@ -18,7 +18,7 @@ function setRefreshTokenCookie(c: Context, refreshToken: string) {
 }
 
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   async register(c: Context, payload: RegisterInput) {
     const response = await this.authService.register(payload)
@@ -30,8 +30,7 @@ export class AuthController {
         status: 201,
         message: 'Usuário registrado com sucesso',
         data: {
-          message: response.message,
-          user: response.user,
+          ...response.user,
         },
       },
       201,
@@ -48,7 +47,6 @@ export class AuthController {
         status: 200,
         message: 'Usuário autenticado com sucesso',
         data: {
-          message: response.message,
           id: response.id,
           name: response.name,
           accessToken: response.accessToken,
@@ -69,7 +67,6 @@ export class AuthController {
         status: 200,
         message: 'Token renovado com sucesso',
         data: {
-          message: response.message,
           id: response.id,
           name: response.name,
           accessToken: response.accessToken,

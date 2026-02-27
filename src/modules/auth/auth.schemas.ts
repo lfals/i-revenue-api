@@ -34,7 +34,6 @@ export const registerResponseSchema = z.object({
   status: z.number(),
   message: z.string(),
   data: z.object({
-    message: z.string(),
     user: authUserSchema.extend({
       accessToken: z.string(),
     }),
@@ -46,7 +45,6 @@ export const loginResponseSchema = z.object({
   status: z.number(),
   message: z.string(),
   data: z.object({
-    message: z.string(),
     id: z.string(),
     name: z.string(),
     accessToken: z.string(),
@@ -58,7 +56,6 @@ export const renewResponseSchema = z.object({
   status: z.number(),
   message: z.string(),
   data: z.object({
-    message: z.string(),
     id: z.string(),
     name: z.string(),
     accessToken: z.string(),

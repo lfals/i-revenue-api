@@ -120,7 +120,6 @@ const loginRoute = createRoute({
             status: 200,
             message: 'Usuário autenticado com sucesso',
             data: {
-              message: 'Login realizado com sucesso',
               id: "f01d0190-7b66-4480-8fa3-3bbebaddb3cd",
               name: 'Felipe Santos',
               accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
@@ -141,7 +140,6 @@ const loginRoute = createRoute({
             errors: [
               {
                 code: 'invalid_string',
-                message: 'Email inválido',
                 path: 'email',
               },
             ],
@@ -161,7 +159,6 @@ const loginRoute = createRoute({
             errors: [
               {
                 code: 'INVALID_CREDENTIALS',
-                message: 'Email e ou senha incorretos',
               },
             ],
           },
@@ -187,7 +184,6 @@ const renewRoute = createRoute({
             status: 200,
             message: 'Token renovado com sucesso',
             data: {
-              message: 'Token renovado com sucesso',
               id: "f01d0190-7b66-4480-8fa3-3bbebaddb3cd",
               name: 'Felipe Santos',
               accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
@@ -204,7 +200,6 @@ const renewRoute = createRoute({
           example: {
             success: false,
             status: 401,
-            message: 'Refresh token inválido',
             errors: [
               {
                 code: 'invalid_refresh_token',
