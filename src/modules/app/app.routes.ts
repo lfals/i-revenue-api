@@ -7,12 +7,14 @@ const appRoutes = new OpenAPIHono()
 
 const appService = new AppService()
 const appController = new AppController(appService)
+const bearerSecurity = [{ BearerAuth: [] }]
 
 const dashboardGetRoute = createRoute({
   method: 'get',
   path: '/dashboard',
   tags: ['App'],
   summary: 'Exemplo GET da rota dashboard',
+  security: bearerSecurity,
   responses: {
     200: {
       description: 'Resposta de exemplo para GET',
@@ -36,6 +38,7 @@ const dashboardPostRoute = createRoute({
   path: '/dashboard',
   tags: ['App'],
   summary: 'Exemplo POST da rota dashboard',
+  security: bearerSecurity,
   responses: {
     200: {
       description: 'Resposta de exemplo para POST',
@@ -59,6 +62,7 @@ const dashboardPutRoute = createRoute({
   path: '/dashboard',
   tags: ['App'],
   summary: 'Exemplo PUT da rota dashboard',
+  security: bearerSecurity,
   responses: {
     200: {
       description: 'Resposta de exemplo para PUT',
@@ -82,6 +86,7 @@ const dashboardPatchRoute = createRoute({
   path: '/dashboard',
   tags: ['App'],
   summary: 'Exemplo PATCH da rota dashboard',
+  security: bearerSecurity,
   responses: {
     200: {
       description: 'Resposta de exemplo para PATCH',
@@ -105,6 +110,7 @@ const dashboardDeleteRoute = createRoute({
   path: '/dashboard',
   tags: ['App'],
   summary: 'Exemplo DELETE da rota dashboard',
+  security: bearerSecurity,
   responses: {
     200: {
       description: 'Resposta de exemplo para DELETE',

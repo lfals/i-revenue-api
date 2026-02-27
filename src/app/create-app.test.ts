@@ -233,4 +233,25 @@ describe('Secure routes auth context', () => {
     expect(body.message).toBe('Sucesso')
     expect(body.data).toEqual([])
   })
+
+  it('retorna 401 para dashboard em todos os metodos sem token', async () => {
+    const app = createApp()
+    const methods: RequestInit['method'][] = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
+
+    for (const method of methods) {
+      const response = await app.request('http://localhost/api/dashboard', { method })
+      const body = (await response.json()) as {
+        success: boolean
+        status: number
+        message: string
+        errors: Array<{ code: string; message: string }>
+      }
+
+      expect(response.status).toBe(401)
+      expect(body.success).toBeFalse()
+      expect(body.status).toBe(401)
+      expect(body.message).toBe('Bearer é obrigatório')
+      expect(body.errors[0]?.code).toBe(ERROR_CODES.MISSING_TOKEN)
+    }
+  })
 })

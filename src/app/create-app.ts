@@ -27,13 +27,17 @@ const healthResponseSchema = z
 export function createApp() {
   const app = new OpenAPIHono<{ Variables: { authUser: JwtPayload } }>()
   const startedAt = Date.now()
+  app.openAPIRegistry.registerComponent('securitySchemes', 'BearerAuth', {
+    type: 'http',
+    scheme: 'bearer',
+    bearerFormat: 'JWT',
+  })
 
   app.use(prettyJSON())
   app.use('*', requestLogger)
   app.use('*', responseEnvelope)
 
   app.route('/auth', authRoutes)
-  app.route('/api', appRoutes)
 
   const healthRoute = createRoute({
     method: 'get',
@@ -110,8 +114,22 @@ export function createApp() {
     return c.json({ message: 'You are authorized', authUser }, 200)
   })
 
+  app.route('/api', appRoutes)
+
   app.doc('/openapi.json', {
     openapi: '3.0.0',
+    servers: [{
+      url: "https://i-revenue-api-production.up.railway.app/",
+      description: "Prod"
+    },
+    {
+      url: "https://i-revenue-api-development.up.railway.app",
+      description: "Dev"
+    },
+    {
+      url: "http://localhost:3000",
+      description: "Local"
+    }],
     info: {
       title: 'i-revenue API',
       version: '1.0.0',
