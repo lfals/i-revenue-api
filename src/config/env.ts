@@ -5,6 +5,7 @@ const envSchema = z.object({
   LOCAL_DB: z.string().min(1, 'LOCAL_DB é obrigatório'),
   TURSO_AUTH_TOKEN: z.string().optional(),
   TURSO_DATABASE_URL: z.string().optional(),
+  DATABASE_URL: z.string().optional(),
   SECRET: z.string().optional(),
   JWT_SECRET: z.string().min(1, 'JWT_SECRET é obrigatório'),
   OTEL_SERVICE_NAME: z.string().default('i-revenue-api'),

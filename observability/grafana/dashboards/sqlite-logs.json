@@ -1,0 +1,109 @@
+{
+  "id": null,
+  "uid": "postgres-logs-overview",
+  "title": "Postgres Logs Overview",
+  "tags": ["postgres", "logs"],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "editable": true,
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "table",
+      "title": "Logs recentes",
+      "datasource": {
+        "type": "postgres",
+        "uid": "postgres-logs"
+      },
+      "gridPos": {
+        "h": 18,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "table",
+          "rawQueryText": "SELECT timestamp, severity_text, body, attributes->>'url.path' AS path, attributes->>'service.name' AS service, attributes->>'http.request.method' AS method, attributes->>'user_agent.original' AS user_agent, attributes->>'http.request.header.x_request_id' AS x_request_id, trace_id, span_id FROM logs_table ORDER BY timestamp DESC LIMIT 500;"
+        }
+      ],
+      "options": {
+        "showHeader": true,
+        "footer": {
+          "show": false,
+          "reducer": ["sum"]
+        }
+      }
+    },
+    {
+      "id": 2,
+      "type": "timeseries",
+      "title": "Logs por minuto",
+      "datasource": {
+        "type": "postgres",
+        "uid": "postgres-logs"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 18
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "time_series",
+          "rawQueryText": "SELECT date_trunc('minute', timestamp) AS time, COUNT(*) AS value FROM logs_table WHERE timestamp >= NOW() - INTERVAL '6 hours' GROUP BY 1 ORDER BY 1;"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      }
+    },
+    {
+      "id": 3,
+      "type": "barchart",
+      "title": "Logs por severidade",
+      "datasource": {
+        "type": "postgres",
+        "uid": "postgres-logs"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 26
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "table",
+          "rawQueryText": "SELECT severity_text, COUNT(*) AS total FROM logs_table GROUP BY severity_text ORDER BY total DESC;"
+        }
+      ],
+      "options": {
+        "orientation": "horizontal",
+        "xField": "total",
+        "xTickLabelRotation": 0,
+        "showValue": "always"
+      }
+    }
+  ]
+}

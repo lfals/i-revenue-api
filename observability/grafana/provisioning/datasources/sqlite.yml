@@ -1,0 +1,17 @@
+apiVersion: 1
+
+datasources:
+  - name: Postgres Logs (Railway)
+    uid: postgres-logs
+    type: postgres
+    access: proxy
+    isDefault: true
+    jsonData:
+      database: railway
+      postgresVersion: 1500
+      sslmode: disable
+      timescaledb: false
+    url: postgres.railway.internal:5432
+    user: postgres
+    secureJsonData:
+      password: twLBSsnZrzgOyKUlHhAYxBENacfOIkaD
