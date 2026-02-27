@@ -8,6 +8,7 @@ export const ERROR_CODES = {
   TOKEN_GENERATION_FAILED: 'token_generation_failed',
   INVALID_TOKEN: 'invalid_token',
   MISSING_TOKEN: 'missing_token',
+  RATE_LIMIT_EXCEEDED: 'rate_limit_exceeded',
   NOT_FOUND: 'not_found',
   INTERNAL_ERROR: 'internal_error',
 } as const
