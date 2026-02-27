@@ -8,6 +8,9 @@ const envSchema = z.object({
   DATABASE_URL: z.string().optional(),
   SECRET: z.string().optional(),
   JWT_SECRET: z.string().min(1, 'JWT_SECRET é obrigatório'),
+  REFRESH_JWT_SECRET: z.string().optional(),
+  ACCESS_TOKEN_TTL_SECONDS: z.coerce.number().int().positive().optional(),
+  REFRESH_TOKEN_TTL_SECONDS: z.coerce.number().int().positive().optional(),
   OTEL_SERVICE_NAME: z.string().default('i-revenue-api'),
 })
 

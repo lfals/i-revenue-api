@@ -1,4 +1,8 @@
-import { generateJWT } from '../../infra/security/jwt.service'
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  getUserFromRefreshToken,
+} from '../../infra/security/jwt.service'
 import { AppError } from '../../shared/errors/app-error'
 import { ERROR_CODES } from '../../shared/errors/error-codes'
 import { logger } from '../../shared/logger/logger'
@@ -7,6 +11,18 @@ import { AuthRepository } from './auth.repository'
 
 export class AuthService {
   constructor(private readonly authRepository: AuthRepository) { }
+
+  private async issueTokens(payload: { id: string; name: string }) {
+    const [accessToken, refreshToken] = await Promise.all([
+      generateAccessToken(payload),
+      generateRefreshToken(payload),
+    ])
+
+    return {
+      accessToken,
+      refreshToken,
+    }
+  }
 
   async register(input: RegisterInput) {
     try {
@@ -25,7 +41,7 @@ export class AuthService {
         )
       }
 
-      const token = await generateJWT({
+      const tokens = await this.issueTokens({
         id: createdUser.id,
         name: createdUser.name,
       })
@@ -34,8 +50,9 @@ export class AuthService {
         message: 'Usuário criado com sucesso',
         user: {
           ...createdUser,
-          token,
+          accessToken: tokens.accessToken,
         },
+        refreshToken: tokens.refreshToken,
       }
     } catch (error) {
       if (error instanceof AppError) {
@@ -71,7 +88,7 @@ export class AuthService {
         throw new AppError(401, 'Email e ou senha incorretos', ERROR_CODES.INVALID_CREDENTIALS)
       }
 
-      const token = await generateJWT({
+      const tokens = await this.issueTokens({
         id: user.id,
         name: user.name,
       })
@@ -80,7 +97,8 @@ export class AuthService {
         message: 'Login realizado com sucesso',
         id: user.id,
         name: user.name,
-        token,
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken,
       }
     } catch (error) {
       if (error instanceof AppError) {
@@ -91,6 +109,40 @@ export class AuthService {
         error: error instanceof Error ? error.message : 'unknown_error',
       })
       throw new AppError(500, 'Erro interno ao autenticar usuário', ERROR_CODES.LOGIN_FAILED)
+    }
+  }
+
+  async renew(refreshToken: string) {
+    try {
+      if (!refreshToken) {
+        throw new AppError(
+          401,
+          'Refresh token é obrigatório',
+          ERROR_CODES.MISSING_REFRESH_TOKEN,
+          [{ code: ERROR_CODES.MISSING_REFRESH_TOKEN, message: 'Refresh token é obrigatório' }],
+          { 'WWW-Authenticate': `Bearer error="${ERROR_CODES.MISSING_REFRESH_TOKEN}"` },
+        )
+      }
+
+      const user = await getUserFromRefreshToken(refreshToken)
+      const tokens = await this.issueTokens(user)
+
+      return {
+        message: 'Token renovado com sucesso',
+        id: user.id,
+        name: user.name,
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken,
+      }
+    } catch (error) {
+      if (error instanceof AppError) {
+        throw error
+      }
+
+      logger.error('auth.renew.unexpected_error', {
+        error: error instanceof Error ? error.message : 'unknown_error',
+      })
+      throw new AppError(500, 'Erro interno ao renovar token', ERROR_CODES.TOKEN_RENEWAL_FAILED)
     }
   }
 }

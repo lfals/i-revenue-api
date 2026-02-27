@@ -7,6 +7,7 @@ import {
   loginSchema,
   registerResponseSchema,
   registerSchema,
+  renewResponseSchema,
 } from './auth.schemas'
 import { AuthService } from './auth.service'
 
@@ -45,7 +46,7 @@ const registerRoute = createRoute({
               user: {
                 id: "f01d0190-7b66-4480-8fa3-3bbebaddb3cd",
                 name: 'Felipe Santos',
-                token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+                accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
               },
             },
           },
@@ -122,7 +123,7 @@ const loginRoute = createRoute({
               message: 'Login realizado com sucesso',
               id: "f01d0190-7b66-4480-8fa3-3bbebaddb3cd",
               name: 'Felipe Santos',
-              token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+              accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
             },
           },
         },
@@ -170,7 +171,55 @@ const loginRoute = createRoute({
   },
 })
 
+const renewRoute = createRoute({
+  method: 'post',
+  path: '/renew',
+  tags: ['Auth'],
+  summary: 'Renova o access token usando refresh token em cookie HttpOnly',
+  responses: {
+    200: {
+      description: 'Token renovado com sucesso',
+      content: {
+        'application/json': {
+          schema: renewResponseSchema,
+          example: {
+            success: true,
+            status: 200,
+            message: 'Token renovado com sucesso',
+            data: {
+              message: 'Token renovado com sucesso',
+              id: "f01d0190-7b66-4480-8fa3-3bbebaddb3cd",
+              name: 'Felipe Santos',
+              accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+            },
+          },
+        },
+      },
+    },
+    401: {
+      description: 'Refresh token ausente ou inválido',
+      content: {
+        'application/json': {
+          schema: errorResponseSchema,
+          example: {
+            success: false,
+            status: 401,
+            message: 'Refresh token inválido',
+            errors: [
+              {
+                code: 'invalid_refresh_token',
+                message: 'Refresh token inválido',
+              },
+            ],
+          },
+        },
+      },
+    },
+  },
+})
+
 authRoutes.openapi(registerRoute, (c) => authController.register(c, c.req.valid('json')))
 authRoutes.openapi(loginRoute, (c) => authController.login(c, c.req.valid('json')))
+authRoutes.openapi(renewRoute, (c) => authController.renew(c))
 
 export default authRoutes

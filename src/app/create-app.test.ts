@@ -6,9 +6,11 @@ type CreateAppFn = () => {
 }
 
 type GenerateJWTFn = (payload: { id: string; name: string }) => Promise<string>
+type GenerateRefreshTokenFn = (payload: { id: string; name: string }) => Promise<string>
 
 let createApp: CreateAppFn
 let generateJWT: GenerateJWTFn
+let generateRefreshToken: GenerateRefreshTokenFn
 const originalNodeEnv = process.env.NODE_ENV
 const originalSwaggerUser = process.env.SWAGGER_USER
 const originalSwaggerPass = process.env.SWAGGER_PASS
@@ -38,6 +40,7 @@ beforeAll(async () => {
 
   createApp = appModule.createApp as CreateAppFn
   generateJWT = jwtModule.generateJWT as GenerateJWTFn
+  generateRefreshToken = jwtModule.generateRefreshToken as GenerateRefreshTokenFn
 })
 
 describe('Secure routes auth context', () => {
@@ -266,6 +269,79 @@ describe('Secure routes auth context', () => {
       expect(body.message).toBe('Bearer é obrigatório')
       expect(body.errors[0]?.code).toBe(ERROR_CODES.MISSING_TOKEN)
     }
+  })
+})
+
+describe('CORS', () => {
+  it('permite requisicoes de http://localhost:5173 com credentials', async () => {
+    const app = createApp()
+    const response = await app.request('http://localhost/health', {
+      method: 'OPTIONS',
+      headers: {
+        origin: 'http://localhost:5173',
+        'access-control-request-method': 'GET',
+      },
+    })
+
+    expect(response.headers.get('access-control-allow-origin')).toBe('http://localhost:5173')
+    expect(response.headers.get('access-control-allow-credentials')).toBe('true')
+  })
+})
+
+describe('Auth renew endpoint', () => {
+  it('renova access token quando refresh token estiver presente no cookie', async () => {
+    const app = createApp()
+    const refreshToken = await generateRefreshToken({
+      id: 'user-renew',
+      name: 'Felps',
+    })
+
+    const response = await app.request('http://localhost/auth/renew', {
+      method: 'POST',
+      headers: {
+        cookie: `refresh_token=${refreshToken}`,
+      },
+    })
+    const body = (await response.json()) as {
+      success: boolean
+      status: number
+      message: string
+      data: {
+        message: string
+        id: string
+        name: string
+        accessToken: string
+      }
+    }
+
+    expect(response.status).toBe(200)
+    expect(body.success).toBeTrue()
+    expect(body.status).toBe(200)
+    expect(body.message).toBe('Token renovado com sucesso')
+    expect(body.data.id).toBe('user-renew')
+    expect(body.data.name).toBe('Felps')
+    expect(typeof body.data.accessToken).toBe('string')
+    expect(body.data.accessToken.length).toBeGreaterThan(10)
+    expect(response.headers.get('set-cookie')).toContain('refresh_token=')
+  })
+
+  it('retorna 401 quando refresh token nao for enviado', async () => {
+    const app = createApp()
+    const response = await app.request('http://localhost/auth/renew', {
+      method: 'POST',
+    })
+    const body = (await response.json()) as {
+      success: boolean
+      status: number
+      message: string
+      errors: Array<{ code: string; message: string }>
+    }
+
+    expect(response.status).toBe(401)
+    expect(body.success).toBeFalse()
+    expect(body.status).toBe(401)
+    expect(body.message).toBe('Refresh token é obrigatório')
+    expect(body.errors[0]?.code).toBe(ERROR_CODES.MISSING_REFRESH_TOKEN)
   })
 })
 

@@ -7,6 +7,7 @@ type AuthServiceCtor = new (authRepository: {
 }) => {
   register: (input: { name: string; email: string; password: string }) => Promise<unknown>
   login: (input: { email: string; password: string }) => Promise<unknown>
+  renew: (refreshToken: string) => Promise<unknown>
 }
 
 type AppErrorCtor = new (...args: unknown[]) => Error & {
@@ -28,7 +29,15 @@ beforeAll(async () => {
   }))
 
   mock.module('../../infra/security/jwt.service', () => ({
-    generateJWT: async ({ id }: { id: string }) => `token-${id}`,
+    generateAccessToken: async ({ id }: { id: string }) => `access-${id}`,
+    generateRefreshToken: async ({ id }: { id: string }) => `refresh-${id}`,
+    getUserFromRefreshToken: async (token: string) => {
+      if (token === 'refresh-user-1') {
+        return { id: 'user-1', name: 'Felps' }
+      }
+
+      throw new Error('invalid_refresh_token')
+    },
   }))
 
   const authServiceModule = await import('./auth.service.js')
@@ -39,7 +48,7 @@ beforeAll(async () => {
 })
 
 describe('AuthService.register', () => {
-  it('cria usuario, aplica hash na senha e retorna token', async () => {
+  it('cria usuario, aplica hash na senha e retorna tokens', async () => {
     let receivedPassword = ''
 
     const repository = {
@@ -60,14 +69,15 @@ describe('AuthService.register', () => {
       password: '123456',
     })) as {
       message: string
-      user: { id: string; name: string; token: string }
+      user: { id: string; name: string; accessToken: string }
+      refreshToken: string
     }
 
     expect(result.message).toBe('Usuário criado com sucesso')
     expect(result.user.id).toBe('user-1')
     expect(result.user.name).toBe('Felps')
-    expect(typeof result.user.token).toBe('string')
-    expect(result.user.token.length).toBeGreaterThan(10)
+    expect(result.user.accessToken).toBe('access-user-1')
+    expect(result.refreshToken).toBe('refresh-user-1')
     expect(receivedPassword).not.toBe('123456')
     expect(await Bun.password.verify('123456', receivedPassword)).toBeTrue()
   })
@@ -126,7 +136,7 @@ describe('AuthService.register', () => {
 })
 
 describe('AuthService.login', () => {
-  it('autentica usuario valido e retorna token', async () => {
+  it('autentica usuario valido e retorna tokens', async () => {
     const hash = await Bun.password.hash('123456')
 
     const repository = {
@@ -146,14 +156,15 @@ describe('AuthService.login', () => {
       message: string
       id: string
       name: string
-      token: string
+      accessToken: string
+      refreshToken: string
     }
 
     expect(result.message).toBe('Login realizado com sucesso')
     expect(result.id).toBe('user-1')
     expect(result.name).toBe('Felps')
-    expect(typeof result.token).toBe('string')
-    expect(result.token.length).toBeGreaterThan(10)
+    expect(result.accessToken).toBe('access-user-1')
+    expect(result.refreshToken).toBe('refresh-user-1')
   })
 
   it('retorna credenciais invalidas quando usuario nao existe', async () => {
@@ -221,6 +232,78 @@ describe('AuthService.login', () => {
       expect(error).toBeInstanceOf(AppError)
       expect((error as InstanceType<AppErrorCtor>).status).toBe(500)
       expect((error as InstanceType<AppErrorCtor>).code).toBe(ERROR_CODES.LOGIN_FAILED)
+    }
+  })
+})
+
+describe('AuthService.renew', () => {
+  it('renova access token com refresh token valido', async () => {
+    const repository = {
+      async createUser() {
+        return null
+      },
+      async findUserByEmail() {
+        return null
+      },
+    }
+
+    const service = new AuthService(repository)
+    const result = (await service.renew('refresh-user-1')) as {
+      message: string
+      id: string
+      name: string
+      accessToken: string
+      refreshToken: string
+    }
+
+    expect(result.message).toBe('Token renovado com sucesso')
+    expect(result.id).toBe('user-1')
+    expect(result.name).toBe('Felps')
+    expect(result.accessToken).toBe('access-user-1')
+    expect(result.refreshToken).toBe('refresh-user-1')
+  })
+
+  it('retorna erro quando refresh token nao for enviado', async () => {
+    const repository = {
+      async createUser() {
+        return null
+      },
+      async findUserByEmail() {
+        return null
+      },
+    }
+
+    const service = new AuthService(repository)
+
+    try {
+      await service.renew('')
+      throw new Error('expected_error_not_thrown')
+    } catch (error) {
+      expect(error).toBeInstanceOf(AppError)
+      expect((error as InstanceType<AppErrorCtor>).status).toBe(401)
+      expect((error as InstanceType<AppErrorCtor>).code).toBe(ERROR_CODES.MISSING_REFRESH_TOKEN)
+    }
+  })
+
+  it('propaga erro de refresh token invalido', async () => {
+    const repository = {
+      async createUser() {
+        return null
+      },
+      async findUserByEmail() {
+        return null
+      },
+    }
+
+    const service = new AuthService(repository)
+
+    try {
+      await service.renew('refresh-invalido')
+      throw new Error('expected_error_not_thrown')
+    } catch (error) {
+      expect(error).toBeInstanceOf(AppError)
+      expect((error as InstanceType<AppErrorCtor>).status).toBe(500)
+      expect((error as InstanceType<AppErrorCtor>).code).toBe(ERROR_CODES.TOKEN_RENEWAL_FAILED)
     }
   })
 })

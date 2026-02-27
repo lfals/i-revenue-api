@@ -22,6 +22,8 @@ export const loginSchema = z.object({
   password: z.string().min(1, 'Senha é obrigatória'),
 }).openapi('LoginRequest')
 
+export const renewRequestSchema = z.object({}).openapi('RenewTokenRequest')
+
 export const authUserSchema = z.object({
   id: z.string(),
   name: z.string(),
@@ -34,7 +36,7 @@ export const registerResponseSchema = z.object({
   data: z.object({
     message: z.string(),
     user: authUserSchema.extend({
-      token: z.string(),
+      accessToken: z.string(),
     }),
   }),
 }).openapi('RegisterResponse')
@@ -47,9 +49,21 @@ export const loginResponseSchema = z.object({
     message: z.string(),
     id: z.string(),
     name: z.string(),
-    token: z.string(),
+    accessToken: z.string(),
   }),
 }).openapi('LoginResponse')
+
+export const renewResponseSchema = z.object({
+  success: z.boolean(),
+  status: z.number(),
+  message: z.string(),
+  data: z.object({
+    message: z.string(),
+    id: z.string(),
+    name: z.string(),
+    accessToken: z.string(),
+  }),
+}).openapi('RenewTokenResponse')
 
 export const errorItemSchema = z.object({
   code: z.union([appErrorCodeSchema, z.string()]).openapi({

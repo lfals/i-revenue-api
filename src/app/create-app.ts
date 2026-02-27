@@ -1,6 +1,7 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import type { Context, Next } from 'hono'
 import { deleteCookie, getCookie, setCookie } from 'hono/cookie'
+import { cors } from 'hono/cors'
 import { HTTPException } from 'hono/http-exception'
 import { prettyJSON } from 'hono/pretty-json'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
@@ -32,6 +33,10 @@ export function createApp() {
   const app = new OpenAPIHono<{ Variables: { authUser: JwtPayload } }>()
   const apiVersion = packageJson.version
   const startedAt = Date.now()
+  const allowedOrigins = new Set([
+    'http://localhost:3000',
+    'http://localhost:5173',
+  ])
   const rateLimitWindowMs = Number(process.env.RATE_LIMIT_WINDOW_MS ?? '60000')
   const rateLimitMaxRequests = Number(process.env.RATE_LIMIT_MAX_REQUESTS ?? '120')
   const rateLimitStore = new Map<string, { count: number; resetAt: number }>()
@@ -45,6 +50,18 @@ export function createApp() {
   })
 
   app.use(prettyJSON())
+  app.use('*', cors({
+    origin: (origin) => {
+      if (!origin) {
+        return ''
+      }
+
+      return allowedOrigins.has(origin) ? origin : ''
+    },
+    allowMethods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+  }))
   app.use('*', requestLogger)
   app.use('*', responseEnvelope)
   app.use('*', async (c, next) => {
