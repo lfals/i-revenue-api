@@ -28,9 +28,9 @@ admin / admin
 ```
 
 The dashboard `Postgres Logs Overview` is provisioned automatically and reads from:
-- PostgreSQL (`logs_table`) via datasource `Postgres Logs (Railway)`
+- PostgreSQL (`logs`) via datasource `Postgres Logs (Railway)`
 
-Important: application logs are persisted into PostgreSQL `logs_table` when `DATABASE_URL` is set.
+Important: application logs are persisted into PostgreSQL `logs` when `DATABASE_URL` is set.
 SQLite/Turso local replica is no longer used as the log persistence backend.
 
 Manual sync cloud -> local replica (non-log data, if needed):

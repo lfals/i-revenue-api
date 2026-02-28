@@ -1,7 +1,7 @@
 import { sql } from 'drizzle-orm'
-import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core'
+import { integer, real, sqliteTable, text } from 'drizzle-orm/sqlite-core'
 
-export const usersTable = sqliteTable('users_table', {
+export const usersTable = sqliteTable('users', {
   id: text().primaryKey().$defaultFn(() => crypto.randomUUID()),
   name: text().notNull(),
   email: text().notNull().unique(),
@@ -9,7 +9,7 @@ export const usersTable = sqliteTable('users_table', {
   createdAt: text().default(sql`(CURRENT_TIMESTAMP)`),
 })
 
-export const logsTable = sqliteTable('logs_table', {
+export const logsTable = sqliteTable('logs', {
   id: text().primaryKey().$defaultFn(() => crypto.randomUUID()),
   timestamp: text().notNull(),
   severityText: text('severity_text').notNull(),
@@ -19,4 +19,17 @@ export const logsTable = sqliteTable('logs_table', {
   traceId: text('trace_id'),
   spanId: text('span_id'),
   createdAt: text().default(sql`(CURRENT_TIMESTAMP)`),
+})
+
+export const revenuesTable = sqliteTable('revenues', {
+  id: text().primaryKey().$defaultFn(() => crypto.randomUUID()),
+  userId: text('user_id').notNull(),
+  name: text().notNull(),
+  type: text().notNull(),
+  revenueAsRange: integer('revenue_as_range').notNull(),
+  minRevenue: real('min_revenue').notNull(),
+  maxRevenue: real('max_revenue'),
+  cycle: text().notNull(),
+  createdAt: text('created_at').default(sql`(CURRENT_TIMESTAMP)`),
+  updatedAt: text('updated_at').default(sql`(CURRENT_TIMESTAMP)`),
 })

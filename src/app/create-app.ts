@@ -7,6 +7,7 @@ import { prettyJSON } from 'hono/pretty-json'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import appRoutes from '../modules/app/app.routes'
 import authRoutes from '../modules/auth/auth.routes'
+import revenueRoutes from '../modules/revenue/revenue.routes'
 import type { JwtPayload } from '../infra/security/jwt.service'
 import { getUserFromJWT } from '../infra/security/jwt.service'
 import { AppError } from '../shared/errors/app-error'
@@ -176,6 +177,7 @@ export function createApp() {
   })
 
   app.route('/api', appRoutes)
+  app.route('/api', revenueRoutes)
 
   const swaggerUser = process.env.SWAGGER_USER
   const swaggerPass = process.env.SWAGGER_PASS

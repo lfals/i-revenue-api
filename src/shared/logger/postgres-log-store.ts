@@ -44,7 +44,7 @@ async function ensureLogsTable() {
 
   logTableReady = activePool
     .query(`
-      CREATE TABLE IF NOT EXISTS logs_table (
+      CREATE TABLE IF NOT EXISTS logs (
         id TEXT PRIMARY KEY,
         timestamp TIMESTAMPTZ NOT NULL,
         severity_text TEXT NOT NULL,
@@ -70,7 +70,7 @@ export async function persistLogRecord(logRecord: LogRecordPayload) {
   await ensureLogsTable()
   await activePool.query(
     `
-      INSERT INTO logs_table (
+      INSERT INTO logs (
         id,
         timestamp,
         severity_text,

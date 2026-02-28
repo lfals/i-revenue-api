@@ -14,6 +14,11 @@ export const ERROR_CODES = {
   RATE_LIMIT_EXCEEDED: 'rate_limit_exceeded',
   NOT_FOUND: 'not_found',
   INTERNAL_ERROR: 'internal_error',
+  REVENUE_NOT_FOUND: 'revenue_not_found',
+  REVENUE_CREATE_FAILED: 'revenue_create_failed',
+  REVENUE_UPDATE_FAILED: 'revenue_update_failed',
+  REVENUE_DELETE_FAILED: 'revenue_delete_failed',
+  INVALID_REVENUE_RANGE: 'invalid_revenue_range',
 } as const
 
 export type ErrorCode = (typeof ERROR_CODES)[keyof typeof ERROR_CODES]
