@@ -15,12 +15,23 @@ type RevenueRecord = {
   min_revenue: number
   max_revenue: number | null
   cycle: 'monthly' | 'yearly'
+  benefits: Array<{
+    id: string
+    revenue_id: string
+    type: string
+    value: number
+  }>
   createdAt: string | null
   updatedAt: string | null
 }
 
-type RevenueListItem = Pick<RevenueRecord, 'id' | 'name' | 'type' | 'min_revenue' | 'max_revenue' | 'cycle'>
-type RevenueDetailItem = Pick<RevenueRecord, 'name' | 'type' | 'min_revenue' | 'max_revenue' | 'cycle'>
+type RevenueListItem = Pick<RevenueRecord, 'id' | 'name' | 'type' | 'min_revenue' | 'max_revenue' | 'cycle'> & {
+  benefits: Array<{
+    type: string
+    value: number
+  }>
+}
+type RevenueDetailItem = Pick<RevenueRecord, 'name' | 'type' | 'min_revenue' | 'max_revenue' | 'cycle' | 'benefits'>
 
 let createApp: CreateAppFn
 let generateJWT: GenerateJWTFn
@@ -61,9 +72,16 @@ beforeAll(async () => {
     RevenueRepository: class RevenueRepository {
       async createRevenue(userId: string, input: Omit<RevenueRecord, 'id' | 'createdAt' | 'updatedAt'>) {
         const now = new Date().toISOString()
+        const revenueId = `revenue-${revenueSequence++}`
         const record: RevenueRecord = {
-          id: `revenue-${revenueSequence++}`,
+          id: revenueId,
           ...input,
+          benefits: input.benefits.map((benefit, index) => ({
+            id: `benefit-${revenueId}-${index + 1}`,
+            revenue_id: revenueId,
+            type: benefit.type,
+            value: benefit.value,
+          })),
           createdAt: now,
           updatedAt: now,
         }
@@ -92,6 +110,12 @@ beforeAll(async () => {
         const updated: RevenueRecord = {
           ...current[index],
           ...input,
+          benefits: input.benefits.map((benefit, benefitIndex) => ({
+            id: `benefit-${id}-${benefitIndex + 1}`,
+            revenue_id: id,
+            type: benefit.type,
+            value: benefit.value,
+          })),
           updatedAt: new Date().toISOString(),
         }
         current[index] = updated
@@ -416,6 +440,7 @@ describe('Revenue routes', () => {
         revenueAsRange: false,
         min_revenue: 3000,
         cycle: 'monthly',
+        benefits: [],
       }),
     })
 
@@ -442,6 +467,7 @@ describe('Revenue routes', () => {
         min_revenue: 5500,
         max_revenue: 7000,
         cycle: 'monthly',
+        benefits: [{ type: 'vr', value: 100000 }],
       }),
     })
     const body = (await response.json()) as {
@@ -457,6 +483,12 @@ describe('Revenue routes', () => {
     expect(body.message).toBe('Renda criada com sucesso')
     expect(body.data.name).toBe('Salario principal')
     expect(body.data.max_revenue).toBeNull()
+    expect(body.data.benefits).toEqual([{
+      id: expect.any(String),
+      revenue_id: body.data.id,
+      type: 'vr',
+      value: 100000,
+    }])
   })
 
   it('retorna 400 quando revenueAsRange for true e max_revenue nao for enviado', async () => {
@@ -478,6 +510,7 @@ describe('Revenue routes', () => {
         revenueAsRange: true,
         min_revenue: 800,
         cycle: 'monthly',
+        benefits: [],
       }),
     })
     const body = (await response.json()) as {
@@ -510,10 +543,25 @@ describe('Revenue routes', () => {
         revenueAsRange: false,
         min_revenue: 1000,
         cycle: 'monthly',
+        benefits: [],
       }),
     })
+    const body = (await response.json()) as {
+      success: boolean
+      status: number
+      message: string
+      errors: Array<{ code: string; path?: string; message: string }>
+    }
 
     expect(response.status).toBe(400)
+    expect(body.success).toBeFalse()
+    expect(body.status).toBe(400)
+    expect(body.message).toBe('Dados inválidos')
+    expect(body.errors[0]).toEqual({
+      code: 'invalid_value',
+      path: 'type',
+      message: 'Selecione um tipo válido.',
+    })
   })
 
   it('lista apenas as rendas do usuario autenticado', async () => {
@@ -539,6 +587,7 @@ describe('Revenue routes', () => {
         revenueAsRange: false,
         min_revenue: 4500,
         cycle: 'monthly',
+        benefits: [{ type: 'va', value: 90000 }],
       }),
     })
 
@@ -555,6 +604,7 @@ describe('Revenue routes', () => {
         min_revenue: 7000,
         max_revenue: 9000,
         cycle: 'monthly',
+        benefits: [],
       }),
     })
 
@@ -577,6 +627,7 @@ describe('Revenue routes', () => {
       min_revenue: 4500,
       max_revenue: null,
       cycle: 'monthly',
+      benefits: [{ type: 'va', value: 90000 }],
     })
   })
 
@@ -624,6 +675,7 @@ describe('Revenue routes', () => {
         min_revenue: 10,
         max_revenue: 100,
         cycle: 'monthly',
+        benefits: [{ type: 'vr', value: 15000 }],
       }),
     })
     const createdBody = (await createResponse.json()) as {
@@ -650,6 +702,12 @@ describe('Revenue routes', () => {
       min_revenue: 10,
       max_revenue: 100,
       cycle: 'monthly',
+      benefits: [{
+        id: expect.any(String),
+        revenue_id: createdBody.data.id,
+        type: 'vr',
+        value: 15000,
+      }],
     })
   })
 
@@ -673,6 +731,7 @@ describe('Revenue routes', () => {
         min_revenue: 5000,
         max_revenue: 8000,
         cycle: 'monthly',
+        benefits: [{ type: 'bonus', value: 12345 }],
       }),
     })
     const createdBody = (await createResponse.json()) as {
@@ -691,6 +750,7 @@ describe('Revenue routes', () => {
         revenueAsRange: false,
         min_revenue: 60000,
         cycle: 'yearly',
+        benefits: [{ type: 'health', value: 25000 }],
       }),
     })
     const body = (await response.json()) as {
@@ -703,6 +763,12 @@ describe('Revenue routes', () => {
     expect(body.data.name).toBe('Projeto anual')
     expect(body.data.cycle).toBe('yearly')
     expect(body.data.max_revenue).toBeNull()
+    expect(body.data.benefits).toEqual([{
+      id: expect.any(String),
+      revenue_id: createdBody.data.id,
+      type: 'health',
+      value: 25000,
+    }])
   })
 
   it('remove uma renda existente', async () => {
@@ -724,6 +790,7 @@ describe('Revenue routes', () => {
         revenueAsRange: false,
         min_revenue: 200,
         cycle: 'monthly',
+        benefits: [{ type: 'va', value: 5000 }],
       }),
     })
     const createdBody = (await createResponse.json()) as {

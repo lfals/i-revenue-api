@@ -33,3 +33,10 @@ export const revenuesTable = sqliteTable('revenues', {
   createdAt: text('created_at').default(sql`(CURRENT_TIMESTAMP)`),
   updatedAt: text('updated_at').default(sql`(CURRENT_TIMESTAMP)`),
 })
+
+export const benefitsTable = sqliteTable('benefits', {
+  id: text().primaryKey().$defaultFn(() => crypto.randomUUID()),
+  revenueId: text('revenue_id').notNull().references(() => revenuesTable.id),
+  type: text().notNull(),
+  value: integer().notNull(),
+})

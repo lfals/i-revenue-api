@@ -8,6 +8,10 @@ type RevenueInput = {
   min_revenue: number
   max_revenue?: number | null
   cycle: 'monthly' | 'yearly'
+  benefits: Array<{
+    type: string
+    value: number
+  }>
 }
 
 type RevenueRecord = {
@@ -18,6 +22,12 @@ type RevenueRecord = {
   min_revenue: number
   max_revenue: number | null
   cycle: RevenueInput['cycle']
+  benefits: Array<{
+    id: string
+    revenue_id: string
+    type: string
+    value: number
+  }>
   createdAt: string | null
   updatedAt: string | null
 }
@@ -59,7 +69,7 @@ beforeAll(async () => {
   const revenueServiceModule = await import('./revenue.service.js')
   const appErrorModule = await import('../../shared/errors/app-error.js')
 
-  RevenueService = revenueServiceModule.RevenueService as RevenueServiceCtor
+  RevenueService = revenueServiceModule.RevenueService as unknown as RevenueServiceCtor
   AppError = appErrorModule.AppError as AppErrorCtor
 })
 
@@ -74,6 +84,7 @@ describe('RevenueService.create', () => {
           id: 'revenue-1',
           ...input,
           max_revenue: input.max_revenue ?? null,
+          benefits: [],
           createdAt: null,
           updatedAt: null,
         }
@@ -100,10 +111,12 @@ describe('RevenueService.create', () => {
       min_revenue: 3000,
       max_revenue: 5000,
       cycle: 'monthly',
+      benefits: [{ type: 'vr', value: 120000 }],
     })
 
     expect(receivedInput).not.toBeNull()
     expect(receivedInput!.max_revenue).toBeNull()
+    expect(receivedInput!.benefits).toEqual([{ type: 'vr', value: 120000 }])
     expect(result.max_revenue).toBeNull()
   })
 
@@ -114,6 +127,12 @@ describe('RevenueService.create', () => {
           id: 'revenue-2',
           ...input,
           max_revenue: input.max_revenue ?? null,
+          benefits: [{
+            id: 'benefit-1',
+            revenue_id: 'revenue-2',
+            type: 'health',
+            value: 50000,
+          }],
           createdAt: null,
           updatedAt: null,
         }
@@ -140,9 +159,11 @@ describe('RevenueService.create', () => {
       min_revenue: 4000,
       max_revenue: 7000,
       cycle: 'monthly',
+      benefits: [{ type: 'health', value: 50000 }],
     })
 
     expect(result.max_revenue).toBe(7000)
+    expect(result.benefits[0]?.type).toBe('health')
   })
 
   it('rejeita faixa invalida quando max_revenue for menor que min_revenue', async () => {
@@ -174,6 +195,7 @@ describe('RevenueService.create', () => {
         min_revenue: 5000,
         max_revenue: 3000,
         cycle: 'monthly',
+        benefits: [],
       })
       throw new Error('expected_error_not_thrown')
     } catch (error) {
@@ -199,6 +221,7 @@ describe('RevenueService.read operations', () => {
           min_revenue: 2500,
           max_revenue: null,
           cycle: 'monthly',
+          benefits: [],
           createdAt: null,
           updatedAt: null,
         }]
@@ -238,6 +261,7 @@ describe('RevenueService.read operations', () => {
           min_revenue: 100,
           max_revenue: null,
           cycle: 'yearly',
+          benefits: [],
           createdAt: null,
           updatedAt: null,
         }
@@ -308,6 +332,7 @@ describe('RevenueService.write operations', () => {
           id,
           ...input,
           max_revenue: input.max_revenue ?? null,
+          benefits: [],
           createdAt: null,
           updatedAt: null,
         }
@@ -325,10 +350,12 @@ describe('RevenueService.write operations', () => {
       min_revenue: 9000,
       max_revenue: 11000,
       cycle: 'yearly',
+      benefits: [{ type: 'vr', value: 80000 }],
     })
 
     expect(receivedInput).not.toBeNull()
     expect(receivedInput!.max_revenue).toBeNull()
+    expect(receivedInput!.benefits).toEqual([{ type: 'vr', value: 80000 }])
     expect(result.cycle).toBe('yearly')
   })
 
@@ -386,6 +413,7 @@ describe('RevenueService.write operations', () => {
         min_revenue: 1000,
         max_revenue: 2000,
         cycle: 'monthly',
+        benefits: [],
       })
       throw new Error('expected_error_not_thrown')
     } catch (error) {

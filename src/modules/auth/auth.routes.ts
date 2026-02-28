@@ -1,4 +1,5 @@
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
+import { openApiValidatorHook } from '../../shared/http/openapi-validator-hook'
 import { AuthController } from './auth.controller'
 import { AuthRepository } from './auth.repository'
 import {
@@ -11,7 +12,9 @@ import {
 } from './auth.schemas'
 import { AuthService } from './auth.service'
 
-const authRoutes = new OpenAPIHono<{ Variables: { userId: string } }>()
+const authRoutes = new OpenAPIHono<{ Variables: { userId: string } }>({
+  defaultHook: openApiValidatorHook,
+})
 
 const authRepository = new AuthRepository()
 const authService = new AuthService(authRepository)

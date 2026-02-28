@@ -1,5 +1,6 @@
 import type { Context } from 'hono'
 import type {
+  BenefitListItem,
   RevenueDetailItem,
   RevenueIdParams,
   RevenueInput,
@@ -12,6 +13,13 @@ type RevenueContext = Context<{ Variables: { authUser: { id: string; name: strin
 export class RevenueController {
   constructor(private readonly revenueService: RevenueService) { }
 
+  private toBenefitListItem(benefit: Awaited<ReturnType<RevenueService['list']>>[number]['benefits'][number]): BenefitListItem {
+    return {
+      type: benefit.type,
+      value: benefit.value,
+    }
+  }
+
   private toRevenueListItem(revenue: Awaited<ReturnType<RevenueService['list']>>[number]): RevenueListItem {
     return {
       id: revenue.id,
@@ -20,6 +28,7 @@ export class RevenueController {
       min_revenue: revenue.min_revenue,
       max_revenue: revenue.max_revenue,
       cycle: revenue.cycle,
+      benefits: revenue.benefits.map((benefit) => this.toBenefitListItem(benefit)),
     }
   }
 
@@ -30,6 +39,7 @@ export class RevenueController {
       min_revenue: revenue.min_revenue,
       max_revenue: revenue.max_revenue,
       cycle: revenue.cycle,
+      benefits: revenue.benefits,
     }
   }
 

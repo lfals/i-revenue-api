@@ -30,8 +30,28 @@ export const errorResponseSchema = z.object({
   errors: z.array(errorItemSchema),
 }).openapi('RevenueErrorResponse')
 
-export const revenueTypeSchema = z.enum(revenueTypes).openapi('RevenueType')
-export const revenueCycleSchema = z.enum(revenueCycles).openapi('RevenueCycle')
+export const revenueTypeSchema = z.enum(revenueTypes, {
+  message: 'Selecione um tipo válido.',
+}).openapi('RevenueType')
+export const revenueCycleSchema = z.enum(revenueCycles, {
+  message: 'Selecione um ciclo válido.',
+}).openapi('RevenueCycle')
+export const benefitInputSchema = z.object({
+  type: z.string().min(1, 'O tipo do benefício é obrigatório.'),
+  value: z.number().int('O valor do benefício deve ser um inteiro em centavos.').min(0, 'O valor do benefício deve ser positivo.'),
+}).openapi('BenefitInput')
+
+export const benefitItemSchema = z.object({
+  id: z.string(),
+  revenue_id: z.string(),
+  type: z.string(),
+  value: z.number(),
+}).openapi('Benefit')
+
+export const benefitListItemSchema = z.object({
+  type: z.string(),
+  value: z.number(),
+}).openapi('BenefitListItem')
 
 export const revenueInputSchema = z.object({
   name: z.string().min(1, 'O nome é obrigatório.'),
@@ -44,6 +64,7 @@ export const revenueInputSchema = z.object({
   cycle: revenueCycleSchema.openapi({
     example: 'monthly',
   }),
+  benefits: z.array(benefitInputSchema).default([]),
 }).superRefine((data, ctx) => {
   if (data.revenueAsRange && data.max_revenue == null) {
     ctx.addIssue({
@@ -74,6 +95,7 @@ export const revenueItemSchema = z.object({
   min_revenue: z.number(),
   max_revenue: z.number().nullable(),
   cycle: revenueCycleSchema,
+  benefits: z.array(benefitItemSchema),
   createdAt: z.string().nullable(),
   updatedAt: z.string().nullable(),
 }).openapi('Revenue')
@@ -85,6 +107,7 @@ export const revenueListItemSchema = z.object({
   min_revenue: z.number(),
   max_revenue: z.number().nullable(),
   cycle: revenueCycleSchema,
+  benefits: z.array(benefitListItemSchema),
 }).openapi('RevenueListItem')
 
 export const revenueDetailItemSchema = z.object({
@@ -93,6 +116,7 @@ export const revenueDetailItemSchema = z.object({
   min_revenue: z.number(),
   max_revenue: z.number().nullable(),
   cycle: revenueCycleSchema,
+  benefits: z.array(benefitItemSchema),
 }).openapi('RevenueDetailItem')
 
 export const revenueResponseSchema = z.object({
@@ -130,3 +154,6 @@ export type RevenueIdParams = z.infer<typeof revenueIdParamSchema>
 export type RevenueItem = z.infer<typeof revenueItemSchema>
 export type RevenueListItem = z.infer<typeof revenueListItemSchema>
 export type RevenueDetailItem = z.infer<typeof revenueDetailItemSchema>
+export type BenefitInput = z.infer<typeof benefitInputSchema>
+export type BenefitItem = z.infer<typeof benefitItemSchema>
+export type BenefitListItem = z.infer<typeof benefitListItemSchema>

@@ -1,4 +1,5 @@
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
+import { openApiValidatorHook } from '../../shared/http/openapi-validator-hook'
 import { RevenueController } from './revenue.controller'
 import { RevenueRepository } from './revenue.repository'
 import {
@@ -12,7 +13,11 @@ import {
 } from './revenue.schemas'
 import { RevenueService } from './revenue.service'
 
-const revenueRoutes = new OpenAPIHono<{ Variables: { authUser: { id: string; name: string } } }>()
+const revenueRoutes = new OpenAPIHono<{
+  Variables: { authUser: { id: string; name: string } }
+}>({
+  defaultHook: openApiValidatorHook,
+})
 
 const revenueRepository = new RevenueRepository()
 const revenueService = new RevenueService(revenueRepository)
