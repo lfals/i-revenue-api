@@ -19,6 +19,9 @@ type RevenueRecord = {
   updatedAt: string | null
 }
 
+type RevenueListItem = Pick<RevenueRecord, 'id' | 'name' | 'type' | 'min_revenue' | 'max_revenue' | 'cycle'>
+type RevenueDetailItem = Pick<RevenueRecord, 'name' | 'type' | 'min_revenue' | 'max_revenue' | 'cycle'>
+
 let createApp: CreateAppFn
 let generateJWT: GenerateJWTFn
 let generateRefreshToken: GenerateRefreshTokenFn
@@ -561,12 +564,20 @@ describe('Revenue routes', () => {
       },
     })
     const body = (await response.json()) as {
-      data: RevenueRecord[]
+      data: RevenueListItem[]
     }
 
     expect(response.status).toBe(200)
     expect(body.data).toHaveLength(1)
     expect(body.data[0]?.name).toBe('CLT')
+    expect(body.data[0]).toEqual({
+      id: expect.any(String),
+      name: 'CLT',
+      type: 'clt',
+      min_revenue: 4500,
+      max_revenue: null,
+      cycle: 'monthly',
+    })
   })
 
   it('retorna 404 ao buscar renda inexistente', async () => {
@@ -591,6 +602,55 @@ describe('Revenue routes', () => {
     expect(body.success).toBeFalse()
     expect(body.status).toBe(404)
     expect(body.errors[0]?.code).toBe(ERROR_CODES.REVENUE_NOT_FOUND)
+  })
+
+  it('busca uma renda por id com payload resumido', async () => {
+    const app = createApp()
+    const token = await generateJWT({
+      id: 'revenue-user-6b',
+      name: 'Felps',
+    })
+
+    const createResponse = await app.request('http://localhost/api/revenues', {
+      method: 'POST',
+      headers: {
+        authorization: `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: 'Bioola',
+        type: 'clt',
+        revenueAsRange: true,
+        min_revenue: 10,
+        max_revenue: 100,
+        cycle: 'monthly',
+      }),
+    })
+    const createdBody = (await createResponse.json()) as {
+      data: RevenueRecord
+    }
+
+    const response = await app.request(`http://localhost/api/revenues/${createdBody.data.id}`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    })
+    const body = (await response.json()) as {
+      success: boolean
+      status: number
+      data: RevenueDetailItem
+    }
+
+    expect(response.status).toBe(200)
+    expect(body.success).toBeTrue()
+    expect(body.status).toBe(200)
+    expect(body.data).toEqual({
+      name: 'Bioola',
+      type: 'clt',
+      min_revenue: 10,
+      max_revenue: 100,
+      cycle: 'monthly',
+    })
   })
 
   it('atualiza uma renda existente', async () => {

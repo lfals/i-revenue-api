@@ -1,11 +1,37 @@
 import type { Context } from 'hono'
-import type { RevenueIdParams, RevenueInput } from './revenue.schemas'
+import type {
+  RevenueDetailItem,
+  RevenueIdParams,
+  RevenueInput,
+  RevenueListItem,
+} from './revenue.schemas'
 import { RevenueService } from './revenue.service'
 
 type RevenueContext = Context<{ Variables: { authUser: { id: string; name: string } } }>
 
 export class RevenueController {
   constructor(private readonly revenueService: RevenueService) { }
+
+  private toRevenueListItem(revenue: Awaited<ReturnType<RevenueService['list']>>[number]): RevenueListItem {
+    return {
+      id: revenue.id,
+      name: revenue.name,
+      type: revenue.type,
+      min_revenue: revenue.min_revenue,
+      max_revenue: revenue.max_revenue,
+      cycle: revenue.cycle,
+    }
+  }
+
+  private toRevenueDetailItem(revenue: Awaited<ReturnType<RevenueService['findById']>>): RevenueDetailItem {
+    return {
+      name: revenue.name,
+      type: revenue.type,
+      min_revenue: revenue.min_revenue,
+      max_revenue: revenue.max_revenue,
+      cycle: revenue.cycle,
+    }
+  }
 
   async create(c: RevenueContext, payload: RevenueInput) {
     const authUser = c.get('authUser')
@@ -27,7 +53,7 @@ export class RevenueController {
       success: true,
       status: 200,
       message: 'Rendas listadas com sucesso',
-      data: revenues,
+      data: revenues.map((revenue) => this.toRevenueListItem(revenue)),
     }, 200)
   }
 
@@ -39,7 +65,7 @@ export class RevenueController {
       success: true,
       status: 200,
       message: 'Renda encontrada com sucesso',
-      data: revenue,
+      data: this.toRevenueDetailItem(revenue),
     }, 200)
   }
 

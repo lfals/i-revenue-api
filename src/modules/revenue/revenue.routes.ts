@@ -2,6 +2,7 @@ import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
 import { RevenueController } from './revenue.controller'
 import { RevenueRepository } from './revenue.repository'
 import {
+  revenueDetailResponseSchema,
   errorResponseSchema,
   revenueDeleteResponseSchema,
   revenueIdParamSchema,
@@ -85,7 +86,7 @@ const getRevenueRoute = createRoute({
       description: 'Renda encontrada com sucesso',
       content: {
         'application/json': {
-          schema: revenueResponseSchema,
+          schema: revenueDetailResponseSchema,
         },
       },
     },

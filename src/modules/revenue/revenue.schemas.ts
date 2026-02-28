@@ -78,6 +78,23 @@ export const revenueItemSchema = z.object({
   updatedAt: z.string().nullable(),
 }).openapi('Revenue')
 
+export const revenueListItemSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  type: revenueTypeSchema,
+  min_revenue: z.number(),
+  max_revenue: z.number().nullable(),
+  cycle: revenueCycleSchema,
+}).openapi('RevenueListItem')
+
+export const revenueDetailItemSchema = z.object({
+  name: z.string(),
+  type: revenueTypeSchema,
+  min_revenue: z.number(),
+  max_revenue: z.number().nullable(),
+  cycle: revenueCycleSchema,
+}).openapi('RevenueDetailItem')
+
 export const revenueResponseSchema = z.object({
   success: z.boolean(),
   status: z.number(),
@@ -85,11 +102,18 @@ export const revenueResponseSchema = z.object({
   data: revenueItemSchema,
 }).openapi('RevenueResponse')
 
+export const revenueDetailResponseSchema = z.object({
+  success: z.boolean(),
+  status: z.number(),
+  message: z.string(),
+  data: revenueDetailItemSchema,
+}).openapi('RevenueDetailResponse')
+
 export const revenueListResponseSchema = z.object({
   success: z.boolean(),
   status: z.number(),
   message: z.string(),
-  data: z.array(revenueItemSchema),
+  data: z.array(revenueListItemSchema),
 }).openapi('RevenueListResponse')
 
 export const revenueDeleteResponseSchema = z.object({
@@ -104,3 +128,5 @@ export const revenueDeleteResponseSchema = z.object({
 export type RevenueInput = z.infer<typeof revenueInputSchema>
 export type RevenueIdParams = z.infer<typeof revenueIdParamSchema>
 export type RevenueItem = z.infer<typeof revenueItemSchema>
+export type RevenueListItem = z.infer<typeof revenueListItemSchema>
+export type RevenueDetailItem = z.infer<typeof revenueDetailItemSchema>
