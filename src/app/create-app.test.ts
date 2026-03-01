@@ -7,6 +7,16 @@ type CreateAppFn = () => {
 
 type GenerateJWTFn = (payload: { id: string; name: string }) => Promise<string>
 type GenerateRefreshTokenFn = (payload: { id: string; name: string }) => Promise<string>
+type ExpenseRecord = {
+  id: string
+  name: string
+  type: string
+  min_revenue: number
+  max_revenue: number | null
+  cycle: 'monthly' | 'yearly'
+  createdAt: string | null
+  updatedAt: string | null
+}
 type RevenueRecord = {
   id: string
   name: string
@@ -46,6 +56,8 @@ type RevenueDetailItem = Pick<RevenueRecord, 'name' | 'type' | 'min_revenue' | '
 let createApp: CreateAppFn
 let generateJWT: GenerateJWTFn
 let generateRefreshToken: GenerateRefreshTokenFn
+const expenseStore = new Map<string, ExpenseRecord[]>()
+let expenseSequence = 1
 const revenueStore = new Map<string, RevenueRecord[]>()
 let revenueSequence = 1
 const originalNodeEnv = process.env.NODE_ENV
@@ -60,6 +72,8 @@ afterEach(() => {
   process.env.SWAGGER_PASS = originalSwaggerPass
   process.env.RATE_LIMIT_WINDOW_MS = originalRateLimitWindowMs
   process.env.RATE_LIMIT_MAX_REQUESTS = originalRateLimitMaxRequests
+  expenseStore.clear()
+  expenseSequence = 1
   revenueStore.clear()
   revenueSequence = 1
 })
@@ -155,6 +169,63 @@ beforeAll(async () => {
 
         const [deleted] = current.splice(index, 1)
         revenueStore.set(userId, current)
+        return deleted ? { id: deleted.id } : null
+      }
+    },
+  }))
+
+  mock.module('../modules/expense/expense.repository.js', () => ({
+    ExpenseRepository: class ExpenseRepository {
+      async createExpense(userId: string, input: Omit<ExpenseRecord, 'id' | 'createdAt' | 'updatedAt'>) {
+        const now = new Date().toISOString()
+        const record: ExpenseRecord = {
+          id: `expense-${expenseSequence++}`,
+          ...input,
+          createdAt: now,
+          updatedAt: now,
+        }
+        const current = expenseStore.get(userId) ?? []
+        current.unshift(record)
+        expenseStore.set(userId, current)
+        return record
+      }
+
+      async listExpensesByUser(userId: string) {
+        return [...(expenseStore.get(userId) ?? [])]
+      }
+
+      async findExpenseById(userId: string, id: string) {
+        return expenseStore.get(userId)?.find((item) => item.id === id) ?? null
+      }
+
+      async updateExpense(userId: string, id: string, input: Omit<ExpenseRecord, 'id' | 'createdAt' | 'updatedAt'>) {
+        const current = expenseStore.get(userId) ?? []
+        const index = current.findIndex((item) => item.id === id)
+
+        if (index === -1) {
+          return null
+        }
+
+        const updated: ExpenseRecord = {
+          ...current[index],
+          ...input,
+          updatedAt: new Date().toISOString(),
+        }
+        current[index] = updated
+        expenseStore.set(userId, current)
+        return updated
+      }
+
+      async deleteExpense(userId: string, id: string) {
+        const current = expenseStore.get(userId) ?? []
+        const index = current.findIndex((item) => item.id === id)
+
+        if (index === -1) {
+          return null
+        }
+
+        const [deleted] = current.splice(index, 1)
+        expenseStore.set(userId, current)
         return deleted ? { id: deleted.id } : null
       }
     },
@@ -870,6 +941,249 @@ describe('Revenue routes', () => {
     })
 
     expect(fetchResponse.status).toBe(404)
+  })
+})
+
+describe('Expense routes', () => {
+  it('retorna 401 quando tenta criar despesa sem bearer token', async () => {
+    const app = createApp()
+    const response = await app.request('http://localhost/api/expenses', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: 'Aluguel',
+        type: 'moradia',
+        min_revenue: 1500,
+        cycle: 'monthly',
+      }),
+    })
+
+    expect(response.status).toBe(401)
+  })
+
+  it('cria despesa com sucesso', async () => {
+    const app = createApp()
+    const token = await generateJWT({
+      id: 'expense-user-1',
+      name: 'Felps',
+    })
+
+    const response = await app.request('http://localhost/api/expenses', {
+      method: 'POST',
+      headers: {
+        authorization: `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: 'Aluguel',
+        type: 'moradia',
+        min_revenue: 1500,
+        max_revenue: 1800,
+        cycle: 'monthly',
+      }),
+    })
+    const body = (await response.json()) as {
+      success: boolean
+      status: number
+      data: ExpenseRecord
+    }
+
+    expect(response.status).toBe(201)
+    expect(body.success).toBeTrue()
+    expect(body.status).toBe(201)
+    expect(body.data.name).toBe('Aluguel')
+  })
+
+  it('lista apenas as despesas do usuario autenticado', async () => {
+    const app = createApp()
+    const userOneToken = await generateJWT({
+      id: 'expense-user-2',
+      name: 'Felps',
+    })
+    const userTwoToken = await generateJWT({
+      id: 'expense-user-3',
+      name: 'Maria',
+    })
+
+    await app.request('http://localhost/api/expenses', {
+      method: 'POST',
+      headers: {
+        authorization: `Bearer ${userOneToken}`,
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: 'Mercado',
+        type: 'alimentacao',
+        min_revenue: 800,
+        cycle: 'monthly',
+      }),
+    })
+
+    await app.request('http://localhost/api/expenses', {
+      method: 'POST',
+      headers: {
+        authorization: `Bearer ${userTwoToken}`,
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: 'Internet',
+        type: 'servico',
+        min_revenue: 120,
+        cycle: 'monthly',
+      }),
+    })
+
+    const response = await app.request('http://localhost/api/expenses', {
+      headers: {
+        authorization: `Bearer ${userOneToken}`,
+      },
+    })
+    const body = (await response.json()) as {
+      data: ExpenseRecord[]
+    }
+
+    expect(response.status).toBe(200)
+    expect(body.data).toHaveLength(1)
+    expect(body.data[0]?.name).toBe('Mercado')
+  })
+
+  it('busca despesa por id com payload detalhado resumido', async () => {
+    const app = createApp()
+    const token = await generateJWT({
+      id: 'expense-user-4',
+      name: 'Felps',
+    })
+
+    const createResponse = await app.request('http://localhost/api/expenses', {
+      method: 'POST',
+      headers: {
+        authorization: `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: 'Condominio',
+        type: 'moradia',
+        min_revenue: 300,
+        max_revenue: 400,
+        cycle: 'monthly',
+      }),
+    })
+    const createdBody = (await createResponse.json()) as {
+      data: ExpenseRecord
+    }
+
+    const response = await app.request(`http://localhost/api/expenses/${createdBody.data.id}`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    })
+    const body = (await response.json()) as {
+      success: boolean
+      status: number
+      data: Omit<ExpenseRecord, 'id' | 'createdAt' | 'updatedAt'>
+    }
+
+    expect(response.status).toBe(200)
+    expect(body.success).toBeTrue()
+    expect(body.status).toBe(200)
+    expect(body.data).toEqual({
+      name: 'Condominio',
+      type: 'moradia',
+      min_revenue: 300,
+      max_revenue: 400,
+      cycle: 'monthly',
+    })
+  })
+
+  it('atualiza uma despesa existente', async () => {
+    const app = createApp()
+    const token = await generateJWT({
+      id: 'expense-user-5',
+      name: 'Felps',
+    })
+
+    const createResponse = await app.request('http://localhost/api/expenses', {
+      method: 'POST',
+      headers: {
+        authorization: `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: 'Gasolina',
+        type: 'transporte',
+        min_revenue: 400,
+        cycle: 'monthly',
+      }),
+    })
+    const createdBody = (await createResponse.json()) as {
+      data: ExpenseRecord
+    }
+
+    const response = await app.request(`http://localhost/api/expenses/${createdBody.data.id}`, {
+      method: 'PUT',
+      headers: {
+        authorization: `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: 'Gasolina carro',
+        type: 'transporte',
+        min_revenue: 500,
+        max_revenue: 700,
+        cycle: 'monthly',
+      }),
+    })
+    const body = (await response.json()) as {
+      success: boolean
+      data: ExpenseRecord
+    }
+
+    expect(response.status).toBe(200)
+    expect(body.success).toBeTrue()
+    expect(body.data.name).toBe('Gasolina carro')
+    expect(body.data.max_revenue).toBe(700)
+  })
+
+  it('remove uma despesa existente', async () => {
+    const app = createApp()
+    const token = await generateJWT({
+      id: 'expense-user-6',
+      name: 'Felps',
+    })
+
+    const createResponse = await app.request('http://localhost/api/expenses', {
+      method: 'POST',
+      headers: {
+        authorization: `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: 'Academia',
+        type: 'saude',
+        min_revenue: 100,
+        cycle: 'monthly',
+      }),
+    })
+    const createdBody = (await createResponse.json()) as {
+      data: ExpenseRecord
+    }
+
+    const deleteResponse = await app.request(`http://localhost/api/expenses/${createdBody.data.id}`, {
+      method: 'DELETE',
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    })
+    const deleteBody = (await deleteResponse.json()) as {
+      success: boolean
+      data: { id: string }
+    }
+
+    expect(deleteResponse.status).toBe(200)
+    expect(deleteBody.success).toBeTrue()
+    expect(deleteBody.data.id).toBe(createdBody.data.id)
   })
 })
 

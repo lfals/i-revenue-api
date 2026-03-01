@@ -19,6 +19,11 @@ export const ERROR_CODES = {
   REVENUE_UPDATE_FAILED: 'revenue_update_failed',
   REVENUE_DELETE_FAILED: 'revenue_delete_failed',
   INVALID_REVENUE_RANGE: 'invalid_revenue_range',
+  EXPENSE_NOT_FOUND: 'expense_not_found',
+  EXPENSE_CREATE_FAILED: 'expense_create_failed',
+  EXPENSE_UPDATE_FAILED: 'expense_update_failed',
+  EXPENSE_DELETE_FAILED: 'expense_delete_failed',
+  INVALID_EXPENSE_RANGE: 'invalid_expense_range',
 } as const
 
 export type ErrorCode = (typeof ERROR_CODES)[keyof typeof ERROR_CODES]

@@ -34,6 +34,18 @@ export const revenuesTable = sqliteTable('revenues', {
   updatedAt: text('updated_at').default(sql`(CURRENT_TIMESTAMP)`),
 })
 
+export const expensesTable = sqliteTable('expenses', {
+  id: text().primaryKey().$defaultFn(() => crypto.randomUUID()),
+  userId: text('user_id').notNull(),
+  name: text().notNull(),
+  type: text().notNull(),
+  minRevenue: real('min_revenue').notNull(),
+  maxRevenue: real('max_revenue'),
+  cycle: text().notNull(),
+  createdAt: text('created_at').default(sql`(CURRENT_TIMESTAMP)`),
+  updatedAt: text('updated_at').default(sql`(CURRENT_TIMESTAMP)`),
+})
+
 export const benefitsTable = sqliteTable('benefits', {
   id: text().primaryKey().$defaultFn(() => crypto.randomUUID()),
   revenueId: text('revenue_id').notNull().references(() => revenuesTable.id),
