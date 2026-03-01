@@ -1,10 +1,16 @@
 import { and, desc, eq } from 'drizzle-orm'
 import { db } from '../../infra/db/client'
-import { benefitsTable, revenuesTable } from '../../infra/db/schema'
-import type { BenefitItem, RevenueInput, RevenueItem } from './revenue.schemas'
+import { benefitsTable, revenuesTable, taxesTable } from '../../infra/db/schema'
+import type {
+  BenefitItem,
+  RevenueInput,
+  RevenueItem,
+  TaxItem,
+} from './revenue.schemas'
 
 type RevenueRecord = RevenueItem
 type BenefitRecord = BenefitItem
+type TaxRecord = TaxItem
 
 function mapBenefitRecord(record: {
   id: string
@@ -20,6 +26,20 @@ function mapBenefitRecord(record: {
   }
 }
 
+function mapTaxRecord(record: {
+  id: string
+  revenueId: string
+  name: string
+  value: number
+}): TaxRecord {
+  return {
+    id: record.id,
+    revenue_id: record.revenueId,
+    name: record.name,
+    value: record.value,
+  }
+}
+
 function mapRevenueRecord(record: {
   id: string
   name: string
@@ -29,6 +49,7 @@ function mapRevenueRecord(record: {
   maxRevenue: number | null
   cycle: string
   benefits: BenefitRecord[]
+  taxes: TaxRecord[]
   createdAt: string | null
   updatedAt: string | null
 }): RevenueRecord {
@@ -41,6 +62,7 @@ function mapRevenueRecord(record: {
     max_revenue: record.maxRevenue,
     cycle: record.cycle as RevenueItem['cycle'],
     benefits: record.benefits,
+    taxes: record.taxes,
     createdAt: record.createdAt,
     updatedAt: record.updatedAt,
   }
@@ -49,7 +71,8 @@ function mapRevenueRecord(record: {
 export class RevenueRepository {
   async createRevenue(userId: string, input: RevenueInput): Promise<RevenueRecord> {
     const createdAt = new Date().toISOString()
-    const created = await db.transaction(async (tx) => {
+
+    return db.transaction(async (tx) => {
       const insertedRevenue = await tx
         .insert(revenuesTable)
         .values({
@@ -76,29 +99,15 @@ export class RevenueRepository {
         })
 
       const revenue = insertedRevenue[0]!
-      const benefits = input.benefits.length
-        ? await tx
-          .insert(benefitsTable)
-          .values(input.benefits.map((benefit) => ({
-            revenueId: revenue.id,
-            type: benefit.type,
-            value: benefit.value,
-          })))
-          .returning({
-            id: benefitsTable.id,
-            revenueId: benefitsTable.revenueId,
-            type: benefitsTable.type,
-            value: benefitsTable.value,
-          })
-        : []
+      const benefits = await this.insertBenefits(tx, revenue.id, input.benefits)
+      const taxes = await this.insertTaxes(tx, revenue.id, input.taxes)
 
       return mapRevenueRecord({
         ...revenue,
-        benefits: benefits.map(mapBenefitRecord),
+        benefits,
+        taxes,
       })
     })
-
-    return created
   }
 
   async listRevenuesByUser(userId: string): Promise<RevenueRecord[]> {
@@ -119,11 +128,17 @@ export class RevenueRepository {
       .orderBy(desc(revenuesTable.createdAt))
 
     const revenueIds = records.map((record) => record.id)
-    const benefits = revenueIds.length ? await this.findBenefitsByRevenueIds(revenueIds) : new Map<string, BenefitRecord[]>()
+    const benefits = revenueIds.length
+      ? await this.findBenefitsByRevenueIds(revenueIds)
+      : new Map<string, BenefitRecord[]>()
+    const taxes = revenueIds.length
+      ? await this.findTaxesByRevenueIds(revenueIds)
+      : new Map<string, TaxRecord[]>()
 
     return records.map((record) => mapRevenueRecord({
       ...record,
       benefits: benefits.get(record.id) ?? [],
+      taxes: taxes.get(record.id) ?? [],
     }))
   }
 
@@ -149,9 +164,12 @@ export class RevenueRepository {
     }
 
     const benefits = await this.findBenefitsByRevenueIds([records[0].id])
+    const taxes = await this.findTaxesByRevenueIds([records[0].id])
+
     return mapRevenueRecord({
       ...records[0],
       benefits: benefits.get(records[0].id) ?? [],
+      taxes: taxes.get(records[0].id) ?? [],
     })
   }
 
@@ -187,25 +205,15 @@ export class RevenueRepository {
       }
 
       await tx.delete(benefitsTable).where(eq(benefitsTable.revenueId, revenue.id))
-      const benefits = input.benefits.length
-        ? await tx
-          .insert(benefitsTable)
-          .values(input.benefits.map((benefit) => ({
-            revenueId: revenue.id,
-            type: benefit.type,
-            value: benefit.value,
-          })))
-          .returning({
-            id: benefitsTable.id,
-            revenueId: benefitsTable.revenueId,
-            type: benefitsTable.type,
-            value: benefitsTable.value,
-          })
-        : []
+      await tx.delete(taxesTable).where(eq(taxesTable.revenueId, revenue.id))
+
+      const benefits = await this.insertBenefits(tx, revenue.id, input.benefits)
+      const taxes = await this.insertTaxes(tx, revenue.id, input.taxes)
 
       return mapRevenueRecord({
         ...revenue,
-        benefits: benefits.map(mapBenefitRecord),
+        benefits,
+        taxes,
       })
     })
   }
@@ -213,6 +221,8 @@ export class RevenueRepository {
   async deleteRevenue(userId: string, id: string): Promise<{ id: string } | null> {
     const deleted = await db.transaction(async (tx) => {
       await tx.delete(benefitsTable).where(eq(benefitsTable.revenueId, id))
+      await tx.delete(taxesTable).where(eq(taxesTable.revenueId, id))
+
       return tx
         .delete(revenuesTable)
         .where(and(eq(revenuesTable.userId, userId), eq(revenuesTable.id, id)))
@@ -222,6 +232,58 @@ export class RevenueRepository {
     })
 
     return deleted[0] ?? null
+  }
+
+  private async insertBenefits(
+    tx: Parameters<Parameters<typeof db.transaction>[0]>[0],
+    revenueId: string,
+    benefits: RevenueInput['benefits'],
+  ) {
+    if (!benefits.length) {
+      return [] as BenefitRecord[]
+    }
+
+    const inserted = await tx
+      .insert(benefitsTable)
+      .values(benefits.map((benefit) => ({
+        revenueId,
+        type: benefit.type,
+        value: benefit.value,
+      })))
+      .returning({
+        id: benefitsTable.id,
+        revenueId: benefitsTable.revenueId,
+        type: benefitsTable.type,
+        value: benefitsTable.value,
+      })
+
+    return inserted.map(mapBenefitRecord)
+  }
+
+  private async insertTaxes(
+    tx: Parameters<Parameters<typeof db.transaction>[0]>[0],
+    revenueId: string,
+    taxes: RevenueInput['taxes'],
+  ) {
+    if (!taxes.length) {
+      return [] as TaxRecord[]
+    }
+
+    const inserted = await tx
+      .insert(taxesTable)
+      .values(taxes.map((tax) => ({
+        revenueId,
+        name: tax.name,
+        value: tax.value,
+      })))
+      .returning({
+        id: taxesTable.id,
+        revenueId: taxesTable.revenueId,
+        name: taxesTable.name,
+        value: taxesTable.value,
+      })
+
+    return inserted.map(mapTaxRecord)
   }
 
   private async findBenefitsByRevenueIds(revenueIds: string[]) {
@@ -242,5 +304,25 @@ export class RevenueRepository {
     }
 
     return benefitMap
+  }
+
+  private async findTaxesByRevenueIds(revenueIds: string[]) {
+    const taxMap = new Map<string, TaxRecord[]>()
+
+    for (const revenueId of revenueIds) {
+      const taxes = await db
+        .select({
+          id: taxesTable.id,
+          revenueId: taxesTable.revenueId,
+          name: taxesTable.name,
+          value: taxesTable.value,
+        })
+        .from(taxesTable)
+        .where(eq(taxesTable.revenueId, revenueId))
+
+      taxMap.set(revenueId, taxes.map(mapTaxRecord))
+    }
+
+    return taxMap
   }
 }

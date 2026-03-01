@@ -5,6 +5,7 @@ import type {
   RevenueIdParams,
   RevenueInput,
   RevenueListItem,
+  TaxListItem,
 } from './revenue.schemas'
 import { RevenueService } from './revenue.service'
 
@@ -20,6 +21,13 @@ export class RevenueController {
     }
   }
 
+  private toTaxListItem(tax: Awaited<ReturnType<RevenueService['list']>>[number]['taxes'][number]): TaxListItem {
+    return {
+      name: tax.name,
+      value: tax.value,
+    }
+  }
+
   private toRevenueListItem(revenue: Awaited<ReturnType<RevenueService['list']>>[number]): RevenueListItem {
     return {
       id: revenue.id,
@@ -29,6 +37,7 @@ export class RevenueController {
       max_revenue: revenue.max_revenue,
       cycle: revenue.cycle,
       benefits: revenue.benefits.map((benefit) => this.toBenefitListItem(benefit)),
+      taxes: revenue.taxes.map((tax) => this.toTaxListItem(tax)),
     }
   }
 
@@ -40,6 +49,7 @@ export class RevenueController {
       max_revenue: revenue.max_revenue,
       cycle: revenue.cycle,
       benefits: revenue.benefits,
+      taxes: revenue.taxes,
     }
   }
 

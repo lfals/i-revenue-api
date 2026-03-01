@@ -33,9 +33,11 @@ export const errorResponseSchema = z.object({
 export const revenueTypeSchema = z.enum(revenueTypes, {
   message: 'Selecione um tipo válido.',
 }).openapi('RevenueType')
+
 export const revenueCycleSchema = z.enum(revenueCycles, {
   message: 'Selecione um ciclo válido.',
 }).openapi('RevenueCycle')
+
 export const benefitInputSchema = z.object({
   type: z.string().min(1, 'O tipo do benefício é obrigatório.'),
   value: z.number().int('O valor do benefício deve ser um inteiro em centavos.').min(0, 'O valor do benefício deve ser positivo.'),
@@ -53,6 +55,23 @@ export const benefitListItemSchema = z.object({
   value: z.number(),
 }).openapi('BenefitListItem')
 
+export const taxInputSchema = z.object({
+  name: z.string().min(1, 'O nome do imposto é obrigatório.'),
+  value: z.number().int('O valor do imposto deve ser um inteiro em centavos.').min(0, 'O valor do imposto deve ser positivo.'),
+}).openapi('TaxInput')
+
+export const taxItemSchema = z.object({
+  id: z.string(),
+  revenue_id: z.string(),
+  name: z.string(),
+  value: z.number(),
+}).openapi('Tax')
+
+export const taxListItemSchema = z.object({
+  name: z.string(),
+  value: z.number(),
+}).openapi('TaxListItem')
+
 export const revenueInputSchema = z.object({
   name: z.string().min(1, 'O nome é obrigatório.'),
   type: revenueTypeSchema.openapi({
@@ -65,6 +84,7 @@ export const revenueInputSchema = z.object({
     example: 'monthly',
   }),
   benefits: z.array(benefitInputSchema).default([]),
+  taxes: z.array(taxInputSchema).default([]),
 }).superRefine((data, ctx) => {
   if (data.revenueAsRange && data.max_revenue == null) {
     ctx.addIssue({
@@ -96,6 +116,7 @@ export const revenueItemSchema = z.object({
   max_revenue: z.number().nullable(),
   cycle: revenueCycleSchema,
   benefits: z.array(benefitItemSchema),
+  taxes: z.array(taxItemSchema),
   createdAt: z.string().nullable(),
   updatedAt: z.string().nullable(),
 }).openapi('Revenue')
@@ -108,6 +129,7 @@ export const revenueListItemSchema = z.object({
   max_revenue: z.number().nullable(),
   cycle: revenueCycleSchema,
   benefits: z.array(benefitListItemSchema),
+  taxes: z.array(taxListItemSchema),
 }).openapi('RevenueListItem')
 
 export const revenueDetailItemSchema = z.object({
@@ -117,6 +139,7 @@ export const revenueDetailItemSchema = z.object({
   max_revenue: z.number().nullable(),
   cycle: revenueCycleSchema,
   benefits: z.array(benefitItemSchema),
+  taxes: z.array(taxItemSchema),
 }).openapi('RevenueDetailItem')
 
 export const revenueResponseSchema = z.object({
@@ -157,3 +180,6 @@ export type RevenueDetailItem = z.infer<typeof revenueDetailItemSchema>
 export type BenefitInput = z.infer<typeof benefitInputSchema>
 export type BenefitItem = z.infer<typeof benefitItemSchema>
 export type BenefitListItem = z.infer<typeof benefitListItemSchema>
+export type TaxInput = z.infer<typeof taxInputSchema>
+export type TaxItem = z.infer<typeof taxItemSchema>
+export type TaxListItem = z.infer<typeof taxListItemSchema>

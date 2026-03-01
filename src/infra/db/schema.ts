@@ -40,3 +40,11 @@ export const benefitsTable = sqliteTable('benefits', {
   type: text().notNull(),
   value: integer().notNull(),
 })
+
+
+export const taxesTable = sqliteTable('taxes', {
+  id: text().primaryKey().$defaultFn(() => crypto.randomUUID()),
+  revenueId: text('revenue_id').notNull().references(() => revenuesTable.id),
+  name: text().notNull(),
+  value: integer().notNull(),
+})

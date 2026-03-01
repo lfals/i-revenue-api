@@ -21,6 +21,12 @@ type RevenueRecord = {
     type: string
     value: number
   }>
+  taxes: Array<{
+    id: string
+    revenue_id: string
+    name: string
+    value: number
+  }>
   createdAt: string | null
   updatedAt: string | null
 }
@@ -30,8 +36,12 @@ type RevenueListItem = Pick<RevenueRecord, 'id' | 'name' | 'type' | 'min_revenue
     type: string
     value: number
   }>
+  taxes: Array<{
+    name: string
+    value: number
+  }>
 }
-type RevenueDetailItem = Pick<RevenueRecord, 'name' | 'type' | 'min_revenue' | 'max_revenue' | 'cycle' | 'benefits'>
+type RevenueDetailItem = Pick<RevenueRecord, 'name' | 'type' | 'min_revenue' | 'max_revenue' | 'cycle' | 'benefits' | 'taxes'>
 
 let createApp: CreateAppFn
 let generateJWT: GenerateJWTFn
@@ -82,6 +92,12 @@ beforeAll(async () => {
             type: benefit.type,
             value: benefit.value,
           })),
+          taxes: input.taxes.map((tax, index) => ({
+            id: `tax-${revenueId}-${index + 1}`,
+            revenue_id: revenueId,
+            name: tax.name,
+            value: tax.value,
+          })),
           createdAt: now,
           updatedAt: now,
         }
@@ -115,6 +131,12 @@ beforeAll(async () => {
             revenue_id: id,
             type: benefit.type,
             value: benefit.value,
+          })),
+          taxes: input.taxes.map((tax, taxIndex) => ({
+            id: `tax-${id}-${taxIndex + 1}`,
+            revenue_id: id,
+            name: tax.name,
+            value: tax.value,
           })),
           updatedAt: new Date().toISOString(),
         }
@@ -441,6 +463,7 @@ describe('Revenue routes', () => {
         min_revenue: 3000,
         cycle: 'monthly',
         benefits: [],
+        taxes: [],
       }),
     })
 
@@ -468,6 +491,7 @@ describe('Revenue routes', () => {
         max_revenue: 7000,
         cycle: 'monthly',
         benefits: [{ type: 'vr', value: 100000 }],
+        taxes: [{ name: 'INSS', value: 35000 }],
       }),
     })
     const body = (await response.json()) as {
@@ -488,6 +512,12 @@ describe('Revenue routes', () => {
       revenue_id: body.data.id,
       type: 'vr',
       value: 100000,
+    }])
+    expect(body.data.taxes).toEqual([{
+      id: expect.any(String),
+      revenue_id: body.data.id,
+      name: 'INSS',
+      value: 35000,
     }])
   })
 
@@ -511,6 +541,7 @@ describe('Revenue routes', () => {
         min_revenue: 800,
         cycle: 'monthly',
         benefits: [],
+        taxes: [],
       }),
     })
     const body = (await response.json()) as {
@@ -544,6 +575,7 @@ describe('Revenue routes', () => {
         min_revenue: 1000,
         cycle: 'monthly',
         benefits: [],
+        taxes: [],
       }),
     })
     const body = (await response.json()) as {
@@ -588,6 +620,7 @@ describe('Revenue routes', () => {
         min_revenue: 4500,
         cycle: 'monthly',
         benefits: [{ type: 'va', value: 90000 }],
+        taxes: [{ name: 'IR', value: 45000 }],
       }),
     })
 
@@ -605,6 +638,7 @@ describe('Revenue routes', () => {
         max_revenue: 9000,
         cycle: 'monthly',
         benefits: [],
+        taxes: [],
       }),
     })
 
@@ -628,6 +662,7 @@ describe('Revenue routes', () => {
       max_revenue: null,
       cycle: 'monthly',
       benefits: [{ type: 'va', value: 90000 }],
+      taxes: [{ name: 'IR', value: 45000 }],
     })
   })
 
@@ -676,6 +711,7 @@ describe('Revenue routes', () => {
         max_revenue: 100,
         cycle: 'monthly',
         benefits: [{ type: 'vr', value: 15000 }],
+        taxes: [{ name: 'FGTS', value: 22000 }],
       }),
     })
     const createdBody = (await createResponse.json()) as {
@@ -708,6 +744,12 @@ describe('Revenue routes', () => {
         type: 'vr',
         value: 15000,
       }],
+      taxes: [{
+        id: expect.any(String),
+        revenue_id: createdBody.data.id,
+        name: 'FGTS',
+        value: 22000,
+      }],
     })
   })
 
@@ -732,6 +774,7 @@ describe('Revenue routes', () => {
         max_revenue: 8000,
         cycle: 'monthly',
         benefits: [{ type: 'bonus', value: 12345 }],
+        taxes: [{ name: 'IRPJ', value: 19000 }],
       }),
     })
     const createdBody = (await createResponse.json()) as {
@@ -751,6 +794,7 @@ describe('Revenue routes', () => {
         min_revenue: 60000,
         cycle: 'yearly',
         benefits: [{ type: 'health', value: 25000 }],
+        taxes: [{ name: 'ISS', value: 9900 }],
       }),
     })
     const body = (await response.json()) as {
@@ -768,6 +812,12 @@ describe('Revenue routes', () => {
       revenue_id: createdBody.data.id,
       type: 'health',
       value: 25000,
+    }])
+    expect(body.data.taxes).toEqual([{
+      id: expect.any(String),
+      revenue_id: createdBody.data.id,
+      name: 'ISS',
+      value: 9900,
     }])
   })
 
@@ -791,6 +841,7 @@ describe('Revenue routes', () => {
         min_revenue: 200,
         cycle: 'monthly',
         benefits: [{ type: 'va', value: 5000 }],
+        taxes: [{ name: 'IR', value: 1500 }],
       }),
     })
     const createdBody = (await createResponse.json()) as {
